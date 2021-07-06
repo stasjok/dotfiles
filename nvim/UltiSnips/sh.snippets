@@ -1,0 +1,180 @@
+# A valid snippet should starts with:
+#
+#		snippet trigger_word [ "description" [ options ] ]
+#
+# and end with:
+#
+#		endsnippet
+#
+# Snippet options:
+#
+#		b - Beginning of line.
+#		i - In-word expansion.
+#		w - Word boundary.
+#		r - Regular expression
+#		e - Custom context snippet
+#		A - Snippet will be triggered automatically, when condition matches.
+#
+# Basic example:
+#
+#		snippet emitter "emitter properties" b
+#		private readonly ${1} = new Emitter<$2>()
+#		public readonly ${1/^_(.*)/$1/}: Event<$2> = this.$1.event
+#		endsnippet
+#
+# Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
+
+snippet #! "Shebang" b
+#!/usr/bin/env ${1:bash}
+
+endsnippet
+
+snippet strict "Bash Strict Mode" b
+set -o errexit -o errtrace -o pipefail -o nounset
+(shopt -p inherit_errexit &>/dev/null) && shopt -s inherit_errexit
+
+function failure() {
+	local lineno=\$1
+	local exitcode=\$2
+	local command=\$3
+	echo "Failed with exit code $exitcode at line $lineno: $command" >&2
+}
+
+trap 'failure \${LINENO} \$? "\${BASH_COMMAND}"' ERR
+
+IFS=$'\n\t'
+
+endsnippet
+
+snippet $ "Variable" i
+\$\{${1:${2:var}[${3:@}]}\}
+endsnippet
+
+snippet function "Function" b
+function ${1:function_name} {
+	${2:${VISUAL}}
+}
+endsnippet
+
+snippet if "If statement" b
+if ${1:[[ ${2:condition} ]]}; then
+	${3:${VISUAL}}
+fi
+endsnippet
+
+snippet else "Else statement" b
+else
+	${0:${VISUAL}}
+endsnippet
+
+snippet elif "Elif condition" b
+elif ${1:[[ ${2:condition} ]]}; then
+	${3:${VISUAL}}
+endsnippet
+
+snippet case "Case statement" b
+case ${1:\$${2:var}} in
+	${3:pattern})
+		${4:${VISUAL}}
+		;;
+esac
+endsnippet
+
+snippet sw "Case pattern" b
+${1:*})
+	${2:${VISUAL}}
+	;;
+endsnippet
+
+snippet for "For loop" b
+for ${1:i} in ${2:words}; do
+	${3:${VISUAL}}
+done
+endsnippet
+
+snippet fori "Three-expression for loop" b
+for (( ${1:i}=${2:0}; $1 ${3:< ${4:10}}; $1${5:++} )); do
+	${6:${VISUAL}}
+done
+endsnippet
+
+snippet forif "Full three-expression for loop" b
+for (( ${1:${2:i}=${3:0}}; ${4:$2 ${5:< ${6:count}}}; ${7:$2${8:++}} )); do
+	${9:${VISUAL}}
+done
+endsnippet
+
+snippet while "While loop" b
+while ${1:[[ ${2:condition} ]]}; do
+	${3:${VISUAL}}
+done
+endsnippet
+
+snippet until "Until loop" b
+until ${1:[[ ${2:condition} ]]}; do
+	${3:${VISUAL}}
+done
+endsnippet
+
+snippet here "Here Document"
+<<-${1:EOF}
+	${0:${VISUAL}}
+${1/["'](.*)["']/$1/}
+endsnippet
+
+# Variables
+snippet BASH_SOURCE "BASH_SOURCE variable" w
+${BASH_SOURCE[${1:0}]}
+endsnippet
+
+# Code snippets
+snippet root_needed "Script must be run as root" b
+if (( EUID != 0 )); then
+	echo "${1:This script must be run as root}" >&2
+	exit ${2:99}
+fi
+endsnippet
+
+snippet getopt "Args parsing with getopt" b
+opts=$(getopt --name "${1:$(basename -- "$\{BASH_SOURCE[0]\}")}" \
+	--options ${2:h${3}} \
+	--longoptions ${4:help${5}} \
+	-- "$@")
+eval "set -- $opts"
+
+function usage {
+	cat <<USAGE
+${6:Description}
+
+Usage:
+	${1} [options]
+
+Options:
+	-h, --help  Display this help and exit.
+USAGE
+}
+
+while true; do
+	case \$1 in
+		${7:-h|--help)
+			usage
+			exit 0
+			;;
+		}${8:-${9:o}|--${10:opt}})
+			${11:${12:${10}}=${13:\$2}}
+			shift${14/.+/ /}${14:2}
+			;;
+		--)
+			shift
+			break
+			;;
+	esac
+done
+endsnippet
+
+snippet swopt "Case opt for getopt" b
+${1:-${2:o}|--${3:opt}})
+	${4:${5:${3}}=${6:\$2}}
+	shift${7/.+/ /}${7:2}
+	;;
+endsnippet

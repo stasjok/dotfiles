@@ -1,0 +1,107 @@
+{
+    "coc.preferences.extensionUpdateCheck": "never",
+    "suggest.completionItemKindLabels": {
+        "keyword": "\uf1de",
+        "variable": "\ue79b",
+        "value": "\uf89f",
+        "operator": "\u03a8",
+        "constructor": "\uf0ad",
+        "function": "\u0192",
+        "reference": "\ufa46",
+        "constant": "\uf8fe",
+        "method": "\uf09a",
+        "struct": "\ufb44",
+        "class": "\uf0e8",
+        "interface": "\uf417",
+        "text": "\ue612",
+        "enum": "\uf435",
+        "enumMember": "\uf02b",
+        "module": "\uf40d",
+        "color": "\ue22b",
+        "property": "\ue624",
+        "field": "\uf9be",
+        "unit": "\uf475",
+        "event": "\ufacd",
+        "file": "\uf723",
+        "folder": "\uf114",
+        "snippet": "\ue60b",
+        "typeParameter": "\uf728",
+        "default": "\uf29c"
+    },
+    "explorer.icon.enableNerdfont": true,
+    "git.addedSign.hlGroup": "Statement",
+    "git.changedSign.hlGroup": "Type",
+    "git.changeRemovedSign.hlGroup": "Type",
+    "git.removedSign.hlGroup": "CocSelectedText",
+    "git.topRemovedSign.hlGroup": "CocSelectedText",
+    "sh.highlightParsingErrors": false,
+    "python.pythonPath": "python3",
+    "vimlsp.suggest.fromRuntimepath": true,
+    "diagnostic-languageserver.filetypes": {
+        "sh": "shellcheck",
+        "yaml.ansible": "ansible_lint",
+        "go": "golangci-lint"
+    },
+    "diagnostic-languageserver.linters": {
+        "shellcheck": {
+            "command": "shellcheck",
+            "args": [
+                "--external-sources",
+                "--format",
+                "json",
+                "-"
+            ],
+            "sourceName": "shellcheck",
+            "parseJson": {
+                "line": "line",
+                "column": "column",
+                "endLine": "endLine",
+                "endColumn": "endColumn",
+                "message": "${message} [SC${code}]",
+                "security": "level"
+            },
+            "securities": {
+                "error": "error",
+                "warning": "warning",
+                "info": "info",
+                "style": "hint"
+            }
+        },
+        "ansible_lint": {
+            "command": "ansible-lint",
+            "args": [
+                "--parseable-severity",
+                "-w",
+                "%file",
+                "-x",
+                "701"
+            ],
+            "rootPatterns": [
+                "tasks",
+                ".git"
+            ],
+            "sourceName": "ansible-lint",
+            "formatPattern": [
+                "^([^:]+):(\\d+):\\s*(\\S+\\s*)\\[(\\S+?)\\]\\s*(.*)$",
+                {
+                    "sourceName": 1,
+                    "sourceNameFilter": true,
+                    "line": 2,
+                    "security": 4,
+                    "message": [
+                        3,
+                        5
+                    ]
+                }
+            ],
+            "securities": {
+                "VERY_HIGH": "error",
+                "HIGH": "warning",
+                "MEDIUM": "warning",
+                "LOW": "info",
+                "VERY_LOW": "hint",
+                "INFO": "hint"
+            }
+        }
+    }
+}

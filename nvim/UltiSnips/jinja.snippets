@@ -1,0 +1,727 @@
+# A valid snippet should starts with:
+#
+#		snippet trigger_word [ "description" [ options ] ]
+#
+# and end with:
+#
+#		endsnippet
+#
+# Snippet options:
+#
+#		b - Beginning of line.
+#		i - In-word expansion.
+#		w - Word boundary.
+#		r - Regular expression
+#		e - Custom context snippet
+#		A - Snippet will be triggered automatically, when condition matches.
+#
+# Basic example:
+#
+#		snippet emitter "emitter properties" w
+#		private readonly ${1} = new Emitter<$2>()
+#		public readonly ${1/^_(.*)/$1/}: Event<$2> = this.$1.event
+#		endsnippet
+#
+# Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
+
+snippet d "Dict value" w
+${1:dict}['${2:key}']
+endsnippet
+
+snippet ife "If expression"
+${2:expression_if_true} if ${1:condition} else ${3:expression_if_false}
+endsnippet
+
+snippet if "If statement" w
+{%${1:-} if ${2:condition} %}
+${3:${VISUAL}}
+{%${1} endif %}
+endsnippet
+
+snippet else "Else statement" w
+{%${1:-} else %}
+${2:${VISUAL}}
+endsnippet
+
+snippet elif "Elif statement" w
+{%${1:-} elif ${2:condition} %}
+${3:${VISUAL}}
+endsnippet
+
+snippet for "For loop" w
+{%${1:-} for ${2:item} in ${3:list} %}
+${4:${VISUAL}}
+{%${1} endfor %}
+endsnippet
+
+snippet forif "For loop with filter" w
+{%${1:-} for ${2:item} in ${3:list} if ${4:filter} %}
+${5:${VISUAL}}
+{%${1} endfor %}
+endsnippet
+
+snippet macro "Macro definition" w
+{%${1:-} macro ${2:macro_name}(${3}) ${1}%}
+${4:${VISUAL}}
+{%${1} endmacro %}
+endsnippet
+
+snippet call "Call block" w
+{%${1:-} call ${2:macro_name}(${3}) %}
+${4:${VISUAL}}
+{%${1} endcall %}
+endsnippet
+
+snippet filter "Filter section" w
+{%${1:-} filter ${2:filter_name} %}
+${3:${VISUAL}}
+{%${1} endfilter %}
+endsnippet
+
+snippet set "Variable assignment" w
+{%${1:-} set ${2:var} = ${3:value} %}
+endsnippet
+
+snippet setb "Block assignment" w
+{%${1:-} set ${2:var} %}
+${3:${VISUAL}}
+{%${1} endset %}
+endsnippet
+
+snippet block "Block" w
+{%${1:-} block ${2:block_name} %}
+${3:${VISUAL}}
+{%${1} endblock %}
+endsnippet
+
+snippet raw "Raw block" w
+{%${1:-} raw %}
+${2:${VISUAL}}
+{%${1} endraw %}
+endsnippet
+
+snippet ablock "Arbitrary block" w
+{%${1:-} ${2:block} ${3:statements} %}
+${4:${VISUAL}}
+{%${1} end${2} %}
+endsnippet
+
+snippet extends "Extend template" w
+{%${1:-} extends '${2:template_file}' %}
+endsnippet
+
+snippet include "Include tag" b
+{%${1:-} include '${2:template_file}'${3:${4: ignore missing}${5: without context}} %}
+endsnippet
+
+snippet import "Import template macros" b
+{%${1:-} import '${2:template_file}'${3: as ${4:$2}}${5: with context} %}
+endsnippet
+
+snippet from "Import from template" b
+{%${1:-} from '${2:template_file}' import ${3:name}${4: as ${5:$3}}${6: with context} %}
+endsnippet
+
+snippet do "Expression Statement" w
+{%${1:-} do ${2:${3:var}.${4:append}(${5})} %}
+endsnippet
+
+# Filters
+snippet default "If the value is undefined it will return the passed default value" w
+default(${1:${2:default_value}, boolean=True})
+endsnippet
+
+snippet join "Join strings with separator" w
+join('${1:,}')
+endsnippet
+
+snippet dictsort "Sort a dict and yield (key, value) pairs" w
+dictsort(${1:case_sensitive=True}${1/.+/, /}${2:by='value'}${2/.+/, /}${3:reverse=True})
+endsnippet
+
+snippet sort "Sort an iterable" w
+sort(${1:reverse=True}${2:${1/.+/, /}case_sensitive=True})
+endsnippet
+
+snippet reverse "Reverse the object" w
+reverse
+endsnippet
+
+snippet first "Return the first item of a sequence" w
+first
+endsnippet
+
+snippet last "Return the last item of a sequence" w
+last
+endsnippet
+
+snippet list "Convert the value into a list" w
+list
+endsnippet
+
+snippet lower "Convert a value to lowercase" w
+lower
+endsnippet
+
+snippet upper "Convert a value to uppercase" w
+upper
+endsnippet
+
+snippet max "Return the largest item from the sequence" w
+max
+endsnippet
+
+snippet min "Return the smallest item from the sequence" w
+min
+endsnippet
+
+snippet length "Return the number of items in a container" w
+length
+endsnippet
+
+snippet map "Apply a filter on a sequence of objects or looks up an attribute" w
+map(${1:attribute='${2:name}'})
+endsnippet
+
+snippet select "Filter a sequence of objects by applying a test to each object" w
+select(${1:'${2:in}'})
+endsnippet
+
+snippet selectattr "Filter a sequence of objects by applying a test to the specified attribute of each object" w
+selectattr('${1:name}', ${2:'${3:eq}'})
+endsnippet
+
+snippet reject "Filter a sequence of objects by applying a test to each object" w
+reject(${1:'${2:eq}'})
+endsnippet
+
+snippet rejectattr "Filter a sequence of objects by applying a test to the specified attribute of each object" w
+rejectattr('${1:name}', ${2:'${3:eq}'})
+endsnippet
+
+snippet unique "Return a list of unique items from the given iterable" w
+unique(${1:case_sensitive=True}${2:${1/.+/, /}attribute='${3:name}'})
+endsnippet
+
+snippet replace "Return a value with all occurrences of a substring replaced" w
+replace('${1:old}', '${2:new}'${3/.+/, count=/}${3:None})
+endsnippet
+
+# SaltStack snippets
+snippet strftime "Converts any time related object into a time based string" w
+strftime('${1:%Y-%m-%d}')
+endsnippet
+
+snippet sequence "Ensure that parsed data is a sequence" w
+sequence
+endsnippet
+
+snippet yaml_encode "Serializes a single object into a YAML scalar" w
+yaml_encode
+endsnippet
+
+snippet to_bool "Returns the logical value of an element" w
+to_bool
+endsnippet
+
+snippet exactly_one_true "Tests that exactly one item in an iterable is truthy (neither None, False, nor 0)" w
+exactly_one_true
+endsnippet
+
+snippet exactly_n_true "Tests that exactly N items in an iterable are truthy (neither None, False, nor 0)" w
+exactly_n_true(${1:2})
+endsnippet
+
+snippet quote "Quote for shell usage" w
+quote
+endsnippet
+
+snippet regex_search "Search in a string and return match object" w
+regex_search(${1:'${2:regex}'}${3:${4:, ignorecase=True}${5:, multiline=True}})
+endsnippet
+
+snippet regex_match "Search at the beginning of a string and return match object" w
+regex_match(${1:'${2:regex}'}${3:${4:, ignorecase=True}${5:, multiline=True}})
+endsnippet
+
+snippet regex_replace "Replace text in a string with regex" w
+regex_replace(${1:'${2:regex}'}, ${3:'${4:replacement}'}${5:, ignorecase=True}${6:, multiline=True})
+endsnippet
+
+snippet regex_escape "Escape special characters within a regex" w
+regex_escape(${1/.+/'/}${1:posix_basic}${1/.+/'/})
+endsnippet
+
+snippet match "Tests that a string matches the regex" w
+match(${1:'${2:regex}'}${3:${4:, ignorecase=True}${5:, multiline=True}})
+endsnippet
+
+snippet uuid "Return a UUID" w
+uuid
+endsnippet
+
+snippet is_list "Return if an object is list" w
+is_list
+endsnippet
+
+snippet is_iter "Return if an object is iterable" w
+is_iter
+endsnippet
+
+snippet avg "Returns the average value of the elements of a list" w
+avg
+endsnippet
+
+snippet union "Return the union of two lists" w
+union(${1:[${2:item1}]})
+endsnippet
+
+snippet intersect "Return the intersection of two lists" w
+intersect(${1:[${2:item1}]})
+endsnippet
+
+snippet difference "Return the difference of two lists" w
+difference(${1:[${2:item1}]})
+endsnippet
+
+snippet symmetric_difference "Return the symmetric difference of two lists" w
+symmetric_difference(${1:[${2:item1}]})
+endsnippet
+
+snippet is_sorted "Return True if an iterable object is already sorted" w
+is_sorted
+endsnippet
+
+snippet compare_lists "Compare two lists and return a dictionary with the changes" w
+compare_lists(${1:[${2:item1}]})
+endsnippet
+
+snippet compare_dicts "Compare two dictionaries and return a dictionary with the changes" w
+compare_dicts(${1:\{${2:'${3:key}': ${4:value}}\}})
+endsnippet
+
+snippet contains_whitespace "Return True if a text contains whitespaces" w
+contains_whitespace
+endsnippet
+
+snippet substring_in_list "Return True if a substring is found in a list of string values" w
+substring_in_list
+endsnippet
+
+snippet check_whitelist_blacklist "Check a whitelist and/or blacklist to see if the value matches it" w
+check_whitelist_blacklist(${1:white}list=${2:[${3:item1}]}${4:, blacklist=${5:[${6:item1}]}})
+endsnippet
+
+snippet date_format "Converts unix timestamp into human-readable string" w
+date_format(${1:'d.%m.%Y %H:%M'})
+endsnippet
+
+snippet to_num "Converts a string to its numerical value" w
+to_num
+endsnippet
+
+snippet yaml "Render a data structure as yaml" w
+yaml${1:(flow_style=False)}
+endsnippet
+
+snippet json "Render a data structure as json" w
+json${1:(${2:sort_keys=False}${3:${2/.+/, /}indent=${4:2}})}
+endsnippet
+
+snippet load_yaml "Load yaml from text" b
+{%${1:-} load_yaml as ${2:variable} -%}
+${3:${VISUAL}}
+{%${1} endload %}
+endsnippet
+
+snippet load_yaml "Load yaml from string" w
+load_yaml
+endsnippet
+
+snippet load_json "Load json from text" b
+{%${1:-} load_json as ${2:variable} -%}
+${3:${VISUAL}}
+{%${1} endload %}
+endsnippet
+
+snippet load_json "Load json from string" w
+load_json
+endsnippet
+
+snippet load_text "Load text to variable" b
+{%${1:-} load_text as ${2:variable} -%}
+${3:${VISUAL}}
+{%${1} endload %}
+endsnippet
+
+snippet import_yaml "Import yaml from file" b
+{%${1:-} import_yaml '${2:${3:defaults}.yaml}' as ${4:$3} %}
+endsnippet
+
+snippet import_json "Import json from file" b
+{%${1:-} import_json '${2:${3:defaults}.json}' as ${4:$3} %}
+endsnippet
+
+snippet import_text "Import text from file" b
+{%${1:-} import_text '${2:${3:}.txt}' as ${4:$3} %}
+endsnippet
+
+snippet random_hash "Generates a random number between 1 and the number passed to the filter, and then hashes it" w
+random_hash('${1:sha512}')
+endsnippet
+
+snippet set_dict_key_value "Set a value in a nested dictionary" w
+set_dict_key_value('${1:foo:bar}', ${2:${3:42}, delimiter='${4:.}'})
+endsnippet
+
+snippet append_dict_key_value "Append to a list nested (deep) in a dictionary" w
+append_dict_key_value('${1:foo:bar}', ${2:${3:42}, delimiter='${4:.}'})
+endsnippet
+
+snippet extend_dict_key_value "Extend a list nested (deep) in a dictionary" w
+extend_dict_key_value('${1:foo:bar}', ${2:${3:42}, delimiter='${4:.}'})
+endsnippet
+
+snippet update_dict_key_value "Update a dictionary nested (deep) in another dictionary" w
+update_dict_key_value('${1:foo:bar}', ${2:${3:dict}, delimiter='${4:.}'})
+endsnippet
+
+snippet base64_encode "Encode a string as base64" w
+base64_encode
+endsnippet
+
+snippet base64_decode "Decode a base64-encoded string" w
+base64_decode
+endsnippet
+
+snippet http_query "Return the HTTP reply object from a URL" w
+http_query(${1:many_supported_parameterss})
+endsnippet
+
+snippet traverse "Traverse a dict or list using a colon-delimited target string" w
+traverse('${1:foo:bar}', ${2:${3:default}, delimiter='${4:.}'})
+endsnippet
+
+snippet json_query "Make queries against JSON data using JMESPath language" w
+json_query(${1:'${2:[]}'})
+endsnippet
+
+snippet to_snake_case "Converts a string from camelCase (or CamelCase) to snake_case" w
+to_snake_case
+endsnippet
+
+snippet to_camelcase "Converts a string from snake_case to camelCase (or UpperCamelCase)" w
+to_camelcase${1:(uppercamel=True)}
+endsnippet
+
+snippet is_ip "Return if a string is a valid IP Address" w
+is_ip${1:(options='${2:global}')}
+endsnippet
+
+snippet is_ipv4 "Returns if a string is a valid IPv4 address" w
+is_ipv4${1:(options='${2:global}')}
+endsnippet
+
+snippet is_ipv6 "Returns if a string is a valid IPv6 address" w
+is_ipv6${1:(options='${2:global}')}
+endsnippet
+
+snippet ipaddr "From a list, returns only valid IP entries" w
+ipaddr${1:(options='${2:global}')}
+endsnippet
+
+snippet ipv4 "From a list, returns only valid IPv4 entries" w
+ipv4${1:(options='${2:global}')}
+endsnippet
+
+snippet ipv6 "From a list, returns only valid IPv6 entries" w
+ipv6${1:(options='${2:global}')}
+endsnippet
+
+snippet network_hosts "Return the list of hosts within a networks" w
+network_hosts${1:(options='${2:global}')}
+endsnippet
+
+snippet network_size "Return the size of the network" w
+network_size${1:(options='${2:global}')}
+endsnippet
+
+snippet gen_mac "Generates a MAC address with the defined OUI prefix" w
+gen_mac
+endsnippet
+
+snippet dns_check "Return the ip resolved by dns.Tries to connect to the address before considering it useful" w
+dns_check(${1:port=${2:443}})
+endsnippet
+
+snippet is_text_file "Return if a file is text" w
+is_text_file
+endsnippet
+
+snippet is_binary_file "Return if a file is binary" w
+is_binary_file
+endsnippet
+
+snippet is_empty_file "Return if a file is empty" w
+is_empty_file
+endsnippet
+
+snippet file_hashsum "Return the hashsum of a file" w
+file_hashsum${1:('${2:sha512}')}
+endsnippet
+
+snippet list_files "Return a recursive list of files under a specific path" w
+list_files
+endsnippet
+
+snippet path_join "Joins absolute paths" w
+path_join(${1:path})
+endsnippet
+
+snippet which "Python clone of /usr/bin/which" w
+which
+endsnippet
+
+snippet show_full_context "Output all variables present in the current Jinja context"
+show_full_context()
+endsnippet
+
+snippet raise "Raise error from jinja"
+raise('${1:Custom Error}')
+endsnippet
+
+# map.jinja
+snippet map.jinja.full "map.jinja" b
+{#- Get the \`tplroot\` from \`tpldir\` #}
+{%- set tplroot = tpldir.split('/')[0] %}
+{#- Start imports as #}
+{%- import_yaml tplroot ~ "/defaults.yaml" as default_settings %}
+{%- import_yaml tplroot ~ "/osarchmap.yaml" as osarchmap %}
+{%- import_yaml tplroot ~ "/osfamilymap.yaml" as osfamilymap %}
+{%- import_yaml tplroot ~ "/osmap.yaml" as osmap %}
+{%- import_yaml tplroot ~ "/osfingermap.yaml" as osfingermap %}
+
+{#- Retrieve the config dict only once #}
+{%- set _config = salt['config.get'](tplroot, default={}) %}
+
+{%- set defaults = salt['grains.filter_by'](
+			default_settings,
+			default=tplroot,
+			merge=salt['grains.filter_by'](
+				osarchmap,
+				grain='osarch',
+				merge=salt['grains.filter_by'](
+					osfamilymap,
+					grain='os_family',
+					merge=salt['grains.filter_by'](
+						osmap,
+						grain='os',
+						merge=salt['grains.filter_by'](
+							osfingermap,
+							grain='osfinger',
+							merge=salt['grains.filter_by'](
+								_config,
+								default='lookup'
+							)
+						)
+					)
+				)
+			)
+		)
+%}
+
+{%- set config = salt['grains.filter_by'](
+			{'defaults': defaults},
+			default='defaults',
+			merge=_config
+		)
+%}
+
+{%- set ${1:`!p s=re.search('.*(?:salt|[^/]*formula[^/]*)/([^/]+)', path)
+snip.rv=s.group(1) if s else 'name' `} = config %}
+endsnippet
+
+snippet map\.jinja(?:\.(arch))?(?:\.((?:os_?)?family))?(?:\.(os))?(?:\.(finger))? "map.jinja" br
+{#- Get the \`tplroot\` from \`tpldir\` #}
+{%- set tplroot = tpldir.split('/')[0] %}
+{#- Start imports as #}
+{%- import_yaml tplroot ~ "/defaults.yaml" as default_settings %}`!p
+snip.rv='\n{%- import_yaml tplroot ~ "/osarchmap.yaml" as osarchmap %}' if \
+'arch' in match.groups() else ''
+``!p
+snip.rv='\n{%- import_yaml tplroot ~ "/osfamilymap.yaml" as osfamilymap %}' if \
+'family' in match.groups() or 'os_family' in match.groups() or 'osfamily' in match.groups() else ''
+``!p
+snip.rv='\n{%- import_yaml tplroot ~ "/osmap.yaml" as osmap %}' if \
+'os' in match.groups() else ''
+``!p
+snip.rv='\n{%- import_yaml tplroot ~ "/osfingermap.yaml" as osfingermap %}' if \
+'finger' in match.groups() else ''
+`
+
+{#- Retrieve the config dict only once #}
+{%- set _config = salt['config.get'](tplroot, default={}) %}
+
+{%- set defaults = salt['grains.filter_by'](
+			default_settings,
+			default=tplroot,
+			`!p
+template=("merge=salt['grains.filter_by'](\n"
+          "\t{var},\n"
+          "\tgrain='{grain}',\n"
+          "\t{merge}\n"
+          ")"
+         )
+final=("merge=salt['grains.filter_by'](\n"
+        "\t_config,\n"
+        "\tdefault='lookup'\n"
+        ")"
+       )
+
+for grain in reversed(match.groups()):
+	if grain:
+		i = {
+			'finger':    {'var': 'osfingermap', 'grain': 'osfinger' },
+			'os':        {'var': 'osmap',       'grain': 'os'       },
+			'os_family': {'var': 'osfamilymap', 'grain': 'os_family'},
+			'osfamily':  {'var': 'osfamilymap', 'grain': 'os_family'},
+			'family':    {'var': 'osfamilymap', 'grain': 'os_family'},
+			'arch':      {'var': 'osarchmap',   'grain': 'osarch'   },
+		}[grain]
+
+		final=template.format(var=i['var'], grain=i['grain'],
+			merge=final.replace('\n', '\n\t'))
+
+snip.rv=final
+`
+		)
+%}
+
+{%- set config = salt['grains.filter_by'](
+			{'defaults': defaults},
+			default='defaults',
+			merge=_config
+		)
+%}
+
+{%- set ${1:`!p s=re.search('.*(?:salt|[^/]*formula[^/]*)/([^/]+)', path)
+snip.rv=s.group(1) if s else 'name' `} = config %}
+endsnippet
+
+snippet libtofs "files_switch function" b
+{%- macro files_switch(
+      source_files,
+      lookup=None,
+      default_files_switch=["id", "os_family"],
+      indent_width=6,
+      use_subpath=False
+    ) %}
+{#-
+    Returns a valid value for the "source" parameter of a "file.managed"
+    state function. This makes easier the usage of the Template Override and
+    Files Switch (TOFS) pattern.
+    Params:
+      * source_files: ordered list of files to look for
+      * lookup: key under "<tplroot>:tofs:source_files" to prepend to the
+        list of source files
+      * default_files_switch: if there's no config (e.g. pillar)
+        "<tplroot>:tofs:files_switch" this is the ordered list of grains to
+        use as selector switch of the directories under
+        "<path_prefix>/files"
+      * indent_width: indentation of the result value to conform to YAML
+      * use_subpath: defaults to \`False\` but if set, lookup the source file
+        recursively from the current state directory up to \`tplroot\`
+    Example (based on a \`tplroot\` of \`xxx\`):
+    If we have a state:
+      Deploy configuration:
+        file.managed:
+          - name: /etc/yyy/zzz.conf
+          - source: {{ files_switch(
+                         ["/etc/yyy/zzz.conf", "/etc/yyy/zzz.conf.jinja"],
+                         lookup="Deploy configuration",
+                       ) }}
+          - template: jinja
+    In a minion with id=theminion and os_family=RedHat, it's going to be
+    rendered as:
+      Deploy configuration:
+        file.managed:
+          - name: /etc/yyy/zzz.conf
+          - source:
+            - salt://xxx/files/theminion/etc/yyy/zzz.conf
+            - salt://xxx/files/theminion/etc/yyy/zzz.conf.jinja
+            - salt://xxx/files/RedHat/etc/yyy/zzz.conf
+            - salt://xxx/files/RedHat/etc/yyy/zzz.conf.jinja
+            - salt://xxx/files/default/etc/yyy/zzz.conf
+            - salt://xxx/files/default/etc/yyy/zzz.conf.jinja
+          - template: jinja
+#}
+{#-   Get the \`tplroot\` from \`tpldir\` #}
+{%-   set tplroot = tpldir.split("/")[0] %}
+{%-   set path_prefix = salt["config.get"](tplroot ~ ":tofs:path_prefix", tplroot) %}
+{%-   set files_dir = salt["config.get"](tplroot ~ ":tofs:dirs:files", "files") %}
+{%-   set files_switch_list = salt["config.get"](
+        tplroot ~ ":tofs:files_switch", default_files_switch
+      ) %}
+{#-   Lookup source_files (v2), files (v1), or fallback to an empty list #}
+{%-   set src_files = salt["config.get"](
+        tplroot ~ ":tofs:source_files:" ~ lookup,
+        salt["config.get"](tplroot ~ ":tofs:files:" ~ lookup, []),
+      ) %}
+{#-   Append the default source_files #}
+{%-   set src_files = src_files + source_files %}
+{#-   Only add to [""] when supporting older TOFS implementations #}
+{%-   set path_prefix_exts = [""] %}
+{%-   if use_subpath and tplroot != tpldir %}
+{#-     Walk directory tree to find {{ files_dir }} #}
+{%-     set subpath_parts = tpldir.lstrip(tplroot).lstrip("/").split("/") %}
+{%-     for path in subpath_parts %}
+{%-       set subpath = subpath_parts[0 : loop.index] | join("/") %}
+{%-       do path_prefix_exts.append("/" ~ subpath) %}
+{%-     endfor %}
+{%-   endif %}
+{%-   for path_prefix_ext in path_prefix_exts | reverse %}
+{%-     set path_prefix_inc_ext = path_prefix ~ path_prefix_ext %}
+{#-     For older TOFS implementation, use \`files_switch\` from the config #}
+{#-     Use the default, new method otherwise #}
+{%-     set fsl = salt["config.get"](
+          tplroot ~ path_prefix_ext | replace("/", ":") ~ ":files_switch",
+          files_switch_list,
+        ) %}
+{#-     Append an empty value to evaluate as \`default\` in the loop below #}
+{%-     if "" not in fsl %}
+{%-       set fsl = fsl + [""] %}
+{%-     endif %}
+{%-     for fs in fsl %}
+{%-       for src_file in src_files %}
+{%-         if fs %}
+{%-           set fs_dirs = salt["config.get"](fs, fs) %}
+{%-         else %}
+{%-           set fs_dirs = salt["config.get"](
+                tplroot ~ ":tofs:dirs:default", "default"
+              ) %}
+{%-         endif %}
+{#-         Force the \`config.get\` lookup result as a list where necessary #}
+{#-         since we need to also handle grains that are lists #}
+{%-         if fs_dirs is string %}
+{%-           set fs_dirs = [fs_dirs] %}
+{%-         endif %}
+{%-         for fs_dir in fs_dirs %}
+{#-           strip empty elements by using a select #}
+{%-           set url = (
+                [
+                  "- salt:/",
+                  path_prefix_inc_ext.strip("/"),
+                  files_dir.strip("/"),
+                  fs_dir.strip("/"),
+                  src_file.strip("/"),
+                ]
+                | select
+                | join("/")
+              ) %}
+{{ url | indent(indent_width, true) }}
+{%-         endfor %}
+{%-       endfor %}
+{%-     endfor %}
+{%-   endfor %}
+{%- endmacro %}
+endsnippet

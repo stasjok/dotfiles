@@ -1,0 +1,76 @@
+# A valid snippet should starts with:
+#
+#		snippet trigger_word [ "description" [ options ] ]
+#
+# and end with:
+#
+#		endsnippet
+#
+# Snippet options:
+#
+#		b - Beginning of line.
+#		i - In-word expansion.
+#		w - Word boundary.
+#		r - Regular expression
+#		e - Custom context snippet
+#		A - Snippet will be triggered automatically, when condition matches.
+#
+# Basic example:
+#
+#		snippet emitter "emitter properties" b
+#		private readonly ${1} = new Emitter<$2>()
+#		public readonly ${1/^_(.*)/$1/}: Event<$2> = this.$1.event
+#		endsnippet
+#
+# Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
+
+extends jinja
+
+snippet fact "Ansible fact" w
+ansible_facts['${1:hostname}']
+endsnippet
+
+snippet managed "Ansible managed variable"
+ansible_managed
+endsnippet
+
+snippet managed "Ansible managed variable" b
+{{ ansible_managed | comment${1} }}
+endsnippet
+
+# Filters
+snippet mandatory "Return error if some value is undefined" w
+mandatory(${1:msg='${2:Mandatory variable is not defined.}'})
+endsnippet
+
+snippet ternary "Value to use when the test returns true and another when the test returns false" w
+ternary(${1:'val_if_true'}, ${2:'val_if_false'}${3/.+/, /}${3:'val_if_none'})
+endsnippet
+
+snippet dict2items "Turn a dictionary into a list of items" w
+dict2items(key_name='${1:name}', value_name='${2:value}')
+endsnippet
+
+snippet items2dict "Turn a list of dicts with 2 keys, into a dict" w
+items2dict(key_name='${1:name}', value_name='${2:value}')
+endsnippet
+
+snippet flatten "Flatten a list" w
+flatten(levels=${1:1})
+endsnippet
+
+snippet regex_findall "Search for all occurrences of regex matches" w
+regex_findall(${1:'${2:regex}'}${3:${4:, multiline=True}${5:, ignorecase=True}})
+endsnippet
+
+snippet match "Match strings against a substring or a regular expression" w
+match(${1:'${2:regex}'}${3:${4:, multiline=True}${5:, ignorecase=True}})
+endsnippet
+
+snippet search "Match strings against a substring or a regular expression" w
+search(${1:'${2:regex}'}${3:${4:, multiline=True}${5:, ignorecase=True}})
+endsnippet
+
+snippet combine "Merge hashes" w
+combine(${1:hash}${2:, recursive=True})
+endsnippet
