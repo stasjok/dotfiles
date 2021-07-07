@@ -17,4 +17,5 @@ in with stable; [
   git
   gnupg
   tmux
+  unstable.neovim
 ]
