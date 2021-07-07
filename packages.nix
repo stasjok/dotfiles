@@ -20,7 +20,7 @@ in with stable; {
     tmux
     ;
   inherit (unstable)
-    neovim
+    neovim-unwrapped
     ;
   packer-nvim = vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
     version = "2021-07-06";
