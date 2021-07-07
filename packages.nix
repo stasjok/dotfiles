@@ -13,9 +13,22 @@ let
   stable = import nixpkgs-stable { config = {}; overlays = []; };
   unstable = import nixpkgs-unstable { config = {}; overlays = []; };
 
-in with stable; [
-  git
-  gnupg
-  tmux
-  unstable.neovim
-]
+in with stable; {
+  inherit
+    git
+    gnupg
+    tmux
+    ;
+  inherit (unstable)
+    neovim
+    ;
+  packer-nvim = vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
+    version = "2021-07-06";
+    src = fetchFromGitHub {
+      owner = "wbthomason";
+      repo = "packer.nvim";
+      rev = "3fdea07bec6cb733d2f82e50a10829528b0ed4a9";
+      sha256 = "022klki8hgv1i5h91r1ag5jnk37iq6awgfijjzb47z2k525nh0nc";
+    };
+  });
+}
