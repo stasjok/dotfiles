@@ -15,4 +15,5 @@ let
 
 in with stable; [
   git
+  gnupg
 ]
