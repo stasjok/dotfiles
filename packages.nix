@@ -14,7 +14,7 @@ let
   unstable = import nixpkgs-unstable { config = {}; overlays = []; };
 
 in with stable; {
-  inherit
+  inherit (stable)
     git
     gnupg
     tmux
