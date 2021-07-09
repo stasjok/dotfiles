@@ -1,5 +1,5 @@
--- Add packer.nvim to runtimepath
-vim.opt.runtimepath:append("~/.nix-profile/share/vim-plugins/packer-nvim/")
+-- Command for installing plugins
+vim.cmd [[command! Plugins runtime lua/my/plugins.lua]]
 
 -- Options
 vim.opt.hidden = true;
