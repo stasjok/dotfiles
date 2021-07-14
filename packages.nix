@@ -22,6 +22,7 @@ in with stable; {
     gcc
     ;
   inherit (unstable)
+    fish
     neovim-unwrapped
     tree-sitter
     ;
