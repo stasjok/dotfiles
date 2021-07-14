@@ -42,6 +42,9 @@ packer.startup({
 
     -- Nix
     { 'Freed-Wu/vim-nix', commit = '2fc254b90661f8190565b18874d0662bfcbec02c', ft = 'nix' }, -- forked from LnL7/vim-nix
+
+    -- Fish
+    { 'khaveesh/vim-fish-syntax', commit = 'cf759d1ac42396ee2246a082eceb0debde04c445' },
   }
 });
 
