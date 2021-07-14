@@ -18,9 +18,12 @@ in with stable; {
     git
     gnupg
     tmux
+    nodejs
+    gcc
     ;
   inherit (unstable)
     neovim-unwrapped
+    tree-sitter
     ;
   packer-nvim = vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
     version = "2021-07-06";
