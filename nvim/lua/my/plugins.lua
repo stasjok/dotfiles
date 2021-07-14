@@ -10,8 +10,12 @@ packer.startup({
   },
 
   -- Plugins
-  { 'nanotee/nvim-lua-guide', commit = 'bcbc72d9c0952d30d603e48603da034b0f095e61' }
+  {
+    { 'nanotee/nvim-lua-guide', commit = 'bcbc72d9c0952d30d603e48603da034b0f095e61' },
 
+    -- Nix
+    { 'Freed-Wu/vim-nix', commit = '2fc254b90661f8190565b18874d0662bfcbec02c' }, -- forked from LnL7/vim-nix
+  }
 });
 
 packer.sync();
