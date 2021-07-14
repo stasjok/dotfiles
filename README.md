@@ -8,6 +8,12 @@ Install Nix (https://nixos.org/manual/nix/stable/#chap-installation), then:
 nix-env --install --remove-all --file packages.nix
 ```
 
+## Fish
+
+Change default shell to `/nix/var/nix/profiles/per-user/<USERNAME>/profile/bin/fish`
+(or `/usr/bin/fish` if you installed it with package manager).
+You may need to edit `/etc/shells`.
+
 ## Nvim
 
 Nvim configuration:
