@@ -5,9 +5,9 @@ let
     sha256 = "1ffk57wfcfvvfjcxzialn9pgfmkanygz4h9kswv0jwiypjbrhzaa";
   };
   nixpkgs-unstable = fetchTarball {
-    name = "nixpkgs-21.11pre300283.f930ea227ce";
-    url = https://releases.nixos.org/nixpkgs/nixpkgs-21.11pre300283.f930ea227ce/nixexprs.tar.xz;
-    sha256 = "1jw4s2psbx2ib1w69nymxj4jcyqgjg19n818ygc1rlspjscjfgyg";
+    name = "nixpkgs-21.11pre301805.dac74fead87";
+    url = https://releases.nixos.org/nixpkgs/nixpkgs-21.11pre301805.dac74fead87/nixexprs.tar.xz;
+    sha256 = "0435g5qwx2qwmsqf1ziazhi9xi0b6inax7j2daikgnsyc1jgcldc";
   };
 
   stable = import nixpkgs-stable { config = {}; overlays = []; };
