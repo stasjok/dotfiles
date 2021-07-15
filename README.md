@@ -1,5 +1,12 @@
 # My dotfiles
 
+## Terminal 
+
+I use [Windows Terminal](https://github.com/microsoft/terminal).
+
+* Set up terminal colors to Solarized Dark theme.
+* Install one of the [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts). I use `FiraCode NF`.
+
 ## Packages
 
 Install Nix (https://nixos.org/manual/nix/stable/#chap-installation), then:
