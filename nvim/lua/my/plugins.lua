@@ -48,6 +48,23 @@ packer.startup({
 
     -- Fish
     { 'khaveesh/vim-fish-syntax', commit = 'cf759d1ac42396ee2246a082eceb0debde04c445' },
+
+    -- Jinja
+    { 'Glench/Vim-Jinja2-Syntax', commit = '2c17843b074b06a835f88587e1023ceff7e2c7d1',
+      config = function()
+        vim.g.jinja_syntax_html = 0
+      end
+    },
+    -- Ansible
+    { 'pearofducks/ansible-vim', commit = '804099202b72ffd4bf4ea4ce24d8d7bac8b9ae2d',
+      config = function()
+        vim.g.ansible_unindent_after_newline = 1;
+        vim.g.ansible_extra_keywords_highlight = 1;
+        vim.g.ansible_template_syntaxes = {
+          ['*.sh.j2'] = 'sh',
+        }
+      end
+    }
   }
 });
 
