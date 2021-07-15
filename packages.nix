@@ -20,6 +20,7 @@ in with stable; {
     tmux
     nodejs
     gcc
+    ansible_2_9
     ;
   inherit (unstable)
     fish
