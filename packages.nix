@@ -29,6 +29,7 @@ in with stable; {
     ;
   packer-nvim = vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
     version = "2021-07-06";
+    pname = "packer.nvim";
     src = fetchFromGitHub {
       owner = "wbthomason";
       repo = "packer.nvim";

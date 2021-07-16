@@ -15,6 +15,18 @@ Install Nix (https://nixos.org/manual/nix/stable/#chap-installation), then:
 nix-env --install --remove-all --file packages.nix
 ```
 
+## Installation
+
+Install configs with Ansible:
+
+```
+ansible-playbook install.yml
+```
+
+It will ask if you want to overwrite existing configs. If you answer `yes`, then all existing
+files and directories will be removed. If you answer `no`, then ansible will just fail in case
+you already have some configs in place.
+
 ## Fish
 
 Change default shell to `/nix/var/nix/profiles/per-user/<USERNAME>/profile/bin/fish`
@@ -23,11 +35,4 @@ You may need to edit `/etc/shells`.
 
 ## Nvim
 
-Nvim configuration:
-
-```
-mkdir -p ~/.local/share/nvim/site/pack/packer.nvim/opt/
-ln -s ~/.nix-profile/share/vim-plugins/packer-nvim/ ~/.local/share/nvim/site/pack/packer.nvim/opt/packer.nvim
-```
-
-In nvim run command `:Plugins`.
+Run command `:Plugins` in neovim after first startup.

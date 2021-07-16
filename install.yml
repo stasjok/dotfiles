@@ -1,0 +1,55 @@
+# vim: ft=yaml.ansible
+
+- hosts: localhost
+  connection: local
+  vars_prompt:
+    - name: force
+      prompt: >
+        Overwrite your configs if any (yes/no)?
+        If `yes`, the following configs will be removed: nvim, fish.
+      private: no
+      default: no
+
+  tasks:
+    - name: get facts about target files/directories
+      stat:
+        path: "{{ item }}"
+      register: path_facts
+      loop:
+        - ~/.config/nvim
+        - ~/.config/fish
+
+    - name: remove any existing files/directories
+      file:
+        path: "{{ item.item }}"
+        state: absent
+      when:
+        - force|bool
+        - item.stat.isdir or item.stat.isreg
+      loop: "{{ path_facts.results }}"
+      loop_control:
+        label: "{{ item.item }}"
+
+    - name: make symlink for neovim configuration
+      file:
+        path: ~/.config/nvim
+        src: "{{ playbook_dir }}/nvim"
+        state: link
+
+    - name: make directory for vim plugins from nix
+      file:
+        path: ~/.local/share/nvim/site/pack/nix
+        mode: 0755
+        state: directory
+
+    - name: make symlink pointing to vim plugins from nix
+      file:
+        path: ~/.local/share/nvim/site/pack/nix/opt
+        src: ~/.nix-profile/share/vim-plugins
+        state: link
+
+    - name: make symlink for fish configuration
+      file:
+        path: ~/.config/fish
+        src: "{{ playbook_dir }}/fish"
+        state: link
