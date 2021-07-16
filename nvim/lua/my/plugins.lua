@@ -69,3 +69,5 @@ packer.startup({
 });
 
 packer.sync();
+vim.api.nvim_command('packloadall!');
+vim.api.nvim_command('runtime packer_compiled.lua');
