@@ -53,3 +53,10 @@
         path: ~/.config/fish
         src: "{{ playbook_dir }}/fish"
         state: link
+
+    - name: make symlink for tmux configuration
+      file:
+        path: ~/.tmux.conf
+        src: "{{ playbook_dir }}/tmux/tmux.conf"
+        force: "{{ force|bool }}"
+        state: link
