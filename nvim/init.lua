@@ -27,3 +27,19 @@ function _G.OnEnter()
   end
 end
 vim.api.nvim_set_keymap('n', '<CR>', 'v:lua.OnEnter()', {expr = true, noremap = true});
+
+-- Clipboard integration with tmux
+if vim.env.TMUX then
+  vim.g.clipboard = {
+    name = 'tmux',
+    copy = {
+      ['+'] = {'tmux', 'load-buffer', '-w', '-'},
+      ['*'] = {'tmux', 'load-buffer', '-w', '-'},
+    },
+    paste = {
+      ['+'] = {'tmux', 'save-buffer', '-w', '-'},
+      ['*'] = {'tmux', 'save-buffer', '-w', '-'},
+    },
+    cache_enabled = 1,
+  }
+end
