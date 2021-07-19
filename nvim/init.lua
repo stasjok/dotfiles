@@ -11,6 +11,7 @@ vim.g.mapleader = ' ';
 vim.g.maplocalleader = '\\';
 
 -- Options
+vim.opt.mouse = 'a';
 vim.opt.hidden = true;
 vim.opt.ignorecase = true;
 vim.opt.smartcase = true;
