@@ -16,6 +16,31 @@ packer.startup({
     -- Solarized colorscheme
     { 'ishan9299/nvim-solarized-lua', commit = 'fa437ae65a6c1239525e4ec7f4cbf4671eaa55ba' },
 
+    { 'aserowy/tmux.nvim', commit = '7d47e74b6fb3cd458cacdced36c2389510708ebe',
+      config = function()
+        require'tmux'.setup(
+        { -- configuration
+          resize = {
+            resize_step_x = 2,
+            resize_step_y = 2,
+          }
+        },
+        { -- logging configuration
+          file = "disabled",
+        });
+        for _, mode in ipairs({'n', 'v', 't'}) do
+          vim.api.nvim_set_keymap(mode, '<M-h>', [[<Cmd>lua require'tmux'.move_left()<cr>]], {noremap = true});
+          vim.api.nvim_set_keymap(mode, '<M-j>', [[<Cmd>lua require'tmux'.move_bottom()<cr>]], {noremap = true});
+          vim.api.nvim_set_keymap(mode, '<M-k>', [[<Cmd>lua require'tmux'.move_top()<cr>]], {noremap = true});
+          vim.api.nvim_set_keymap(mode, '<M-l>', [[<Cmd>lua require'tmux'.move_right()<cr>]], {noremap = true});
+          vim.api.nvim_set_keymap(mode, '<M-H>', [[<Cmd>lua require'tmux'.resize_left()<cr>]], {noremap = true});
+          vim.api.nvim_set_keymap(mode, '<M-J>', [[<Cmd>lua require'tmux'.resize_bottom()<cr>]], {noremap = true});
+          vim.api.nvim_set_keymap(mode, '<M-K>', [[<Cmd>lua require'tmux'.resize_top()<cr>]], {noremap = true});
+          vim.api.nvim_set_keymap(mode, '<M-L>', [[<Cmd>lua require'tmux'.resize_right()<cr>]], {noremap = true});
+        end
+      end
+    },
+
     -- Tree-sitter
     {
       'nvim-treesitter/nvim-treesitter', commit = '29113e6892a46d4afff41417c0be7122a3b97ae6',
