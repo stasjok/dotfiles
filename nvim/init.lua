@@ -24,6 +24,10 @@ vim.opt_global.scrolloff = 6;
 vim.opt_global.sidescrolloff = 6;
 vim.opt_global.scrollback = 80000;
 
+vim.opt.cursorline = true;
+vim.opt.number = true;
+vim.opt.relativenumber = true;
+
 -- Mappings
 vim.api.nvim_set_keymap('n', '<leader><CR>', '<Cmd>buffer #<CR>', {noremap = true});
 function _G.OnEnter()

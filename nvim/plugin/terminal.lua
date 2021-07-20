@@ -2,6 +2,7 @@ vim.cmd([[
 augroup terminal
   autocmd!
   autocmd TermOpen * lua _G.Terminal.bufnr = vim.fn.winbufnr(0)
+  autocmd TermOpen * setlocal nocursorline nonumber norelativenumber
   autocmd TermOpen * startinsert
   autocmd BufWinEnter term://* startinsert
 augroup END
