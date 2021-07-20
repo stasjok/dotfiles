@@ -80,6 +80,6 @@ end
 vim.cmd [[
 augroup highlight_on_yank
 autocmd!
-autocmd! highlight_on_yank TextYankPost * silent! lua vim.highlight.on_yank {on_visual=false}
+autocmd TextYankPost * silent! lua vim.highlight.on_yank {on_visual=false}
 augroup END
 ]]
