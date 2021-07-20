@@ -28,6 +28,18 @@ vim.opt.cursorline = true;
 vim.opt.number = true;
 vim.opt.relativenumber = true;
 
+-- show tabs and trailing spaces
+vim.opt.list = true;
+vim.opt_global.listchars = 'tab:→ ,trail:⋅,extends:❯,precedes:❮';
+-- don't show trailing spaces during insert mode
+vim.cmd [[
+augroup listchars_in_insert
+autocmd!
+autocmd InsertEnter * setlocal listchars=tab:→\ ,extends:❯,precedes:❮
+autocmd InsertLeave * setlocal listchars=tab:→\ ,trail:⋅,extends:❯,precedes:❮
+augroup END
+]]
+
 -- Mappings
 vim.api.nvim_set_keymap('n', '<leader><CR>', '<Cmd>buffer #<CR>', {noremap = true});
 function _G.OnEnter()
