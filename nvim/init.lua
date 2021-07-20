@@ -37,9 +37,9 @@ if vim.env.TMUX then
       ['*'] = {'tmux', 'load-buffer', '-w', '-'},
     },
     paste = {
-      ['+'] = {'tmux', 'save-buffer', '-w', '-'},
-      ['*'] = {'tmux', 'save-buffer', '-w', '-'},
+      ['+'] = {'tmux', 'save-buffer', '-'},
+      ['*'] = {'tmux', 'save-buffer', '-'},
     },
-    cache_enabled = 1,
+    cache_enabled = true,
   }
 end
