@@ -16,6 +16,9 @@ vim.opt.hidden = true;
 vim.opt.ignorecase = true;
 vim.opt.smartcase = true;
 vim.opt.ttimeoutlen = 5;
+vim.opt_global.scrolloff = 6;
+vim.opt_global.sidescrolloff = 6;
+vim.opt_global.scrollback = 80000;
 
 -- Mappings
 vim.api.nvim_set_keymap('n', '<leader><CR>', '<Cmd>buffer #<CR>', {noremap = true});
