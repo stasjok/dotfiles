@@ -1,7 +1,7 @@
 -- Colorscheme (Solarized)
 vim.opt.termguicolors = true;
 vim.opt.background = 'dark';
-vim.api.nvim_command('colorscheme solarized');
+vim.api.nvim_command('runtime colors/solarized.lua');
 
 -- Command for installing plugins
 vim.cmd [[command! Plugins runtime lua/my/plugins.lua]]
