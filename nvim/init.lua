@@ -59,6 +59,8 @@ end
 vim.api.nvim_set_keymap('v', '<LeftRelease>', '<LeftRelease>"*y', {noremap = true});
 -- by default MiddleMouse yanks to unnamed and pastes from * (why?); change yanking also to *
 vim.api.nvim_set_keymap('v', '<MiddleMouse>', '"*y<MiddleMouse>', {noremap = true});
+-- by default MiddleMouse paste at the position of cursor in normal mode, but not in insert mode; fix it
+vim.api.nvim_set_keymap('i', '<MiddleMouse>', '<LeftMouse><MiddleMouse>', {noremap = true});
 
 -- Clipboard integration with tmux
 if vim.env.TMUX then
