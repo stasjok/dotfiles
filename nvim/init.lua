@@ -27,6 +27,15 @@ function _G.OnEnter()
   end
 end
 vim.api.nvim_set_keymap('n', '<CR>', 'v:lua.OnEnter()', {expr = true, noremap = true});
+-- increase mouse scroll speed
+for _, m in ipairs{'', 'i', 't'} do
+  vim.api.nvim_set_keymap(m, '<ScrollWheelUp>', '<ScrollWheelUp><ScrollWheelUp>', {noremap = true});
+  vim.api.nvim_set_keymap(m, '<ScrollWheelDown>', '<ScrollWheelDown><ScrollWheelDown>', {noremap = true});
+end
+-- automatic yank after mouse selection
+vim.api.nvim_set_keymap('v', '<LeftRelease>', '<LeftRelease>"*y', {noremap = true});
+-- by default MiddleMouse yanks to unnamed and pastes from * (why?); change yanking also to *
+vim.api.nvim_set_keymap('v', '<MiddleMouse>', '"*y<MiddleMouse>', {noremap = true});
 
 -- Clipboard integration with tmux
 if vim.env.TMUX then
