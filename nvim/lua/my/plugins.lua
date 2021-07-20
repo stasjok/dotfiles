@@ -100,6 +100,14 @@ packer.startup({
     },
     -- SaltStack
     { 'saltstack/salt-vim', commit = '6ca9e3500cc39dd417b411435d58a1b720b331cc' },
+    -- MediaWiki
+    { 'chikamichi/mediawiki.vim', commit = '26e5737264354be41cb11d16d48132779795e168',
+      ft = 'mediawiki',
+      config = function()
+        vim.g.mediawiki_wikilang_to_vim_overrides = { sls = 'sls' };
+        vim.g.mediawiki_forced_wikilang = { 'bash' };
+      end
+    },
   }
 });
 
