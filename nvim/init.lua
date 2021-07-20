@@ -11,6 +11,10 @@ vim.g.mapleader = ' ';
 vim.g.maplocalleader = '\\';
 
 -- Options
+vim.opt.softtabstop = -1;
+vim.opt.shiftwidth = 4;
+vim.opt.expandtab = true;
+
 vim.opt.mouse = 'a';
 vim.opt.hidden = true;
 vim.opt.ignorecase = true;
