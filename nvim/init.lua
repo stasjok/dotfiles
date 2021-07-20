@@ -40,7 +40,7 @@ vim.api.nvim_set_keymap('v', '<MiddleMouse>', '"*y<MiddleMouse>', {noremap = tru
 -- Clipboard integration with tmux
 if vim.env.TMUX then
   vim.g.clipboard = {
-    name = 'tmux',
+    name = 'tmux-send-to-clipboard',
     copy = {
       ['+'] = {'tmux', 'load-buffer', '-w', '-'},
       ['*'] = {'tmux', 'load-buffer', '-w', '-'},
