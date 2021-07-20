@@ -97,7 +97,9 @@ packer.startup({
           ['*.sh.j2'] = 'sh',
         }
       end
-    }
+    },
+    -- SaltStack
+    { 'saltstack/salt-vim', commit = '6ca9e3500cc39dd417b411435d58a1b720b331cc' },
   }
 });
 
