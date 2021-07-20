@@ -5,6 +5,20 @@ if status is-login
     set --universal --export EDITOR nvim
     # Force nix packages to use system locale
     set --universal --export LOCALE_ARCHIVE /usr/lib/locale/locale-archive
+    # Set $NIX_SSL_CERT_FILE so that Nixpkgs applications like curl work.
+    if not set -q NIX_SSL_CERT_FILE
+        if test -e /etc/ssl/certs/ca-certificates.crt # NixOS, Ubuntu, Debian, Gentoo, Arch
+            set --universal --export NIX_SSL_CERT_FILE /etc/ssl/certs/ca-certificates.crt
+        else if test -e /etc/ssl/ca-bundle.pem # openSUSE Tumbleweed
+            set --universal --export NIX_SSL_CERT_FILE /etc/ssl/ca-bundle.pem
+        else if test -e /etc/ssl/certs/ca-bundle.crt # Old NixOS
+            set --universal --export NIX_SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt
+        else if test -e /etc/pki/tls/certs/ca-bundle.crt # Fedora, CentOS
+            set --universal --export NIX_SSL_CERT_FILE /etc/pki/tls/certs/ca-bundle.crt
+        else if test -e ~/.nix-profile/etc/ssl/certs/ca-bundle.crt
+            set --universal --export NIX_SSL_CERT_FILE ~/.nix-profile/etc/ssl/certs/ca-bundle.crt
+        end
+    end
     # Set up ssh-agent
     find_ssh_agent
     # Load Solarized Theme
