@@ -59,7 +59,39 @@ packer.startup({
       config = function()
         require'nvim-autopairs'.setup({
           fast_wrap = {},
-        });
+        })
+
+        local npairs = require'nvim-autopairs'
+        local Rule = require'nvim-autopairs.rule'
+        local cond = require'nvim-autopairs.conds'
+
+        -- Add spaces between parentheses
+        -- https://github.com/windwp/nvim-autopairs/issues/78
+        -- https://github.com/windwp/nvim-autopairs/wiki/Custom-rules/425d8b096433b1329808797ff78f3acf23bc438f
+        -- But I've changed it a little
+        npairs.add_rules {
+          Rule(' ', ' ')
+            :with_pair(function (opts)
+              local pair = opts.line:sub(opts.col, opts.col + 1)
+              return vim.tbl_contains({ '()', '[]', '{}' }, pair)
+            end),
+          Rule('', ' )')
+            :with_pair(cond.none())
+            :with_del(cond.none())
+            :with_move(function(opts) return opts.char == ')' end)
+            :use_key(')'),
+          Rule('', ' }')
+            :with_pair(cond.none())
+            :with_del(cond.none())
+            :with_move(function(opts) return opts.char == '}' end)
+            :use_key('}'),
+          Rule('', ' ]')
+            :with_pair(cond.none())
+            :with_del(cond.none())
+            :with_move(function(opts) return opts.char == ']' end)
+            :use_key(']'),
+        }
+
         function _G.OnEnterInsert()
           if vim.fn.pumvisible() ~= 0 then
             return vim.api.nvim_replace_termcodes('<CR>', true, false, true);
