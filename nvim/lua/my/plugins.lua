@@ -52,28 +52,23 @@ packer.startup({
     -- Tree-sitter
     {
       'nvim-treesitter/nvim-treesitter', commit = '29113e6892a46d4afff41417c0be7122a3b97ae6',
-      run = ':TSUpdate', config = require'my.treesitter'.setup,
-      ft = {
-        'nix',
-      },
-      cmd = {
-        'TSInstall',
-        'TSInstallFromGrammar',
-        'TSInstallInfo',
-        'TSUpdate',
-        'TSUninstall',
-        'TSConfigInfo',
-        'TSBufEnable',
-        'TSBufDisable',
-        'TSBufToggle',
-        'TSEnableAll',
-        'TSDisableAll',
-        'TSToggleAll',
-        'TSModuleInfo',
-        'TSEditQuery',
-        'TSEditQueryUserAfter'
-      },
-      module = 'nvim-treesitter.ts_utils'
+      run = ':TSUpdate', config = require'my.treesitter'.setup
+    },
+
+    { 'windwp/nvim-autopairs', commit = 'b0bbe8d9089cbb045fd15d217ac5a5ec0f4f5066',
+      config = function()
+        require'nvim-autopairs'.setup({
+          fast_wrap = {},
+        });
+        function _G.OnEnterInsert()
+          if vim.fn.pumvisible() ~= 0 then
+            return vim.api.nvim_replace_termcodes('<CR>', true, false, true);
+          else
+            return require'nvim-autopairs'.autopairs_cr();
+          end
+        end
+        vim.api.nvim_set_keymap('i' , '<CR>','v:lua.OnEnterInsert()', {expr = true , noremap = true});
+      end
     },
 
     -- Nix
