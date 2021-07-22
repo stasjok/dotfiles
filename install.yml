@@ -18,6 +18,7 @@
       loop:
         - ~/.config/nvim
         - ~/.config/fish
+        - ~/.config/git
 
     - name: remove any existing files/directories
       file:
@@ -60,4 +61,10 @@
         path: ~/.tmux.conf
         src: "{{ playbook_dir }}/tmux/tmux.conf"
         force: "{{ force|bool }}"
+        state: link
+
+    - name: make symlink for git configuration
+      file:
+        path: ~/.config/git
+        src: "{{ playbook_dir }}/git"
         state: link
