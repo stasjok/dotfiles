@@ -19,6 +19,14 @@ if status is-login
             set --universal --export NIX_SSL_CERT_FILE ~/.nix-profile/etc/ssl/certs/ca-bundle.crt
         end
     end
+    # Add nix-profile to the list of XDG data directories
+    if not set -q XDG_DATA_DIRS
+        set --universal --export --path XDG_DATA_DIRS ~/.nix-profile/share /usr/local/share /usr/share
+    else
+        set --path XDG_DATA_DIRS (string split : $XDG_DATA_DIRS)
+        contains ~/.nix-profile/share $XDG_DATA_DIRS
+        or set XDG_DATA_DIRS ~/.nix-profile/share $XDG_DATA_DIRS
+    end
     # Set up ssh-agent
     find_ssh_agent
     # Load Solarized Theme
