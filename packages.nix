@@ -18,6 +18,10 @@ in with stable; {
     git
     gnupg
     tmux
+    bat
+    fd
+    ripgrep
+    fzf
     nodejs
     gcc
     ansible_2_9
