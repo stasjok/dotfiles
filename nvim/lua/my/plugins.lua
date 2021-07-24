@@ -16,6 +16,10 @@ packer.startup({
     -- Solarized colorscheme
     { 'ishan9299/nvim-solarized-lua', commit = 'fa437ae65a6c1239525e4ec7f4cbf4671eaa55ba' },
 
+    -- Libraries
+    { 'nvim-lua/popup.nvim', commit = '5e3bece7b4b4905f4ec89bee74c09cfd8172a16a' },
+    { 'nvim-lua/plenary.nvim', commit = '8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974' },
+
     { 'aserowy/tmux.nvim', commit = '7d47e74b6fb3cd458cacdced36c2389510708ebe',
       config = function()
         require'tmux'.setup(
@@ -53,6 +57,16 @@ packer.startup({
     {
       'nvim-treesitter/nvim-treesitter', commit = '29113e6892a46d4afff41417c0be7122a3b97ae6',
       run = ':TSUpdate', config = require'my.treesitter'.setup
+    },
+
+    {
+      'nvim-telescope/telescope.nvim', commit = 'c0f1999b0280bb042bba01c930dd94a4bfdee363',
+      config = function()
+        require'telescope'.setup()
+        vim.api.nvim_set_keymap('n', '<leader> ', '<cmd>lua require"telescope.builtin".buffers()<CR>', {noremap = true})
+        vim.api.nvim_set_keymap('n', '<leader>f', '<cmd>lua require"telescope.builtin".find_files()<CR>', {noremap = true})
+        vim.api.nvim_set_keymap('n', '<leader>g', '<cmd>lua require"telescope.builtin".live_grep()<CR>', {noremap = true})
+      end
     },
 
     { 'windwp/nvim-autopairs', commit = 'e3e105b11a3b34e93bdcee0c895801cf3ed2a835',
