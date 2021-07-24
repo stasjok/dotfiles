@@ -55,7 +55,7 @@ packer.startup({
       run = ':TSUpdate', config = require'my.treesitter'.setup
     },
 
-    { 'windwp/nvim-autopairs', commit = 'b0bbe8d9089cbb045fd15d217ac5a5ec0f4f5066',
+    { 'windwp/nvim-autopairs', commit = 'e3e105b11a3b34e93bdcee0c895801cf3ed2a835',
       config = function()
         require'nvim-autopairs'.setup({
           fast_wrap = {},
@@ -72,14 +72,14 @@ packer.startup({
         npairs.add_rules {
           Rule(' ', ' ')
             :with_pair(function(opts)
-              local pair = opts.line:sub(opts.col, opts.col + 1)
+              local pair = opts.line:sub(opts.col - 1, opts.col)
               return vim.tbl_contains({ '()', '{}', '[]' }, pair)
             end)
             :with_move(cond.none())
             :with_cr(cond.none())
             :with_del(function(opts)
-              local col = vim.api.nvim_win_get_cursor(0)[2]
-              local context = opts.line:sub(col - 1, col + 2)
+              local col = vim.api.nvim_win_get_cursor(0)[2] + 1 -- plus one to match plugin behavior
+              local context = opts.line:sub(col - 2, col + 1)
               return vim.tbl_contains({ '(  )', '{  }', '[  ]' }, context)
             end),
           Rule('', ' )')
