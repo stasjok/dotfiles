@@ -64,6 +64,17 @@ vim.api.nvim_set_keymap('v', '<LeftRelease>', '<LeftRelease>"*y', {noremap = tru
 vim.api.nvim_set_keymap('v', '<MiddleMouse>', '"*y<MiddleMouse>', {noremap = true});
 -- by default MiddleMouse paste at the position of cursor in normal mode, but not in insert mode; fix it
 vim.api.nvim_set_keymap('i', '<MiddleMouse>', '<LeftMouse><MiddleMouse>', {noremap = true});
+-- Cursor movement in insert and command-line mode
+vim.api.nvim_set_keymap('!', '<C-H>', '<Left>', {noremap = true})
+vim.api.nvim_set_keymap('!', '<C-J>', '<Down>', {noremap = true})
+vim.api.nvim_set_keymap('!', '<C-K>', '<Up>', {noremap = true})
+vim.api.nvim_set_keymap('!', '<C-L>', '<Right>', {noremap = true})
+-- Emacs-like bindings
+vim.api.nvim_set_keymap('c', '<C-A>', '<C-B>', {noremap = true})
+vim.api.nvim_set_keymap('!', '<M-BS>', '<C-W>', {noremap = true})
+vim.api.nvim_set_keymap('!', '<M-b>', '<C-Left>', {noremap = true})
+vim.api.nvim_set_keymap('!', '<M-f>', '<C-Right>', {noremap = true})
+vim.api.nvim_set_keymap('!', '<M-d>', '<C-Right><C-W>', {noremap = true})
 
 -- Clipboard integration with tmux
 if vim.env.TMUX then
