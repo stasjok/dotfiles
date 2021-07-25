@@ -62,7 +62,16 @@ packer.startup({
     {
       'nvim-telescope/telescope.nvim', commit = 'c0f1999b0280bb042bba01c930dd94a4bfdee363',
       config = function()
-        require'telescope'.setup()
+        require'telescope'.setup{
+          defaults = {
+            mappings = {
+              i = {
+                ["<Esc>"] = require'telescope.actions'.close,
+                ['<C-c>'] = false,
+              },
+            },
+          },
+        }
         vim.api.nvim_set_keymap('n', '<leader> ', '<cmd>lua require"telescope.builtin".buffers()<CR>', {noremap = true})
         vim.api.nvim_set_keymap('n', '<leader>f', '<cmd>lua require"telescope.builtin".find_files()<CR>', {noremap = true})
         vim.api.nvim_set_keymap('n', '<leader>g', '<cmd>lua require"telescope.builtin".live_grep()<CR>', {noremap = true})
