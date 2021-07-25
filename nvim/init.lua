@@ -24,6 +24,8 @@ vim.opt_global.scrolloff = 6;
 vim.opt_global.sidescrolloff = 6;
 vim.opt_global.scrollback = 80000;
 
+vim.opt.shell = 'bash';
+
 vim.opt.cursorline = true;
 vim.opt.number = true;
 vim.opt.relativenumber = true;
