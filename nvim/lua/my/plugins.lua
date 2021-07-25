@@ -18,6 +18,9 @@ packer.startup({
     -- Solarized colorscheme
     { 'ishan9299/nvim-solarized-lua', commit = 'fa437ae65a6c1239525e4ec7f4cbf4671eaa55ba' },
 
+    -- Icons
+    { 'kyazdani42/nvim-web-devicons', commit = 'da717e19678bd6ec33008cf92da05da1b8ceb87d' },
+
     -- Libraries
     { 'nvim-lua/popup.nvim', commit = '5e3bece7b4b4905f4ec89bee74c09cfd8172a16a' },
     { 'nvim-lua/plenary.nvim', commit = '8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974' },
