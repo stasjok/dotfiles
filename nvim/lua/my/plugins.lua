@@ -11,7 +11,9 @@ packer.startup({
 
   -- Plugins
   {
+    -- Docs
     { 'nanotee/nvim-lua-guide', commit = 'bcbc72d9c0952d30d603e48603da034b0f095e61' },
+    { 'nanotee/luv-vimdocs', commit = '915eb060b2bddec7dd256dd1028773243f078016' },
 
     -- Solarized colorscheme
     { 'ishan9299/nvim-solarized-lua', commit = 'fa437ae65a6c1239525e4ec7f4cbf4671eaa55ba' },
