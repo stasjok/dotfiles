@@ -65,13 +65,13 @@ vim.api.nvim_set_keymap('v', '<MiddleMouse>', '"*y<MiddleMouse>', {noremap = tru
 -- by default MiddleMouse paste at the position of cursor in normal mode, but not in insert mode; fix it
 vim.api.nvim_set_keymap('i', '<MiddleMouse>', '<LeftMouse><MiddleMouse>', {noremap = true});
 -- Cursor movement in insert and command-line mode
-vim.api.nvim_set_keymap('!', '<C-H>', '<Left>', {noremap = true})
-vim.api.nvim_set_keymap('!', '<C-J>', '<Down>', {noremap = true})
-vim.api.nvim_set_keymap('!', '<C-K>', '<Up>', {noremap = true})
-vim.api.nvim_set_keymap('!', '<C-L>', '<Right>', {noremap = true})
+vim.api.nvim_set_keymap('!', '<C-h>', '<Left>', {noremap = true})
+vim.api.nvim_set_keymap('!', '<C-j>', '<Down>', {noremap = true})
+vim.api.nvim_set_keymap('!', '<C-k>', '<Up>', {noremap = true})
+vim.api.nvim_set_keymap('!', '<C-l>', '<Right>', {noremap = true})
 -- Emacs-like bindings
-vim.api.nvim_set_keymap('c', '<C-A>', '<C-B>', {noremap = true})
-vim.api.nvim_set_keymap('!', '<M-BS>', '<C-W>', {noremap = true})
+vim.api.nvim_set_keymap('c', '<C-a>', '<C-b>', {noremap = true})
+vim.api.nvim_set_keymap('!', '<M-BS>', '<C-w>', {noremap = true})
 vim.api.nvim_set_keymap('!', '<M-b>', '<C-Left>', {noremap = true})
 vim.api.nvim_set_keymap('!', '<M-f>', '<C-Right>', {noremap = true})
 vim.api.nvim_set_keymap('i', '<M-d>', '<C-o>dw', {noremap = true})
