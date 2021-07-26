@@ -14,8 +14,12 @@
         "path": "./sls.json"
       },
       {
+        "language": "ansible",
+        "path": "./ansible.json"
+      },
+      {
         "language": "yaml.ansible",
-        "path": "./yaml.ansible.json"
+        "path": "./ansible.json"
       },
       {
         "language": "mediawiki",
