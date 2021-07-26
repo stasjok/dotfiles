@@ -74,6 +74,8 @@ vim.api.nvim_set_keymap('c', '<C-A>', '<C-B>', {noremap = true})
 vim.api.nvim_set_keymap('!', '<M-BS>', '<C-W>', {noremap = true})
 vim.api.nvim_set_keymap('!', '<M-b>', '<C-Left>', {noremap = true})
 vim.api.nvim_set_keymap('!', '<M-f>', '<C-Right>', {noremap = true})
+vim.api.nvim_set_keymap('i', '<M-d>', '<C-o>dw', {noremap = true})
+vim.api.nvim_set_keymap('c', '<M-d>', '<C-f>dw<C-c>', {noremap = true})
 
 -- Clipboard integration with tmux
 if vim.env.TMUX then
