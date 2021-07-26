@@ -64,6 +64,11 @@ packer.startup({
       run = ':TSUpdate', config = require'my.treesitter'.setup
     },
 
+    -- Telescope
+    {
+      'nvim-telescope/telescope-fzf-native.nvim', commit = 'fe8c8d8cf7ff215ac83e1119cba87c016070b27e',
+      run = 'mkdir -p build && gcc -O3 -Wall -Werror -fpic -shared src/fzf.c -o build/libfzf.so',
+    },
     {
       'nvim-telescope/telescope.nvim', commit = 'c0f1999b0280bb042bba01c930dd94a4bfdee363',
       config = function()
@@ -77,6 +82,7 @@ packer.startup({
             },
           },
         }
+        require('telescope').load_extension('fzf')
         vim.api.nvim_set_keymap('n', '<leader> ', '<cmd>lua require"telescope.builtin".buffers()<CR>', {noremap = true})
         vim.api.nvim_set_keymap('n', '<leader>f', '<cmd>lua require"telescope.builtin".find_files()<CR>', {noremap = true})
         vim.api.nvim_set_keymap('n', '<leader>g', '<cmd>lua require"telescope.builtin".live_grep()<CR>', {noremap = true})
