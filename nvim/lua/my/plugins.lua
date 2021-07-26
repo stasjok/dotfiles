@@ -135,16 +135,47 @@ packer.startup({
             :with_del(cond.none())
             :use_key(']'),
         }
+      end
+    },
 
-        function _G.OnEnterInsert()
-          if vim.fn.pumvisible() ~= 0 then
-            return vim.api.nvim_replace_termcodes('<CR>', true, false, true);
+    -- Auto completion
+    {
+      'hrsh7th/nvim-compe', commit = '73529ce61611c9ee3821e18ecc929c422416c462',
+      config = function()
+        require'compe'.setup{
+          source = {
+            buffer = true,
+            path = true,
+            nvim_lua = true,
+          }
+        }
+        vim.opt.completeopt = {'menuone', 'noselect'}
+        require'nvim-autopairs.completion.compe'.setup()
+        vim.api.nvim_set_keymap('i', '<C-n>', 'compe#complete()',
+                                {expr = true, noremap = true})
+        vim.api.nvim_set_keymap('i', '<C-q>', 'compe#close("<C-q>")',
+                                {expr = true, noremap = true})
+        vim.api.nvim_set_keymap('i', '<C-f>', 'compe#scroll({ "delta": +8 })',
+                                {expr = true, noremap = true})
+        vim.api.nvim_set_keymap('i', '<C-b>', 'compe#scroll({ "delta": -8 })',
+                                {expr = true, noremap = true})
+        _G.tab_complete = function()
+          if vim.fn.pumvisible() == 1 then
+            return vim.api.nvim_replace_termcodes('<C-n>', true, false, true)
           else
-            return require'nvim-autopairs'.autopairs_cr();
+            return vim.api.nvim_replace_termcodes('<Tab>', true, false, true)
           end
         end
-        vim.api.nvim_set_keymap('i' , '<CR>','v:lua.OnEnterInsert()', {expr = true , noremap = true});
-      end
+        _G.s_tab_complete = function()
+          if vim.fn.pumvisible() == 1 then
+            return vim.api.nvim_replace_termcodes('<C-p>', true, false, true)
+          else
+            return vim.api.nvim_replace_termcodes('<C-d>', true, false, true)
+          end
+        end
+        vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.tab_complete()', {expr = true, noremap = true})
+        vim.api.nvim_set_keymap('i', '<S-Tab>', 'v:lua.s_tab_complete()', {expr = true, noremap = true})
+      end,
     },
 
     -- Nix
