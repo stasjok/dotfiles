@@ -151,9 +151,20 @@ packer.startup({
         }
         vim.opt.completeopt = {'menuone', 'noselect'}
         require'nvim-autopairs.completion.compe'.setup()
+
+        _G.complete_show_confirm = function(key)
+          if vim.fn.pumvisible() == 1 then
+            return vim.fn['compe#confirm']()
+          else
+            return vim.fn['compe#complete']()
+          end
+        end
+
+        vim.api.nvim_set_keymap('i', '<C-y>', 'v:lua.complete_show_confirm()',
+                                {expr = true, noremap = true})
         vim.api.nvim_set_keymap('i', '<C-n>', 'compe#complete()',
                                 {expr = true, noremap = true})
-        vim.api.nvim_set_keymap('i', '<C-q>', 'compe#close("<C-q>")',
+        vim.api.nvim_set_keymap('i', '<C-e>', 'compe#close("<C-e>")',
                                 {expr = true, noremap = true})
         vim.api.nvim_set_keymap('i', '<C-f>', 'compe#scroll({ "delta": +8 })',
                                 {expr = true, noremap = true})
