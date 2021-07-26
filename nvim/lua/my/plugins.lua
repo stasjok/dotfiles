@@ -191,7 +191,7 @@ packer.startup({
                                 {expr = true, noremap = true})
         vim.api.nvim_set_keymap('i', '<C-n>', 'compe#complete()',
                                 {expr = true, noremap = true})
-        vim.api.nvim_set_keymap('i', '<C-e>', 'compe#close("<C-e>")',
+        vim.api.nvim_set_keymap('i', '<C-e>', 'compe#close()',
                                 {expr = true, noremap = true})
         vim.api.nvim_set_keymap('i', '<C-f>', 'compe#scroll({ "delta": +8 })',
                                 {expr = true, noremap = true})
