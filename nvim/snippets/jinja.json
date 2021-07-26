@@ -1,0 +1,552 @@
+{
+  "d": {
+    "prefix": "d",
+    "body": "${1:dict}['${2:key}']",
+    "description": "Dict value"
+  },
+  "ife": {
+    "prefix": "ife",
+    "body": "${2:expression_if_true} if ${1:condition} else ${3:expression_if_false}",
+    "description": "If expression"
+  },
+  "if": {
+    "prefix": "if",
+    "body": "{%${1:-} if ${2:condition} %}\n$3\n{%${1} endif %}",
+    "description": "If statement"
+  },
+  "else": {
+    "prefix": "else",
+    "body": "{%${1:-} else %}\n$2",
+    "description": "Else statement"
+  },
+  "elif": {
+    "prefix": "elif",
+    "body": "{%${1:-} elif ${2:condition} %}\n$3",
+    "description": "Elif statement"
+  },
+  "for": {
+    "prefix": "for",
+    "body": "{%${1:-} for ${2:item} in ${3:list} %}\n$4\n{%${1} endfor %}",
+    "description": "For loop"
+  },
+  "forif": {
+    "prefix": "forif",
+    "body": "{%${1:-} for ${2:item} in ${3:list} if ${4:filter} %}\n$5\n{%${1} endfor %}",
+    "description": "For loop with filter"
+  },
+  "macro": {
+    "prefix": "macro",
+    "body": "{%${1:-} macro ${2:macro_name}(${3}) ${1}%}\n$4\n{%${1} endmacro %}",
+    "description": "Macro definition"
+  },
+  "call": {
+    "prefix": "call",
+    "body": "{%${1:-} call ${2:macro_name}(${3}) %}\n$4\n{%${1} endcall %}",
+    "description": "Call block"
+  },
+  "filter": {
+    "prefix": "filter",
+    "body": "{%${1:-} filter ${2:filter_name} %}\n$3\n{%${1} endfilter %}",
+    "description": "Filter section"
+  },
+  "set": {
+    "prefix": "set",
+    "body": "{%${1:-} set ${2:var} = ${3:value} %}",
+    "description": "Variable assignment"
+  },
+  "setb": {
+    "prefix": "setb",
+    "body": "{%${1:-} set ${2:var} %}\n$3\n{%${1} endset %}",
+    "description": "Block assignment"
+  },
+  "block": {
+    "prefix": "block",
+    "body": "{%${1:-} block ${2:block_name} %}\n$3\n{%${1} endblock %}",
+    "description": "Block"
+  },
+  "raw": {
+    "prefix": "raw",
+    "body": "{%${1:-} raw %}\n$2\n{%${1} endraw %}",
+    "description": "Raw block"
+  },
+  "ablock": {
+    "prefix": "ablock",
+    "body": "{%${1:-} ${2:block} ${3:statements} %}\n$4\n{%${1} end${2} %}",
+    "description": "Arbitrary block"
+  },
+  "extends": {
+    "prefix": "extends",
+    "body": "{%${1:-} extends '${2:template_file}' %}",
+    "description": "Extend template"
+  },
+  "include": {
+    "prefix": "include",
+    "body": "{%${1:-} include '${2:template_file}'${3:${4: ignore missing}${5: without context}} %}",
+    "description": "Include tag"
+  },
+  "import": {
+    "prefix": "import",
+    "body": "{%${1:-} import '${2:template_file}'${3: as ${4:$2}}${5: with context} %}",
+    "description": "Import template macros"
+  },
+  "from": {
+    "prefix": "from",
+    "body": "{%${1:-} from '${2:template_file}' import ${3:name}${4: as ${5:$3}}${6: with context} %}",
+    "description": "Import from template"
+  },
+  "do": {
+    "prefix": "do",
+    "body": "{%${1:-} do ${2:${3:var}.${4:append}(${5})} %}",
+    "description": "Expression Statement"
+  },
+  "default": {
+    "prefix": "default",
+    "body": "default(${1:${2:default_value}, boolean=True})",
+    "description": "If the value is undefined it will return the passed default value"
+  },
+  "join": {
+    "prefix": "join",
+    "body": "join('${1:,}')",
+    "description": "Join strings with separator"
+  },
+  "dictsort": {
+    "prefix": "dictsort",
+    "body": "dictsort(${1:case_sensitive=True}${1/.+/, /}${2:by='value'}${2/.+/, /}${3:reverse=True})",
+    "description": "Sort a dict and yield (key, value) pairs"
+  },
+  "sort": {
+    "prefix": "sort",
+    "body": "sort(${1:reverse=True}${2:${1/.+/, /}case_sensitive=True})",
+    "description": "Sort an iterable"
+  },
+  "reverse": {
+    "prefix": "reverse",
+    "body": "reverse",
+    "description": "Reverse the object"
+  },
+  "first": {
+    "prefix": "first",
+    "body": "first",
+    "description": "Return the first item of a sequence"
+  },
+  "last": {
+    "prefix": "last",
+    "body": "last",
+    "description": "Return the last item of a sequence"
+  },
+  "list": {
+    "prefix": "list",
+    "body": "list",
+    "description": "Convert the value into a list"
+  },
+  "lower": {
+    "prefix": "lower",
+    "body": "lower",
+    "description": "Convert a value to lowercase"
+  },
+  "upper": {
+    "prefix": "upper",
+    "body": "upper",
+    "description": "Convert a value to uppercase"
+  },
+  "max": {
+    "prefix": "max",
+    "body": "max",
+    "description": "Return the largest item from the sequence"
+  },
+  "min": {
+    "prefix": "min",
+    "body": "min",
+    "description": "Return the smallest item from the sequence"
+  },
+  "length": {
+    "prefix": "length",
+    "body": "length",
+    "description": "Return the number of items in a container"
+  },
+  "map": {
+    "prefix": "map",
+    "body": "map(${1:attribute='${2:name}'})",
+    "description": "Apply a filter on a sequence of objects or looks up an attribute"
+  },
+  "select": {
+    "prefix": "select",
+    "body": "select(${1:'${2:in}'})",
+    "description": "Filter a sequence of objects by applying a test to each object"
+  },
+  "selectattr": {
+    "prefix": "selectattr",
+    "body": "selectattr('${1:name}', ${2:'${3:eq}'})",
+    "description": "Filter a sequence of objects by applying a test to the specified attribute of each object"
+  },
+  "reject": {
+    "prefix": "reject",
+    "body": "reject(${1:'${2:eq}'})",
+    "description": "Filter a sequence of objects by applying a test to each object"
+  },
+  "rejectattr": {
+    "prefix": "rejectattr",
+    "body": "rejectattr('${1:name}', ${2:'${3:eq}'})",
+    "description": "Filter a sequence of objects by applying a test to the specified attribute of each object"
+  },
+  "unique": {
+    "prefix": "unique",
+    "body": "unique(${1:case_sensitive=True}${2:${1/.+/, /}attribute='${3:name}'})",
+    "description": "Return a list of unique items from the given iterable"
+  },
+  "replace": {
+    "prefix": "replace",
+    "body": "replace('${1:old}', '${2:new}'${3/.+/, count=/}${3:None})",
+    "description": "Return a value with all occurrences of a substring replaced"
+  },
+  "strftime": {
+    "prefix": "strftime",
+    "body": "strftime('${1:%Y-%m-%d}')",
+    "description": "Converts any time related object into a time based string"
+  },
+  "sequence": {
+    "prefix": "sequence",
+    "body": "sequence",
+    "description": "Ensure that parsed data is a sequence"
+  },
+  "yaml_encode": {
+    "prefix": "yaml_encode",
+    "body": "yaml_encode",
+    "description": "Serializes a single object into a YAML scalar"
+  },
+  "to_bool": {
+    "prefix": "to_bool",
+    "body": "to_bool",
+    "description": "Returns the logical value of an element"
+  },
+  "exactly_one_true": {
+    "prefix": "exactly_one_true",
+    "body": "exactly_one_true",
+    "description": "Tests that exactly one item in an iterable is truthy (neither None, False, nor 0)"
+  },
+  "exactly_n_true": {
+    "prefix": "exactly_n_true",
+    "body": "exactly_n_true(${1:2})",
+    "description": "Tests that exactly N items in an iterable are truthy (neither None, False, nor 0)"
+  },
+  "quote": {
+    "prefix": "quote",
+    "body": "quote",
+    "description": "Quote for shell usage"
+  },
+  "regex_search": {
+    "prefix": "regex_search",
+    "body": "regex_search(${1:'${2:regex}'}${3:${4:, ignorecase=True}${5:, multiline=True}})",
+    "description": "Search in a string and return match object"
+  },
+  "regex_match": {
+    "prefix": "regex_match",
+    "body": "regex_match(${1:'${2:regex}'}${3:${4:, ignorecase=True}${5:, multiline=True}})",
+    "description": "Search at the beginning of a string and return match object"
+  },
+  "regex_replace": {
+    "prefix": "regex_replace",
+    "body": "regex_replace(${1:'${2:regex}'}, ${3:'${4:replacement}'}${5:, ignorecase=True}${6:, multiline=True})",
+    "description": "Replace text in a string with regex"
+  },
+  "regex_escape": {
+    "prefix": "regex_escape",
+    "body": "regex_escape(${1/.+/'/}${1:posix_basic}${1/.+/'/})",
+    "description": "Escape special characters within a regex"
+  },
+  "match": {
+    "prefix": "match",
+    "body": "match(${1:'${2:regex}'}${3:${4:, ignorecase=True}${5:, multiline=True}})",
+    "description": "Tests that a string matches the regex"
+  },
+  "uuid": {
+    "prefix": "uuid",
+    "body": "uuid",
+    "description": "Return a UUID"
+  },
+  "is_list": {
+    "prefix": "is_list",
+    "body": "is_list",
+    "description": "Return if an object is list"
+  },
+  "is_iter": {
+    "prefix": "is_iter",
+    "body": "is_iter",
+    "description": "Return if an object is iterable"
+  },
+  "avg": {
+    "prefix": "avg",
+    "body": "avg",
+    "description": "Returns the average value of the elements of a list"
+  },
+  "union": {
+    "prefix": "union",
+    "body": "union(${1:[${2:item1}]})",
+    "description": "Return the union of two lists"
+  },
+  "intersect": {
+    "prefix": "intersect",
+    "body": "intersect(${1:[${2:item1}]})",
+    "description": "Return the intersection of two lists"
+  },
+  "difference": {
+    "prefix": "difference",
+    "body": "difference(${1:[${2:item1}]})",
+    "description": "Return the difference of two lists"
+  },
+  "symmetric_difference": {
+    "prefix": "symmetric_difference",
+    "body": "symmetric_difference(${1:[${2:item1}]})",
+    "description": "Return the symmetric difference of two lists"
+  },
+  "is_sorted": {
+    "prefix": "is_sorted",
+    "body": "is_sorted",
+    "description": "Return True if an iterable object is already sorted"
+  },
+  "compare_lists": {
+    "prefix": "compare_lists",
+    "body": "compare_lists(${1:[${2:item1}]})",
+    "description": "Compare two lists and return a dictionary with the changes"
+  },
+  "compare_dicts": {
+    "prefix": "compare_dicts",
+    "body": "compare_dicts(${1:\\{${2:'${3:key}': ${4:value}}\\}})",
+    "description": "Compare two dictionaries and return a dictionary with the changes"
+  },
+  "contains_whitespace": {
+    "prefix": "contains_whitespace",
+    "body": "contains_whitespace",
+    "description": "Return True if a text contains whitespaces"
+  },
+  "substring_in_list": {
+    "prefix": "substring_in_list",
+    "body": "substring_in_list",
+    "description": "Return True if a substring is found in a list of string values"
+  },
+  "check_whitelist_blacklist": {
+    "prefix": "check_whitelist_blacklist",
+    "body": "check_whitelist_blacklist(${1:white}list=${2:[${3:item1}]}${4:, blacklist=${5:[${6:item1}]}})",
+    "description": "Check a whitelist and/or blacklist to see if the value matches it"
+  },
+  "date_format": {
+    "prefix": "date_format",
+    "body": "date_format(${1:'d.%m.%Y %H:%M'})",
+    "description": "Converts unix timestamp into human-readable string"
+  },
+  "to_num": {
+    "prefix": "to_num",
+    "body": "to_num",
+    "description": "Converts a string to its numerical value"
+  },
+  "yaml": {
+    "prefix": "yaml",
+    "body": "yaml${1:(flow_style=False)}",
+    "description": "Render a data structure as yaml"
+  },
+  "json": {
+    "prefix": "json",
+    "body": "json${1:(${2:sort_keys=False}${3:${2/.+/, /}indent=${4:2}})}",
+    "description": "Render a data structure as json"
+  },
+  "load_yaml": {
+    "prefix": "load_yaml",
+    "body": "load_yaml",
+    "description": "Load yaml from string"
+  },
+  "load_json": {
+    "prefix": "load_json",
+    "body": "load_json",
+    "description": "Load json from string"
+  },
+  "load_text": {
+    "prefix": "load_text",
+    "body": "{%${1:-} load_text as ${2:variable} -%}\n$3\n{%${1} endload %}",
+    "description": "Load text to variable"
+  },
+  "import_yaml": {
+    "prefix": "import_yaml",
+    "body": "{%${1:-} import_yaml '${2:${3:defaults}.yaml}' as ${4:$3} %}",
+    "description": "Import yaml from file"
+  },
+  "import_json": {
+    "prefix": "import_json",
+    "body": "{%${1:-} import_json '${2:${3:defaults}.json}' as ${4:$3} %}",
+    "description": "Import json from file"
+  },
+  "import_text": {
+    "prefix": "import_text",
+    "body": "{%${1:-} import_text '${2:${3:}.txt}' as ${4:$3} %}",
+    "description": "Import text from file"
+  },
+  "random_hash": {
+    "prefix": "random_hash",
+    "body": "random_hash('${1:sha512}')",
+    "description": "Generates a random number between 1 and the number passed to the filter, and then hashes it"
+  },
+  "set_dict_key_value": {
+    "prefix": "set_dict_key_value",
+    "body": "set_dict_key_value('${1:foo:bar}', ${2:${3:42}, delimiter='${4:.}'})",
+    "description": "Set a value in a nested dictionary"
+  },
+  "append_dict_key_value": {
+    "prefix": "append_dict_key_value",
+    "body": "append_dict_key_value('${1:foo:bar}', ${2:${3:42}, delimiter='${4:.}'})",
+    "description": "Append to a list nested (deep) in a dictionary"
+  },
+  "extend_dict_key_value": {
+    "prefix": "extend_dict_key_value",
+    "body": "extend_dict_key_value('${1:foo:bar}', ${2:${3:42}, delimiter='${4:.}'})",
+    "description": "Extend a list nested (deep) in a dictionary"
+  },
+  "update_dict_key_value": {
+    "prefix": "update_dict_key_value",
+    "body": "update_dict_key_value('${1:foo:bar}', ${2:${3:dict}, delimiter='${4:.}'})",
+    "description": "Update a dictionary nested (deep) in another dictionary"
+  },
+  "base64_encode": {
+    "prefix": "base64_encode",
+    "body": "base64_encode",
+    "description": "Encode a string as base64"
+  },
+  "base64_decode": {
+    "prefix": "base64_decode",
+    "body": "base64_decode",
+    "description": "Decode a base64-encoded string"
+  },
+  "http_query": {
+    "prefix": "http_query",
+    "body": "http_query(${1:many_supported_parameterss})",
+    "description": "Return the HTTP reply object from a URL"
+  },
+  "traverse": {
+    "prefix": "traverse",
+    "body": "traverse('${1:foo:bar}', ${2:${3:default}, delimiter='${4:.}'})",
+    "description": "Traverse a dict or list using a colon-delimited target string"
+  },
+  "json_query": {
+    "prefix": "json_query",
+    "body": "json_query(${1:'${2:[]}'})",
+    "description": "Make queries against JSON data using JMESPath language"
+  },
+  "to_snake_case": {
+    "prefix": "to_snake_case",
+    "body": "to_snake_case",
+    "description": "Converts a string from camelCase (or CamelCase) to snake_case"
+  },
+  "to_camelcase": {
+    "prefix": "to_camelcase",
+    "body": "to_camelcase${1:(uppercamel=True)}",
+    "description": "Converts a string from snake_case to camelCase (or UpperCamelCase)"
+  },
+  "is_ip": {
+    "prefix": "is_ip",
+    "body": "is_ip${1:(options='${2:global}')}",
+    "description": "Return if a string is a valid IP Address"
+  },
+  "is_ipv4": {
+    "prefix": "is_ipv4",
+    "body": "is_ipv4${1:(options='${2:global}')}",
+    "description": "Returns if a string is a valid IPv4 address"
+  },
+  "is_ipv6": {
+    "prefix": "is_ipv6",
+    "body": "is_ipv6${1:(options='${2:global}')}",
+    "description": "Returns if a string is a valid IPv6 address"
+  },
+  "ipaddr": {
+    "prefix": "ipaddr",
+    "body": "ipaddr${1:(options='${2:global}')}",
+    "description": "From a list, returns only valid IP entries"
+  },
+  "ipv4": {
+    "prefix": "ipv4",
+    "body": "ipv4${1:(options='${2:global}')}",
+    "description": "From a list, returns only valid IPv4 entries"
+  },
+  "ipv6": {
+    "prefix": "ipv6",
+    "body": "ipv6${1:(options='${2:global}')}",
+    "description": "From a list, returns only valid IPv6 entries"
+  },
+  "network_hosts": {
+    "prefix": "network_hosts",
+    "body": "network_hosts${1:(options='${2:global}')}",
+    "description": "Return the list of hosts within a networks"
+  },
+  "network_size": {
+    "prefix": "network_size",
+    "body": "network_size${1:(options='${2:global}')}",
+    "description": "Return the size of the network"
+  },
+  "gen_mac": {
+    "prefix": "gen_mac",
+    "body": "gen_mac",
+    "description": "Generates a MAC address with the defined OUI prefix"
+  },
+  "dns_check": {
+    "prefix": "dns_check",
+    "body": "dns_check(${1:port=${2:443}})",
+    "description": "Return the ip resolved by dns.Tries to connect to the address before considering it useful"
+  },
+  "is_text_file": {
+    "prefix": "is_text_file",
+    "body": "is_text_file",
+    "description": "Return if a file is text"
+  },
+  "is_binary_file": {
+    "prefix": "is_binary_file",
+    "body": "is_binary_file",
+    "description": "Return if a file is binary"
+  },
+  "is_empty_file": {
+    "prefix": "is_empty_file",
+    "body": "is_empty_file",
+    "description": "Return if a file is empty"
+  },
+  "file_hashsum": {
+    "prefix": "file_hashsum",
+    "body": "file_hashsum${1:('${2:sha512}')}",
+    "description": "Return the hashsum of a file"
+  },
+  "list_files": {
+    "prefix": "list_files",
+    "body": "list_files",
+    "description": "Return a recursive list of files under a specific path"
+  },
+  "path_join": {
+    "prefix": "path_join",
+    "body": "path_join(${1:path})",
+    "description": "Joins absolute paths"
+  },
+  "which": {
+    "prefix": "which",
+    "body": "which",
+    "description": "Python clone of /usr/bin/which"
+  },
+  "show_full_context": {
+    "prefix": "show_full_context",
+    "body": "show_full_context()",
+    "description": "Output all variables present in the current Jinja context"
+  },
+  "raise": {
+    "prefix": "raise",
+    "body": "raise('${1:Custom Error}')",
+    "description": "Raise error from jinja"
+  },
+  "map.jinja.full": {
+    "prefix": "map.jinja.full",
+    "body": "{#- Get the \\`tplroot\\` from \\`tpldir\\` #}\n{%- set tplroot = tpldir.split('/')[0] %}\n{#- Start imports as #}\n{%- import_yaml tplroot ~ \"/defaults.yaml\" as default_settings %}\n{%- import_yaml tplroot ~ \"/osarchmap.yaml\" as osarchmap %}\n{%- import_yaml tplroot ~ \"/osfamilymap.yaml\" as osfamilymap %}\n{%- import_yaml tplroot ~ \"/osmap.yaml\" as osmap %}\n{%- import_yaml tplroot ~ \"/osfingermap.yaml\" as osfingermap %}\n\n{#- Retrieve the config dict only once #}\n{%- set _config = salt['config.get'](tplroot, default={}) %}\n\n{%- set defaults = salt['grains.filter_by'](\n\t\t\tdefault_settings,\n\t\t\tdefault=tplroot,\n\t\t\tmerge=salt['grains.filter_by'](\n\t\t\t\tosarchmap,\n\t\t\t\tgrain='osarch',\n\t\t\t\tmerge=salt['grains.filter_by'](\n\t\t\t\t\tosfamilymap,\n\t\t\t\t\tgrain='os_family',\n\t\t\t\t\tmerge=salt['grains.filter_by'](\n\t\t\t\t\t\tosmap,\n\t\t\t\t\t\tgrain='os',\n\t\t\t\t\t\tmerge=salt['grains.filter_by'](\n\t\t\t\t\t\t\tosfingermap,\n\t\t\t\t\t\t\tgrain='osfinger',\n\t\t\t\t\t\t\tmerge=salt['grains.filter_by'](\n\t\t\t\t\t\t\t\t_config,\n\t\t\t\t\t\t\t\tdefault='lookup'\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t)\n\t\t\t\t\t)\n\t\t\t\t)\n\t\t\t)\n\t\t)\n%}\n\n{%- set config = salt['grains.filter_by'](\n\t\t\t{'defaults': defaults},\n\t\t\tdefault='defaults',\n\t\t\tmerge=_config\n\t\t)\n%}\n\n{%- set ${1:`!p s=re.search('.*(?:salt|[^/]*formula[^/]*)/([^/]+)', path)\nsnip.rv=s.group(1) if s else 'name' `} = config %}",
+    "description": "map.jinja"
+  },
+  "map\\.jinja(?:\\.(arch))?(?:\\.((?:os_?)?family))?(?:\\.(os))?(?:\\.(finger))?": {
+    "prefix": "map\\.jinja(?:\\.(arch))?(?:\\.((?:os_?)?family))?(?:\\.(os))?(?:\\.(finger))?",
+    "body": "{#- Get the \\`tplroot\\` from \\`tpldir\\` #}\n{%- set tplroot = tpldir.split('/')[0] %}\n{#- Start imports as #}\n{%- import_yaml tplroot ~ \"/defaults.yaml\" as default_settings %}`!p\nsnip.rv='\\n{%- import_yaml tplroot ~ \"/osarchmap.yaml\" as osarchmap %}' if \\\n'arch' in match.groups() else ''\n``!p\nsnip.rv='\\n{%- import_yaml tplroot ~ \"/osfamilymap.yaml\" as osfamilymap %}' if \\\n'family' in match.groups() or 'os_family' in match.groups() or 'osfamily' in match.groups() else ''\n``!p\nsnip.rv='\\n{%- import_yaml tplroot ~ \"/osmap.yaml\" as osmap %}' if \\\n'os' in match.groups() else ''\n``!p\nsnip.rv='\\n{%- import_yaml tplroot ~ \"/osfingermap.yaml\" as osfingermap %}' if \\\n'finger' in match.groups() else ''\n`\n\n{#- Retrieve the config dict only once #}\n{%- set _config = salt['config.get'](tplroot, default={}) %}\n\n{%- set defaults = salt['grains.filter_by'](\n\t\t\tdefault_settings,\n\t\t\tdefault=tplroot,\n\t\t\t`!p\ntemplate=(\"merge=salt['grains.filter_by'](\\n\"\n          \"\\t{var},\\n\"\n          \"\\tgrain='{grain}',\\n\"\n          \"\\t{merge}\\n\"\n          \")\"\n         )\nfinal=(\"merge=salt['grains.filter_by'](\\n\"\n        \"\\t_config,\\n\"\n        \"\\tdefault='lookup'\\n\"\n        \")\"\n       )\n\nfor grain in reversed(match.groups()):\n\tif grain:\n\t\ti = {\n\t\t\t'finger':    {'var': 'osfingermap', 'grain': 'osfinger' },\n\t\t\t'os':        {'var': 'osmap',       'grain': 'os'       },\n\t\t\t'os_family': {'var': 'osfamilymap', 'grain': 'os_family'},\n\t\t\t'osfamily':  {'var': 'osfamilymap', 'grain': 'os_family'},\n\t\t\t'family':    {'var': 'osfamilymap', 'grain': 'os_family'},\n\t\t\t'arch':      {'var': 'osarchmap',   'grain': 'osarch'   },\n\t\t}[grain]\n\n\t\tfinal=template.format(var=i['var'], grain=i['grain'],\n\t\t\tmerge=final.replace('\\n', '\\n\\t'))\n\nsnip.rv=final\n`\n\t\t)\n%}\n\n{%- set config = salt['grains.filter_by'](\n\t\t\t{'defaults': defaults},\n\t\t\tdefault='defaults',\n\t\t\tmerge=_config\n\t\t)\n%}\n\n{%- set ${1:`!p s=re.search('.*(?:salt|[^/]*formula[^/]*)/([^/]+)', path)\nsnip.rv=s.group(1) if s else 'name' `} = config %}",
+    "description": "map.jinja"
+  },
+  "libtofs": {
+    "prefix": "libtofs",
+    "body": "{%- macro files_switch(\n      source_files,\n      lookup=None,\n      default_files_switch=[\"id\", \"os_family\"],\n      indent_width=6,\n      use_subpath=False\n    ) %}\n{#-\n    Returns a valid value for the \"source\" parameter of a \"file.managed\"\n    state function. This makes easier the usage of the Template Override and\n    Files Switch (TOFS) pattern.\n    Params:\n      * source_files: ordered list of files to look for\n      * lookup: key under \"<tplroot>:tofs:source_files\" to prepend to the\n        list of source files\n      * default_files_switch: if there's no config (e.g. pillar)\n        \"<tplroot>:tofs:files_switch\" this is the ordered list of grains to\n        use as selector switch of the directories under\n        \"<path_prefix>/files\"\n      * indent_width: indentation of the result value to conform to YAML\n      * use_subpath: defaults to \\`False\\` but if set, lookup the source file\n        recursively from the current state directory up to \\`tplroot\\`\n    Example (based on a \\`tplroot\\` of \\`xxx\\`):\n    If we have a state:\n      Deploy configuration:\n        file.managed:\n          - name: /etc/yyy/zzz.conf\n          - source: {{ files_switch(\n                         [\"/etc/yyy/zzz.conf\", \"/etc/yyy/zzz.conf.jinja\"],\n                         lookup=\"Deploy configuration\",\n                       ) }}\n          - template: jinja\n    In a minion with id=theminion and os_family=RedHat, it's going to be\n    rendered as:\n      Deploy configuration:\n        file.managed:\n          - name: /etc/yyy/zzz.conf\n          - source:\n            - salt://xxx/files/theminion/etc/yyy/zzz.conf\n            - salt://xxx/files/theminion/etc/yyy/zzz.conf.jinja\n            - salt://xxx/files/RedHat/etc/yyy/zzz.conf\n            - salt://xxx/files/RedHat/etc/yyy/zzz.conf.jinja\n            - salt://xxx/files/default/etc/yyy/zzz.conf\n            - salt://xxx/files/default/etc/yyy/zzz.conf.jinja\n          - template: jinja\n#}\n{#-   Get the \\`tplroot\\` from \\`tpldir\\` #}\n{%-   set tplroot = tpldir.split(\"/\")[0] %}\n{%-   set path_prefix = salt[\"config.get\"](tplroot ~ \":tofs:path_prefix\", tplroot) %}\n{%-   set files_dir = salt[\"config.get\"](tplroot ~ \":tofs:dirs:files\", \"files\") %}\n{%-   set files_switch_list = salt[\"config.get\"](\n        tplroot ~ \":tofs:files_switch\", default_files_switch\n      ) %}\n{#-   Lookup source_files (v2), files (v1), or fallback to an empty list #}\n{%-   set src_files = salt[\"config.get\"](\n        tplroot ~ \":tofs:source_files:\" ~ lookup,\n        salt[\"config.get\"](tplroot ~ \":tofs:files:\" ~ lookup, []),\n      ) %}\n{#-   Append the default source_files #}\n{%-   set src_files = src_files + source_files %}\n{#-   Only add to [\"\"] when supporting older TOFS implementations #}\n{%-   set path_prefix_exts = [\"\"] %}\n{%-   if use_subpath and tplroot != tpldir %}\n{#-     Walk directory tree to find {{ files_dir }} #}\n{%-     set subpath_parts = tpldir.lstrip(tplroot).lstrip(\"/\").split(\"/\") %}\n{%-     for path in subpath_parts %}\n{%-       set subpath = subpath_parts[0 : loop.index] | join(\"/\") %}\n{%-       do path_prefix_exts.append(\"/\" ~ subpath) %}\n{%-     endfor %}\n{%-   endif %}\n{%-   for path_prefix_ext in path_prefix_exts | reverse %}\n{%-     set path_prefix_inc_ext = path_prefix ~ path_prefix_ext %}\n{#-     For older TOFS implementation, use \\`files_switch\\` from the config #}\n{#-     Use the default, new method otherwise #}\n{%-     set fsl = salt[\"config.get\"](\n          tplroot ~ path_prefix_ext | replace(\"/\", \":\") ~ \":files_switch\",\n          files_switch_list,\n        ) %}\n{#-     Append an empty value to evaluate as \\`default\\` in the loop below #}\n{%-     if \"\" not in fsl %}\n{%-       set fsl = fsl + [\"\"] %}\n{%-     endif %}\n{%-     for fs in fsl %}\n{%-       for src_file in src_files %}\n{%-         if fs %}\n{%-           set fs_dirs = salt[\"config.get\"](fs, fs) %}\n{%-         else %}\n{%-           set fs_dirs = salt[\"config.get\"](\n                tplroot ~ \":tofs:dirs:default\", \"default\"\n              ) %}\n{%-         endif %}\n{#-         Force the \\`config.get\\` lookup result as a list where necessary #}\n{#-         since we need to also handle grains that are lists #}\n{%-         if fs_dirs is string %}\n{%-           set fs_dirs = [fs_dirs] %}\n{%-         endif %}\n{%-         for fs_dir in fs_dirs %}\n{#-           strip empty elements by using a select #}\n{%-           set url = (\n                [\n                  \"- salt:/\",\n                  path_prefix_inc_ext.strip(\"/\"),\n                  files_dir.strip(\"/\"),\n                  fs_dir.strip(\"/\"),\n                  src_file.strip(\"/\"),\n                ]\n                | select\n                | join(\"/\")\n              ) %}\n{{ url | indent(indent_width, true) }}\n{%-         endfor %}\n{%-       endfor %}\n{%-     endfor %}\n{%-   endfor %}\n{%- endmacro %}",
+    "description": "files_switch function"
+  }
+}

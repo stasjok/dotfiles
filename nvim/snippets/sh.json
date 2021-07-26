@@ -1,0 +1,97 @@
+{
+  "#!": {
+    "prefix": "#!",
+    "body": "#!/usr/bin/env ${1:bash}\n",
+    "description": "Shebang"
+  },
+  "strict": {
+    "prefix": "strict",
+    "body": "set -o errexit -o errtrace -o pipefail -o nounset\n(shopt -p inherit_errexit &>/dev/null) && shopt -s inherit_errexit\n\nfunction failure() {\n\tlocal lineno=\\$1\n\tlocal exitcode=\\$2\n\tlocal command=\\$3\n\techo \"Failed with exit code $exitcode at line $lineno: $command\" >&2\n}\n\ntrap 'failure \\${LINENO} \\$? \"\\${BASH_COMMAND}\"' ERR\n\nIFS=$'\\n\\t'\n",
+    "description": "Bash Strict Mode"
+  },
+  "$": {
+    "prefix": "$",
+    "body": "\\$\\{${1:${2:var}[${3:@}]}\\}",
+    "description": "Variable"
+  },
+  "function": {
+    "prefix": "function",
+    "body": "function ${1:function_name} {\n\t$2\n}",
+    "description": "Function"
+  },
+  "if": {
+    "prefix": "if",
+    "body": "if ${1:[[ ${2:condition} ]]}; then\n\t$3\nfi",
+    "description": "If statement"
+  },
+  "else": {
+    "prefix": "else",
+    "body": "else\n\t$0",
+    "description": "Else statement"
+  },
+  "elif": {
+    "prefix": "elif",
+    "body": "elif ${1:[[ ${2:condition} ]]}; then\n\t$3",
+    "description": "Elif condition"
+  },
+  "case": {
+    "prefix": "case",
+    "body": "case ${1:\\$${2:var}} in\n\t${3:pattern})\n\t\t$4\n\t\t;;\nesac",
+    "description": "Case statement"
+  },
+  "sw": {
+    "prefix": "sw",
+    "body": "${1:*})\n\t$2\n\t;;",
+    "description": "Case pattern"
+  },
+  "for": {
+    "prefix": "for",
+    "body": "for ${1:i} in ${2:words}; do\n\t$3\ndone",
+    "description": "For loop"
+  },
+  "fori": {
+    "prefix": "fori",
+    "body": "for (( ${1:i}=${2:0}; $1 ${3:< ${4:10}}; $1${5:++} )); do\n\t$6\ndone",
+    "description": "Three-expression for loop"
+  },
+  "forif": {
+    "prefix": "forif",
+    "body": "for (( ${1:${2:i}=${3:0}}; ${4:$2 ${5:< ${6:count}}}; ${7:$2${8:++}} )); do\n\t$9\ndone",
+    "description": "Full three-expression for loop"
+  },
+  "while": {
+    "prefix": "while",
+    "body": "while ${1:[[ ${2:condition} ]]}; do\n\t$3\ndone",
+    "description": "While loop"
+  },
+  "until": {
+    "prefix": "until",
+    "body": "until ${1:[[ ${2:condition} ]]}; do\n\t$3\ndone",
+    "description": "Until loop"
+  },
+  "here": {
+    "prefix": "here",
+    "body": "<<-${1:EOF}\n\t$0\n${1/[\"'](.*)[\"']/$1/}",
+    "description": "Here Document"
+  },
+  "BASH_SOURCE": {
+    "prefix": "BASH_SOURCE",
+    "body": "${BASH_SOURCE[${1:0}]}",
+    "description": "BASH_SOURCE variable"
+  },
+  "root_needed": {
+    "prefix": "root_needed",
+    "body": "if (( EUID != 0 )); then\n\techo \"${1:This script must be run as root}\" >&2\n\texit ${2:99}\nfi",
+    "description": "Script must be run as root"
+  },
+  "getopt": {
+    "prefix": "getopt",
+    "body": "opts=$(getopt --name \"${1:$(basename -- \"$\\{BASH_SOURCE[0]\\}\")}\" \\\n\t--options ${2:h${3}} \\\n\t--longoptions ${4:help${5}} \\\n\t-- \"$@\")\neval \"set -- $opts\"\n\nfunction usage {\n\tcat <<USAGE\n${6:Description}\n\nUsage:\n\t${1} [options]\n\nOptions:\n\t-h, --help  Display this help and exit.\nUSAGE\n}\n\nwhile true; do\n\tcase \\$1 in\n\t\t${7:-h|--help)\n\t\t\tusage\n\t\t\texit 0\n\t\t\t;;\n\t\t}${8:-${9:o}|--${10:opt}})\n\t\t\t${11:${12:${10}}=${13:\\$2}}\n\t\t\tshift${14/.+/ /}${14:2}\n\t\t\t;;\n\t\t--)\n\t\t\tshift\n\t\t\tbreak\n\t\t\t;;\n\tesac\ndone",
+    "description": "Args parsing with getopt"
+  },
+  "swopt": {
+    "prefix": "swopt",
+    "body": "${1:-${2:o}|--${3:opt}})\n\t${4:${5:${3}}=${6:\\$2}}\n\tshift${7/.+/ /}${7:2}\n\t;;",
+    "description": "Case opt for getopt"
+  }
+}

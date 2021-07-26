@@ -1,0 +1,57 @@
+{
+  "fact": {
+    "prefix": "fact",
+    "body": "ansible_facts['${1:hostname}']",
+    "description": "Ansible fact"
+  },
+  "managed": {
+    "prefix": "managed",
+    "body": "{{ ansible_managed | comment${1} }}",
+    "description": "Ansible managed variable"
+  },
+  "mandatory": {
+    "prefix": "mandatory",
+    "body": "mandatory(${1:msg='${2:Mandatory variable is not defined.}'})",
+    "description": "Return error if some value is undefined"
+  },
+  "ternary": {
+    "prefix": "ternary",
+    "body": "ternary(${1:'val_if_true'}, ${2:'val_if_false'}${3/.+/, /}${3:'val_if_none'})",
+    "description": "Value to use when the test returns true and another when the test returns false"
+  },
+  "dict2items": {
+    "prefix": "dict2items",
+    "body": "dict2items(key_name='${1:name}', value_name='${2:value}')",
+    "description": "Turn a dictionary into a list of items"
+  },
+  "items2dict": {
+    "prefix": "items2dict",
+    "body": "items2dict(key_name='${1:name}', value_name='${2:value}')",
+    "description": "Turn a list of dicts with 2 keys, into a dict"
+  },
+  "flatten": {
+    "prefix": "flatten",
+    "body": "flatten(levels=${1:1})",
+    "description": "Flatten a list"
+  },
+  "regex_findall": {
+    "prefix": "regex_findall",
+    "body": "regex_findall(${1:'${2:regex}'}${3:${4:, multiline=True}${5:, ignorecase=True}})",
+    "description": "Search for all occurrences of regex matches"
+  },
+  "match": {
+    "prefix": "match",
+    "body": "match(${1:'${2:regex}'}${3:${4:, multiline=True}${5:, ignorecase=True}})",
+    "description": "Match strings against a substring or a regular expression"
+  },
+  "search": {
+    "prefix": "search",
+    "body": "search(${1:'${2:regex}'}${3:${4:, multiline=True}${5:, ignorecase=True}})",
+    "description": "Match strings against a substring or a regular expression"
+  },
+  "combine": {
+    "prefix": "combine",
+    "body": "combine(${1:hash}${2:, recursive=True})",
+    "description": "Merge hashes"
+  }
+}

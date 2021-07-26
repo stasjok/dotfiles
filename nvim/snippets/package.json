@@ -1,0 +1,38 @@
+{
+  "contributes": {
+    "snippets": [
+      {
+        "language": ["jinja", "jinja2", "sls"],
+        "path": "./jinja.json"
+      },
+      {
+        "language": ["jinja2", "yaml.ansible"],
+        "path": "./jinja2.json"
+      },
+      {
+        "language": "sls",
+        "path": "./sls.json"
+      },
+      {
+        "language": "yaml.ansible",
+        "path": "./yaml.ansible.json"
+      },
+      {
+        "language": "mediawiki",
+        "path": "./mediawiki.json"
+      },
+      {
+        "language": "python",
+        "path": "./python.json"
+      },
+      {
+        "language": "sh",
+        "path": "./sh.json"
+      },
+      {
+        "language": "snippets",
+        "path": "./snippets.json"
+      }
+    ]
+  }
+}

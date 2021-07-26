@@ -1,0 +1,192 @@
+{
+  "i": {
+    "prefix": "i",
+    "body": "''1''",
+    "description": "Italic text"
+  },
+  "b": {
+    "prefix": "b",
+    "body": "'''1'''",
+    "description": "Bold text"
+  },
+  "bi": {
+    "prefix": "bi",
+    "body": "'''''1'''''",
+    "description": "Bold and italic text"
+  },
+  "nowiki": {
+    "prefix": "nowiki",
+    "body": "<nowiki>1</nowiki>",
+    "description": "Escape wiki markup"
+  },
+  "h2": {
+    "prefix": "h2",
+    "body": "== 1 ==\n",
+    "description": "Heading level 2"
+  },
+  "h3": {
+    "prefix": "h3",
+    "body": "=== 1 ===\n",
+    "description": "Heading level 3"
+  },
+  "h4": {
+    "prefix": "h4",
+    "body": "==== 1 ====\n",
+    "description": "Heading level 4"
+  },
+  "h5": {
+    "prefix": "h5",
+    "body": "===== 1 =====\n",
+    "description": "Heading level 5"
+  },
+  "h6": {
+    "prefix": "h6",
+    "body": "====== 1 ======\n",
+    "description": "Heading level 6"
+  },
+  "hl": {
+    "prefix": "hl",
+    "body": "----\n",
+    "description": "Horizontal rule"
+  },
+  "preformatted": {
+    "prefix": "preformatted",
+    "body": "${VISUAL/^/ /gm}",
+    "description": "Preformatted text"
+  },
+  "u": {
+    "prefix": "u",
+    "body": "<u>1</u>",
+    "description": "Underlined text"
+  },
+  "ins": {
+    "prefix": "ins",
+    "body": "<ins>1</ins>",
+    "description": "Inserted text"
+  },
+  "s": {
+    "prefix": "s",
+    "body": "<s>1</s>",
+    "description": "Struck-through text"
+  },
+  "del": {
+    "prefix": "del",
+    "body": "<del>1</del>",
+    "description": "Deleted text"
+  },
+  "code": {
+    "prefix": "code",
+    "body": "<code>1</code>",
+    "description": "Source code"
+  },
+  "blockquote": {
+    "prefix": "blockquote",
+    "body": "<blockquote>1</blockquote>",
+    "description": "Blockquote"
+  },
+  "q": {
+    "prefix": "q",
+    "body": "<q>1</q>",
+    "description": "Quotes"
+  },
+  "pre": {
+    "prefix": "pre",
+    "body": "<pre>\n1\n</pre>",
+    "description": "Preformatted text"
+  },
+  "br": {
+    "prefix": "br",
+    "body": "<br />",
+    "description": "Line break"
+  },
+  "nbs": {
+    "prefix": "nbs",
+    "body": "&nbsp;",
+    "description": "Non-breaking space"
+  },
+  "abbr": {
+    "prefix": "abbr",
+    "body": "<abbr title=\"${2:meaning}\">1</abbr>",
+    "description": "Abbreviation"
+  },
+  "kbd": {
+    "prefix": "kbd",
+    "body": "<kbd>1</kbd>",
+    "description": "Keyboard input"
+  },
+  "var": {
+    "prefix": "var",
+    "body": "<var>1</var>",
+    "description": "Variable name"
+  },
+  "samp": {
+    "prefix": "samp",
+    "body": "<samp>1</samp>",
+    "description": "Sample output"
+  },
+  "strong": {
+    "prefix": "strong",
+    "body": "<strong>1</strong>",
+    "description": "Important text"
+  },
+  "em": {
+    "prefix": "em",
+    "body": "<em>1</em>",
+    "description": "Emphasized text"
+  },
+  "syn": {
+    "prefix": "syn",
+    "body": "<syntaxhighlight lang=\"${1:text}\">\n$2\n</syntaxhighlight>",
+    "description": "Syntax Highlight"
+  },
+  "syni": {
+    "prefix": "syni",
+    "body": "<syntaxhighlight lang=\"${1:text}\" inline=\"1\">$2</syntaxhighlight>",
+    "description": "Inline Syntax Highlight"
+  },
+  "a": {
+    "prefix": "a",
+    "body": "[[${1:${2:${3:page}#${4:section}}|$5}]]",
+    "description": "Internal link"
+  },
+  "ae": {
+    "prefix": "ae",
+    "body": "[${1:${2:url} $3}]",
+    "description": "External link"
+  },
+  "redirect": {
+    "prefix": "redirect",
+    "body": "#REDIRECT [[${1:${2:page}#${3:section}}]]",
+    "description": "Redirect"
+  },
+  "category": {
+    "prefix": "category",
+    "body": "[[Category:${1:Name}]]",
+    "description": "Category"
+  },
+  "t": {
+    "prefix": "t",
+    "body": "{| class=\"wikitable\"\n$0\n|}",
+    "description": "Table"
+  },
+  "tc": {
+    "prefix": "tc",
+    "body": "|+ $0",
+    "description": "Table caption"
+  },
+  "t([rh])(m?)(\\d*)": {
+    "prefix": "t([rh])(m?)(\\d*)",
+    "body": "|-\n`!p num = match.group(3) or 0\nsep = '|' if match.group(1) == 'r' else '!'\nsep2 = '\\n' if match.group(2) else sep\nplaceholders = ['${{{}:text{}}}'.format(i, i) for i in range(1, int(num)+1)]\nsnip.rv = sep+' ' + ' {}{} '.format(sep2, sep).join(placeholders)`",
+    "description": "Table rows or headers"
+  },
+  "cs": {
+    "prefix": "cs",
+    "body": "colspan=\"${1:2}\"|",
+    "description": "Column span"
+  },
+  "rs": {
+    "prefix": "rs",
+    "body": "rowspan=\"${1:2}\"|",
+    "description": "Row span"
+  }
+}

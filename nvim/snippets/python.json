@@ -1,0 +1,202 @@
+{
+  "#!": {
+    "prefix": "#!",
+    "body": "#!/usr/bin/env python${1:3}\n",
+    "description": "Shebang"
+  },
+  "cutf8": {
+    "prefix": "cutf8",
+    "body": "# -*- coding: utf-8 -*-\n",
+    "description": "# encoding: UTF-8"
+  },
+  "imp": {
+    "prefix": "imp",
+    "body": "import ${0:module}",
+    "description": "Import module"
+  },
+  "from": {
+    "prefix": "from",
+    "body": "from ${1:package} import ${0:module}",
+    "description": "From package import"
+  },
+  "ifm": {
+    "prefix": "ifm",
+    "body": "if __name__ == '__main__':\n\t$0",
+    "description": "If __main__"
+  },
+  "for": {
+    "prefix": "for",
+    "body": "for ${1:item} in ${2:items}:\n\t$3",
+    "description": "For loop statement"
+  },
+  "wh": {
+    "prefix": "wh",
+    "body": "while ${1:condition}:\n\t$2",
+    "description": "While loop statement"
+  },
+  "dowh": {
+    "prefix": "dowh",
+    "body": "while True:\n\t$2\n\tif ${1:condition}:\n\t\tbreak",
+    "description": "Same as do...while in other languages"
+  },
+  "with": {
+    "prefix": "with",
+    "body": "with ${1:expr} as ${2:var}:\n\t$3",
+    "description": "With statement"
+  },
+  "if": {
+    "prefix": "if",
+    "body": "if ${1:condition}:\n\t$2",
+    "description": "If"
+  },
+  "ife": {
+    "prefix": "ife",
+    "body": "if ${1:condition}:\n\t$2\nelse:\n\t${3:pass}",
+    "description": "If / Else"
+  },
+  "ifee": {
+    "prefix": "ifee",
+    "body": "if ${1:condition}:\n\t$2\nelif ${3:condition}:\n\t${4:pass}\nelse:\n\t${5:pass}",
+    "description": "If / Elif / Else"
+  },
+  "el": {
+    "prefix": "el",
+    "body": "else:\n\t1",
+    "description": "Else statement"
+  },
+  "elif": {
+    "prefix": "elif",
+    "body": "elif ${1:condition}:\n\t$2",
+    "description": "Elif"
+  },
+  "try": {
+    "prefix": "try",
+    "body": "try:\n\t1\nexcept ${2:Exception} as ${3:e}:\n\t${4:raise $3}",
+    "description": "Try / Except"
+  },
+  "trye": {
+    "prefix": "trye",
+    "body": "try:\n\t1\nexcept ${2:Exception} as ${3:e}:\n\t${4:raise $3}\nelse:\n\t${5:pass}",
+    "description": "Try / Except / Else"
+  },
+  "tryf": {
+    "prefix": "tryf",
+    "body": "try:\n\t1\nexcept ${2:Exception} as ${3:e}:\n\t${4:raise $3}\nfinally:\n\t${5:pass}",
+    "description": "Try / Except / Finally"
+  },
+  "tryef": {
+    "prefix": "tryef",
+    "body": "try:\n\t1\nexcept${2: ${3:Exception} as ${4:e}}:\n\t${5:raise}\nelse:\n\t${6:pass}\nfinally:\n\t${7:pass}",
+    "description": "Try / Except / Else / Finally"
+  },
+  "exc": {
+    "prefix": "exc",
+    "body": "except ${1:Exception} as ${2:e}:\n\t${3:raise $2}",
+    "description": "Except statement"
+  },
+  "fin": {
+    "prefix": "fin",
+    "body": "finally:\n\t${1:pass}",
+    "description": "Finally statement"
+  },
+  "cl": {
+    "prefix": "cl",
+    "body": "class ${1:ClassName}${2:(${3:object})}:\n\t'''${4:docstring for $1}'''\n\t$5",
+    "description": "Class definition"
+  },
+  "cli": {
+    "prefix": "cli",
+    "body": "class ${1:ClassName}${2:(${3:object})}:\n\t'''${4:docstring for $1}'''\n\n\tdef __init__(self${5:, ${6:args}})${7: -> None}:\n\t\t$8",
+    "description": "Class definition with __init__"
+  },
+  "def": {
+    "prefix": "def",
+    "body": "def ${1:function}(`!p snip.rv = 'self${2:, ${3:args}}' if snip.indent else '${2:args}'`)${4: -> ${5:None}}:\n\t'''${6:docstring for $1}'''\n\t$7",
+    "description": "Function definition"
+  },
+  "defi": {
+    "prefix": "defi",
+    "body": "def __init__(self${1:, ${2:args}})${3: -> None}:\n\t$4",
+    "description": "Class __init__ definition"
+  },
+  "ret": {
+    "prefix": "ret",
+    "body": "return $1",
+    "description": "Return"
+  },
+  "/(^|(?<=\\W))\\./": {
+    "prefix": "/(^|(?<=\\W))\\./",
+    "body": "self.",
+    "description": "self."
+  },
+  "sa": {
+    "prefix": "sa",
+    "body": "self.${1:attribute} = $1",
+    "description": "self.attribute = attribute"
+  },
+  "_": {
+    "prefix": "_",
+    "body": "__${1:init}__",
+    "description": "__magic__"
+  },
+  "lambd": {
+    "prefix": "lambd",
+    "body": "lambda ${1:vars} : ${2:action}",
+    "description": "Lambda"
+  },
+  "lcp": {
+    "prefix": "lcp",
+    "body": "[${5:expression} for ${1:item} in ${2:items}${3: if ${4:condition}}]",
+    "description": "List comprehension"
+  },
+  "dcp": {
+    "prefix": "dcp",
+    "body": "{${5:key_exprn}: ${6:value_expr} for ${1:item} in ${2:items}${3: if ${4:condition}}}",
+    "description": "Dict comprehension"
+  },
+  "scp": {
+    "prefix": "scp",
+    "body": "{${5:expression} for ${1:item} in ${2:items}${3: if ${4:condition}}}",
+    "description": "Set comprehension"
+  },
+  "lgen": {
+    "prefix": "lgen",
+    "body": "(${5:expression} for ${1:item} in ${2:items}${3: if ${4:condition}})",
+    "description": "Generator Expression"
+  },
+  "ar": {
+    "prefix": "ar",
+    "body": "*args",
+    "description": "*args"
+  },
+  "kw": {
+    "prefix": "kw",
+    "body": "**kwargs",
+    "description": "**kwargs"
+  },
+  "akw": {
+    "prefix": "akw",
+    "body": "*args, **kwargs",
+    "description": "*args, **kwargs"
+  },
+  "kwg": {
+    "prefix": "kwg",
+    "body": "kwargs.get('$1', ${2:None})",
+    "description": "kwargs.get()"
+  },
+  "v": {
+    "prefix": "v",
+    "body": "${1:variable}: ${2:type}",
+    "description": "Variable annotation"
+  },
+  "va": {
+    "prefix": "va",
+    "body": "${1:variable}: ${2:type} = ${3:value}",
+    "description": "Variable annotation with assignment"
+  },
+  "reveal_type": {
+    "prefix": "reveal_type",
+    "body": "reveal_type(${1:variable})",
+    "description": "Mypy: reveal type"
+  }
+}

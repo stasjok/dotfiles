@@ -161,6 +161,8 @@ packer.startup({
         end
         vim.api.nvim_set_keymap('s', '<BS>', '<C-o>c', {noremap = true})
         vim.api.nvim_set_keymap('s', '<Del>', '<C-o>c', {noremap = true})
+
+        vim.api.nvim_command('runtime snippets/snippets.lua')
       end
     },
 
