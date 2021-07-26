@@ -138,12 +138,39 @@ packer.startup({
       end
     },
 
+    -- Snippets
+    {
+      'L3MON4D3/LuaSnip', commit = '631a1551c9e0d983e9545d37c79fb024f4680a83',
+      config = function()
+        require'luasnip.config'.setup({})
+
+        _G.luasnip_change_choice = function(num)
+          if require("luasnip").choice_active() then
+            return vim.api.nvim_replace_termcodes('<Cmd>lua require"luasnip".change_choice('..num..')<CR>', true, false, true)
+          else
+            return vim.api.nvim_replace_termcodes('<Ignore>', true, false, true)
+          end
+        end
+
+        vim.api.nvim_set_keymap('i', '<C-s>', '<Cmd>lua require"luasnip".expand()<CR>', {noremap = true})
+        for _, m in ipairs({'i', 's'}) do
+          vim.api.nvim_set_keymap(m, '<M-n>', '<Cmd>lua require"luasnip".jump(1)<CR>', {noremap = true})
+          vim.api.nvim_set_keymap(m, '<M-p>', '<Cmd>lua require"luasnip".jump(-1)<CR>', {noremap = true})
+          vim.api.nvim_set_keymap(m, '<M-N>', 'v:lua.luasnip_change_choice(1)', {expr = true, noremap = true})
+          vim.api.nvim_set_keymap(m, '<M-P>', 'v:lua.luasnip_change_choice(-1)', {expr = true, noremap = true})
+        end
+        vim.api.nvim_set_keymap('s', '<BS>', '<C-o>c', {noremap = true})
+        vim.api.nvim_set_keymap('s', '<Del>', '<C-o>c', {noremap = true})
+      end
+    },
+
     -- Auto completion
     {
       'hrsh7th/nvim-compe', commit = '73529ce61611c9ee3821e18ecc929c422416c462',
       config = function()
         require'compe'.setup{
           source = {
+            luasnip = true,
             buffer = true,
             path = true,
             nvim_lua = true,
