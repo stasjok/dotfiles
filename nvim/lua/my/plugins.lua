@@ -144,7 +144,7 @@ packer.startup({
       config = function()
         require'luasnip.config'.setup({})
 
-        _G.luasnip_change_choice = function(num)
+        _G.luasnip_choose = function(num)
           if require("luasnip").choice_active() then
             return vim.api.nvim_replace_termcodes('<Cmd>lua require"luasnip".change_choice('..num..')<CR>', true, false, true)
           else
@@ -152,12 +152,11 @@ packer.startup({
           end
         end
 
-        vim.api.nvim_set_keymap('i', '<C-s>', '<Cmd>lua require"luasnip".expand()<CR>', {noremap = true})
+        vim.api.nvim_set_keymap('i', '<C-h>', '<Cmd>lua require"luasnip".expand()<CR>', {noremap = true})
         for _, m in ipairs({'i', 's'}) do
-          vim.api.nvim_set_keymap(m, '<M-n>', '<Cmd>lua require"luasnip".jump(1)<CR>', {noremap = true})
-          vim.api.nvim_set_keymap(m, '<M-p>', '<Cmd>lua require"luasnip".jump(-1)<CR>', {noremap = true})
-          vim.api.nvim_set_keymap(m, '<M-N>', 'v:lua.luasnip_change_choice(1)', {expr = true, noremap = true})
-          vim.api.nvim_set_keymap(m, '<M-P>', 'v:lua.luasnip_change_choice(-1)', {expr = true, noremap = true})
+          vim.api.nvim_set_keymap(m, '<C-j>', '<Cmd>lua require"luasnip".jump(1)<CR>', {noremap = true})
+          vim.api.nvim_set_keymap(m, '<C-k>', '<Cmd>lua require"luasnip".jump(-1)<CR>', {noremap = true})
+          vim.api.nvim_set_keymap(m, '<C-l>', 'v:lua.luasnip_choose(1)', {expr = true, noremap = true})
         end
         vim.api.nvim_set_keymap('s', '<BS>', '<C-o>c', {noremap = true})
         vim.api.nvim_set_keymap('s', '<Del>', '<C-o>c', {noremap = true})
@@ -191,13 +190,11 @@ packer.startup({
 
         vim.api.nvim_set_keymap('i', '<C-y>', 'v:lua.complete_show_confirm()',
                                 {expr = true, noremap = true})
-        vim.api.nvim_set_keymap('i', '<C-n>', 'compe#complete()',
+        -- without extra <C-e> keys like <C-n>/<C-p> doesn't work, don't know why
+        vim.api.nvim_set_keymap('i', '<C-e>', '<Cmd>lua require"compe"._close()<CR><C-e>', {noremap = true})
+        vim.api.nvim_set_keymap('i', '<M-d>', 'compe#scroll({ "delta": +8 })',
                                 {expr = true, noremap = true})
-        vim.api.nvim_set_keymap('i', '<C-e>', 'compe#close()',
-                                {expr = true, noremap = true})
-        vim.api.nvim_set_keymap('i', '<C-f>', 'compe#scroll({ "delta": +8 })',
-                                {expr = true, noremap = true})
-        vim.api.nvim_set_keymap('i', '<C-b>', 'compe#scroll({ "delta": -8 })',
+        vim.api.nvim_set_keymap('i', '<M-u>', 'compe#scroll({ "delta": -8 })',
                                 {expr = true, noremap = true})
         _G.tab_complete = function()
           if vim.fn.pumvisible() == 1 then
