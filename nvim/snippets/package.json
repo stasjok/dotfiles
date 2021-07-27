@@ -2,11 +2,11 @@
   "contributes": {
     "snippets": [
       {
-        "language": ["jinja", "jinja2", "sls"],
+        "language": ["jinja", "jinja2", "sls", "yaml.ansible", "ansible"],
         "path": "./jinja.json"
       },
       {
-        "language": ["jinja2", "yaml.ansible"],
+        "language": ["jinja2", "yaml.ansible", "ansible"],
         "path": "./jinja2.json"
       },
       {
