@@ -75,6 +75,14 @@ vim.api.nvim_set_keymap('c', '<C-a>', '<C-b>', {noremap = true})
 vim.api.nvim_set_keymap('!', '<M-BS>', '<C-w>', {noremap = true})
 vim.api.nvim_set_keymap('i', '<M-d>', '<C-o>dw', {noremap = true})
 vim.api.nvim_set_keymap('c', '<M-d>', '<C-f>dw<C-c>', {noremap = true})
+-- Create new lines in insert mode
+vim.api.nvim_set_keymap('i', '<M-n>', '<C-o>o', {noremap = true})
+vim.api.nvim_set_keymap('i', '<M-p>', '<C-o>O', {noremap = true})
+-- Move lines
+vim.api.nvim_set_keymap('n', '<M-d>', '<Cmd>move .+1<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<M-u>', '<Cmd>move .-2<CR>', {noremap = true})
+vim.api.nvim_set_keymap('v', '<M-d>', ":move '>+1<CR>gv", {noremap = true})
+vim.api.nvim_set_keymap('v', '<M-u>', ":move '<-2<CR>gv", {noremap = true})
 
 -- Clipboard integration with tmux
 if vim.env.TMUX then
