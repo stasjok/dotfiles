@@ -41,4 +41,17 @@ in with stable; {
       sha256 = "022klki8hgv1i5h91r1ag5jnk37iq6awgfijjzb47z2k525nh0nc";
     };
   });
+  sumneko-lua-language-server = sumneko-lua-language-server.overrideAttrs (oldAttrs: rec {
+    version = "2.3.3";
+    src = fetchFromGitHub {
+      owner = "sumneko";
+      repo = "lua-language-server";
+      rev = version;
+      sha256 = "0q229i4aniqmj8rkdwyr1bpx9bjiwc06wcgizvsn98fyand1dnfr";
+      fetchSubmodules = true;
+    };
+    ninjaFlags = [
+      "-fcompile/ninja/linux.ninja"
+    ];
+  });
 }
