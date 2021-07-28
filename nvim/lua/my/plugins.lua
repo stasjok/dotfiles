@@ -171,10 +171,10 @@ packer.startup({
       config = function()
         require'compe'.setup{
           source = {
+            nvim_lsp = true;
             luasnip = true,
             buffer = true,
             path = true,
-            nvim_lua = true,
           }
         }
         vim.opt.completeopt = {'menuone', 'noselect'}
@@ -213,6 +213,83 @@ packer.startup({
         vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.tab_complete()', {expr = true, noremap = true})
         vim.api.nvim_set_keymap('i', '<S-Tab>', 'v:lua.s_tab_complete()', {expr = true, noremap = true})
       end,
+    },
+
+    {
+      'neovim/nvim-lspconfig', commit = '8b5f017fdf4ac485cfffbf4c93b7f3ce8de792f7',
+      config = function()
+        local on_attach = function(client, bufnr)
+          for lhs, rhs in pairs {
+            gd = '<Cmd>lua vim.lsp.buf.definition()<CR>',
+            gD = '<Cmd>lua vim.lsp.buf.declaration()<CR>',
+            ['<leader>D'] = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
+            ['<leader>i'] = '<Cmd>lua vim.lsp.buf.implementation()<CR>',
+            gr = '<Cmd>lua vim.lsp.buf.references()<CR>',
+            ['<leader>r'] = '<Cmd>lua vim.lsp.buf.rename()<CR>',
+            K = '<Cmd>lua vim.lsp.buf.hover()<CR>',
+            ['<leader>a'] = '<Cmd>lua vim.lsp.buf.code_action()<CR>',
+            ['<leader>d'] = '<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',
+            [']d'] = '<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>',
+            ['[d'] = '<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>',
+            ['<leader>F'] = '<Cmd>lua vim.lsp.buf.formatting()<CR>',
+          } do
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', lhs, rhs, {noremap = true})
+          end
+        end
+
+        local capabilities = vim.lsp.protocol.make_client_capabilities()
+        capabilities.textDocument.completion.completionItem.snippetSupport = true
+        capabilities.textDocument.completion.completionItem.resolveSupport = {
+          properties = {
+            'documentation',
+            'detail',
+            'additionalTextEdits',
+          }
+        }
+
+        -- Lua language server
+        local runtime_path = vim.split(package.path, ';')
+        table.insert(runtime_path, "lua/?.lua")
+        table.insert(runtime_path, "lua/?/init.lua")
+
+        require'lspconfig'.sumneko_lua.setup {
+          cmd = {'lua-language-server'},
+          settings = {
+            Lua = {
+              runtime = {
+                version = 'LuaJIT',
+                path = runtime_path,
+              },
+              completion = {
+                callSnippet = 'Replace'
+              },
+              diagnostics = {
+                globals = {'vim'},
+              },
+              workspace = {
+                library = vim.api.nvim_get_runtime_file('', true),
+              },
+              telemetry = {
+                enable = false,
+              },
+            },
+          },
+          on_attach = on_attach,
+          capabilities = capabilities,
+          flags = {
+            debounce_text_changes = 100,
+          },
+        }
+        for _, lsp_server in ipairs {} do
+          require'lspconfig'[lsp_server].setup {
+            on_attach = on_attach,
+            capabilities = capabilities,
+            flags = {
+              debounce_text_changes = 100,
+            },
+          }
+        end
+      end
     },
 
     -- Nix
