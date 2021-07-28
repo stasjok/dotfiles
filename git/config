@@ -11,3 +11,5 @@
     ff = only
 [status]
     showUntrackedFiles = all
+[diff]
+    mnemonicPrefix = true
