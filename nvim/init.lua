@@ -83,6 +83,14 @@ vim.api.nvim_set_keymap('n', '<M-d>', '<Cmd>move .+1<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<M-u>', '<Cmd>move .-2<CR>', {noremap = true})
 vim.api.nvim_set_keymap('v', '<M-d>', ":move '>+1<CR>gv", {noremap = true})
 vim.api.nvim_set_keymap('v', '<M-u>', ":move '<-2<CR>gv", {noremap = true})
+-- Shortcuts
+vim.api.nvim_set_keymap('n', '<leader>x', '<C-w>v', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>v', '<C-w>s', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>c', '<Cmd>close<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>w', '<Cmd>write<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>W', '<Cmd>wall<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>q', '<Cmd>quit<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>Q', '<Cmd>quitall<CR>', {noremap = true})
 
 -- Clipboard integration with tmux
 if vim.env.TMUX then
