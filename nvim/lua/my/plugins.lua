@@ -89,6 +89,15 @@ packer.startup({
       end
     },
 
+    {
+      'https://github.com/stasjok/surround.nvim', commit = '183d5107ab68190ddca53d29b398dcf83f3e5488',
+      config = function ()
+        require'surround'.setup({
+          mappings_style = 'surround',
+        })
+      end
+    },
+
     { 'windwp/nvim-autopairs', commit = 'e3e105b11a3b34e93bdcee0c895801cf3ed2a835',
       config = function()
         require'nvim-autopairs'.setup({
