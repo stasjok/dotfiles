@@ -44,7 +44,6 @@ augroup END
 ]]
 
 -- Mappings
-vim.api.nvim_set_keymap('n', '<leader><CR>', '<Cmd>buffer #<CR>', {noremap = true});
 function _G.OnEnter()
   if vim.v.hlsearch == 1 then
     return vim.api.nvim_replace_termcodes('<Cmd>nohlsearch<CR>', true, true, true);
@@ -93,7 +92,9 @@ vim.api.nvim_set_keymap('n', '<leader>H', '<C-w>H', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>J', '<C-w>J', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>K', '<C-w>K', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>L', '<C-w>L', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader><CR>', '<Cmd>buffer #<CR>', {noremap = true});
 vim.api.nvim_set_keymap('n', '<leader>c', '<Cmd>close<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>C', '<Cmd>buffer #<CR><Cmd>bdelete #<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>w', '<Cmd>write<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>W', '<Cmd>wall<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>q', '<Cmd>quit<CR>', {noremap = true})
