@@ -30,6 +30,7 @@ vim.opt.shell = 'bash';
 vim.opt.cursorline = true;
 vim.opt.number = true;
 vim.opt.relativenumber = true;
+vim.opt.signcolumn = 'yes';
 
 -- show tabs and trailing spaces
 vim.opt.list = true;

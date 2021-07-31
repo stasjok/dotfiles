@@ -1,7 +1,7 @@
 vim.cmd([[
 augroup terminal
   autocmd!
-  autocmd TermOpen * setlocal nonumber norelativenumber sidescrolloff=0 | startinsert
+  autocmd TermOpen * setlocal nonumber norelativenumber sidescrolloff=0 signcolumn=auto | startinsert
 augroup END
 ]]);
 
