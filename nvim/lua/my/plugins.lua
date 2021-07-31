@@ -301,6 +301,13 @@ packer.startup({
       end
     },
 
+    {
+      'lewis6991/gitsigns.nvim', commit = '0d45fff0a28cebdc87604117c0fc46f3a64550f6',
+      config = function ()
+        require'gitsigns'.setup()
+      end
+    },
+
     -- Nix
     { 'Freed-Wu/vim-nix', commit = '2fc254b90661f8190565b18874d0662bfcbec02c', ft = 'nix' }, -- forked from LnL7/vim-nix
 
