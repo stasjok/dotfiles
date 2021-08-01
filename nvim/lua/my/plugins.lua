@@ -58,6 +58,16 @@ packer.startup({
       end
     },
 
+    -- Comments
+    {
+      'winston0410/commented.nvim', commit = 'a7fed2e21cdef40ee91d79460fbb53085931d5df',
+      config = function ()
+        require('commented').setup {
+          keybindings = {n = "gc", v = "gc", nl = "gcc"},
+        }
+      end
+    },
+
     -- Tree-sitter
     {
       'nvim-treesitter/nvim-treesitter', commit = '29113e6892a46d4afff41417c0be7122a3b97ae6',
