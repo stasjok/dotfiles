@@ -313,9 +313,31 @@ packer.startup({
       'TimUntersberger/neogit', commit = 'ee83d4fa8ac946e5e0064e65a5276e1ea030ae28',
       cmd = 'Neogit',
       keys = '<leader>g',
+      wants = 'diffview.nvim',
       config = function ()
-        require'neogit'.setup()
+        require'neogit'.setup {
+          integrations = {
+            diffview = true,
+          },
+        }
         vim.api.nvim_set_keymap('n', '<leader>g', '<Cmd>Neogit<CR>', {noremap = true})
+      end
+    },
+
+    {
+      'sindrets/diffview.nvim', commit = '2411f5303192a9c8056ec174fb995773f90b52b8',
+      cmd = 'DiffviewOpen',
+      config = function ()
+        require'diffview'.setup {
+          key_bindings = {
+            view = {
+              q = '<Cmd>lua require"diffview".close()<CR>'
+            },
+            file_panel = {
+              q = '<Cmd>lua require"diffview".close()<CR>'
+            },
+          },
+        }
       end
     },
 
