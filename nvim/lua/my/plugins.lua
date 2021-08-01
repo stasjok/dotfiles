@@ -85,7 +85,7 @@ packer.startup({
         require('telescope').load_extension('fzf')
         vim.api.nvim_set_keymap('n', '<leader> ', '<cmd>lua require"telescope.builtin".buffers()<CR>', {noremap = true})
         vim.api.nvim_set_keymap('n', '<leader>f', '<cmd>lua require"telescope.builtin".find_files()<CR>', {noremap = true})
-        vim.api.nvim_set_keymap('n', '<leader>g', '<cmd>lua require"telescope.builtin".live_grep()<CR>', {noremap = true})
+        vim.api.nvim_set_keymap('n', '<leader>s', '<cmd>lua require"telescope.builtin".live_grep()<CR>', {noremap = true})
       end
     },
 
@@ -301,10 +301,21 @@ packer.startup({
       end
     },
 
+    -- Git
     {
       'lewis6991/gitsigns.nvim', commit = '0d45fff0a28cebdc87604117c0fc46f3a64550f6',
       config = function ()
         require'gitsigns'.setup()
+      end
+    },
+
+    {
+      'TimUntersberger/neogit', commit = 'ee83d4fa8ac946e5e0064e65a5276e1ea030ae28',
+      cmd = 'Neogit',
+      keys = '<leader>g',
+      config = function ()
+        require'neogit'.setup()
+        vim.api.nvim_set_keymap('n', '<leader>g', '<Cmd>Neogit<CR>', {noremap = true})
       end
     },
 
