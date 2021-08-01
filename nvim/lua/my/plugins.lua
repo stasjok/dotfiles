@@ -378,5 +378,12 @@ packer.startup({
 });
 
 packer.sync();
+-- Allow lazy-loaded plugins to load again
+for _, var in ipairs {
+  'neovim_loaded', -- neogit
+  'diffview_nvim_loaded'
+} do
+  vim.api.nvim_del_var(var)
+end
 vim.api.nvim_command('packloadall!');
 vim.api.nvim_command('runtime packer_compiled.lua');
