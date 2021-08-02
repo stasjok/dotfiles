@@ -266,6 +266,27 @@ packer.startup({
           }
         }
 
+        -- Diagnostics settings
+        vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+          virtual_text = false,
+          update_in_insert = true,
+        })
+
+        -- Diagnostics icons
+        local signs = { Error = " ", Warning = " ", Hint = " ", Information = " " }
+        for type, icon in pairs(signs) do
+          local hl = "LspDiagnosticsSign" .. type
+          vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+        end
+
+        -- Show diagnostics automatically
+        vim.cmd [[
+          augroup ShowDiagnostics
+          autocmd!
+          autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})
+          augroup END
+        ]]
+
         -- Lua language server
         local runtime_path = vim.split(package.path, ';')
         table.insert(runtime_path, "lua/?.lua")

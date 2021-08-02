@@ -24,6 +24,7 @@ vim.opt_global.scrolloff = 6;
 vim.opt_global.sidescrolloff = 6;
 vim.opt_global.scrollback = 80000;
 vim.opt.lazyredraw = true;
+vim.opt.updatetime = 250;
 
 vim.opt.shell = 'bash';
 
