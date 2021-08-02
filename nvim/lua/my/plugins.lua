@@ -316,6 +316,13 @@ packer.startup({
           kinds[i] = icons[kind] or kind
         end
 
+        -- Signature help
+        require "lsp_signature".on_attach {
+          handler_opts = {
+            border = 'none'
+          }
+        }
+
         -- Lua language server
         local runtime_path = vim.split(package.path, ';')
         table.insert(runtime_path, "lua/?.lua")
@@ -360,6 +367,8 @@ packer.startup({
         end
       end
     },
+
+    { 'ray-x/lsp_signature.nvim', commit = '933ba2f059d965ee8db288f63869b8205ea223b8' },
 
     -- Git
     {
