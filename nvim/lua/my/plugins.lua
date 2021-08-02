@@ -442,7 +442,9 @@ for _, var in ipairs {
   'neovim_loaded', -- neogit
   'diffview_nvim_loaded'
 } do
-  vim.api.nvim_del_var(var)
+  if vim.g[var] then
+    vim.api.nvim_del_var(var)
+  end
 end
 vim.api.nvim_command('packloadall!');
 vim.api.nvim_command('runtime packer_compiled.lua');
