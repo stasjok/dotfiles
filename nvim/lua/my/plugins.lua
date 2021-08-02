@@ -16,7 +16,19 @@ packer.startup({
     { 'nanotee/luv-vimdocs', commit = '915eb060b2bddec7dd256dd1028773243f078016' },
 
     -- Solarized colorscheme
-    { 'ishan9299/nvim-solarized-lua', commit = 'fa437ae65a6c1239525e4ec7f4cbf4671eaa55ba' },
+    {
+      'ishan9299/nvim-solarized-lua', commit = 'fa437ae65a6c1239525e4ec7f4cbf4671eaa55ba',
+      config = function ()
+        vim.opt.termguicolors = true
+        vim.opt.background = 'dark'
+        vim.cmd[[
+          colorscheme solarized
+          highlight link LspReferenceText CursorLine
+          highlight link LspReferenceRead CursorLine
+          highlight link LspReferenceWrite CursorLine
+        ]]
+      end
+    },
 
     -- Icons
     { 'kyazdani42/nvim-web-devicons', commit = 'da717e19678bd6ec33008cf92da05da1b8ceb87d' },
