@@ -30,6 +30,7 @@ in with stable; {
     fish
     neovim-unwrapped
     tree-sitter
+    stylua
     ;
   packer-nvim = vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
     version = "2021-07-06";

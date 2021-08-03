@@ -378,7 +378,7 @@ packer.startup({
             debounce_text_changes = 100,
           },
         }
-        for _, lsp_server in ipairs {} do
+        for _, lsp_server in ipairs {'null-ls'} do
           require'lspconfig'[lsp_server].setup {
             on_attach = on_attach,
             capabilities = capabilities,
@@ -387,6 +387,16 @@ packer.startup({
             },
           }
         end
+      end
+    },
+
+    {
+      'jose-elias-alvarez/null-ls.nvim', commit = '2c9690964b91e34b421326dc4839b322a7b1a6cd',
+      config = function ()
+        require'null-ls'.config {
+        debounce = 100,
+          sources = { require'null-ls'.builtins.formatting.stylua }
+        }
       end
     },
 
