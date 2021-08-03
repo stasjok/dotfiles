@@ -292,21 +292,25 @@ packer.startup {
       config = function()
         local on_attach = function(client, bufnr)
           for lhs, rhs in pairs {
-            gd = '<Cmd>lua vim.lsp.buf.definition()<CR>',
+            gd = '<Cmd>lua require("telescope.builtin").lsp_definitions()<CR>',
             gD = '<Cmd>lua vim.lsp.buf.declaration()<CR>',
-            ['<leader>D'] = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
-            ['<leader>i'] = '<Cmd>lua vim.lsp.buf.implementation()<CR>',
-            gr = '<Cmd>lua vim.lsp.buf.references()<CR>',
+            ['<leader>T'] = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
+            ['<leader>i'] = '<Cmd>lua require("telescope.builtin").lsp_implementations()<CR>',
+            gr = '<Cmd>lua require("telescope.builtin").lsp_references()<CR>',
+            gs = '<Cmd>lua require("telescope.builtin").lsp_document_symbols()<CR>',
+            gS = '<Cmd>lua require("telescope.builtin").lsp_workspace_symbols()<CR>',
             ['<leader>r'] = '<Cmd>lua vim.lsp.buf.rename()<CR>',
             K = '<Cmd>lua vim.lsp.buf.hover()<CR>',
             ['<leader>a'] = '<Cmd>lua vim.lsp.buf.code_action()<CR>',
-            ['<leader>d'] = '<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',
+            ['<leader>d'] = '<Cmd>lua require("telescope.builtin").lsp_document_diagnostics()<CR>',
+            ['<leader>D'] = '<Cmd>lua require("telescope.builtin").lsp_workspace_diagnostics()<CR>',
             [']d'] = '<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>',
             ['[d'] = '<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>',
             ['<leader>F'] = '<Cmd>lua vim.lsp.buf.formatting()<CR>',
           } do
             vim.api.nvim_buf_set_keymap(bufnr, 'n', lhs, rhs, { noremap = true })
           end
+          vim.api.nvim_set_keymap('v', '<leader>F', '<Cmd>lua vim.lsp.buf.range_formatting()<CR>', { noremap = true })
         end
 
         local capabilities = vim.lsp.protocol.make_client_capabilities()
