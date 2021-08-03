@@ -114,19 +114,25 @@ packer.startup {
         vim.api.nvim_set_keymap(
           'n',
           '<leader> ',
-          '<cmd>lua require"telescope.builtin".buffers()<CR>',
+          '<Cmd>lua require("telescope.builtin").buffers()<CR>',
           { noremap = true }
         )
         vim.api.nvim_set_keymap(
           'n',
           '<leader>f',
-          '<cmd>lua require"telescope.builtin".find_files()<CR>',
+          '<Cmd>lua require("telescope.builtin").find_files()<CR>',
           { noremap = true }
         )
         vim.api.nvim_set_keymap(
           'n',
           '<leader>s',
-          '<cmd>lua require"telescope.builtin".live_grep()<CR>',
+          '<Cmd>lua require("telescope.builtin").live_grep()<CR>',
+          { noremap = true }
+        )
+        vim.api.nvim_set_keymap(
+          'n',
+          '<leader>S',
+          '<Cmd>lua require("telescope.builtin").grep_string()<CR>',
           { noremap = true }
         )
       end,
