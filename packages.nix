@@ -23,13 +23,11 @@ in with stable; {
     ripgrep
     fzf
     ansible_2_9
-    nodejs
     python3
     ;
   inherit (unstable)
     fish
     neovim-unwrapped
-    tree-sitter
     stylua
     black
     ;
@@ -47,6 +45,12 @@ in with stable; {
     };
   });
   telescope-fzf-native-nvim = unstable.vimPlugins.telescope-fzf-native-nvim;
+  nvim-treesitter-parsers = linkFarm "nvim-treesitter-parsers" [
+    {
+      name = "share/vim-plugins/nvim-treesitter-parsers/parser/nix.so";
+      path = "${unstable.tree-sitter.builtGrammars.tree-sitter-nix}/parser";
+    }
+  ];
   sumneko-lua-language-server = sumneko-lua-language-server.overrideAttrs (oldAttrs: rec {
     version = "2.3.3";
     src = fetchFromGitHub {

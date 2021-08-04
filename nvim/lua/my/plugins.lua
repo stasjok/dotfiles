@@ -179,9 +179,14 @@ packer.startup({
     -- Tree-sitter
     {
       "nvim-treesitter/nvim-treesitter",
-      commit = "29113e6892a46d4afff41417c0be7122a3b97ae6",
-      run = ":TSUpdate",
-      config = require("my.treesitter").setup,
+      branch = "0.5-compat",
+      commit = "27f5e99cdd1b4e7f6a5cc30016d990ebf81a561c",
+      config = function ()
+        vim.api.nvim_command("packadd nvim-treesitter-parsers")
+        require("nvim-treesitter.configs").setup({
+          highlight = { enable = true },
+        })
+      end
     },
 
     -- Telescope
