@@ -22,9 +22,8 @@ in with stable; {
     fd
     ripgrep
     fzf
-    nodejs
-    gcc
     ansible_2_9
+    nodejs
     python3
     ;
   inherit (unstable)
