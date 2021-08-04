@@ -186,11 +186,6 @@ packer.startup({
 
     -- Telescope
     {
-      "nvim-telescope/telescope-fzf-native.nvim",
-      commit = "fe8c8d8cf7ff215ac83e1119cba87c016070b27e",
-      run = "mkdir -p build && gcc -O3 -Wall -Werror -fpic -shared src/fzf.c -o build/libfzf.so",
-    },
-    {
       "nvim-telescope/telescope.nvim",
       commit = "c0f1999b0280bb042bba01c930dd94a4bfdee363",
       config = function()
@@ -204,6 +199,7 @@ packer.startup({
             },
           },
         })
+        vim.api.nvim_command("packadd telescope-fzf-native-nvim")
         require("telescope").load_extension("fzf")
         vim.api.nvim_set_keymap(
           "n",

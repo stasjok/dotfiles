@@ -47,6 +47,7 @@ in with stable; {
       sha256 = "022klki8hgv1i5h91r1ag5jnk37iq6awgfijjzb47z2k525nh0nc";
     };
   });
+  telescope-fzf-native-nvim = unstable.vimPlugins.telescope-fzf-native-nvim;
   sumneko-lua-language-server = sumneko-lua-language-server.overrideAttrs (oldAttrs: rec {
     version = "2.3.3";
     src = fetchFromGitHub {
