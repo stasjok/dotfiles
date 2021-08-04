@@ -32,6 +32,7 @@ in with stable; {
     neovim-unwrapped
     tree-sitter
     stylua
+    black
     ;
   inherit (unstable.nodePackages)
     pyright

@@ -441,7 +441,10 @@ packer.startup {
       config = function()
         require('null-ls').config {
           debounce = 100,
-          sources = { require('null-ls').builtins.formatting.stylua },
+          sources = {
+            require('null-ls').builtins.formatting.stylua,
+            require('null-ls').builtins.formatting.black,
+          },
         }
       end,
     },
