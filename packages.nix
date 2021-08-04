@@ -25,12 +25,16 @@ in with stable; {
     nodejs
     gcc
     ansible_2_9
+    python3
     ;
   inherit (unstable)
     fish
     neovim-unwrapped
     tree-sitter
     stylua
+    ;
+  inherit (unstable.nodePackages)
+    pyright
     ;
   packer-nvim = vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
     version = "2021-07-06";

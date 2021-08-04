@@ -423,7 +423,7 @@ packer.startup {
             debounce_text_changes = 100,
           },
         }
-        for _, lsp_server in ipairs { 'null-ls' } do
+        for _, lsp_server in ipairs { 'null-ls', 'pyright' } do
           require('lspconfig')[lsp_server].setup {
             on_attach = on_attach,
             capabilities = capabilities,
