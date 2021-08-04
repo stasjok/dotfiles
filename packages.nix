@@ -1,13 +1,13 @@
 let
   nixpkgs-stable = fetchTarball {
-    name = "nixos-21.05.1268.21b696caf39";
-    url = https://releases.nixos.org/nixos/21.05/nixos-21.05.1268.21b696caf39/nixexprs.tar.xz;
-    sha256 = "1ffk57wfcfvvfjcxzialn9pgfmkanygz4h9kswv0jwiypjbrhzaa";
+    name = "nixos-21.05.2001.d4590d21006";
+    url = https://releases.nixos.org/nixos/21.05/nixos-21.05.2001.d4590d21006/nixexprs.tar.xz;
+    sha256 = "00p5vdk1ir4k35kc530rp9bjw3crvg0l1rmhsgyzhypavwvwy1lc";
   };
   nixpkgs-unstable = fetchTarball {
-    name = "nixpkgs-21.11pre301805.dac74fead87";
-    url = https://releases.nixos.org/nixpkgs/nixpkgs-21.11pre301805.dac74fead87/nixexprs.tar.xz;
-    sha256 = "0435g5qwx2qwmsqf1ziazhi9xi0b6inax7j2daikgnsyc1jgcldc";
+    name = "nixpkgs-21.11pre306170.4d3e13e51b6";
+    url = https://releases.nixos.org/nixpkgs/nixpkgs-21.11pre306170.4d3e13e51b6/nixexprs.tar.xz;
+    sha256 = "1jzlsza51vil0s64gl1djwd8nypi5x95x3yd89vw3iy25inhjl9h";
   };
 
   stable = import nixpkgs-stable { config = {}; overlays = []; };
