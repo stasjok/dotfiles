@@ -156,6 +156,15 @@ packer.startup({
       end,
     },
 
+    {
+      "editorconfig/editorconfig-vim",
+      commit = "3078cd10b28904e57d878c0d0dab42aa0a9fdc89",
+      config = function()
+        vim.g.EditorConfig_exclude_patterns = { "scp://.*", "fugitive://.*" }
+        vim.g.EditorConfig_preserve_formatoptions = 1
+      end,
+    },
+
     -- Comments
     {
       "winston0410/commented.nvim",
