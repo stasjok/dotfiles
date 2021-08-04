@@ -37,13 +37,13 @@ in with stable; {
     pyright
     ;
   packer-nvim = vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
-    version = "2021-07-06";
+    version = "2021-08-02";
     pname = "packer.nvim";
     src = fetchFromGitHub {
       owner = "wbthomason";
       repo = "packer.nvim";
-      rev = "3fdea07bec6cb733d2f82e50a10829528b0ed4a9";
-      sha256 = "022klki8hgv1i5h91r1ag5jnk37iq6awgfijjzb47z2k525nh0nc";
+      rev = "2794f0767920c884736b746d1c0824cc55874f4b";
+      sha256 = "19cwjm98nq0f9z0kxc8l4350pkaw3m2dv5wb7nlwcz0m9w3dri0w";
     };
   });
   telescope-fzf-native-nvim = unstable.vimPlugins.telescope-fzf-native-nvim;
