@@ -454,7 +454,8 @@ packer.startup({
           }) do
             vim.api.nvim_buf_set_keymap(bufnr, "n", lhs, rhs, { noremap = true })
           end
-          vim.api.nvim_set_keymap(
+          vim.api.nvim_buf_set_keymap(
+            bufnr,
             "v",
             "<leader>F",
             "<Cmd>lua vim.lsp.buf.range_formatting()<CR>",
@@ -580,7 +581,7 @@ packer.startup({
             debounce_text_changes = 100,
           },
         })
-        for _, lsp_server in ipairs({ "null-ls", "pyright" }) do
+        for _, lsp_server in ipairs({ "pyright" }) do
           require("lspconfig")[lsp_server].setup({
             on_attach = on_attach,
             capabilities = capabilities,
@@ -602,6 +603,27 @@ packer.startup({
             require("null-ls").builtins.formatting.stylua,
             require("null-ls").builtins.formatting.black,
           },
+        })
+        require("lspconfig")["null-ls"].setup({
+          on_attach = function(client, bufnr)
+            for lhs, rhs in pairs({
+              ["<leader>a"] = "<Cmd>lua vim.lsp.buf.code_action()<CR>",
+              ["<leader>d"] = '<Cmd>lua require("telescope.builtin").lsp_document_diagnostics()<CR>',
+              ["<leader>D"] = '<Cmd>lua require("telescope.builtin").lsp_workspace_diagnostics()<CR>',
+              ["]d"] = "<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
+              ["[d"] = "<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>",
+              ["<leader>F"] = "<Cmd>lua vim.lsp.buf.formatting()<CR>",
+            }) do
+              vim.api.nvim_buf_set_keymap(bufnr, "n", lhs, rhs, { noremap = true })
+            end
+            vim.api.nvim_buf_set_keymap(
+              bufnr,
+              "v",
+              "<leader>F",
+              "<Cmd>lua vim.lsp.buf.range_formatting()<CR>",
+              { noremap = true }
+            )
+          end,
         })
       end,
     },
