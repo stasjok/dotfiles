@@ -194,6 +194,9 @@ packer.startup({
               node_decremental = "<C-l>",
             },
           },
+          indent = {
+            enable = true,
+          },
         })
       end,
     },
