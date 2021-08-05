@@ -188,10 +188,10 @@ packer.startup({
           incremental_selection = {
             enable = true,
             keymaps = {
-              init_selection = "<C-j>",
-              node_incremental = "<C-j>",
-              scope_incremental = "<C-h>",
-              node_decremental = "<C-l>",
+              init_selection = "<C-s>",
+              node_incremental = "<C-s>",
+              scope_incremental = "<M-s>",
+              node_decremental = "<C-q>",
             },
           },
           indent = {
@@ -315,9 +315,11 @@ packer.startup({
     -- Snippets
     {
       "L3MON4D3/LuaSnip",
-      commit = "631a1551c9e0d983e9545d37c79fb024f4680a83",
+      commit = "511f733cf2c6247f7a1b62b90e4bf0dfdae17a9f",
       config = function()
-        require("luasnip.config").setup({})
+        require("luasnip.config").setup({
+          store_selection_keys = "<C-h>",
+        })
 
         _G.luasnip_choose = function(num)
           if require("luasnip").choice_active() then
@@ -338,7 +340,7 @@ packer.startup({
           '<Cmd>lua require"luasnip".expand()<CR>',
           { noremap = true }
         )
-        for _, m in ipairs({ "i", "s" }) do
+        for _, m in ipairs({ "i", "s", "n" }) do
           vim.api.nvim_set_keymap(
             m,
             "<C-j>",
