@@ -4,7 +4,11 @@ if status is-login
     # Set EDITOR
     set --universal --export EDITOR nvim
     # Force nix packages to use system locale
-    set --universal --export LOCALE_ARCHIVE /usr/lib/locale/locale-archive
+    if test -f /usr/lib/locale/locale-archive
+        set --universal --export LOCALE_ARCHIVE /usr/lib/locale/locale-archive
+    else if test -d /usr/lib/locale
+        set --universal --export LOCPATH /usr/lib/locale
+    end
     # Set $NIX_SSL_CERT_FILE so that Nixpkgs applications like curl work.
     if not set -q NIX_SSL_CERT_FILE
         if test -e /etc/ssl/certs/ca-certificates.crt # NixOS, Ubuntu, Debian, Gentoo, Arch
