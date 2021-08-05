@@ -42,6 +42,7 @@ packer.startup({
     -- Libraries
     { "nvim-lua/popup.nvim", commit = "5e3bece7b4b4905f4ec89bee74c09cfd8172a16a" },
     { "nvim-lua/plenary.nvim", commit = "8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974" },
+    { "tjdevries/lazy.nvim", commit = "238c1b9a661947b864a7d103f9d6b1f376c3b72f" },
 
     {
       "aserowy/tmux.nvim",
