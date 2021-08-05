@@ -191,7 +191,7 @@ packer.startup({
               init_selection = "<C-j>",
               node_incremental = "<C-j>",
               scope_incremental = "<C-h>",
-              node_decremental = "<C-k>",
+              node_decremental = "<C-l>",
             },
           },
         })
@@ -344,13 +344,13 @@ packer.startup({
           )
           vim.api.nvim_set_keymap(
             m,
-            "<C-k>",
+            "<C-l>",
             '<Cmd>lua require"luasnip".jump(-1)<CR>',
             { noremap = true }
           )
           vim.api.nvim_set_keymap(
             m,
-            "<C-l>",
+            "<C-k>",
             "v:lua.luasnip_choose(1)",
             { expr = true, noremap = true }
           )
