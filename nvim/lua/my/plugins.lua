@@ -488,14 +488,16 @@ packer.startup({
           ]])
 
           -- Document highlight
-          vim.cmd([[
-            augroup DocumentHighlight
-            autocmd!
-            autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
-            autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
-            autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-            augroup END
-          ]])
+          if client.supports_method("textDocument/documentHighlight") then
+            vim.cmd([[
+              augroup DocumentHighlight
+              autocmd!
+              autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
+              autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
+              autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+              augroup END
+            ]])
+          end
 
           -- Signature help
           require("lsp_signature").on_attach({
