@@ -181,12 +181,21 @@ packer.startup({
       "nvim-treesitter/nvim-treesitter",
       branch = "0.5-compat",
       commit = "27f5e99cdd1b4e7f6a5cc30016d990ebf81a561c",
-      config = function ()
+      config = function()
         vim.api.nvim_command("packadd nvim-treesitter-parsers")
         require("nvim-treesitter.configs").setup({
           highlight = { enable = true },
+          incremental_selection = {
+            enable = true,
+            keymaps = {
+              init_selection = "<C-j>",
+              node_incremental = "<C-j>",
+              scope_incremental = "<C-h>",
+              node_decremental = "<C-k>",
+            },
+          },
         })
-      end
+      end,
     },
 
     -- Telescope
