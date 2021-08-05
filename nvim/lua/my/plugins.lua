@@ -470,6 +470,7 @@ packer.startup({
           }) do
             vim.api.nvim_buf_set_keymap(bufnr, "n", lhs, rhs, { noremap = true })
           end
+
           vim.api.nvim_buf_set_keymap(
             bufnr,
             "v",
@@ -477,6 +478,31 @@ packer.startup({
             "<Cmd>lua vim.lsp.buf.range_formatting()<CR>",
             { noremap = true }
           )
+
+          -- Show diagnostics automatically
+          vim.cmd([[
+            augroup ShowDiagnostics
+            autocmd!
+            autocmd CursorHold,CursorHoldI <buffer> lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})
+            augroup END
+          ]])
+
+          -- Document highlight
+          vim.cmd([[
+            augroup DocumentHighlight
+            autocmd!
+            autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
+            autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
+            autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+            augroup END
+          ]])
+
+          -- Signature help
+          require("lsp_signature").on_attach({
+            handler_opts = {
+              border = "none",
+            },
+          })
         end
 
         local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -510,14 +536,6 @@ packer.startup({
           vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
         end
 
-        -- Show diagnostics automatically
-        vim.cmd([[
-          augroup ShowDiagnostics
-          autocmd!
-          autocmd CursorHold,CursorHoldI * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})
-          augroup END
-        ]])
-
         -- Completion icons
         local icons = {
           Class = " ",
@@ -546,23 +564,6 @@ packer.startup({
         for i, kind in ipairs(kinds) do
           kinds[i] = icons[kind] or kind
         end
-
-        -- Signature help
-        require("lsp_signature").on_attach({
-          handler_opts = {
-            border = "none",
-          },
-        })
-
-        -- Document highlight
-        vim.cmd([[
-          augroup DocumentHighlight
-          autocmd!
-          autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
-          autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
-          autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-          augroup END
-        ]])
 
         -- Lua language server
         local runtime_path = vim.split(package.path, ";")
