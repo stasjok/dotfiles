@@ -18,6 +18,7 @@ let
   stable = import nixpkgs-stable { config = {}; overlays = []; };
   unstable = import nixpkgs-unstable { config = {}; overlays = []; };
   nvim-ts-grammars = unstable.callPackage "${hurricanehrndz-nixcfg}/nix/pkgs/nvim-ts-grammars" { };
+  my-node-packages = import ./nix/node-composition.nix { pkgs = stable; };
 
 in with stable; {
   inherit (stable)
@@ -35,6 +36,7 @@ in with stable; {
     ;
   inherit (nodePackages)
     bash-language-server
+    node2nix
     ;
   inherit (unstable)
     fish
@@ -88,4 +90,4 @@ in with stable; {
       "-fcompile/ninja/linux.ninja"
     ];
   });
-}
+} // my-node-packages
