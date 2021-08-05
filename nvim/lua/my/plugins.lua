@@ -597,6 +597,17 @@ packer.startup({
             debounce_text_changes = 100,
           },
         })
+        require("lspconfig")["bashls"].setup({
+          on_attach = on_attach,
+          capabilities = capabilities,
+          flags = {
+            debounce_text_changes = 100,
+          },
+          root_dir = function(filename)
+            return require("lspconfig.util").root_pattern(".git")(filename)
+              or require("lspconfig.util").path.dirname(filename)
+          end,
+        })
         for _, lsp_server in ipairs({ "pyright" }) do
           require("lspconfig")[lsp_server].setup({
             on_attach = on_attach,
@@ -616,6 +627,8 @@ packer.startup({
         require("null-ls").config({
           debounce = 100,
           sources = {
+            require("null-ls").builtins.diagnostics.shellcheck,
+            require("null-ls").builtins.formatting.shfmt,
             require("null-ls").builtins.formatting.stylua,
             require("null-ls").builtins.formatting.black,
           },

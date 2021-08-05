@@ -30,6 +30,11 @@ in with stable; {
     fzf
     ansible_2_9
     python3
+    shellcheck
+    shfmt
+    ;
+  inherit (nodePackages)
+    bash-language-server
     ;
   inherit (unstable)
     fish
