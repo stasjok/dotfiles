@@ -609,7 +609,7 @@ packer.startup({
               or require("lspconfig.util").path.dirname(filename)
           end,
         })
-        for _, lsp_server in ipairs({ "pyright" }) do
+        for _, lsp_server in ipairs({ "pyright", "jsonls" }) do
           require("lspconfig")[lsp_server].setup({
             on_attach = on_attach,
             capabilities = capabilities,
