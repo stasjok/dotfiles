@@ -567,39 +567,18 @@ packer.startup({
           kinds[i] = icons[kind] or kind
         end
 
-        -- Lua language server
-        local runtime_path = vim.split(package.path, ";")
-        table.insert(runtime_path, "lua/?.lua")
-        table.insert(runtime_path, "lua/?/init.lua")
-
-        require("lspconfig").sumneko_lua.setup({
-          cmd = { "lua-language-server" },
-          settings = {
-            Lua = {
-              runtime = {
-                version = "LuaJIT",
-                path = runtime_path,
-              },
-              completion = {
-                callSnippet = "Replace",
-              },
-              diagnostics = {
-                globals = { "vim" },
-              },
-              workspace = {
-                library = vim.api.nvim_get_runtime_file("", true),
-              },
-              telemetry = {
-                enable = false,
-              },
+        local luadev = require("lua-dev").setup({
+          lspconfig = {
+            cmd = { "lua-language-server" },
+            on_attach = on_attach,
+            capabilities = capabilities,
+            flags = {
+              debounce_text_changes = 100,
             },
           },
-          on_attach = on_attach,
-          capabilities = capabilities,
-          flags = {
-            debounce_text_changes = 100,
-          },
         })
+        require("lspconfig").sumneko_lua.setup(luadev)
+
         require("lspconfig")["bashls"].setup({
           on_attach = on_attach,
           capabilities = capabilities,
@@ -628,8 +607,8 @@ packer.startup({
                 useFullyQualifiedCollectionNames = false,
               },
               ansibleLint = {
-                arguments = ''
-              }
+                arguments = "",
+              },
             },
           },
         })
@@ -681,6 +660,8 @@ packer.startup({
         })
       end,
     },
+
+    { "folke/lua-dev.nvim", commit = "e9588503e68fa32ac08b83d9cb7e42ec31b8907d" },
 
     { "ray-x/lsp_signature.nvim", commit = "933ba2f059d965ee8db288f63869b8205ea223b8" },
 
