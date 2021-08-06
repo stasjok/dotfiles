@@ -20,19 +20,12 @@ packer.startup({
     { "nanotee/nvim-lua-guide", commit = "bcbc72d9c0952d30d603e48603da034b0f095e61" },
     { "nanotee/luv-vimdocs", commit = "915eb060b2bddec7dd256dd1028773243f078016" },
 
-    -- Solarized colorscheme
+    -- Colorscheme
     {
-      "ishan9299/nvim-solarized-lua",
-      commit = "fa437ae65a6c1239525e4ec7f4cbf4671eaa55ba",
+      "folke/tokyonight.nvim",
+      commit = "8e8a11e001b0af4849cba47265d11eda93b82f51",
       config = function()
-        vim.opt.termguicolors = true
-        vim.opt.background = "dark"
-        vim.cmd([[
-          colorscheme solarized
-          highlight link LspReferenceText CursorLine
-          highlight link LspReferenceRead CursorLine
-          highlight link LspReferenceWrite CursorLine
-        ]])
+        vim.api.nvim_command("colorscheme tokyonight")
       end,
     },
 

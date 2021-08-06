@@ -10,6 +10,7 @@ vim.opt.shiftwidth = 4
 vim.opt.softtabstop = -1
 vim.opt.expandtab = true
 
+vim.opt.termguicolors = true
 vim.opt.mouse = "a"
 vim.opt.hidden = true
 vim.opt.ignorecase = true
