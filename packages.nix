@@ -92,4 +92,15 @@ in with stable; {
       "-fcompile/ninja/linux.ninja"
     ];
   });
+  # We need 2.10 version for ansible 2.9
+  mitogen = unstable.python38Packages.mitogen.overrideAttrs (oldAttrs: rec {
+    name = "python3.8-mitogen-${version}";
+    version = "0.2.10rc1";
+    src = fetchFromGitHub {
+      owner = "mitogen-hq";
+      repo = "mitogen";
+      rev = "v${version}";
+      sha256 = "0i600gy8qigkd693pd13vmm9knsvggpjpidyhr650xj75i6bbn7m";
+    };
+  });
 } // my-node-packages
