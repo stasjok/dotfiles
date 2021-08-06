@@ -448,7 +448,7 @@ packer.startup({
 
     {
       "neovim/nvim-lspconfig",
-      commit = "8b5f017fdf4ac485cfffbf4c93b7f3ce8de792f7",
+      commit = "662159eeb112c076d90b2c3fe799f16a8165e4a6",
       config = function()
         local on_attach = function(client, bufnr)
           for lhs, rhs in pairs({
@@ -610,6 +610,28 @@ packer.startup({
             return require("lspconfig.util").root_pattern(".git")(filename)
               or require("lspconfig.util").path.dirname(filename)
           end,
+        })
+        require("lspconfig")["ansiblels"].setup({
+          filetypes = { "yaml.ansible" },
+          on_attach = on_attach,
+          capabilities = capabilities,
+          flags = {
+            debounce_text_changes = 100,
+          },
+          root_dir = function(filename)
+            return require("lspconfig.util").root_pattern("ansible.cfg", ".git")(filename)
+              or require("lspconfig.util").path.dirname(filename)
+          end,
+          settings = {
+            ansible = {
+              ansible = {
+                useFullyQualifiedCollectionNames = false,
+              },
+              ansibleLint = {
+                arguments = ''
+              }
+            },
+          },
         })
         for _, lsp_server in ipairs({ "pyright", "jsonls" }) do
           require("lspconfig")[lsp_server].setup({

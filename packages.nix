@@ -43,6 +43,8 @@ in with stable; {
     neovim-unwrapped
     stylua
     black
+    ansible-lint
+    yamllint
     ;
   inherit (unstable.nodePackages)
     pyright
