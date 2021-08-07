@@ -3,10 +3,11 @@
 ## Terminal 
 
 * True Color support is required.
-* Set up terminal colors to Solarized Dark theme.
+* Set up terminal colors to One Dark theme.
 * Install one of the [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts).
 
 I use [Windows Terminal](https://github.com/microsoft/terminal) and `FiraCode NF` font.
+[Settings](wt/settings.json).
 
 ## Packages
 
