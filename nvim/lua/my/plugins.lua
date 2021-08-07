@@ -22,10 +22,10 @@ packer.startup({
 
     -- Colorscheme
     {
-      "folke/tokyonight.nvim",
-      commit = "8e8a11e001b0af4849cba47265d11eda93b82f51",
+      "ful1e5/onedark.nvim",
+      commit = "5efacc13479cda116cac11e271d397c92fb07db5",
       config = function()
-        vim.api.nvim_command("colorscheme tokyonight")
+        require('onedark').setup()
       end,
     },
 
