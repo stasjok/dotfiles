@@ -34,7 +34,7 @@ if status is-login
     # Set up ssh-agent
     find_ssh_agent
     # Load Solarized Theme
-    theme_solarized_dark_load
+    theme_one_dark_load
 end
 
 if status is-interactive
