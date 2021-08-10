@@ -649,7 +649,7 @@ packer.startup({
 
     {
       "jose-elias-alvarez/null-ls.nvim",
-      commit = "2c9690964b91e34b421326dc4839b322a7b1a6cd",
+      commit = "eeb6c9907aae98fb2870091b15cfa6230e4d3f0e",
       config = function()
         require("null-ls").config({
           debounce = 100,
