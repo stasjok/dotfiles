@@ -1,6 +1,3 @@
--- Command for installing plugins
-vim.cmd([[command! Plugins runtime lua/my/plugins.lua]])
-
 -- Set <leader> to Space and <localleader> to \
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
@@ -146,3 +143,5 @@ autocmd!
 autocmd TextYankPost * silent! lua vim.highlight.on_yank {on_visual=false}
 augroup END
 ]])
+
+require("my.plugins")

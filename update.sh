@@ -16,4 +16,4 @@ nix-env --install --remove-all --file packages.nix
 
 ansible-playbook install.yml --extra-vars "force=False"
 
-nvim --headless -c "autocmd User PackerComplete quitall" -c "runtime lua/my/plugins.lua"
+nvim --headless -c "autocmd User PackerComplete quitall" -c "PackerSync"

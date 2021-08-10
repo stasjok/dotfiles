@@ -11,7 +11,9 @@ packer.startup({
       "plugin",
       "packer_compiled.lua"
     ),
-    disable_commands = true,
+    profile = {
+      enable = true,
+    },
   },
 
   -- Plugins
@@ -25,7 +27,7 @@ packer.startup({
       "ful1e5/onedark.nvim",
       commit = "5efacc13479cda116cac11e271d397c92fb07db5",
       config = function()
-        require('onedark').setup()
+        require("onedark").setup()
       end,
     },
 
@@ -741,16 +743,3 @@ packer.startup({
     },
   },
 })
-
-packer.sync()
--- Allow lazy-loaded plugins to load again
-for _, var in ipairs({
-  "neovim_loaded", -- neogit
-  "diffview_nvim_loaded",
-}) do
-  if vim.g[var] then
-    vim.api.nvim_del_var(var)
-  end
-end
-vim.api.nvim_command("packloadall!")
-vim.api.nvim_command("runtime packer_compiled.lua")
