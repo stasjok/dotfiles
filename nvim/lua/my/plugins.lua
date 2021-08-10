@@ -11,6 +11,7 @@ packer.startup({
       "plugin",
       "packer_compiled.lua"
     ),
+    auto_reload_compiled = false,
     profile = {
       enable = true,
     },
