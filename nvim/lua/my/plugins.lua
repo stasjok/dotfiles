@@ -468,10 +468,10 @@ packer.startup({
 
           vim.api.nvim_buf_set_keymap(
             bufnr,
-            "v",
+            "x",
             "<leader>F",
-            "<Cmd>lua vim.lsp.buf.range_formatting()<CR>",
-            { noremap = true }
+            ":lua vim.lsp.buf.range_formatting()<CR>",
+            { noremap = true, silent = true }
           )
 
           -- Show diagnostics automatically
@@ -674,10 +674,10 @@ packer.startup({
             end
             vim.api.nvim_buf_set_keymap(
               bufnr,
-              "v",
+              "x",
               "<leader>F",
-              "<Cmd>lua vim.lsp.buf.range_formatting()<CR>",
-              { noremap = true }
+              ":lua vim.lsp.buf.range_formatting()<CR>",
+              { noremap = true, silent = true }
             )
           end,
         })
