@@ -577,7 +577,7 @@ packer.startup({
             "plenary.nvim",
             "lazy.nvim",
           }) do
-          local plugin_dir = string.format("%s/start/%s/lua", packer_start, plugin)
+            local plugin_dir = string.format("%s/start/%s/lua", packer_start, plugin)
             table.insert(path, plugin_dir .. "/?.lua")
             table.insert(path, plugin_dir .. "/?/init.lua")
           end
@@ -594,10 +594,10 @@ packer.startup({
             settings = {
               Lua = {
                 runtime = {
-                  path = sumneko_lua_paths()
-                }
-              }
-            }
+                  path = sumneko_lua_paths(),
+                },
+              },
+            },
           },
         })
         require("lspconfig").sumneko_lua.setup(luadev)
