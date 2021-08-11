@@ -475,11 +475,23 @@ packer.startup({
             { noremap = true, silent = true }
           )
 
+          function _G._show_diagnostics(opts)
+            local status, existing_float = pcall(
+              vim.api.nvim_buf_get_var,
+              0,
+              "lsp_floating_preview"
+            )
+            if status and vim.api.nvim_win_is_valid(existing_float) then
+            else
+              vim.lsp.diagnostic.show_line_diagnostics({ focusable = false })
+            end
+          end
+
           -- Show diagnostics automatically
           vim.cmd([[
             augroup ShowDiagnostics
             autocmd!
-            autocmd CursorHold,CursorHoldI <buffer> lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})
+            autocmd CursorHold,CursorHoldI <buffer> lua _G._show_diagnostics()
             augroup END
           ]])
 
