@@ -490,7 +490,7 @@ packer.startup({
           -- Show diagnostics automatically
           vim.cmd([[
             augroup ShowDiagnostics
-            autocmd!
+            autocmd! * <buffer>
             autocmd CursorHold,CursorHoldI <buffer> lua _G._show_diagnostics()
             augroup END
           ]])
@@ -499,7 +499,7 @@ packer.startup({
           if client.supports_method("textDocument/documentHighlight") then
             vim.cmd([[
               augroup DocumentHighlight
-              autocmd!
+              autocmd! * <buffer>
               autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
               autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
               autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
