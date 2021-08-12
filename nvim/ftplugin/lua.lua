@@ -16,7 +16,7 @@ local stylua_conf_exists = lsputil.path.exists(root_dir .. "/stylua.toml")
 if stylua_conf_exists then
   vim.cmd([[
     augroup LuaAutoFormatting
-    autocmd!
+    autocmd! * <buffer>
     autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
     augroup END
   ]])
