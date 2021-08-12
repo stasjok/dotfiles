@@ -683,6 +683,16 @@ packer.startup({
                       type = "object",
                       required = { "body" },
                       additionalProperties = false,
+                      defaultSnippets = {
+                        {
+                          label = "Snippet",
+                          body = {
+                            prefix = "${1:prefix}",
+                            body = "${2:snippet}",
+                            description = "${3:description}",
+                          },
+                        },
+                      },
                       properties = {
                         prefix = {
                           description = "The prefix to use when selecting the snippet in intellisense",
