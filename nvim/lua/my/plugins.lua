@@ -346,13 +346,13 @@ packer.startup({
           )
           vim.api.nvim_set_keymap(
             m,
-            "<C-l>",
+            "<C-k>",
             '<Cmd>lua require"luasnip".jump(-1)<CR>',
             { noremap = true }
           )
           vim.api.nvim_set_keymap(
             m,
-            "<C-k>",
+            "<C-l>",
             "v:lua.luasnip_choose(1)",
             { expr = true, noremap = true }
           )
