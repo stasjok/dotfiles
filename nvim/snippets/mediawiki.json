@@ -1,52 +1,52 @@
 {
   "i": {
     "prefix": "i",
-    "body": "''1''",
+    "body": "''${1:$TM_SELECTED_TEXT}''",
     "description": "Italic text"
   },
   "b": {
     "prefix": "b",
-    "body": "'''1'''",
+    "body": "'''${1:$TM_SELECTED_TEXT}'''",
     "description": "Bold text"
   },
   "bi": {
     "prefix": "bi",
-    "body": "'''''1'''''",
+    "body": "'''''${1:$TM_SELECTED_TEXT}'''''",
     "description": "Bold and italic text"
   },
   "nowiki": {
     "prefix": "nowiki",
-    "body": "<nowiki>1</nowiki>",
+    "body": "<nowiki>${1:$TM_SELECTED_TEXT}</nowiki>",
     "description": "Escape wiki markup"
   },
   "h2": {
     "prefix": "h2",
-    "body": "== 1 ==\n",
+    "body": "== ${1:$TM_SELECTED_TEXT} ==",
     "description": "Heading level 2"
   },
   "h3": {
     "prefix": "h3",
-    "body": "=== 1 ===\n",
+    "body": "=== ${1:$TM_SELECTED_TEXT} ===",
     "description": "Heading level 3"
   },
   "h4": {
     "prefix": "h4",
-    "body": "==== 1 ====\n",
+    "body": "==== ${1:$TM_SELECTED_TEXT} ====",
     "description": "Heading level 4"
   },
   "h5": {
     "prefix": "h5",
-    "body": "===== 1 =====\n",
+    "body": "===== ${1:$TM_SELECTED_TEXT} =====",
     "description": "Heading level 5"
   },
   "h6": {
     "prefix": "h6",
-    "body": "====== 1 ======\n",
+    "body": "====== ${1:$TM_SELECTED_TEXT} ======",
     "description": "Heading level 6"
   },
   "hl": {
     "prefix": "hl",
-    "body": "----\n",
+    "body": "----",
     "description": "Horizontal rule"
   },
   "preformatted": {
@@ -56,42 +56,42 @@
   },
   "u": {
     "prefix": "u",
-    "body": "<u>1</u>",
+    "body": "<u>${1:$TM_SELECTED_TEXT}</u>",
     "description": "Underlined text"
   },
   "ins": {
     "prefix": "ins",
-    "body": "<ins>1</ins>",
+    "body": "<ins>${1:$TM_SELECTED_TEXT}</ins>",
     "description": "Inserted text"
   },
   "s": {
     "prefix": "s",
-    "body": "<s>1</s>",
+    "body": "<s>${1:$TM_SELECTED_TEXT}</s>",
     "description": "Struck-through text"
   },
   "del": {
     "prefix": "del",
-    "body": "<del>1</del>",
+    "body": "<del>${1:$TM_SELECTED_TEXT}</del>",
     "description": "Deleted text"
   },
   "code": {
     "prefix": "code",
-    "body": "<code>1</code>",
+    "body": "<code>${1:$TM_SELECTED_TEXT}</code>",
     "description": "Source code"
   },
   "blockquote": {
     "prefix": "blockquote",
-    "body": "<blockquote>1</blockquote>",
+    "body": "<blockquote>${1:$TM_SELECTED_TEXT}</blockquote>",
     "description": "Blockquote"
   },
   "q": {
     "prefix": "q",
-    "body": "<q>1</q>",
+    "body": "<q>${1:$TM_SELECTED_TEXT}</q>",
     "description": "Quotes"
   },
   "pre": {
     "prefix": "pre",
-    "body": "<pre>\n1\n</pre>",
+    "body": "<pre>\n${1:$TM_SELECTED_TEXT}\n</pre>",
     "description": "Preformatted text"
   },
   "br": {
@@ -106,47 +106,47 @@
   },
   "abbr": {
     "prefix": "abbr",
-    "body": "<abbr title=\"${2:meaning}\">1</abbr>",
+    "body": "<abbr title=\"${2:meaning}\">${1:$TM_SELECTED_TEXT}</abbr>",
     "description": "Abbreviation"
   },
   "kbd": {
     "prefix": "kbd",
-    "body": "<kbd>1</kbd>",
+    "body": "<kbd>${1:$TM_SELECTED_TEXT}</kbd>",
     "description": "Keyboard input"
   },
   "var": {
     "prefix": "var",
-    "body": "<var>1</var>",
+    "body": "<var>${1:$TM_SELECTED_TEXT}</var>",
     "description": "Variable name"
   },
   "samp": {
     "prefix": "samp",
-    "body": "<samp>1</samp>",
+    "body": "<samp>${1:$TM_SELECTED_TEXT}</samp>",
     "description": "Sample output"
   },
   "strong": {
     "prefix": "strong",
-    "body": "<strong>1</strong>",
+    "body": "<strong>${1:$TM_SELECTED_TEXT}</strong>",
     "description": "Important text"
   },
   "em": {
     "prefix": "em",
-    "body": "<em>1</em>",
+    "body": "<em>${1:$TM_SELECTED_TEXT}</em>",
     "description": "Emphasized text"
   },
   "syn": {
     "prefix": "syn",
-    "body": "<syntaxhighlight lang=\"${1:text}\">\n$2\n</syntaxhighlight>",
+    "body": "<syntaxhighlight lang=\"${1:text}\">\n${2:$TM_SELECTED_TEXT}\n</syntaxhighlight>",
     "description": "Syntax Highlight"
   },
   "syni": {
     "prefix": "syni",
-    "body": "<syntaxhighlight lang=\"${1:text}\" inline=\"1\">$2</syntaxhighlight>",
+    "body": "<syntaxhighlight lang=\"${1:text}\" inline=\"1\">${2:$TM_SELECTED_TEXT}</syntaxhighlight>",
     "description": "Inline Syntax Highlight"
   },
   "a": {
     "prefix": "a",
-    "body": "[[${1:${2:${3:page}#${4:section}}|$5}]]",
+    "body": "[[${1:${2:page#section}|$3}]]",
     "description": "Internal link"
   },
   "ae": {
@@ -156,7 +156,7 @@
   },
   "redirect": {
     "prefix": "redirect",
-    "body": "#REDIRECT [[${1:${2:page}#${3:section}}]]",
+    "body": "#REDIRECT [[${1:page#section}]]",
     "description": "Redirect"
   },
   "category": {
