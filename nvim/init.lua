@@ -96,7 +96,7 @@ vim.opt.langmap = {
   "ЯZ",
 }
 ---Toggles keymap. If disabled, it enables it. It enabled,
----it toggle it in insert modes and disables in normal mode.
+---it toggles it in insert modes and disables it in normal mode.
 ---@return nil
 function _G._toggle_keymap()
   local mode = vim.api.nvim_get_mode().mode
