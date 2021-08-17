@@ -16,4 +16,10 @@ nix-env --install --remove-all --file packages.nix
 
 ansible-playbook install.yml --extra-vars "force=False"
 
+echo "Syncing neovim plugins with Packer..."
 nvim --headless -c "autocmd User PackerComplete quitall" -c "PackerSync"
+
+if [[ -n $TMUX ]]; then
+    echo "Sourcing tmux config..."
+    tmux source-file ~/.tmux.conf
+fi
