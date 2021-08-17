@@ -312,7 +312,7 @@ packer.startup({
     -- Snippets
     {
       "L3MON4D3/LuaSnip",
-      commit = "511f733cf2c6247f7a1b62b90e4bf0dfdae17a9f",
+      commit = "47b8e5cadf323782093fa8c7ea56759ca8904dbb",
       config = function()
         require("luasnip.config").setup({
           store_selection_keys = "<C-h>",
