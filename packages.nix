@@ -1,13 +1,13 @@
 let
   nixpkgs-stable = fetchTarball {
-    name = "nixos-21.05.2001.d4590d21006";
-    url = https://releases.nixos.org/nixos/21.05/nixos-21.05.2001.d4590d21006/nixexprs.tar.xz;
-    sha256 = "00p5vdk1ir4k35kc530rp9bjw3crvg0l1rmhsgyzhypavwvwy1lc";
+    name = "nixos-21.05.2518.97c5d0cbe76";
+    url = https://releases.nixos.org/nixos/21.05/nixos-21.05.2518.97c5d0cbe76/nixexprs.tar.xz;
+    sha256 = "1bwv2x2mkmpmmipqmjn9cz3m3k4vkb2lv4a8dpm13bmir92v54xh";
   };
   nixpkgs-unstable = fetchTarball {
-    name = "nixpkgs-21.11pre306170.4d3e13e51b6";
-    url = https://releases.nixos.org/nixpkgs/nixpkgs-21.11pre306170.4d3e13e51b6/nixexprs.tar.xz;
-    sha256 = "1jzlsza51vil0s64gl1djwd8nypi5x95x3yd89vw3iy25inhjl9h";
+    name = "nixpkgs-21.11pre309670.253aecf69ed";
+    url = https://releases.nixos.org/nixpkgs/nixpkgs-21.11pre309670.253aecf69ed/nixexprs.tar.xz;
+    sha256 = "1ppnpjbdvxwnzjrmxx4z50sa2ymznbl83aq0zij6v0ix1xgfsdx4";
   };
   hurricanehrndz-nixcfg = fetchTarball {
     name = "hurricanehrndz-nixcfg-2021-08-02";
