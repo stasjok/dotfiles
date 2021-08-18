@@ -22,6 +22,7 @@ packer.startup({
     -- Docs
     { "nanotee/nvim-lua-guide", commit = "13af62882a84fb232e4bddd81a57dde1b91fbc4c" },
     { "nanotee/luv-vimdocs", commit = "915eb060b2bddec7dd256dd1028773243f078016" },
+    { "LionC/nest.nvim", commit = "2ed1bfd4a2884c43a4a1ee59611307d03087a62b" },
 
     -- Colorscheme
     {
@@ -589,6 +590,7 @@ packer.startup({
             "popup.nvim",
             "plenary.nvim",
             "lazy.nvim",
+            "nest.nvim",
           }) do
             local plugin_dir = string.format("%s/start/%s/lua", packer_start, plugin)
             table.insert(path, plugin_dir .. "/?.lua")
