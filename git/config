@@ -11,5 +11,10 @@
     ff = only
 [status]
     showUntrackedFiles = all
-[diff]
-    mnemonicPrefix = true
+
+# Delta configuration
+[pager]
+    diff = delta
+    log = delta
+    reflog = delta
+    show = delta
