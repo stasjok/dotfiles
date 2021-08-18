@@ -25,10 +25,12 @@ in with stable; {
     git
     gnupg
     tmux
+    exa
     bat
     fd
     ripgrep
     fzf
+    delta
     ansible_2_9
     python3
     shellcheck
