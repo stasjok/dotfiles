@@ -52,15 +52,9 @@ in with stable; {
   inherit (unstable.nodePackages)
     pyright
     ;
-  packer-nvim = vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
-    version = "2021-08-02";
+  packer-nvim = unstable.vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
+    # I need to change package name, because packer does :packadd packer.nvim
     pname = "packer.nvim";
-    src = fetchFromGitHub {
-      owner = "wbthomason";
-      repo = "packer.nvim";
-      rev = "2794f0767920c884736b746d1c0824cc55874f4b";
-      sha256 = "19cwjm98nq0f9z0kxc8l4350pkaw3m2dv5wb7nlwcz0m9w3dri0w";
-    };
   });
   telescope-fzf-native-nvim = unstable.vimPlugins.telescope-fzf-native-nvim;
   nvim-treesitter-parsers = linkFarm "nvim-treesitter-parsers" (
