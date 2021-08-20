@@ -36,7 +36,7 @@ local function make_map(default_opts, buffer)
     if type(rhs) == "function" then
       local id = store_function(rhs)
       if final_opts.expr then
-        rhs = string.format("luaeval('require(%s).functions[%s]()')", '"my.map"', id)
+        rhs = string.format([[luaeval('require("my.map").functions[%s]()')]], id)
       else
         rhs = string.format("<Cmd>lua require('my.map').functions[%s]()<CR>", id)
       end
