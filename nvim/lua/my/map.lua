@@ -1,9 +1,6 @@
 local map = {}
 
 ---@type function[]
-function _G._call_map_function(id)
-  return require("my.map").functions[id]()
-end
 map.functions = {}
 
 ---Store mapping functions in container
@@ -39,7 +36,7 @@ local function make_map(default_opts, buffer)
     if type(rhs) == "function" then
       local id = store_function(rhs)
       if final_opts.expr then
-        rhs = string.format("v:lua._call_map_function(%s)", id)
+        rhs = string.format("luaeval('require(%s).functions[%s]()')", '"my.map"', id)
       else
         rhs = string.format("<Cmd>lua require('my.map').functions[%s]()<CR>", id)
       end
