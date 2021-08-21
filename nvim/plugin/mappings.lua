@@ -1,5 +1,5 @@
-local map = require("my.map").map
-local map_expr = require("my.map").map_expr
+local map = require("map").map
+local map_expr = require("map").map_expr
 
 -- Emacs-like mappings
 map("!", "<C-B>", "<Left>")
