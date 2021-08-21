@@ -1,16 +1,12 @@
 vim.api.nvim_command("packadd packer.nvim")
 
 local packer = require("packer")
+local join_paths = require("packer.util").join_paths
 
 packer.startup({
   -- Packer config
   config = {
-    compile_path = require("packer.util").join_paths(
-      vim.fn.stdpath("data"),
-      "site",
-      "plugin",
-      "packer_compiled.lua"
-    ),
+    compile_path = join_paths(vim.fn.stdpath("data"), "site", "plugin", "packer_compiled.lua"),
     auto_reload_compiled = false,
     profile = {
       enable = true,
