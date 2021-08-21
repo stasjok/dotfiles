@@ -158,8 +158,6 @@ autocmd TextYankPost * silent! lua vim.highlight.on_yank {on_visual=false}
 augroup END
 ]])
 
-require("my.plugins")
-
 -- From nvim-lua-guide
 function _G.dump(...)
   local objects = vim.tbl_map(vim.inspect, { ... })
