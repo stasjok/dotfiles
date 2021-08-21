@@ -4,7 +4,8 @@ local packer = require("packer")
 local join_paths = require("packer.util").join_paths
 
 packer.startup({
-  -- Packer config
+
+  -- Packer configuration
   config = {
     compile_path = join_paths(vim.fn.stdpath("data"), "site", "plugin", "packer_compiled.lua"),
     auto_reload_compiled = false,
@@ -18,7 +19,7 @@ packer.startup({
     },
   },
 
-  -- Plugins
+  -- Plugin specifications
   {
     -- Docs
     { "nanotee/nvim-lua-guide", commit = "13af62882a84fb232e4bddd81a57dde1b91fbc4c" },
