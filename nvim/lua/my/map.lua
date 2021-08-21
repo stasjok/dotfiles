@@ -58,7 +58,6 @@ map.buf_map_expr = make_map({ noremap = true, silent = true, expr = true }, true
 ---@param do_lt? boolean
 ---@return string
 function map.replace_termcodes(str, do_lt)
-  do_lt = do_lt == nil and false or true
   return vim.api.nvim_replace_termcodes(str, true, do_lt, true)
 end
 
@@ -67,7 +66,6 @@ end
 ---@param do_lt? boolean
 ---@return function
 function map.replace_termcodes_wrap(fun, do_lt)
-  do_lt = do_lt == nil and false or true
   return function()
     return vim.api.nvim_replace_termcodes(fun(), true, do_lt, true)
   end
