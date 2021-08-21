@@ -8,6 +8,11 @@ packer.startup({
   config = {
     compile_path = join_paths(vim.fn.stdpath("data"), "site", "plugin", "packer_compiled.lua"),
     auto_reload_compiled = false,
+    display = {
+      open_fn = function()
+        return require("packer.util").float({ border = "rounded" })
+      end,
+    },
     profile = {
       enable = true,
     },
