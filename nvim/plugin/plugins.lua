@@ -30,14 +30,12 @@ packer.startup({
     { "nvim-lua/plenary.nvim", commit = "8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974" },
     { "tjdevries/lazy.nvim", commit = "238c1b9a661947b864a7d103f9d6b1f376c3b72f" },
 
-    -- Colorscheme
+    -- Color schemes
     {
       "ful1e5/onedark.nvim",
       commit = "5efacc13479cda116cac11e271d397c92fb07db5",
       config = function()
-        require("onedark").setup({
-          keywordStyle = "NONE",
-        })
+        require("plugins.onedark").setup()
       end,
     },
 
