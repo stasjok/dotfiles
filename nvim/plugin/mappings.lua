@@ -14,6 +14,8 @@ map("c", "<M-d>", "<C-F>dw<C-C>")
 
 -- Shortcuts
 map("n", "<leader><CR>", "<Cmd>buffer #<CR>")
+map("n", "<Leader>e", "<Cmd>edit<CR>")
+map("n", "<Leader>E", "<Cmd>edit!<CR>")
 map("n", "<leader>c", "<Cmd>close<CR>")
 map("n", "<leader>C", "<Cmd>buffer #<CR><Cmd>bdelete #<CR>")
 map("n", "<leader>w", "<Cmd>write<CR>")
