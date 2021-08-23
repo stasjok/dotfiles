@@ -3,14 +3,14 @@ local map = require("map").map
 local tmux = {}
 
 local mappings = {
-  ["<M-h>"] = "<Cmd>lua require('tmux').move_left()<CR>",
-  ["<M-j>"] = "<Cmd>lua require('tmux').move_bottom()<CR>",
-  ["<M-k>"] = "<Cmd>lua require('tmux').move_top()<CR>",
-  ["<M-l>"] = "<Cmd>lua require('tmux').move_right()<CR>",
-  ["<M-H>"] = "<Cmd>lua require('tmux').resize_left()<CR>",
-  ["<M-J>"] = "<Cmd>lua require('tmux').resize_bottom()<CR>",
-  ["<M-K>"] = "<Cmd>lua require('tmux').resize_top()<CR>",
-  ["<M-L>"] = "<Cmd>lua require('tmux').resize_right()<CR>",
+  ["<M-h>"] = "move_left()",
+  ["<M-j>"] = "move_bottom()",
+  ["<M-k>"] = "move_top()",
+  ["<M-l>"] = "move_right()",
+  ["<M-H>"] = "resize_left()",
+  ["<M-J>"] = "resize_bottom()",
+  ["<M-K>"] = "resize_top()",
+  ["<M-L>"] = "resize_right()",
 }
 local modes = { "n", "v", "t" }
 
@@ -28,7 +28,8 @@ function tmux.config()
   require("tmux").setup(options, logging)
 
   -- Mappings
-  for lhs, rhs in pairs(mappings) do
+  for lhs, action in pairs(mappings) do
+    local rhs = string.format("<Cmd>lua require('tmux').%s<CR>", action)
     map(modes, lhs, rhs)
     -- First leave insert mode, than navigate
     map("i", lhs, "<Esc>" .. rhs)
