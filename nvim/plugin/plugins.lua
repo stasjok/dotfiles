@@ -46,6 +46,7 @@ packer.startup({
     {
       "aserowy/tmux.nvim",
       commit = "e5eebe69577e40477996166f77a858c6708fc4fe",
+      keys = require("plugins.tmux").keys,
       config = function()
         require("plugins.tmux").config()
       end,
