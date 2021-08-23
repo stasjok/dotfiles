@@ -35,7 +35,7 @@ packer.startup({
       "ful1e5/onedark.nvim",
       commit = "5efacc13479cda116cac11e271d397c92fb07db5",
       config = function()
-        require("plugins.onedark").setup()
+        require("plugins.onedark").config()
       end,
     },
 

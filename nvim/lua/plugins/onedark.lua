@@ -1,6 +1,6 @@
 local onedark = {}
 
-function onedark.setup()
+function onedark.config()
   require("onedark").setup({
     keywordStyle = "NONE",
   })
