@@ -39,7 +39,7 @@ packer.startup({
       end,
     },
 
-    -- Icons
+    -- File icons
     { "kyazdani42/nvim-web-devicons", commit = "da717e19678bd6ec33008cf92da05da1b8ceb87d" },
 
     {
