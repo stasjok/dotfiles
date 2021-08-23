@@ -137,6 +137,12 @@ packer.startup({
           '<Cmd>lua require("telescope.builtin").grep_string()<CR>',
           { noremap = true }
         )
+        vim.api.nvim_set_keymap(
+          "n",
+          "<leader>;",
+          '<Cmd>lua require("telescope.builtin").commands()<CR>',
+          { noremap = true }
+        )
       end,
     },
 
