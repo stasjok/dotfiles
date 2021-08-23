@@ -42,116 +42,12 @@ packer.startup({
     -- File icons
     { "kyazdani42/nvim-web-devicons", commit = "da717e19678bd6ec33008cf92da05da1b8ceb87d" },
 
+    -- Tmux integration
     {
       "aserowy/tmux.nvim",
       commit = "7d47e74b6fb3cd458cacdced36c2389510708ebe",
       config = function()
-        require("tmux").setup({ -- configuration
-          resize = {
-            resize_step_x = 2,
-            resize_step_y = 2,
-          },
-        }, { -- logging configuration
-          file = "disabled",
-        })
-        for _, mode in ipairs({ "n", "v", "t" }) do
-          vim.api.nvim_set_keymap(
-            mode,
-            "<M-h>",
-            [[<Cmd>lua require'tmux'.move_left()<CR>]],
-            { noremap = true }
-          )
-          vim.api.nvim_set_keymap(
-            mode,
-            "<M-j>",
-            [[<Cmd>lua require'tmux'.move_bottom()<CR>]],
-            { noremap = true }
-          )
-          vim.api.nvim_set_keymap(
-            mode,
-            "<M-k>",
-            [[<Cmd>lua require'tmux'.move_top()<CR>]],
-            { noremap = true }
-          )
-          vim.api.nvim_set_keymap(
-            mode,
-            "<M-l>",
-            [[<Cmd>lua require'tmux'.move_right()<CR>]],
-            { noremap = true }
-          )
-          vim.api.nvim_set_keymap(
-            mode,
-            "<M-H>",
-            [[<Cmd>lua require'tmux'.resize_left()<CR>]],
-            { noremap = true }
-          )
-          vim.api.nvim_set_keymap(
-            mode,
-            "<M-J>",
-            [[<Cmd>lua require'tmux'.resize_bottom()<CR>]],
-            { noremap = true }
-          )
-          vim.api.nvim_set_keymap(
-            mode,
-            "<M-K>",
-            [[<Cmd>lua require'tmux'.resize_top()<CR>]],
-            { noremap = true }
-          )
-          vim.api.nvim_set_keymap(
-            mode,
-            "<M-L>",
-            [[<Cmd>lua require'tmux'.resize_right()<CR>]],
-            { noremap = true }
-          )
-        end
-        vim.api.nvim_set_keymap(
-          "i",
-          "<M-h>",
-          [[<Esc><Cmd>lua require'tmux'.move_left()<CR>]],
-          { noremap = true }
-        )
-        vim.api.nvim_set_keymap(
-          "i",
-          "<M-j>",
-          [[<Esc><Cmd>lua require'tmux'.move_bottom()<CR>]],
-          { noremap = true }
-        )
-        vim.api.nvim_set_keymap(
-          "i",
-          "<M-k>",
-          [[<Esc><Cmd>lua require'tmux'.move_top()<CR>]],
-          { noremap = true }
-        )
-        vim.api.nvim_set_keymap(
-          "i",
-          "<M-l>",
-          [[<Esc><Cmd>lua require'tmux'.move_right()<CR>]],
-          { noremap = true }
-        )
-        vim.api.nvim_set_keymap(
-          "i",
-          "<M-H>",
-          [[<Esc><Cmd>lua require'tmux'.resize_left()<CR>]],
-          { noremap = true }
-        )
-        vim.api.nvim_set_keymap(
-          "i",
-          "<M-J>",
-          [[<Esc><Cmd>lua require'tmux'.resize_bottom()<CR>]],
-          { noremap = true }
-        )
-        vim.api.nvim_set_keymap(
-          "i",
-          "<M-K>",
-          [[<Esc><Cmd>lua require'tmux'.resize_top()<CR>]],
-          { noremap = true }
-        )
-        vim.api.nvim_set_keymap(
-          "i",
-          "<M-L>",
-          [[<Esc><Cmd>lua require'tmux'.resize_right()<CR>]],
-          { noremap = true }
-        )
+        require("plugins.tmux").config()
       end,
     },
 
