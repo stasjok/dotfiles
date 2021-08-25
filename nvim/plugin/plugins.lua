@@ -65,7 +65,7 @@ packer.startup({
     -- Telescope
     {
       "nvim-telescope/telescope.nvim",
-      commit = "c0f1999b0280bb042bba01c930dd94a4bfdee363",
+      commit = "50e5e86ac37ee3989a0015d3934c5a961012990a",
       config = function()
         require("plugins.telescope").config()
       end,
