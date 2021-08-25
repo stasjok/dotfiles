@@ -42,6 +42,16 @@ packer.startup({
     -- File icons
     { "kyazdani42/nvim-web-devicons", commit = "da717e19678bd6ec33008cf92da05da1b8ceb87d" },
 
+    -- Comments toggle
+    {
+      "b3nj5m1n/kommentary",
+      commit = "a5d7cd90059ad99b5e80a1d40d655756d86b5dad",
+      keys = {
+        { "n", "gc" },
+        { "x", "gc" },
+      },
+    },
+
     -- EditorConfig
     {
       "editorconfig/editorconfig-vim",
@@ -58,17 +68,6 @@ packer.startup({
       keys = require("plugins.tmux").keys,
       config = function()
         require("plugins.tmux").config()
-      end,
-    },
-
-    -- Comments
-    {
-      "winston0410/commented.nvim",
-      commit = "a7fed2e21cdef40ee91d79460fbb53085931d5df",
-      config = function()
-        require("commented").setup({
-          keybindings = { n = "gc", v = "gc", nl = "gcc" },
-        })
       end,
     },
 
