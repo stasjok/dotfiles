@@ -52,6 +52,16 @@ packer.startup({
       },
     },
 
+    -- Tree-sitter
+    {
+      "nvim-treesitter/nvim-treesitter",
+      branch = "0.5-compat",
+      commit = "27f5e99cdd1b4e7f6a5cc30016d990ebf81a561c",
+      config = function()
+        require("plugins.treesitter").config()
+      end,
+    },
+
     -- EditorConfig
     {
       "editorconfig/editorconfig-vim",
@@ -68,31 +78,6 @@ packer.startup({
       keys = require("plugins.tmux").keys,
       config = function()
         require("plugins.tmux").config()
-      end,
-    },
-
-    -- Tree-sitter
-    {
-      "nvim-treesitter/nvim-treesitter",
-      branch = "0.5-compat",
-      commit = "27f5e99cdd1b4e7f6a5cc30016d990ebf81a561c",
-      config = function()
-        vim.api.nvim_command("packadd nvim-treesitter-parsers")
-        require("nvim-treesitter.configs").setup({
-          highlight = { enable = true },
-          incremental_selection = {
-            enable = true,
-            keymaps = {
-              init_selection = "<C-s>",
-              node_incremental = "<C-s>",
-              scope_incremental = "<M-s>",
-              node_decremental = "<C-q>",
-            },
-          },
-          indent = {
-            enable = true,
-          },
-        })
       end,
     },
 
