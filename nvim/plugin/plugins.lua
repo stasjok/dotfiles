@@ -62,6 +62,15 @@ packer.startup({
       end,
     },
 
+    -- Telescope
+    {
+      "nvim-telescope/telescope.nvim",
+      commit = "c0f1999b0280bb042bba01c930dd94a4bfdee363",
+      config = function()
+        require("plugins.telescope").config()
+      end,
+    },
+
     -- EditorConfig
     {
       "editorconfig/editorconfig-vim",
@@ -78,56 +87,6 @@ packer.startup({
       keys = require("plugins.tmux").keys,
       config = function()
         require("plugins.tmux").config()
-      end,
-    },
-
-    -- Telescope
-    {
-      "nvim-telescope/telescope.nvim",
-      commit = "c0f1999b0280bb042bba01c930dd94a4bfdee363",
-      config = function()
-        require("telescope").setup({
-          defaults = {
-            mappings = {
-              i = {
-                ["<Esc>"] = require("telescope.actions").close,
-                ["<C-c>"] = false,
-              },
-            },
-          },
-        })
-        vim.api.nvim_command("packadd telescope-fzf-native-nvim")
-        require("telescope").load_extension("fzf")
-        vim.api.nvim_set_keymap(
-          "n",
-          "<leader> ",
-          '<Cmd>lua require("telescope.builtin").buffers()<CR>',
-          { noremap = true }
-        )
-        vim.api.nvim_set_keymap(
-          "n",
-          "<leader>f",
-          '<Cmd>lua require("telescope.builtin").find_files()<CR>',
-          { noremap = true }
-        )
-        vim.api.nvim_set_keymap(
-          "n",
-          "<leader>s",
-          '<Cmd>lua require("telescope.builtin").live_grep()<CR>',
-          { noremap = true }
-        )
-        vim.api.nvim_set_keymap(
-          "n",
-          "<leader>S",
-          '<Cmd>lua require("telescope.builtin").grep_string()<CR>',
-          { noremap = true }
-        )
-        vim.api.nvim_set_keymap(
-          "n",
-          "<leader>;",
-          '<Cmd>lua require("telescope.builtin").commands()<CR>',
-          { noremap = true }
-        )
       end,
     },
 
