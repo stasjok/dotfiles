@@ -42,6 +42,15 @@ packer.startup({
     -- File icons
     { "kyazdani42/nvim-web-devicons", commit = "da717e19678bd6ec33008cf92da05da1b8ceb87d" },
 
+    -- EditorConfig
+    {
+      "editorconfig/editorconfig-vim",
+      commit = "3078cd10b28904e57d878c0d0dab42aa0a9fdc89",
+      config = function()
+        require("plugins.editorconfig").config()
+      end,
+    },
+
     -- Tmux integration
     {
       "aserowy/tmux.nvim",
@@ -49,15 +58,6 @@ packer.startup({
       keys = require("plugins.tmux").keys,
       config = function()
         require("plugins.tmux").config()
-      end,
-    },
-
-    {
-      "editorconfig/editorconfig-vim",
-      commit = "3078cd10b28904e57d878c0d0dab42aa0a9fdc89",
-      config = function()
-        vim.g.EditorConfig_exclude_patterns = { "scp://.*", "fugitive://.*" }
-        vim.g.EditorConfig_preserve_formatoptions = 1
       end,
     },
 
