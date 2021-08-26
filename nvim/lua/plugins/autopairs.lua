@@ -4,6 +4,7 @@ function autopairs.config()
   require("nvim-autopairs").setup({
     fast_wrap = {},
   })
+  require("nvim-autopairs.completion.compe").setup()
 
   local npairs = require("nvim-autopairs")
   local Rule = require("nvim-autopairs.rule")

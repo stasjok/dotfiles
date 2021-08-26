@@ -60,6 +60,7 @@ packer.startup({
     {
       "windwp/nvim-autopairs",
       commit = "afd3b224a0d508af38270dc87d836fc55b347561",
+      event = "InsertEnter",
       config = function()
         require("plugins.autopairs").config()
       end,
@@ -185,7 +186,6 @@ packer.startup({
           },
         })
         vim.opt.completeopt = { "menuone", "noselect" }
-        require("nvim-autopairs.completion.compe").setup()
 
         _G.complete_show_confirm = function(key)
           if vim.fn.pumvisible() == 1 then
