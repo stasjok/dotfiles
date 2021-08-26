@@ -76,6 +76,15 @@ packer.startup({
       },
     },
 
+    -- Snippets
+    {
+      "L3MON4D3/LuaSnip",
+      commit = "344b0d93f2e208094f01790d59ec670ec0cae6e1",
+      config = function()
+        require("plugins.luasnip").config()
+      end,
+    },
+
     -- Tree-sitter
     {
       "nvim-treesitter/nvim-treesitter",
@@ -114,61 +123,6 @@ packer.startup({
       keys = require("plugins.tmux").keys,
       config = function()
         require("plugins.tmux").config()
-      end,
-    },
-
-    -- Snippets
-    {
-      "L3MON4D3/LuaSnip",
-      commit = "344b0d93f2e208094f01790d59ec670ec0cae6e1",
-      config = function()
-        require("luasnip.config").setup({
-          store_selection_keys = "<C-h>",
-        })
-
-        _G.luasnip_choose = function(num)
-          if require("luasnip").choice_active() then
-            return vim.api.nvim_replace_termcodes(
-              '<Cmd>lua require"luasnip".change_choice(' .. num .. ")<CR>",
-              true,
-              false,
-              true
-            )
-          else
-            return vim.api.nvim_replace_termcodes("<Ignore>", true, false, true)
-          end
-        end
-
-        vim.api.nvim_set_keymap(
-          "i",
-          "<C-h>",
-          '<Cmd>lua require"luasnip".expand()<CR>',
-          { noremap = true }
-        )
-        for _, m in ipairs({ "i", "s", "n" }) do
-          vim.api.nvim_set_keymap(
-            m,
-            "<C-j>",
-            '<Cmd>lua require"luasnip".jump(1)<CR>',
-            { noremap = true }
-          )
-          vim.api.nvim_set_keymap(
-            m,
-            "<C-k>",
-            '<Cmd>lua require"luasnip".jump(-1)<CR>',
-            { noremap = true }
-          )
-          vim.api.nvim_set_keymap(
-            m,
-            "<C-l>",
-            "v:lua.luasnip_choose(1)",
-            { expr = true, noremap = true }
-          )
-        end
-        vim.api.nvim_set_keymap("s", "<BS>", "<C-o>c", { noremap = true })
-        vim.api.nvim_set_keymap("s", "<Del>", "<C-o>c", { noremap = true })
-
-        vim.api.nvim_command("runtime snippets/snippets.lua")
       end,
     },
 
