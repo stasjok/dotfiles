@@ -41,6 +41,15 @@ packer.startup({
     -- File icons
     { "kyazdani42/nvim-web-devicons", commit = "da717e19678bd6ec33008cf92da05da1b8ceb87d" },
 
+    -- Text objects surrounding
+    {
+      "stasjok/surround.nvim",
+      commit = "183d5107ab68190ddca53d29b398dcf83f3e5488",
+      config = function()
+        require("plugins.surround").config()
+      end,
+    },
+
     -- Comments toggle
     {
       "b3nj5m1n/kommentary",
@@ -89,16 +98,6 @@ packer.startup({
       keys = require("plugins.tmux").keys,
       config = function()
         require("plugins.tmux").config()
-      end,
-    },
-
-    {
-      "https://github.com/stasjok/surround.nvim",
-      commit = "183d5107ab68190ddca53d29b398dcf83f3e5488",
-      config = function()
-        require("surround").setup({
-          mappings_style = "surround",
-        })
       end,
     },
 
