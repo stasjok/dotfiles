@@ -56,6 +56,15 @@ packer.startup({
       end,
     },
 
+    -- Auto-pairs
+    {
+      "windwp/nvim-autopairs",
+      commit = "8b937f612e44e62c29db497b6af149719c30b9aa",
+      config = function()
+        require("plugins.autopairs").config()
+      end,
+    },
+
     -- Comments toggle
     {
       "b3nj5m1n/kommentary",
@@ -104,63 +113,6 @@ packer.startup({
       keys = require("plugins.tmux").keys,
       config = function()
         require("plugins.tmux").config()
-      end,
-    },
-
-    {
-      "windwp/nvim-autopairs",
-      commit = "8b937f612e44e62c29db497b6af149719c30b9aa",
-      config = function()
-        require("nvim-autopairs").setup({
-          fast_wrap = {},
-        })
-
-        local npairs = require("nvim-autopairs")
-        local Rule = require("nvim-autopairs.rule")
-        local cond = require("nvim-autopairs.conds")
-
-        -- Add spaces between parentheses
-        -- https://github.com/windwp/nvim-autopairs/issues/78
-        -- https://github.com/windwp/nvim-autopairs/wiki/Custom-rules/425d8b096433b1329808797ff78f3acf23bc438f
-        -- But I've changed it a little
-        npairs.add_rules({
-          Rule(" ", " ")
-            :with_pair(function(opts)
-              local pair = opts.line:sub(opts.col - 1, opts.col)
-              return vim.tbl_contains({ "()", "{}", "[]" }, pair)
-            end)
-            :with_move(cond.none())
-            :with_cr(cond.none())
-            :with_del(function(opts)
-              local col = vim.api.nvim_win_get_cursor(0)[2] + 1 -- plus one to match plugin behavior
-              local context = opts.line:sub(col - 2, col + 1)
-              return vim.tbl_contains({ "(  )", "{  }", "[  ]" }, context)
-            end),
-          Rule("", " )")
-            :with_pair(cond.none())
-            :with_move(function(opts)
-              return opts.char == ")"
-            end)
-            :with_cr(cond.none())
-            :with_del(cond.none())
-            :use_key(")"),
-          Rule("", " }")
-            :with_pair(cond.none())
-            :with_move(function(opts)
-              return opts.char == "}"
-            end)
-            :with_cr(cond.none())
-            :with_del(cond.none())
-            :use_key("}"),
-          Rule("", " ]")
-            :with_pair(cond.none())
-            :with_move(function(opts)
-              return opts.char == "]"
-            end)
-            :with_cr(cond.none())
-            :with_del(cond.none())
-            :use_key("]"),
-        })
       end,
     },
 
