@@ -43,8 +43,14 @@ packer.startup({
 
     -- Text objects surrounding
     {
-      "stasjok/surround.nvim",
-      commit = "183d5107ab68190ddca53d29b398dcf83f3e5488",
+      "blackCauldron7/surround.nvim",
+      commit = "5c7fd08947968c296f37f1dad2ecbda52dd05792",
+      keys = {
+        { "n", "ys" },
+        { "n", "cs" },
+        { "n", "ds" },
+        { "n", "cq" },
+      },
       config = function()
         require("plugins.surround").config()
       end,
