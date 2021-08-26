@@ -22,6 +22,8 @@ function compe.config()
   map("i", "<C-E>", "<Cmd>lua require('compe')._close()<CR><C-E>")
   map_expr("i", "<M-d>", "compe#scroll({ 'delta': +8 })")
   map_expr("i", "<M-u>", "compe#scroll({ 'delta': -8 })")
+  -- Map <CR>
+  require("nvim-autopairs.completion.compe").setup()
 end
 
 return compe

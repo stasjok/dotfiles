@@ -61,7 +61,6 @@ packer.startup({
       "windwp/nvim-autopairs",
       commit = "afd3b224a0d508af38270dc87d836fc55b347561",
       event = "InsertEnter",
-      wants = "nvim-compe",
       config = function()
         require("plugins.autopairs").config()
       end,
@@ -82,7 +81,7 @@ packer.startup({
       "hrsh7th/nvim-compe",
       commit = "73529ce61611c9ee3821e18ecc929c422416c462",
       event = "InsertEnter",
-      wants = "LuaSnip",
+      wants = { "LuaSnip", "nvim-autopairs" },
       config = function()
         require("plugins.compe").config()
       end,
