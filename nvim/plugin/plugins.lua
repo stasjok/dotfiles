@@ -77,6 +77,17 @@ packer.startup({
       },
     },
 
+    -- Autocompletion
+    {
+      "hrsh7th/nvim-compe",
+      commit = "73529ce61611c9ee3821e18ecc929c422416c462",
+      event = "InsertEnter",
+      wants = "LuaSnip",
+      config = function()
+        require("plugins.compe").config()
+      end,
+    },
+
     -- Snippets
     {
       "L3MON4D3/LuaSnip",
@@ -125,85 +136,6 @@ packer.startup({
       keys = require("plugins.tmux").keys,
       config = function()
         require("plugins.tmux").config()
-      end,
-    },
-
-    -- Auto completion
-    {
-      "hrsh7th/nvim-compe",
-      commit = "73529ce61611c9ee3821e18ecc929c422416c462",
-      event = "InsertEnter",
-      wants = "LuaSnip",
-      config = function()
-        require("compe").setup({
-          source = {
-            nvim_lsp = true,
-            luasnip = true,
-            buffer = true,
-            path = true,
-          },
-        })
-        vim.opt.completeopt = { "menuone", "noselect" }
-
-        _G.complete_show_confirm = function(key)
-          if vim.fn.pumvisible() == 1 then
-            return vim.fn["compe#confirm"]()
-          else
-            return vim.fn["compe#complete"]()
-          end
-        end
-
-        vim.api.nvim_set_keymap(
-          "i",
-          "<C-y>",
-          "v:lua.complete_show_confirm()",
-          { expr = true, noremap = true }
-        )
-        -- without extra <C-e> keys like <C-n>/<C-p> doesn't work, don't know why
-        vim.api.nvim_set_keymap(
-          "i",
-          "<C-e>",
-          '<Cmd>lua require"compe"._close()<CR><C-e>',
-          { noremap = true }
-        )
-        vim.api.nvim_set_keymap(
-          "i",
-          "<M-d>",
-          'compe#scroll({ "delta": +8 })',
-          { expr = true, noremap = true }
-        )
-        vim.api.nvim_set_keymap(
-          "i",
-          "<M-u>",
-          'compe#scroll({ "delta": -8 })',
-          { expr = true, noremap = true }
-        )
-        _G.tab_complete = function()
-          if vim.fn.pumvisible() == 1 then
-            return vim.api.nvim_replace_termcodes("<C-n>", true, false, true)
-          else
-            return vim.api.nvim_replace_termcodes("<Tab>", true, false, true)
-          end
-        end
-        _G.s_tab_complete = function()
-          if vim.fn.pumvisible() == 1 then
-            return vim.api.nvim_replace_termcodes("<C-p>", true, false, true)
-          else
-            return vim.api.nvim_replace_termcodes("<C-d>", true, false, true)
-          end
-        end
-        vim.api.nvim_set_keymap(
-          "i",
-          "<Tab>",
-          "v:lua.tab_complete()",
-          { expr = true, noremap = true }
-        )
-        vim.api.nvim_set_keymap(
-          "i",
-          "<S-Tab>",
-          "v:lua.s_tab_complete()",
-          { expr = true, noremap = true }
-        )
       end,
     },
 
