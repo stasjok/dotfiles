@@ -78,13 +78,29 @@ packer.startup({
 
     -- Autocompletion
     {
-      "hrsh7th/nvim-compe",
-      commit = "73529ce61611c9ee3821e18ecc929c422416c462",
-      event = "InsertEnter",
-      wants = { "LuaSnip", "nvim-autopairs" },
+      "hrsh7th/nvim-cmp",
+      commit = "24406f995ea20abba816c0356ebff1a025c18a72",
       config = function()
-        require("plugins.compe").config()
+        require("plugins.cmp").config()
       end,
+      requires = {
+        {
+          "saadparwaiz1/cmp_luasnip",
+          commit = "b954085485e42e0cd97d3d6e8fe540df5380e0ac",
+        },
+        {
+          "hrsh7th/cmp-nvim-lsp",
+          commit = "9af212372c41e94d55603dea8ad9700f6c31573d",
+        },
+        {
+          "hrsh7th/cmp-path",
+          commit = "48df45154ee644edf1b955d325be60928dd28d47",
+        },
+        {
+          "hrsh7th/cmp-buffer",
+          commit = "a5774490b5ea8df8ce9e80ef4ec131cb4541702e",
+        },
+      },
     },
 
     -- Snippets
