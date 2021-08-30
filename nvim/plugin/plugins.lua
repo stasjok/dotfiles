@@ -69,7 +69,7 @@ packer.startup({
     -- Autocompletion
     {
       "hrsh7th/nvim-cmp",
-      commit = "24406f995ea20abba816c0356ebff1a025c18a72",
+      commit = "f32b80c0a6ba7be341e2fc29fec7607429ab356d",
       event = "InsertEnter",
       wants = "nvim-autopairs",
       config = function()
