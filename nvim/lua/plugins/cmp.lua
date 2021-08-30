@@ -1,17 +1,21 @@
 local map_expr = require("map").map_expr
 local replace_termcodes = require("map").replace_termcodes
+local cmp_plugin = require("cmp")
 
 local cmp = {}
 
 function cmp.config()
   local mapping = require("cmp.mapping")
 
-  require("cmp").setup({
+  cmp_plugin.setup({
     sources = {
       { name = "luasnip" },
       { name = "nvim_lsp" },
       { name = "path" },
       { name = "buffer" },
+    },
+    confirmation = {
+      default_behavior = cmp_plugin.ConfirmBehavior.Replace,
     },
     snippet = {
       expand = function(args)
@@ -21,19 +25,22 @@ function cmp.config()
     mapping = {
       ["<C-Y>"] = function()
         if vim.fn.pumvisible() == 1 then
-          require("cmp").close()
+          cmp_plugin.close()
           -- Without extra key some keys like <C-N> / <C-P> doesn't work
           vim.api.nvim_feedkeys(replace_termcodes("<C-Y>"), "n", false)
         else
-          require("cmp").complete()
+          cmp_plugin.complete()
         end
       end,
       ["<C-E>"] = function()
         if vim.fn.pumvisible() == 1 then
-          require("cmp").abort()
+          cmp_plugin.abort()
         end
       end,
       ["<CR>"] = mapping.confirm(),
+      ["<M-CR>"] = mapping.confirm({
+        behavior = cmp_plugin.ConfirmBehavior.Insert,
+      }),
       ["<M-d>"] = mapping.scroll_docs(8),
       ["<M-u>"] = mapping.scroll_docs(-8),
     },
