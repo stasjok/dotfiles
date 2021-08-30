@@ -66,16 +66,6 @@ packer.startup({
       end,
     },
 
-    -- Comments toggle
-    {
-      "b3nj5m1n/kommentary",
-      commit = "a5d7cd90059ad99b5e80a1d40d655756d86b5dad",
-      keys = {
-        { "n", "gc" },
-        { "x", "gc" },
-      },
-    },
-
     -- Autocompletion
     {
       "hrsh7th/nvim-cmp",
@@ -111,6 +101,16 @@ packer.startup({
       config = function()
         require("plugins.luasnip").config()
       end,
+    },
+
+    -- Comments toggle
+    {
+      "b3nj5m1n/kommentary",
+      commit = "a5d7cd90059ad99b5e80a1d40d655756d86b5dad",
+      keys = {
+        { "n", "gc" },
+        { "x", "gc" },
+      },
     },
 
     -- Tree-sitter
