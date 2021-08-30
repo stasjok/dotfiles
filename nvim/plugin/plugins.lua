@@ -70,24 +70,29 @@ packer.startup({
     {
       "hrsh7th/nvim-cmp",
       commit = "24406f995ea20abba816c0356ebff1a025c18a72",
+      event = "InsertEnter",
       config = function()
         require("plugins.cmp").config()
       end,
       requires = {
         {
           "saadparwaiz1/cmp_luasnip",
+          after = "nvim-cmp",
           commit = "b954085485e42e0cd97d3d6e8fe540df5380e0ac",
         },
         {
           "hrsh7th/cmp-nvim-lsp",
+          after = "nvim-cmp",
           commit = "9af212372c41e94d55603dea8ad9700f6c31573d",
         },
         {
           "hrsh7th/cmp-path",
+          after = "nvim-cmp",
           commit = "48df45154ee644edf1b955d325be60928dd28d47",
         },
         {
           "hrsh7th/cmp-buffer",
+          after = "nvim-cmp",
           commit = "a5774490b5ea8df8ce9e80ef4ec131cb4541702e",
         },
       },
