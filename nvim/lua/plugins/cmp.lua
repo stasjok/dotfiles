@@ -6,9 +6,6 @@ local cmp = {}
 function cmp.config()
   local mapping = require("cmp.mapping")
 
-  -- TODO: change it to auto-setup from nvim-autopairs
-  map_expr("i", "<CR>", [[luaeval("require('nvim-autopairs').autopairs_cr()")]])
-
   require("cmp").setup({
     sources = {
       { name = "luasnip" },
@@ -40,6 +37,11 @@ function cmp.config()
       ["<M-d>"] = mapping.scroll_docs(8),
       ["<M-u>"] = mapping.scroll_docs(-8),
     },
+  })
+
+  -- Automatically insert brackets for functions and methods
+  require("nvim-autopairs.completion.cmp").setup({
+    map_complete = true,
   })
 
   -- Mappings

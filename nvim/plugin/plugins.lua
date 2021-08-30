@@ -71,6 +71,7 @@ packer.startup({
       "hrsh7th/nvim-cmp",
       commit = "24406f995ea20abba816c0356ebff1a025c18a72",
       event = "InsertEnter",
+      wants = "nvim-autopairs",
       config = function()
         require("plugins.cmp").config()
       end,
