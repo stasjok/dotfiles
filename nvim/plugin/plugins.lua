@@ -59,7 +59,7 @@ packer.startup({
     -- Auto-pairs
     {
       "windwp/nvim-autopairs",
-      commit = "afd3b224a0d508af38270dc87d836fc55b347561",
+      commit = "0ec2d9baa1e721210e0ddfa7f7eb15dc4d5c530f",
       event = "InsertEnter",
       config = function()
         require("plugins.autopairs").config()
