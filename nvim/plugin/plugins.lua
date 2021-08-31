@@ -83,7 +83,6 @@ packer.startup({
         },
         {
           "hrsh7th/cmp-nvim-lsp",
-          after = "nvim-cmp",
           commit = "9af212372c41e94d55603dea8ad9700f6c31573d",
         },
         {
