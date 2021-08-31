@@ -25,19 +25,11 @@ function utils.on_attach(client, bufnr)
   end
   buf_map("x", "<Leader>F", ":lua vim.lsp.buf.range_formatting()<CR>")
 
-  function _G._show_diagnostics()
-    local status, existing_float = pcall(vim.api.nvim_buf_get_var, 0, "lsp_floating_preview")
-    if status and vim.api.nvim_win_is_valid(existing_float) then
-    else
-      vim.lsp.diagnostic.show_line_diagnostics({ focusable = false })
-    end
-  end
-
   -- Show diagnostics automatically
   vim.cmd([[
 augroup ShowDiagnostics
 autocmd! * <buffer>
-autocmd CursorHold,CursorHoldI <buffer> lua _G._show_diagnostics()
+autocmd CursorHold,CursorHoldI <buffer> lua require("plugins.lspconfig.utils").show_diagnostics()
 augroup END]])
 
   -- Document highlight
@@ -57,6 +49,14 @@ augroup END]])
       border = "none",
     },
   })
+end
+
+function utils.show_diagnostics()
+  local status, existing_float = pcall(vim.api.nvim_buf_get_var, 0, "lsp_floating_preview")
+  if status and vim.api.nvim_win_is_valid(existing_float) then
+  else
+    vim.lsp.diagnostic.show_line_diagnostics({ focusable = false })
+  end
 end
 
 return utils
