@@ -1,36 +1,32 @@
+local buf_map = require("map").buf_map
+
 local lspconfig = {}
 
 function lspconfig.config()
   local on_attach = function(client, bufnr)
+    -- Mappings
     for lhs, rhs in pairs({
-      gd = '<Cmd>lua require("telescope.builtin").lsp_definitions()<CR>',
-      gD = "<Cmd>lua vim.lsp.buf.declaration()<CR>",
-      ["<leader>T"] = "<Cmd>lua vim.lsp.buf.type_definition()<CR>",
-      ["<leader>i"] = '<Cmd>lua require("telescope.builtin").lsp_implementations()<CR>',
-      gr = '<Cmd>lua require("telescope.builtin").lsp_references()<CR>',
-      gs = '<Cmd>lua require("telescope.builtin").lsp_document_symbols()<CR>',
-      gS = '<Cmd>lua require("telescope.builtin").lsp_workspace_symbols()<CR>',
-      ["<leader>r"] = "<Cmd>lua vim.lsp.buf.rename()<CR>",
-      K = "<Cmd>lua vim.lsp.buf.hover()<CR>",
-      ["<leader>a"] = "<Cmd>lua vim.lsp.buf.code_action()<CR>",
-      ["<leader>d"] = '<Cmd>lua require("telescope.builtin").lsp_document_diagnostics()<CR>',
-      ["<leader>D"] = '<Cmd>lua require("telescope.builtin").lsp_workspace_diagnostics()<CR>',
+      ["gd"] = '<Cmd>lua require("telescope.builtin").lsp_definitions()<CR>',
+      ["gD"] = "<Cmd>lua vim.lsp.buf.declaration()<CR>",
+      ["<Leader>T"] = "<Cmd>lua vim.lsp.buf.type_definition()<CR>",
+      ["<Leader>i"] = '<Cmd>lua require("telescope.builtin").lsp_implementations()<CR>',
+      ["gr"] = '<Cmd>lua require("telescope.builtin").lsp_references()<CR>',
+      ["gs"] = '<Cmd>lua require("telescope.builtin").lsp_document_symbols()<CR>',
+      ["gS"] = '<Cmd>lua require("telescope.builtin").lsp_workspace_symbols()<CR>',
+      ["<Leader>r"] = "<Cmd>lua vim.lsp.buf.rename()<CR>",
+      ["K"] = "<Cmd>lua vim.lsp.buf.hover()<CR>",
+      ["<Leader>a"] = "<Cmd>lua vim.lsp.buf.code_action()<CR>",
+      ["<Leader>d"] = '<Cmd>lua require("telescope.builtin").lsp_document_diagnostics()<CR>',
+      ["<Leader>D"] = '<Cmd>lua require("telescope.builtin").lsp_workspace_diagnostics()<CR>',
       ["]d"] = "<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
       ["[d"] = "<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>",
-      ["<leader>F"] = "<Cmd>lua vim.lsp.buf.formatting()<CR>",
+      ["<Leader>F"] = "<Cmd>lua vim.lsp.buf.formatting()<CR>",
     }) do
-      vim.api.nvim_buf_set_keymap(bufnr, "n", lhs, rhs, { noremap = true })
+      buf_map("n", lhs, rhs)
     end
+    buf_map("x", "<Leader>F", ":lua vim.lsp.buf.range_formatting()<CR>")
 
-    vim.api.nvim_buf_set_keymap(
-      bufnr,
-      "x",
-      "<leader>F",
-      ":lua vim.lsp.buf.range_formatting()<CR>",
-      { noremap = true, silent = true }
-    )
-
-    function _G._show_diagnostics(opts)
+    function _G._show_diagnostics()
       local status, existing_float = pcall(vim.api.nvim_buf_get_var, 0, "lsp_floating_preview")
       if status and vim.api.nvim_win_is_valid(existing_float) then
       else
@@ -178,6 +174,7 @@ function lspconfig.config()
         or require("lspconfig.util").path.dirname(filename)
     end,
   })
+
   require("lspconfig")["ansiblels"].setup({
     filetypes = { "yaml.ansible" },
     on_attach = on_attach,
@@ -200,6 +197,7 @@ function lspconfig.config()
       },
     },
   })
+
   require("lspconfig")["jsonls"].setup({
     on_attach = on_attach,
     capabilities = capabilities,
@@ -267,6 +265,7 @@ function lspconfig.config()
       },
     },
   })
+
   for _, lsp_server in ipairs({ "pyright" }) do
     require("lspconfig")[lsp_server].setup({
       on_attach = on_attach,
