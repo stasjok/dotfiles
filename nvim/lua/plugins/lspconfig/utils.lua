@@ -28,18 +28,18 @@ function utils.on_attach(client, bufnr)
   -- Show diagnostics automatically
   vim.cmd([[
 augroup ShowDiagnostics
-autocmd! * <buffer>
-autocmd CursorHold,CursorHoldI <buffer> lua require("plugins.lspconfig.utils").show_diagnostics()
+  autocmd! * <buffer>
+  autocmd CursorHold,CursorHoldI <buffer> lua require("plugins.lspconfig.utils").show_diagnostics()
 augroup END]])
 
   -- Document highlight
   if client.supports_method("textDocument/documentHighlight") then
     vim.cmd([[
 augroup DocumentHighlight
-autocmd! * <buffer>
-autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
-autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+  autocmd! * <buffer>
+  autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+  autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
+  autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
 augroup END]])
   end
 
