@@ -79,7 +79,7 @@ packer.startup({
         {
           "saadparwaiz1/cmp_luasnip",
           after = "nvim-cmp",
-          commit = "b954085485e42e0cd97d3d6e8fe540df5380e0ac",
+          commit = "da37737ab9c569013827d60915f8d598c1483bbc",
         },
         {
           "hrsh7th/cmp-nvim-lsp",
