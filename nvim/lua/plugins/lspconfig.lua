@@ -27,35 +27,6 @@ function lspconfig.config()
     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
   end
 
-  -- Completion icons
-  local icons = {
-    Class = " ",
-    Color = " ",
-    Constant = " ",
-    Constructor = " ",
-    Enum = "了 ",
-    EnumMember = " ",
-    Field = " ",
-    File = " ",
-    Folder = " ",
-    Function = " ",
-    Interface = "ﰮ ",
-    Keyword = " ",
-    Method = "ƒ ",
-    Module = " ",
-    Property = " ",
-    Snippet = "﬌ ",
-    Struct = " ",
-    Text = " ",
-    Unit = " ",
-    Value = " ",
-    Variable = " ",
-  }
-  local kinds = vim.lsp.protocol.CompletionItemKind
-  for i, kind in ipairs(kinds) do
-    kinds[i] = icons[kind] or kind
-  end
-
   local function sumneko_lua_paths()
     local path = {}
     table.insert(path, "lua/?.lua")
