@@ -27,28 +27,6 @@ function lspconfig.config()
     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
   end
 
-  local function sumneko_lua_paths()
-    local path = {}
-    table.insert(path, "lua/?.lua")
-    table.insert(path, "lua/?/init.lua")
-    local packer_config = require("packer").config
-    local packer_start = string.format(
-      "%s/%s",
-      packer_config.package_root,
-      packer_config.plugin_package
-    )
-    for _, plugin in ipairs({
-      "popup.nvim",
-      "plenary.nvim",
-      "lazy.nvim",
-      "nest.nvim",
-    }) do
-      local plugin_dir = string.format("%s/start/%s/lua", packer_start, plugin)
-      table.insert(path, plugin_dir .. "/?.lua")
-      table.insert(path, plugin_dir .. "/?/init.lua")
-    end
-    return path
-  end
   local luadev = require("lua-dev").setup({
     lspconfig = {
       cmd = { "lua-language-server" },
@@ -56,13 +34,6 @@ function lspconfig.config()
       capabilities = capabilities,
       flags = {
         debounce_text_changes = 100,
-      },
-      settings = {
-        Lua = {
-          runtime = {
-            path = sumneko_lua_paths(),
-          },
-        },
       },
     },
   })
