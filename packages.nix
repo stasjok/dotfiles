@@ -55,12 +55,12 @@ in with stable; {
   packer-nvim = unstable.vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
     # I need to change package name, because packer does :packadd packer.nvim
     pname = "packer.nvim";
-    version = "2021-08-25";
+    version = "2021-09-02";
     src = fetchFromGitHub {
       owner = "wbthomason";
       repo = "packer.nvim";
-      rev = "09cc2d615bbc14bca957f941052e49e489d76537";
-      sha256 = "1n7vhavf46vdpvpjk25i0w14w88lbm3nmlfac0rmikn6h5vma0kq";
+      rev = "24e088bae1a103e628e5b3a0fc528a8c2ce11851";
+      sha256 = "0vcxccs7bla6m3hg5y1j12xk686mkgyh3hb9zii90hvr51msf50q";
     };
   });
   telescope-fzf-native-nvim = unstable.vimPlugins.telescope-fzf-native-nvim;
