@@ -211,7 +211,7 @@ packer.startup({
     },
 
     -- Nix
-    { "Freed-Wu/vim-nix", commit = "2fc254b90661f8190565b18874d0662bfcbec02c", ft = "nix" }, -- forked from LnL7/vim-nix
+    { "Freed-Wu/vim-nix", commit = "2fc254b90661f8190565b18874d0662bfcbec02c", ft = "nix" },
 
     -- Fish
     { "khaveesh/vim-fish-syntax", commit = "cf759d1ac42396ee2246a082eceb0debde04c445" },
@@ -221,30 +221,28 @@ packer.startup({
       "Glench/Vim-Jinja2-Syntax",
       commit = "2c17843b074b06a835f88587e1023ceff7e2c7d1",
       config = function()
-        vim.g.jinja_syntax_html = 0
+        require("plugins.jinja").config()
       end,
     },
+
     -- Ansible
     {
       "pearofducks/ansible-vim",
-      commit = "804099202b72ffd4bf4ea4ce24d8d7bac8b9ae2d",
+      commit = "40e28ee318b968c09a1724cd25cd450330b136c9",
       config = function()
-        vim.g.ansible_unindent_after_newline = 1
-        vim.g.ansible_extra_keywords_highlight = 1
-        vim.g.ansible_template_syntaxes = {
-          ["*.sh.j2"] = "sh",
-        }
+        require("plugins.ansible").config()
       end,
     },
+
     -- SaltStack
     { "saltstack/salt-vim", commit = "6ca9e3500cc39dd417b411435d58a1b720b331cc" },
+
     -- MediaWiki
     {
       "chikamichi/mediawiki.vim",
       commit = "26e5737264354be41cb11d16d48132779795e168",
       config = function()
-        vim.g.mediawiki_wikilang_to_vim_overrides = { sls = "sls" }
-        vim.g.mediawiki_forced_wikilang = { "bash" }
+        require("plugins.mediawiki").config()
       end,
     },
   },
