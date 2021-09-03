@@ -179,7 +179,7 @@ packer.startup({
       end,
     },
 
-    -- Git
+    -- Git signs
     {
       "lewis6991/gitsigns.nvim",
       commit = "daa233aabb4dbc7c870ea7300bcfeef96d49c2a3",
@@ -188,6 +188,7 @@ packer.startup({
       end,
     },
 
+    -- Git visual interface
     {
       "TimUntersberger/neogit",
       commit = "2a9ce6bbe682c31dbd5cd59214eb0ae93dab4ab6",
@@ -199,6 +200,7 @@ packer.startup({
       end,
     },
 
+    -- Git diff viewer
     {
       "sindrets/diffview.nvim",
       commit = "15ab6ab2fe88844238db1a175d18595fc2553c41",
