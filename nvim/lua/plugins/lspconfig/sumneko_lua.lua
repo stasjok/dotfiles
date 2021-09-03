@@ -1,5 +1,7 @@
-local sumneko_lua = {}
+local luadev = require("lua-dev").setup({
+  lspconfig = {
+    cmd = { "lua-language-server" },
+  },
+})
 
-sumneko_lua.cmd = { "lua-language-server" }
-
-return sumneko_lua
+return luadev

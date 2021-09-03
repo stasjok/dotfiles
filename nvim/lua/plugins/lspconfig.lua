@@ -36,6 +36,7 @@ function lspconfig.config()
   -- List of configured language servers
   local lsp_servers = {
     "null-ls",
+    "sumneko_lua",
     "bashls",
     "ansiblels",
     "jsonls",
@@ -59,12 +60,6 @@ function lspconfig.config()
     end
     require("lspconfig")[lsp_server].setup(final_config)
   end
-
-  -- Lua language server
-  local luadev = require("lua-dev").setup({
-    lspconfig = vim.tbl_extend("force", default_config, require("plugins.lspconfig.sumneko_lua")),
-  })
-  require("lspconfig").sumneko_lua.setup(luadev)
 end
 
 return lspconfig
