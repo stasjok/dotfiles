@@ -131,7 +131,7 @@ packer.startup({
     -- Language Servers configuration
     {
       "neovim/nvim-lspconfig",
-      commit = "662159eeb112c076d90b2c3fe799f16a8165e4a6",
+      commit = "71c241425fd7a84f0ae33ea1eb7c071f20499bcd",
       config = function()
         require("plugins.lspconfig").config()
       end,
