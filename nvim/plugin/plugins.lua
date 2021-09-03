@@ -201,8 +201,8 @@ packer.startup({
 
     {
       "sindrets/diffview.nvim",
-      commit = "2411f5303192a9c8056ec174fb995773f90b52b8",
-      cmd = "DiffviewOpen",
+      commit = "15ab6ab2fe88844238db1a175d18595fc2553c41",
+      cmd = { "DiffviewOpen", "DiffviewFileHistory" },
       config = function()
         require("plugins.diffview").config()
       end,
