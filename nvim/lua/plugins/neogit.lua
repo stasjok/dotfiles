@@ -5,6 +5,7 @@ local neogit = {}
 function neogit.config()
   require("neogit").setup({
     disable_commit_confirmation = true,
+    disable_builtin_notifications = true,
     integrations = {
       diffview = true,
     },
