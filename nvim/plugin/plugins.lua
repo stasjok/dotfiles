@@ -192,7 +192,7 @@ packer.startup({
       "TimUntersberger/neogit",
       commit = "ee83d4fa8ac946e5e0064e65a5276e1ea030ae28",
       cmd = "Neogit",
-      keys = "<leader>g",
+      keys = { { "n", "<Leader>g" } },
       wants = "diffview.nvim",
       config = function()
         require("plugins.neogit").config()
