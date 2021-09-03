@@ -160,25 +160,6 @@ packer.startup({
       end,
     },
 
-    -- EditorConfig
-    {
-      "editorconfig/editorconfig-vim",
-      commit = "3078cd10b28904e57d878c0d0dab42aa0a9fdc89",
-      config = function()
-        require("plugins.editorconfig").config()
-      end,
-    },
-
-    -- Tmux integration
-    {
-      "aserowy/tmux.nvim",
-      commit = "e5eebe69577e40477996166f77a858c6708fc4fe",
-      keys = require("plugins.tmux").keys,
-      config = function()
-        require("plugins.tmux").config()
-      end,
-    },
-
     -- Git signs
     {
       "lewis6991/gitsigns.nvim",
@@ -207,6 +188,25 @@ packer.startup({
       cmd = { "DiffviewOpen", "DiffviewFileHistory" },
       config = function()
         require("plugins.diffview").config()
+      end,
+    },
+
+    -- EditorConfig
+    {
+      "editorconfig/editorconfig-vim",
+      commit = "3078cd10b28904e57d878c0d0dab42aa0a9fdc89",
+      config = function()
+        require("plugins.editorconfig").config()
+      end,
+    },
+
+    -- Tmux integration
+    {
+      "aserowy/tmux.nvim",
+      commit = "e5eebe69577e40477996166f77a858c6708fc4fe",
+      keys = require("plugins.tmux").keys,
+      config = function()
+        require("plugins.tmux").config()
       end,
     },
 
