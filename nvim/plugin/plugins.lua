@@ -139,7 +139,7 @@ packer.startup({
         -- General language server
         {
           "jose-elias-alvarez/null-ls.nvim",
-          commit = "eeb6c9907aae98fb2870091b15cfa6230e4d3f0e",
+          commit = "00b1cce2e089c01c3047ccdf60ce8709399791b9",
         },
       },
     },
