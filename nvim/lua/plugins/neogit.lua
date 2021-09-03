@@ -1,3 +1,5 @@
+local map = require("map").map
+
 local neogit = {}
 
 function neogit.config()
@@ -7,7 +9,8 @@ function neogit.config()
       diffview = true,
     },
   })
-  vim.api.nvim_set_keymap("n", "<leader>g", "<Cmd>Neogit<CR>", { noremap = true })
+  -- Mappings
+  map("n", "<Leader>g", "<Cmd>lua require('neogit').open()<CR>")
 end
 
 return neogit
