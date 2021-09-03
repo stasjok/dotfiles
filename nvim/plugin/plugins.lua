@@ -141,6 +141,8 @@ packer.startup({
           "jose-elias-alvarez/null-ls.nvim",
           commit = "00b1cce2e089c01c3047ccdf60ce8709399791b9",
         },
+        -- Sumneko lua language server configuration
+        { "folke/lua-dev.nvim", commit = "6a7abb62af1b6a4411a3f5ea5cf0cb6b47878cc0" },
       },
     },
 
@@ -174,8 +176,6 @@ packer.startup({
         require("plugins.tmux").config()
       end,
     },
-
-    { "folke/lua-dev.nvim", commit = "6a7abb62af1b6a4411a3f5ea5cf0cb6b47878cc0" },
 
     { "ray-x/lsp_signature.nvim", commit = "933ba2f059d965ee8db288f63869b8205ea223b8" },
 
