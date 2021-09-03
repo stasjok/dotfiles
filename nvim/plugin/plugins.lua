@@ -144,7 +144,7 @@ packer.startup({
         -- Sumneko lua language server configuration
         { "folke/lua-dev.nvim", commit = "6a7abb62af1b6a4411a3f5ea5cf0cb6b47878cc0" },
         -- Signature help
-        { "ray-x/lsp_signature.nvim", commit = "933ba2f059d965ee8db288f63869b8205ea223b8" },
+        { "ray-x/lsp_signature.nvim", commit = "3d090c73c735b99299e1344f5f6b6813c756f3bf" },
       },
     },
 
