@@ -28,8 +28,14 @@ function lspconfig.config()
     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
   end
 
+  -- Configuration of null-ls
+  require("null-ls").config({
+    sources = require("plugins.null-ls").sources,
+  })
+
   -- List of configured language servers
   local lsp_servers = {
+    "null-ls",
     "bashls",
     "ansiblels",
     "jsonls",

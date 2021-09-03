@@ -135,6 +135,13 @@ packer.startup({
       config = function()
         require("plugins.lspconfig").config()
       end,
+      requires = {
+        -- General language server
+        {
+          "jose-elias-alvarez/null-ls.nvim",
+          commit = "eeb6c9907aae98fb2870091b15cfa6230e4d3f0e",
+        },
+      },
     },
 
     -- Telescope
@@ -165,43 +172,6 @@ packer.startup({
       keys = require("plugins.tmux").keys,
       config = function()
         require("plugins.tmux").config()
-      end,
-    },
-
-    {
-      "jose-elias-alvarez/null-ls.nvim",
-      commit = "eeb6c9907aae98fb2870091b15cfa6230e4d3f0e",
-      config = function()
-        require("null-ls").config({
-          debounce = 100,
-          sources = {
-            require("null-ls").builtins.diagnostics.shellcheck,
-            require("null-ls").builtins.formatting.shfmt,
-            require("null-ls").builtins.formatting.stylua,
-            require("null-ls").builtins.formatting.black,
-          },
-        })
-        require("lspconfig")["null-ls"].setup({
-          on_attach = function(client, bufnr)
-            for lhs, rhs in pairs({
-              ["<leader>a"] = "<Cmd>lua vim.lsp.buf.code_action()<CR>",
-              ["<leader>d"] = '<Cmd>lua require("telescope.builtin").lsp_document_diagnostics()<CR>',
-              ["<leader>D"] = '<Cmd>lua require("telescope.builtin").lsp_workspace_diagnostics()<CR>',
-              ["]d"] = "<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
-              ["[d"] = "<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>",
-              ["<leader>F"] = "<Cmd>lua vim.lsp.buf.formatting()<CR>",
-            }) do
-              vim.api.nvim_buf_set_keymap(bufnr, "n", lhs, rhs, { noremap = true })
-            end
-            vim.api.nvim_buf_set_keymap(
-              bufnr,
-              "x",
-              "<leader>F",
-              ":lua vim.lsp.buf.range_formatting()<CR>",
-              { noremap = true, silent = true }
-            )
-          end,
-        })
       end,
     },
 
