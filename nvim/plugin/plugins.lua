@@ -204,16 +204,7 @@ packer.startup({
       commit = "2411f5303192a9c8056ec174fb995773f90b52b8",
       cmd = "DiffviewOpen",
       config = function()
-        require("diffview").setup({
-          key_bindings = {
-            view = {
-              q = '<Cmd>lua require"diffview".close()<CR>',
-            },
-            file_panel = {
-              q = '<Cmd>lua require"diffview".close()<CR>',
-            },
-          },
-        })
+        require("plugins.diffview").config()
       end,
     },
 
