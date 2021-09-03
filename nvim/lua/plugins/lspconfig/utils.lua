@@ -45,6 +45,7 @@ augroup END]])
 
   -- Signature help
   require("lsp_signature").on_attach({
+    hint_enable = false,
     handler_opts = {
       border = "none",
     },
