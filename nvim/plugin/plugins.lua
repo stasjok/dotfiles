@@ -195,13 +195,7 @@ packer.startup({
       keys = "<leader>g",
       wants = "diffview.nvim",
       config = function()
-        require("neogit").setup({
-          disable_commit_confirmation = true,
-          integrations = {
-            diffview = true,
-          },
-        })
-        vim.api.nvim_set_keymap("n", "<leader>g", "<Cmd>Neogit<CR>", { noremap = true })
+        require("plugins.neogit").config()
       end,
     },
 
