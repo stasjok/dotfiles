@@ -46,9 +46,8 @@ augroup END]])
   -- Signature help
   require("lsp_signature").on_attach({
     hint_enable = false,
-    handler_opts = {
-      border = "none",
-    },
+    floating_window_above_first = true,
+    hi_parameter = "LspReferenceRead",
   })
 end
 
