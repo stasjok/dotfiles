@@ -27,7 +27,7 @@ local function make_map(default_opts, buffer)
   ---@param mode string[]|string Mode short-name (like "n", "i", "!", "") or array of modes
   ---@param lhs string Left-hand-side of the mapping
   ---@param rhs string|function Right-hand-side of the mapping. Can be lua function
-  ---@param opts? table<string, boolean> Optional parameters map. Default: {noremap = true, silent = true}
+  ---@param opts? table<string, boolean> Optional parameters map. Default: {noremap = true}
   local function map_fun(mode, lhs, rhs, opts)
     local final_opts = vim.tbl_extend("force", default_opts, opts or {})
     if type(mode) == "string" then
@@ -49,13 +49,13 @@ local function make_map(default_opts, buffer)
 end
 
 ---Set a global mapping for the given mode
-map.map = make_map({ noremap = true, silent = true })
+map.map = make_map({ noremap = true })
 ---Set a global mapping for the given mode whose argument is an expression
-map.map_expr = make_map({ noremap = true, silent = true, expr = true })
+map.map_expr = make_map({ noremap = true, expr = true })
 ---Set a buffer-local mapping for current buffer
-map.buf_map = make_map({ noremap = true, silent = true }, true)
+map.buf_map = make_map({ noremap = true }, true)
 ---Set a buffer-local mapping for current buffer whose argument is an expression
-map.buf_map_expr = make_map({ noremap = true, silent = true, expr = true }, true)
+map.buf_map_expr = make_map({ noremap = true, expr = true }, true)
 
 ---A wrapper around `vim.api.nvim_replace_termcodes()`
 ---@param str string String to be converted

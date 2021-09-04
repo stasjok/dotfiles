@@ -5,15 +5,15 @@ local map_expr = require("map").map_expr
 map({ "n", "v" }, "<Leader>", "<Nop>")
 
 -- Emacs-like mappings
-map("!", "<C-B>", "<Left>", { silent = false })
-map("!", "<C-F>", "<Right>", { silent = false })
-map("!", "<M-b>", "<C-Left>", { silent = false })
-map("!", "<M-f>", "<C-Right>", { silent = false })
+map("!", "<C-B>", "<Left>")
+map("!", "<C-F>", "<Right>")
+map("!", "<M-b>", "<C-Left>")
+map("!", "<M-f>", "<C-Right>")
 map("i", "<C-N>", "<Down>")
 map("i", "<C-P>", "<Up>")
-map("c", "<C-A>", "<C-B>", { silent = false })
-map("!", "<M-BS>", "<C-W>", { silent = false })
-map("c", "<M-d>", "<C-F>dw<C-C>", { silent = false })
+map("c", "<C-A>", "<C-B>")
+map("!", "<M-BS>", "<C-W>")
+map("c", "<M-d>", "<C-F>dw<C-C>")
 
 -- Scrolling in insert mode (including completion popup)
 map("i", "<M-F>", "<PageDown>")
@@ -38,8 +38,8 @@ map("i", "<M-p>", "<C-O>O")
 -- Move lines
 map("n", "<M-d>", "<Cmd>move .+1<CR>")
 map("n", "<M-u>", "<Cmd>move .-2<CR>")
-map("v", "<M-d>", ":move '>+1<CR>gv")
-map("v", "<M-u>", ":move '<-2<CR>gv")
+map("v", "<M-d>", ":move '>+1<CR>gv", { silent = true })
+map("v", "<M-u>", ":move '<-2<CR>gv", { silent = true })
 
 -- Window management
 map("n", "<Leader>x", "<C-W>v")
