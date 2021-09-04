@@ -5,15 +5,15 @@ local map_expr = require("map").map_expr
 map({ "n", "v" }, "<Leader>", "<Nop>")
 
 -- Emacs-like mappings
-map("!", "<C-B>", "<Left>")
-map("!", "<C-F>", "<Right>")
-map("!", "<M-b>", "<C-Left>")
-map("!", "<M-f>", "<C-Right>")
+map("!", "<C-B>", "<Left>", { silent = false })
+map("!", "<C-F>", "<Right>", { silent = false })
+map("!", "<M-b>", "<C-Left>", { silent = false })
+map("!", "<M-f>", "<C-Right>", { silent = false })
 map("i", "<C-N>", "<Down>")
 map("i", "<C-P>", "<Up>")
-map("c", "<C-A>", "<C-B>")
-map("!", "<M-BS>", "<C-W>")
-map("c", "<M-d>", "<C-F>dw<C-C>")
+map("c", "<C-A>", "<C-B>", { silent = false })
+map("!", "<M-BS>", "<C-W>", { silent = false })
+map("c", "<M-d>", "<C-F>dw<C-C>", { silent = false })
 
 -- Scrolling in insert mode (including completion popup)
 map("i", "<M-F>", "<PageDown>")
