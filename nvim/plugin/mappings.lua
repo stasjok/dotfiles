@@ -15,6 +15,10 @@ map("c", "<C-A>", "<C-B>")
 map("!", "<M-BS>", "<C-W>")
 map("c", "<M-d>", "<C-F>dw<C-C>")
 
+-- Scrolling in insert mode (including completion popup)
+map("i", "<M-F>", "<PageDown>")
+map("i", "<M-B>", "<PageUp>")
+
 -- Shortcuts
 map("n", "<Leader><CR>", "<Cmd>buffer #<CR>")
 map("n", "<Leader>e", "<Cmd>edit<CR>")
