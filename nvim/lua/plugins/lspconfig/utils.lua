@@ -59,4 +59,38 @@ function utils.show_diagnostics()
   end
 end
 
+local completion_kind_icons = {
+  Class = "",
+  Color = "",
+  Constant = "",
+  Constructor = "",
+  EnumMember = "",
+  Enum = "了",
+  Event = "",
+  Field = "",
+  File = "",
+  Folder = "",
+  Function = "",
+  Interface = "",
+  Keyword = "",
+  Method = "ƒ",
+  Module = "",
+  Operator = "",
+  Property = "",
+  Reference = "",
+  Snippet = "﬌",
+  Struct = "",
+  Text = "",
+  TypeParameter = "",
+  Unit = "",
+  Value = "",
+  Variable = "",
+}
+
+utils.completion_kinds = {}
+-- Prepend icon to completion kind
+for kind, icon in pairs(completion_kind_icons) do
+  utils.completion_kinds[kind] = string.format("%s %s", icon, kind)
+end
+
 return utils
