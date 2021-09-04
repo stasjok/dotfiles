@@ -5,10 +5,10 @@ local completion_kinds = require("plugins.lspconfig.utils").completion_kinds
 local cmp = {}
 
 local completion_menu_map = {
-  luasnip = "[LuaSnip]",
+  luasnip = "[Snip]",
   nvim_lsp = "[LSP]",
   path = "[Path]",
-  buffer = "[Buffer]",
+  buffer = "[Buf]",
 }
 
 local function format_vim_item(entry, vim_item)
