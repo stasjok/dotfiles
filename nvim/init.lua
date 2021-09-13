@@ -1,30 +1,6 @@
--- Set <leader> to Space and <localleader> to \
+-- Set <Leader> to <Space> and <LocalLeader> to `\`
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
-
--- Options
-vim.opt.shiftwidth = 4
-vim.opt.softtabstop = -1
-vim.opt.expandtab = true
-
-vim.opt.termguicolors = true
-vim.opt.mouse = "a"
-vim.opt.hidden = true
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-vim.opt.ttimeoutlen = 5
-vim.opt_global.scrolloff = 6
-vim.opt_global.sidescrolloff = 6
-vim.opt_global.scrollback = 80000
-vim.opt.lazyredraw = true
-vim.opt.updatetime = 250
-
-vim.opt.shell = "bash"
-
-vim.opt.cursorline = true
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.signcolumn = "yes"
 
 -- Russian layout
 vim.opt.langmap = {
@@ -121,18 +97,6 @@ end
 for _, m in ipairs({ "i", "n", "v", "c" }) do
   vim.api.nvim_set_keymap(m, "<M-i>", "v:lua._toggle_keymap()", { noremap = true, expr = true })
 end
-
--- show tabs and trailing spaces
-vim.opt.list = true
-vim.opt_global.listchars = "tab:→ ,trail:⋅,extends:❯,precedes:❮"
--- don't show trailing spaces during insert mode
-vim.cmd([[
-augroup listchars_in_insert
-autocmd!
-autocmd InsertEnter * setlocal listchars=tab:→\ ,extends:❯,precedes:❮
-autocmd InsertLeave * setlocal listchars=tab:→\ ,trail:⋅,extends:❯,precedes:❮
-augroup END
-]])
 
 -- Clipboard integration with tmux
 if vim.env.TMUX then
