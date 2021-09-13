@@ -22,7 +22,7 @@ function telescope.config()
     },
   })
   -- Activate telescope-fzf-native installed by nix
-  vim.cmd("packadd telescope-fzf-native-nvim")
+  vim.api.nvim_command("packadd telescope-fzf-native-nvim")
   require("telescope").load_extension("fzf")
   -- Mappings
   for lhs, picker in pairs(mappings) do

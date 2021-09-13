@@ -5,7 +5,7 @@ function onedark.config()
     keywordStyle = "NONE",
   })
   -- Restore TelescopeMatching highlight to default
-  vim.cmd("highlight! link TelescopeMatching Special")
+  vim.api.nvim_command("highlight! link TelescopeMatching Special")
 end
 
 return onedark

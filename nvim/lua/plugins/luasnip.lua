@@ -26,7 +26,7 @@ function luasnip.config()
   map("s", "<Del>", "<C-O>c")
 
   -- Load snippets
-  vim.cmd("runtime snippets/snippets.lua")
+  vim.api.nvim_command("runtime snippets/snippets.lua")
 end
 
 return luasnip
