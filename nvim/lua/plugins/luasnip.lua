@@ -16,6 +16,13 @@ function luasnip.config()
   require("luasnip.config").setup({
     updateevents = "TextChanged,TextChangedI",
     store_selection_keys = "<C-H>",
+    parser_nested_assembler = function(pos, snip)
+      local i = require("luasnip").insert_node
+      local c = require("luasnip").choice_node
+      local snip_text = snip:get_static_text()
+      snip.pos = nil
+      return c(pos, { i(nil, snip_text), snip })
+    end,
   })
 
   -- Mappings
