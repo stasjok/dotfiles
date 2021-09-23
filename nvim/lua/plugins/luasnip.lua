@@ -14,6 +14,7 @@ end
 
 function luasnip.config()
   require("luasnip.config").setup({
+    updateevents = "TextChanged,TextChangedI",
     store_selection_keys = "<C-H>",
   })
 
