@@ -101,7 +101,7 @@ packer.startup({
     -- Snippets
     {
       "L3MON4D3/LuaSnip",
-      commit = "4a06572252f2d68b51e0bd7e89da22abde1729b4",
+      commit = "b113f7e66e7dad86acffc898ebd177242b5612a8",
       event = "InsertEnter",
       config = function()
         require("plugins.luasnip").config()
