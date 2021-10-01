@@ -1,10 +1,15 @@
 let
   nixpkgs-stable = fetchTarball {
-    name = "nixos-21.05.2518.97c5d0cbe76";
-    url = https://releases.nixos.org/nixos/21.05/nixos-21.05.2518.97c5d0cbe76/nixexprs.tar.xz;
-    sha256 = "1bwv2x2mkmpmmipqmjn9cz3m3k4vkb2lv4a8dpm13bmir92v54xh";
+    name = "nixos-21.05.3367.fd8a7fd07da";
+    url = https://releases.nixos.org/nixos/21.05/nixos-21.05.3367.fd8a7fd07da/nixexprs.tar.xz;
+    sha256 = "12p7v805xj5as2fbdh30i0b9iwy8y24sk256rgqfqylxj1784mn8";
   };
   nixpkgs-unstable = fetchTarball {
+    name = "nixpkgs-a0edb8ded4fa739b6d0017a66f60df6de0032be3";
+    url = https://github.com/NixOS/nixpkgs/archive/a0edb8ded4fa739b6d0017a66f60df6de0032be3.tar.gz;
+    sha256 = "1s209mq7hyh0g1wjfjjlglgh31vdn2yak7i32y5gjhrkgsp62ns2";
+  };
+  nixpkgs-unstable-for-vimplugins = fetchTarball {
     name = "nixpkgs-21.11pre309670.253aecf69ed";
     url = https://releases.nixos.org/nixpkgs/nixpkgs-21.11pre309670.253aecf69ed/nixexprs.tar.xz;
     sha256 = "1ppnpjbdvxwnzjrmxx4z50sa2ymznbl83aq0zij6v0ix1xgfsdx4";
@@ -17,6 +22,7 @@ let
 
   stable = import nixpkgs-stable { config = {}; overlays = []; };
   unstable = import nixpkgs-unstable { config = {}; overlays = []; };
+  vimplugins = import nixpkgs-unstable-for-vimplugins { config = {}; overlays = []; };
   nvim-ts-grammars = unstable.callPackage "${hurricanehrndz-nixcfg}/nix/pkgs/nvim-ts-grammars" { };
   my-node-packages = import ./nix/node-composition.nix { pkgs = stable; };
 
@@ -52,7 +58,7 @@ in with stable; {
   inherit (unstable.nodePackages)
     pyright
     ;
-  packer-nvim = unstable.vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
+  packer-nvim = vimplugins.vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
     # I need to change package name, because packer does :packadd packer.nvim
     pname = "packer.nvim";
     version = "2021-09-04";
@@ -63,7 +69,7 @@ in with stable; {
       sha256 = "1mavf0rwrlvwd9bmxj1nnyd32jqrzn4wpiman8wpakf5dcn1i8gb";
     };
   });
-  telescope-fzf-native-nvim = unstable.vimPlugins.telescope-fzf-native-nvim;
+  telescope-fzf-native-nvim = vimplugins.vimPlugins.telescope-fzf-native-nvim;
   nvim-treesitter-parsers = linkFarm "nvim-treesitter-parsers" (
     lib.attrsets.mapAttrsToList
       (name: drv:
