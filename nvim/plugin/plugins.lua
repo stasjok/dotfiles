@@ -26,7 +26,7 @@ packer.startup({
     "nanotee/luv-vimdocs",
 
     -- Libraries
-    { "nvim-lua/plenary.nvim", commit = "15c3cb9e6311dc1a875eacb9fc8df69ca48d7402" },
+    { "nvim-lua/plenary.nvim", commit = "6bb0e09030a7c2af19bf288088ca815228de9429" },
     { "tjdevries/lazy.nvim", commit = "238c1b9a661947b864a7d103f9d6b1f376c3b72f" },
 
     -- Color schemes
@@ -69,7 +69,7 @@ packer.startup({
     -- Autocompletion
     {
       "hrsh7th/nvim-cmp",
-      commit = "a8f62d2364d8bafa7d9c6247483a06aed88bdb73",
+      commit = "af70f40d2eb6db2121536c8df2e114af759df537",
       event = "InsertEnter",
       wants = "nvim-autopairs",
       config = function()
@@ -83,7 +83,7 @@ packer.startup({
         },
         {
           "hrsh7th/cmp-nvim-lsp",
-          commit = "9af212372c41e94d55603dea8ad9700f6c31573d",
+          commit = "f93a6cf9761b096ff2c28a4f0defe941a6ffffb5",
         },
         {
           "hrsh7th/cmp-path",
@@ -131,7 +131,7 @@ packer.startup({
     -- Configuration of language servers
     {
       "neovim/nvim-lspconfig",
-      commit = "71c241425fd7a84f0ae33ea1eb7c071f20499bcd",
+      commit = "507f8a570ac2b8b8dabdd0f62da3b3194bf822f8",
       config = function()
         require("plugins.lspconfig").config()
       end,
@@ -139,19 +139,19 @@ packer.startup({
         -- General language server
         {
           "jose-elias-alvarez/null-ls.nvim",
-          commit = "00b1cce2e089c01c3047ccdf60ce8709399791b9",
+          commit = "27d30e43b8ecd0623463ff8e71f7c1bb989b7e21",
         },
         -- Sumneko lua language server configuration
         { "folke/lua-dev.nvim", commit = "6a7abb62af1b6a4411a3f5ea5cf0cb6b47878cc0" },
         -- Signature help
-        { "ray-x/lsp_signature.nvim", commit = "3d090c73c735b99299e1344f5f6b6813c756f3bf" },
+        { "ray-x/lsp_signature.nvim", commit = "8f89ab239ef2569096b6805ea093a322985b8e4e" },
       },
     },
 
     -- Telescope
     {
       "nvim-telescope/telescope.nvim",
-      commit = "50e5e86ac37ee3989a0015d3934c5a961012990a",
+      commit = "440c598de419858a056e7d9d42a0a6829cd5bb05",
       cmd = "Telescope",
       keys = require("plugins.telescope").keys,
       module = "telescope",

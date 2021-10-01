@@ -22,7 +22,7 @@ end
 function cmp.config()
   ---@diagnostic disable-next-line: redefined-local
   local cmp = require("cmp")
-  local mapping = require("cmp.mapping")
+  local mapping = cmp.mapping
 
   cmp.setup({
     sources = {
