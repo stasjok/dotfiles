@@ -1,5 +1,6 @@
-local map_expr = require("map").map_expr
-local replace_termcodes_wrap = require("map").replace_termcodes_wrap
+local map = require("map").map
+local replace_termcodes = require("map").replace_termcodes
+local feedkeys = vim.api.nvim_feedkeys
 
 -- Russian layout
 vim.opt.langmap = {
@@ -71,23 +72,14 @@ vim.opt.langmap = {
   "ЯZ",
 }
 
----Toggles keymap. If disabled, it enables it. It enabled,
----it toggles it in insert modes and disables it in normal mode.
+---Enables russian-jcukenwin keymap if disabled, then toggles iminsert.
 ---@return nil
-local function toggle_keymap()
-  local mode = vim.api.nvim_get_mode().mode
-  local is_in_insert = mode == "i" or mode == "c"
-  if vim.opt.keymap._value == "" then
-    local extra_keys = ""
-    if is_in_insert then
-      extra_keys = "<C-^>"
-    end
-    return "<Cmd>set keymap=russian-jcukenwin<CR>" .. extra_keys
-  elseif is_in_insert then
-    return "<C-^>"
-  else
-    return "<Cmd>set keymap=<CR>"
+local function toggle_iminsert()
+  ---@diagnostic disable-next-line: undefined-field
+  if #vim.opt_local.keymap:get() == 0 then
+    vim.opt_local.keymap = "russian-jcukenwin"
   end
+  feedkeys(replace_termcodes("<C-^>"), "n", false)
 end
 
-map_expr({ "!", "n", "v" }, "<M-i>", replace_termcodes_wrap(toggle_keymap))
+map({ "!", "s" }, "<M-i>", toggle_iminsert)
