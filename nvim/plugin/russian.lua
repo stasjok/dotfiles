@@ -1,3 +1,6 @@
+local map_expr = require("map").map_expr
+local replace_termcodes_wrap = require("map").replace_termcodes_wrap
+
 -- Russian layout
 vim.opt.langmap = {
   "аf",
@@ -71,26 +74,20 @@ vim.opt.langmap = {
 ---Toggles keymap. If disabled, it enables it. It enabled,
 ---it toggles it in insert modes and disables it in normal mode.
 ---@return nil
-function _G._toggle_keymap()
+local function toggle_keymap()
   local mode = vim.api.nvim_get_mode().mode
-  local insert_modes = vim.tbl_contains({ "i", "c" }, mode)
+  local is_in_insert = mode == "i" or mode == "c"
   if vim.opt.keymap._value == "" then
     local extra_keys = ""
-    if insert_modes then
+    if is_in_insert then
       extra_keys = "<C-^>"
     end
-    return vim.api.nvim_replace_termcodes(
-      "<Cmd>set keymap=russian-jcukenwin<CR>" .. extra_keys,
-      true,
-      false,
-      true
-    )
-  elseif insert_modes then
-    return vim.api.nvim_replace_termcodes("<C-^>", true, false, true)
+    return "<Cmd>set keymap=russian-jcukenwin<CR>" .. extra_keys
+  elseif is_in_insert then
+    return "<C-^>"
   else
-    return vim.api.nvim_replace_termcodes("<Cmd>set keymap=<CR>", true, false, true)
+    return "<Cmd>set keymap=<CR>"
   end
 end
-for _, m in ipairs({ "i", "n", "v", "c" }) do
-  vim.api.nvim_set_keymap(m, "<M-i>", "v:lua._toggle_keymap()", { noremap = true, expr = true })
-end
+
+map_expr({ "!", "n", "v" }, "<M-i>", replace_termcodes_wrap(toggle_keymap))
