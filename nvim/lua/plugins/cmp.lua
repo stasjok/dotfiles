@@ -19,6 +19,26 @@ local function format_vim_item(entry, vim_item)
   return vim_item
 end
 
+---Returns a list of bufnrs suitable for cmp_buffer completion
+---@return number[]
+local function get_bufnrs()
+  -- Skip buffers with more lines than
+  local max_buf_size = 1000
+  local all_bufnrs = vim.api.nvim_list_bufs()
+  local current_bufnr = vim.api.nvim_get_current_buf()
+  local bufnrs = {}
+  for _, bufnr in ipairs(all_bufnrs) do
+    if
+      vim.api.nvim_buf_is_loaded(bufnr)
+        and vim.api.nvim_buf_line_count(bufnr) <= max_buf_size
+      or bufnr == current_bufnr
+    then
+      table.insert(bufnrs, bufnr)
+    end
+  end
+  return bufnrs
+end
+
 function cmp.config()
   ---@diagnostic disable-next-line: redefined-local
   local cmp = require("cmp")
@@ -29,7 +49,13 @@ function cmp.config()
       { name = "luasnip" },
       { name = "nvim_lsp" },
       { name = "path" },
-      { name = "buffer" },
+      {
+        name = "buffer",
+        opts = {
+          keyword_pattern = [[\%(-\?\d\+\%(\.\d\+\)\?\|[a-zA-ZА-яЁё_][0-9a-zA-ZА-яЁё_.-]\+\)]],
+          get_bufnrs = get_bufnrs,
+        },
+      },
     },
     confirmation = {
       default_behavior = cmp.ConfirmBehavior.Replace,
