@@ -1,51 +1,81 @@
 {
   "i": {
-    "prefix": "i",
+    "prefix": [
+      "i",
+      "и"
+    ],
     "body": "''${1:$TM_SELECTED_TEXT}''",
     "description": "Italic text"
   },
   "b": {
-    "prefix": "b",
+    "prefix": [
+      "b",
+      "б"
+    ],
     "body": "'''${1:$TM_SELECTED_TEXT}'''",
     "description": "Bold text"
   },
   "bi": {
-    "prefix": "bi",
+    "prefix": [
+      "bi",
+      "би"
+    ],
     "body": "'''''${1:$TM_SELECTED_TEXT}'''''",
     "description": "Bold and italic text"
   },
   "nowiki": {
-    "prefix": "nowiki",
+    "prefix": [
+      "nowiki",
+      "ноувики"
+    ],
     "body": "<nowiki>${1:$TM_SELECTED_TEXT}</nowiki>",
     "description": "Escape wiki markup"
   },
   "h2": {
-    "prefix": "h2",
+    "prefix": [
+      "h2",
+      "з2"
+    ],
     "body": "== ${1:$TM_SELECTED_TEXT} ==",
     "description": "Heading level 2"
   },
   "h3": {
-    "prefix": "h3",
+    "prefix": [
+      "h3",
+      "з3"
+    ],
     "body": "=== ${1:$TM_SELECTED_TEXT} ===",
     "description": "Heading level 3"
   },
   "h4": {
-    "prefix": "h4",
+    "prefix": [
+      "h4",
+      "з4"
+    ],
     "body": "==== ${1:$TM_SELECTED_TEXT} ====",
     "description": "Heading level 4"
   },
   "h5": {
-    "prefix": "h5",
+    "prefix": [
+      "h5",
+      "з5"
+    ],
     "body": "===== ${1:$TM_SELECTED_TEXT} =====",
     "description": "Heading level 5"
   },
   "h6": {
-    "prefix": "h6",
+    "prefix": [
+      "h6",
+      "з6"
+    ],
     "body": "====== ${1:$TM_SELECTED_TEXT} ======",
     "description": "Heading level 6"
   },
   "hl": {
-    "prefix": "hl",
+    "prefix": [
+      "hl",
+      "хл"
+    ],
     "body": "----",
     "description": "Horizontal rule"
   },
@@ -55,117 +85,186 @@
     "description": "Preformatted text"
   },
   "u": {
-    "prefix": "u",
+    "prefix": [
+      "u",
+      "ю"
+    ],
     "body": "<u>${1:$TM_SELECTED_TEXT}</u>",
     "description": "Underlined text"
   },
   "ins": {
-    "prefix": "ins",
+    "prefix": [
+      "ins",
+      "инс"
+    ],
     "body": "<ins>${1:$TM_SELECTED_TEXT}</ins>",
     "description": "Inserted text"
   },
   "s": {
-    "prefix": "s",
+    "prefix": [
+      "s",
+      "с"
+    ],
     "body": "<s>${1:$TM_SELECTED_TEXT}</s>",
     "description": "Struck-through text"
   },
   "del": {
-    "prefix": "del",
+    "prefix": [
+      "del",
+      "дел"
+    ],
     "body": "<del>${1:$TM_SELECTED_TEXT}</del>",
     "description": "Deleted text"
   },
   "code": {
-    "prefix": "code",
+    "prefix": [
+      "code",
+      "код"
+    ],
     "body": "<code>${1:$TM_SELECTED_TEXT}</code>",
     "description": "Source code"
   },
   "blockquote": {
-    "prefix": "blockquote",
+    "prefix": [
+      "blockquote",
+      "блокквоут"
+    ],
     "body": "<blockquote>${1:$TM_SELECTED_TEXT}</blockquote>",
     "description": "Blockquote"
   },
   "q": {
-    "prefix": "q",
+    "prefix": [
+      "q",
+      "к"
+    ],
     "body": "<q>${1:$TM_SELECTED_TEXT}</q>",
     "description": "Quotes"
   },
   "pre": {
-    "prefix": "pre",
+    "prefix": [
+      "pre",
+      "пре"
+    ],
     "body": "<pre>\n${1:$TM_SELECTED_TEXT}\n</pre>",
     "description": "Preformatted text"
   },
   "br": {
-    "prefix": "br",
+    "prefix": [
+      "br",
+      "бр"
+    ],
     "body": "<br />",
     "description": "Line break"
   },
   "nbs": {
-    "prefix": "nbs",
+    "prefix": [
+      "nbs",
+      "нбс"
+    ],
     "body": "&nbsp;",
     "description": "Non-breaking space"
   },
   "abbr": {
-    "prefix": "abbr",
+    "prefix": [
+      "abbr",
+      "аббр"
+    ],
     "body": "<abbr title=\"${2:meaning}\">${1:$TM_SELECTED_TEXT}</abbr>",
     "description": "Abbreviation"
   },
   "kbd": {
-    "prefix": "kbd",
+    "prefix": [
+      "kbd",
+      "кбд"
+    ],
     "body": "<kbd>${1:$TM_SELECTED_TEXT}</kbd>",
     "description": "Keyboard input"
   },
   "var": {
-    "prefix": "var",
+    "prefix": [
+      "var",
+      "вар"
+    ],
     "body": "<var>${1:$TM_SELECTED_TEXT}</var>",
     "description": "Variable name"
   },
   "samp": {
-    "prefix": "samp",
+    "prefix": [
+      "samp",
+      "сэмп"
+    ],
     "body": "<samp>${1:$TM_SELECTED_TEXT}</samp>",
     "description": "Sample output"
   },
   "strong": {
-    "prefix": "strong",
+    "prefix": [
+      "strong",
+      "стронг"
+    ],
     "body": "<strong>${1:$TM_SELECTED_TEXT}</strong>",
     "description": "Important text"
   },
   "em": {
-    "prefix": "em",
+    "prefix": [
+      "em",
+      "ем"
+    ],
     "body": "<em>${1:$TM_SELECTED_TEXT}</em>",
     "description": "Emphasized text"
   },
   "syn": {
-    "prefix": "syn",
+    "prefix": [
+      "syn",
+      "син"
+    ],
     "body": "<syntaxhighlight lang=\"${1:text}\">\n${2:$TM_SELECTED_TEXT}\n</syntaxhighlight>",
     "description": "Syntax Highlight"
   },
   "syni": {
-    "prefix": "syni",
+    "prefix": [
+      "syni",
+      "сини"
+    ],
     "body": "<syntaxhighlight lang=\"${1:text}\" inline=\"1\">${2:$TM_SELECTED_TEXT}</syntaxhighlight>",
     "description": "Inline Syntax Highlight"
   },
   "a": {
-    "prefix": "a",
+    "prefix": [
+      "a",
+      "а"
+    ],
     "body": "[[${1:${2:page#section}|$3}]]",
     "description": "Internal link"
   },
   "ae": {
-    "prefix": "ae",
+    "prefix": [
+      "ae",
+      "ае"
+    ],
     "body": "[${1:${2:url} $3}]",
     "description": "External link"
   },
   "redirect": {
-    "prefix": "redirect",
+    "prefix": [
+      "redirect",
+      "редирект"
+    ],
     "body": "#REDIRECT [[${1:page#section}]]",
     "description": "Redirect"
   },
   "category": {
-    "prefix": "category",
+    "prefix": [
+      "category",
+      "категория"
+    ],
     "body": "[[Category:${1:Name}]]",
     "description": "Category"
   },
   "t": {
-    "prefix": "t",
+    "prefix": [
+      "t",
+      "т"
+    ],
     "body": "{| class=\"wikitable\"\n$0\n|}",
     "description": "Table"
   },
