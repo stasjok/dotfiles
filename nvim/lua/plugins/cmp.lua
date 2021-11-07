@@ -1,4 +1,3 @@
-local map_expr = require("map").map_expr
 local replace_termcodes = require("map").replace_termcodes
 local completion_kinds = require("plugins.lspconfig.utils").completion_kinds
 
@@ -70,37 +69,31 @@ function cmp.config()
       format = format_vim_item,
     },
     mapping = {
-      ["<C-Y>"] = function()
-        if vim.fn.pumvisible() == 1 then
-          cmp.close()
-          -- Without extra key some keys like <C-N> / <C-P> doesn't work
-          vim.api.nvim_feedkeys(replace_termcodes("<C-Y>"), "n", false)
+      ["<Tab>"] = function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
         else
-          cmp.complete()
+          fallback()
         end
       end,
-      ["<C-E>"] = function()
-        if vim.fn.pumvisible() == 1 then
-          cmp.abort()
+      ["<S-Tab>"] = function()
+        if cmp.visible() then
+          cmp.select_prev_item()
+        else
+          vim.api.nvim_feedkeys(replace_termcodes("<C-D>"), "n", false)
         end
       end,
       ["<CR>"] = mapping.confirm(),
       ["<M-CR>"] = mapping.confirm({
         behavior = cmp.ConfirmBehavior.Insert,
       }),
-      ["<M-d>"] = mapping.scroll_docs(8),
-      ["<M-u>"] = mapping.scroll_docs(-8),
+      ["<M-d>"] = mapping(mapping.scroll_docs(8), { "i", "c" }),
+      ["<M-u>"] = mapping(mapping.scroll_docs(-8), { "i", "c" }),
     },
   })
 
   -- Automatically insert brackets for functions and methods
-  require("nvim-autopairs.completion.cmp").setup({
-    map_complete = true,
-  })
-
-  -- Mappings
-  map_expr("i", "<Tab>", "pumvisible() ? '<C-N>' : '<Tab>'")
-  map_expr("i", "<S-Tab>", "pumvisible() ? '<C-P>' : '<C-D>'")
+  cmp.event:on("confirm_done", require("nvim-autopairs.completion.cmp").on_confirm_done())
 end
 
 return cmp

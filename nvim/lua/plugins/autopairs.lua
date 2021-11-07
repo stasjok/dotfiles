@@ -1,4 +1,3 @@
-local map_expr = require("map").map_expr
 local autopairs = {}
 
 function autopairs.config()
@@ -51,8 +50,6 @@ function autopairs.config()
       :with_del(cond.none())
       :use_key("]"),
   })
-
-  map_expr("i", "<CR>", [[luaeval("require('nvim-autopairs').autopairs_cr()")]])
 end
 
 return autopairs
