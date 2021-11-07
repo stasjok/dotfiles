@@ -83,12 +83,12 @@ packer.startup({
         },
         {
           "hrsh7th/cmp-nvim-lsp",
-          commit = "f93a6cf9761b096ff2c28a4f0defe941a6ffffb5",
+          commit = "accbe6d97548d8d3471c04d512d36fa61d0e4be8",
         },
         {
           "hrsh7th/cmp-path",
           after = "nvim-cmp",
-          commit = "48df45154ee644edf1b955d325be60928dd28d47",
+          commit = "97661b00232a2fe145fe48e295875bc3299ed1f7",
         },
         {
           "hrsh7th/cmp-buffer",
