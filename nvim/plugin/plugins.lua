@@ -95,6 +95,11 @@ packer.startup({
           after = "nvim-cmp",
           commit = "d1ca295ce584ec80763a6dc043080874b57ccffc",
         },
+        {
+          "hrsh7th/cmp-cmdline",
+          after = "nvim-cmp",
+          commit = "a5cf11a8cd3a99294bc78e609d7c9323fef88831",
+        },
       },
     },
 

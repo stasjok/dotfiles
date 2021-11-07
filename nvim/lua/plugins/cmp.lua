@@ -92,6 +92,12 @@ function cmp.config()
     },
   })
 
+  cmp.setup.cmdline(":", {
+    sources = {
+      { name = "cmdline" },
+    },
+  })
+
   -- Automatically insert brackets for functions and methods
   cmp.event:on("confirm_done", require("nvim-autopairs.completion.cmp").on_confirm_done())
 end
