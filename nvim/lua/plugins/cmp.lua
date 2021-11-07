@@ -103,7 +103,7 @@ function cmp.config()
       ["<M-CR>"] = mapping.confirm({
         behavior = cmp.ConfirmBehavior.Insert,
       }),
-      ["<C-Y>"] = mapping(function()
+      ["<C-y>"] = mapping(function()
         if cmp.visible() then
           cmp.confirm()
         else
@@ -113,7 +113,7 @@ function cmp.config()
         "i",
         "c",
       }),
-      ["<C-E>"] = mapping(function()
+      ["<C-e>"] = mapping(function()
         if cmp.visible() then
           cmp.abort()
         end
