@@ -1,4 +1,4 @@
-local replace_termcodes = require("map").replace_termcodes
+local feedkeys = require("map").feedkeys
 local completion_kinds = require("plugins.lspconfig.utils").completion_kinds
 
 local cmp = {}
@@ -90,7 +90,7 @@ function cmp.config()
           if cmp.visible() then
             cmp.select_prev_item()
           else
-            vim.api.nvim_feedkeys(replace_termcodes("<C-D>"), "n", false)
+            feedkeys("<C-D>", "n")
           end
         end,
         c = function()
