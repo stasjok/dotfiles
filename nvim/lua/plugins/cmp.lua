@@ -69,20 +69,36 @@ function cmp.config()
       format = format_vim_item,
     },
     mapping = {
-      ["<Tab>"] = function(fallback)
-        if cmp.visible() then
-          cmp.select_next_item()
-        else
-          fallback()
-        end
-      end,
-      ["<S-Tab>"] = function()
-        if cmp.visible() then
-          cmp.select_prev_item()
-        else
-          vim.api.nvim_feedkeys(replace_termcodes("<C-D>"), "n", false)
-        end
-      end,
+      ["<Tab>"] = mapping({
+        i = function(fallback)
+          if cmp.visible() then
+            cmp.select_next_item()
+          else
+            fallback()
+          end
+        end,
+        c = function()
+          if cmp.visible() then
+            cmp.select_next_item()
+          else
+            cmp.complete()
+          end
+        end,
+      }),
+      ["<S-Tab>"] = mapping({
+        i = function()
+          if cmp.visible() then
+            cmp.select_prev_item()
+          else
+            vim.api.nvim_feedkeys(replace_termcodes("<C-D>"), "n", false)
+          end
+        end,
+        c = function()
+          if cmp.visible() then
+            cmp.select_prev_item()
+          end
+        end,
+      }),
       ["<CR>"] = mapping.confirm(),
       ["<M-CR>"] = mapping.confirm({
         behavior = cmp.ConfirmBehavior.Insert,
