@@ -8,6 +8,7 @@ local completion_menu_map = {
   nvim_lsp = "[LSP]",
   path = "[Path]",
   buffer = "[Buf]",
+  cmdline = "[Cmd]",
 }
 
 local function format_vim_item(entry, vim_item)
