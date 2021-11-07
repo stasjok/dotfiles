@@ -131,6 +131,7 @@ function cmp.config()
   cmp.setup.cmdline(":", {
     sources = {
       { name = "cmdline" },
+      { name = "path" },
     },
   })
 
