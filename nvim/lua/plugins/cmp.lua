@@ -103,6 +103,8 @@ function cmp.config()
       ["<M-CR>"] = mapping.confirm({
         behavior = cmp.ConfirmBehavior.Insert,
       }),
+      ["<C-Y>"] = mapping(mapping.confirm(), { "i", "c" }),
+      ["<C-E>"] = mapping(mapping.abort(), { "i", "c" }),
       ["<M-d>"] = mapping(mapping.scroll_docs(8), { "i", "c" }),
       ["<M-u>"] = mapping(mapping.scroll_docs(-8), { "i", "c" }),
     },
