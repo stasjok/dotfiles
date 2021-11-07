@@ -105,6 +105,8 @@ function cmp.config()
       }),
       ["<C-Y>"] = mapping(mapping.confirm(), { "i", "c" }),
       ["<C-E>"] = mapping(mapping.abort(), { "i", "c" }),
+      ["<C-N>"] = mapping.select_next_item(),
+      ["<C-P>"] = mapping.select_prev_item(),
       ["<M-d>"] = mapping(mapping.scroll_docs(8), { "i", "c" }),
       ["<M-u>"] = mapping(mapping.scroll_docs(-8), { "i", "c" }),
     },
