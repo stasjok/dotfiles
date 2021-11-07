@@ -32,7 +32,7 @@ packer.startup({
     -- Color schemes
     {
       "ful1e5/onedark.nvim",
-      commit = "2c72dd54888dbc2b41195f692f17756f0a7dab7b",
+      commit = "35515a794cc426f561ddf4af402355fba762c4cb",
       config = function()
         require("plugins.onedark").config()
       end,

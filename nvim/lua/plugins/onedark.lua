@@ -1,11 +1,19 @@
 local onedark = {}
 
 function onedark.config()
-  require("onedark").setup({
-    keywordStyle = "NONE",
+  -- Apply configuration
+  require("onedark.config").apply_configuration({
+    keyword_style = "NONE",
+    function_style = "NONE",
   })
-  -- Restore TelescopeMatching highlight to default
-  vim.api.nvim_command("highlight! link TelescopeMatching Special")
+  -- Load colors
+  local theme = require("onedark.theme").setup(require("onedark.config").config)
+
+  -- Modify theme
+  theme.plugins.TelescopeMatching = { link = "Special" }
+
+  -- Apply colorscheme
+  require("onedark.util").load(theme)
 end
 
 return onedark
