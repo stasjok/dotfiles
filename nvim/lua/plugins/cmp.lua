@@ -24,19 +24,20 @@ end
 local function get_bufnrs()
   -- Skip buffers with more lines than
   local max_buf_size = 1000
-  local all_bufnrs = vim.api.nvim_list_bufs()
-  local current_bufnr = vim.api.nvim_get_current_buf()
-  local bufnrs = {}
-  for _, bufnr in ipairs(all_bufnrs) do
+  local result = {}
+  local cur_buf = vim.api.nvim_get_current_buf()
+  local all_bufs = vim.api.nvim_list_bufs()
+  for i = 1, #all_bufs do
+    local buf = all_bufs[i]
     if
-      vim.api.nvim_buf_is_loaded(bufnr)
-        and vim.api.nvim_buf_line_count(bufnr) <= max_buf_size
-      or bufnr == current_bufnr
+      vim.api.nvim_buf_get_option(buf, "buflisted")
+        and vim.api.nvim_buf_line_count(buf) <= max_buf_size
+      or buf == cur_buf
     then
-      table.insert(bufnrs, bufnr)
+      table.insert(result, buf)
     end
   end
-  return bufnrs
+  return result
 end
 
 function cmp.config()
