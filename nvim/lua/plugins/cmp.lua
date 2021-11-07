@@ -121,8 +121,22 @@ function cmp.config()
         "i",
         "c",
       }),
-      ["<C-N>"] = mapping.select_next_item(),
-      ["<C-P>"] = mapping.select_prev_item(),
+      ["<C-n>"] = mapping({
+        i = mapping.select_next_item(),
+        c = function(fallback)
+          cmp.close()
+          vim.schedule(cmp.suspend())
+          fallback()
+        end,
+      }),
+      ["<C-p>"] = mapping({
+        i = mapping.select_prev_item(),
+        c = function(fallback)
+          cmp.close()
+          vim.schedule(cmp.suspend())
+          fallback()
+        end,
+      }),
       ["<M-d>"] = mapping(mapping.scroll_docs(8), { "i", "c" }),
       ["<M-u>"] = mapping(mapping.scroll_docs(-8), { "i", "c" }),
     },
