@@ -60,7 +60,6 @@ packer.startup({
     {
       "windwp/nvim-autopairs",
       commit = "f858ab38b532715dbaf7b2773727f8622ba04322",
-      event = "InsertEnter",
       config = function()
         require("plugins.autopairs").config()
       end,
@@ -70,15 +69,12 @@ packer.startup({
     {
       "hrsh7th/nvim-cmp",
       commit = "1774ff0f842146521c63707245d3de5db2bb3732",
-      event = "InsertEnter",
-      wants = "nvim-autopairs",
       config = function()
         require("plugins.cmp").config()
       end,
       requires = {
         {
           "saadparwaiz1/cmp_luasnip",
-          after = "nvim-cmp",
           commit = "16832bb50e760223a403ffa3042859845dd9ef9d",
         },
         {
@@ -87,17 +83,14 @@ packer.startup({
         },
         {
           "hrsh7th/cmp-path",
-          after = "nvim-cmp",
           commit = "97661b00232a2fe145fe48e295875bc3299ed1f7",
         },
         {
           "hrsh7th/cmp-buffer",
-          after = "nvim-cmp",
           commit = "d1ca295ce584ec80763a6dc043080874b57ccffc",
         },
         {
           "hrsh7th/cmp-cmdline",
-          after = "nvim-cmp",
           commit = "a5cf11a8cd3a99294bc78e609d7c9323fef88831",
         },
       },
@@ -107,7 +100,6 @@ packer.startup({
     {
       "L3MON4D3/LuaSnip",
       commit = "bab7cc2c32fba00776d2f2fc4704bed4eee2d082",
-      event = "InsertEnter",
       config = function()
         require("plugins.luasnip").config()
       end,
