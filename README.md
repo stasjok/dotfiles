@@ -37,4 +37,4 @@ You may need to edit `/etc/shells`.
 
 ## Nvim
 
-Run command `:Plugins` in neovim after first startup.
+Run command `:PackerSync` in neovim after first startup. Then restart neovim.
