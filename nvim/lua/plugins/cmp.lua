@@ -70,21 +70,15 @@ function cmp.config()
       format = format_vim_item,
     },
     mapping = {
-      ["<Tab>"] = mapping({
-        i = function(fallback)
-          if cmp.visible() then
-            cmp.select_next_item()
-          else
-            fallback()
-          end
-        end,
-        c = function()
-          if cmp.visible() then
-            cmp.select_next_item()
-          else
-            cmp.complete()
-          end
-        end,
+      ["<Tab>"] = mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        else
+          fallback()
+        end
+      end, {
+        "i",
+        "c",
       }),
       ["<S-Tab>"] = mapping({
         i = function()
@@ -94,9 +88,11 @@ function cmp.config()
             feedkeys("<C-D>", "n")
           end
         end,
-        c = function()
+        c = function(fallback)
           if cmp.visible() then
             cmp.select_prev_item()
+          else
+            fallback()
           end
         end,
       }),
