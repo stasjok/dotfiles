@@ -106,4 +106,18 @@ in with stable; {
       sha256 = "0i600gy8qigkd693pd13vmm9knsvggpjpidyhr650xj75i6bbn7m";
     };
   });
+  rnix-lsp = unstable.rnix-lsp.overrideAttrs (oldAttrs: rec {
+    version = "2021-11-15+9462b0d";
+    src = fetchFromGitHub {
+      owner = "nix-community";
+      repo = "rnix-lsp";
+      rev = "9462b0d20325a06f7e43b5a0469ec2c92e60f5fe";
+      sha256 = "0mhzm4k7jkrq8r06mi49i04zvg0j1j6b54aqwyy104k8l32802d5";
+    };
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      inherit src;
+      name = "rnix-lsp-${version}-vendor.tar.gz";
+      hash = "sha256:0fpzmp5cnj3s1x5xnp2ffxkwlgyrmfmkgz0k23b2b0rpl94d1x17";
+    };
+  });
 } // my-node-packages
