@@ -41,6 +41,7 @@ function lspconfig.config()
     "ansiblels",
     "jsonls",
     "pyright",
+    "rnix",
   }
 
   -- Default language server configuration
