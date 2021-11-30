@@ -1,13 +1,19 @@
 let
   nixpkgs-stable = fetchTarball {
-    name = "nixos-21.05.3367.fd8a7fd07da";
-    url = https://releases.nixos.org/nixos/21.05/nixos-21.05.3367.fd8a7fd07da/nixexprs.tar.xz;
-    sha256 = "12p7v805xj5as2fbdh30i0b9iwy8y24sk256rgqfqylxj1784mn8";
+    # Released on 2021-11-29 21:50:19 from Git commit
+    # https://github.com/NixOS/nixpkgs/commits/2553aee74fed8c2205a4aeb3ffd206ca14ede60f
+    # via Hydra evaluation https://hydra.nixos.org/eval/1726412
+    name = "nixos-21.05.4394.2553aee74fe";
+    url = "https://releases.nixos.org/nixos/21.05/nixos-21.05.4394.2553aee74fe/nixexprs.tar.xz";
+    sha256 = "1zp2wx9mqb7m3rixsd1pz6z11pfakny87m537nnlvl9axjf1mj1b";
   };
   nixpkgs-unstable = fetchTarball {
-    name = "nixpkgs-a0edb8ded4fa739b6d0017a66f60df6de0032be3";
-    url = https://github.com/NixOS/nixpkgs/archive/a0edb8ded4fa739b6d0017a66f60df6de0032be3.tar.gz;
-    sha256 = "1s209mq7hyh0g1wjfjjlglgh31vdn2yak7i32y5gjhrkgsp62ns2";
+    # Released on 2021-11-29 20:21:59 from Git commit
+    # https://github.com/NixOS/nixpkgs/commits/f366af7a1b3891d9370091ab03150d3a6ee138fa
+    # via Hydra evaluation https://hydra.nixos.org/eval/1726352
+    name = "nixpkgs-22.05pre334669.f366af7a1b3";
+    url = "https://releases.nixos.org/nixpkgs/nixpkgs-22.05pre334669.f366af7a1b3/nixexprs.tar.xz";
+    sha256 = "1ikwfziw382fd3vbhljlf4hkiwjpg2c64dmfd6hcqqi9dzswq35y";
   };
   nixpkgs-unstable-for-vimplugins = fetchTarball {
     name = "nixpkgs-21.11pre309670.253aecf69ed";
