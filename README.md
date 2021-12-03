@@ -11,10 +11,13 @@ I use [Windows Terminal](https://github.com/microsoft/terminal) and `FiraCode NF
 
 ## Packages
 
-Install Nix (https://nixos.org/manual/nix/stable/#chap-installation), then:
+Install Nix 2.4 and later (https://nixos.org/manual/nix/stable/#chap-installation),
+then follow the instructions from [My Nix flake](https://github.com/stasjok/flake).
+
+In order to upgrade packages:
 
 ```
-nix-env --install --remove-all --file packages.nix
+nix profile upgrade defaultPackage.x86_64-linux
 ```
 
 ## Installation

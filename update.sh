@@ -12,7 +12,7 @@ if [[ $1 != --no-pull ]]; then
     exec ./"$script_name" --no-pull
 fi
 
-nix-env --install --remove-all --file packages.nix
+nix profile upgrade defaultPackage.x86_64-linux
 
 ansible-playbook install.yml --extra-vars "force=False"
 
