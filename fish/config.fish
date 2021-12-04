@@ -31,6 +31,11 @@ if status is-login
         contains ~/.nix-profile/share $XDG_DATA_DIRS
         or set XDG_DATA_DIRS ~/.nix-profile/share $XDG_DATA_DIRS
     end
+    # Add nix-profile to manpath
+    set -q MANPATH
+    or set --universal --export MANPATH (manpath -q)
+    contains ~/.nix-profile/share/man $MANPATH
+    or set MANPATH ~/.nix-profile/share/man $MANPATH
     # Set up ssh-agent
     find_ssh_agent
     # Load Solarized Theme
