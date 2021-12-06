@@ -1,8 +1,6 @@
 local treesitter = {}
 
 function treesitter.config()
-  -- Add parsers from nix to rtp
-  vim.api.nvim_command("packadd nvim-treesitter-parsers")
   require("nvim-treesitter.configs").setup({
     highlight = {
       enable = true,

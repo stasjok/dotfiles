@@ -1,5 +1,3 @@
-vim.api.nvim_command("packadd packer.nvim")
-
 local packer = require("packer")
 local join_paths = require("packer.util").join_paths
 
