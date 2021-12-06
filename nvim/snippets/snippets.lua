@@ -15,4 +15,4 @@ local ls = require("luasnip")
 
 ls.snippets = {}
 
-require("luasnip.loaders.from_vscode").load({ paths = "./snippets" })
+require("luasnip.loaders.from_vscode").load({ paths = "~/.config/nvim/snippets" })
