@@ -75,7 +75,7 @@ packer.startup({
     -- Autocompletion
     {
       "hrsh7th/nvim-cmp",
-      commit = "1774ff0f842146521c63707245d3de5db2bb3732",
+      commit = "d12ba90da372bfe5d9a103546ce1553341a2daff",
       config = function()
         require("plugins.cmp").config()
       end,
@@ -94,11 +94,11 @@ packer.startup({
         },
         {
           "hrsh7th/cmp-buffer",
-          commit = "d1ca295ce584ec80763a6dc043080874b57ccffc",
+          commit = "a706dc69c49110038fe570e5c9c33d6d4f67015b",
         },
         {
           "hrsh7th/cmp-cmdline",
-          commit = "0ca73c3a50b72c2ca168d8904b39aba34d0c4227",
+          commit = "29ca81a6f0f288e6311b3377d9d9684d22eac2ec",
         },
       },
     },
@@ -125,7 +125,7 @@ packer.startup({
     -- Configuration of language servers
     {
       "neovim/nvim-lspconfig",
-      commit = "507f8a570ac2b8b8dabdd0f62da3b3194bf822f8",
+      commit = "22b21bc000a8320675ea10f4f50f1bbd48d09ff2",
       config = function()
         require("plugins.lspconfig").config()
       end,
@@ -133,7 +133,7 @@ packer.startup({
         -- General language server
         {
           "jose-elias-alvarez/null-ls.nvim",
-          commit = "27d30e43b8ecd0623463ff8e71f7c1bb989b7e21",
+          commit = "214451829add4f050d9d94710a9112e6cdca3e03",
         },
         -- Sumneko lua language server configuration
         { "folke/lua-dev.nvim", commit = "6a7abb62af1b6a4411a3f5ea5cf0cb6b47878cc0" },
