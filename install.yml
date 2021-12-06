@@ -38,18 +38,6 @@
         src: "{{ playbook_dir }}/nvim"
         state: link
 
-    - name: make directory for vim plugins from nix
-      file:
-        path: ~/.local/share/nvim/site/pack/nix
-        mode: 0755
-        state: directory
-
-    - name: make symlink pointing to vim plugins from nix
-      file:
-        path: ~/.local/share/nvim/site/pack/nix/opt
-        src: ~/.nix-profile/share/vim-plugins
-        state: link
-
     - name: make symlink for fish configuration
       file:
         path: ~/.config/fish
@@ -68,3 +56,9 @@
         path: ~/.config/git
         src: "{{ playbook_dir }}/git"
         state: link
+
+    - name: remove obsolete directory for vim plugins from nix
+      file:
+        path: ~/.local/share/nvim/site/pack/nix
+        mode: 0755
+        state: absent
