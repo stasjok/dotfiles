@@ -1,6 +1,15 @@
 local packer = require("packer")
 local join_paths = require("packer.util").join_paths
 
+--
+-- Plugins managed by Nix
+--
+-- Tree-sitter
+require("plugins.treesitter").config()
+
+--
+-- Plugins managed by Packer
+--
 packer.startup({
 
   -- Packer configuration
@@ -111,16 +120,6 @@ packer.startup({
         { "n", "gc" },
         { "x", "gc" },
       },
-    },
-
-    -- Tree-sitter
-    {
-      "nvim-treesitter/nvim-treesitter",
-      branch = "0.5-compat",
-      commit = "27f5e99cdd1b4e7f6a5cc30016d990ebf81a561c",
-      config = function()
-        require("plugins.treesitter").config()
-      end,
     },
 
     -- Configuration of language servers
