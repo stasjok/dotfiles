@@ -60,5 +60,4 @@
     - name: remove obsolete directory for vim plugins from nix
       file:
         path: ~/.local/share/nvim/site/pack/nix
-        mode: 0755
         state: absent
