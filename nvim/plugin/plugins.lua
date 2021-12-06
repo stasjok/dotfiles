@@ -82,7 +82,7 @@ packer.startup({
       requires = {
         {
           "saadparwaiz1/cmp_luasnip",
-          commit = "16832bb50e760223a403ffa3042859845dd9ef9d",
+          commit = "75bf6434f175206cd219f9d2bbcae154a009346c",
         },
         {
           "hrsh7th/cmp-nvim-lsp",
@@ -106,7 +106,7 @@ packer.startup({
     -- Snippets
     {
       "L3MON4D3/LuaSnip",
-      commit = "a13420343687ca9476eaf53fc2636aa954daa717",
+      commit = "052807223ba4d9babb412f12f08da0b34bc083cf",
       config = function()
         require("plugins.luasnip").config()
       end,
