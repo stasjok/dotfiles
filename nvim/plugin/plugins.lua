@@ -51,12 +51,13 @@ packer.startup({
     -- Text objects surrounding
     {
       "blackCauldron7/surround.nvim",
-      commit = "5c7fd08947968c296f37f1dad2ecbda52dd05792",
+      commit = "a21c3eeee2f139d20694ff70135b3557cadece1c",
       keys = {
         { "n", "ys" },
         { "n", "cs" },
         { "n", "ds" },
         { "n", "cq" },
+        { "v", "<Leader>s" },
       },
       config = function()
         require("plugins.surround").config()

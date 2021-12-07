@@ -11,6 +11,7 @@ function surround.config()
   map("n", "cs", "<Cmd>lua require('surround').surround_replace()<CR>")
   map("n", "ds", "<Cmd>lua require('surround').surround_delete()<CR>")
   map("n", "cq", "<Cmd>lua require('surround').toggle_quotes()<CR>")
+  map("v", "<Leader>s", "<Esc>gv<Cmd>lua require'surround'.surround_add()<CR>")
 end
 
 return surround
