@@ -38,7 +38,7 @@
         "path": "./snippets.json"
       },
       {
-        "language": "gitcommit",
+        "language": ["gitcommit", "NeogitCommitMessage"],
         "path": "./gitcommit.json"
       }
     ]
