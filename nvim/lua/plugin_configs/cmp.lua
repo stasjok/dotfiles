@@ -100,7 +100,7 @@ function cmp.config()
       ["<M-CR>"] = mapping.confirm({
         behavior = cmp.ConfirmBehavior.Insert,
       }),
-      ["<C-y>"] = mapping(function()
+      ["<C-Y>"] = mapping(function()
         if cmp.visible() then
           cmp.confirm()
         else
@@ -110,7 +110,7 @@ function cmp.config()
         "i",
         "c",
       }),
-      ["<C-e>"] = mapping(function()
+      ["<C-E>"] = mapping(function()
         if cmp.visible() then
           cmp.abort()
         end
@@ -118,7 +118,7 @@ function cmp.config()
         "i",
         "c",
       }),
-      ["<C-n>"] = mapping({
+      ["<C-N>"] = mapping({
         i = mapping.select_next_item(),
         c = function(fallback)
           cmp.close()
@@ -126,7 +126,7 @@ function cmp.config()
           fallback()
         end,
       }),
-      ["<C-p>"] = mapping({
+      ["<C-P>"] = mapping({
         i = mapping.select_prev_item(),
         c = function(fallback)
           cmp.close()
