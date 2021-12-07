@@ -143,7 +143,7 @@ packer.startup({
           commit = "214451829add4f050d9d94710a9112e6cdca3e03",
         },
         -- Sumneko lua language server configuration
-        { "folke/lua-dev.nvim", commit = "6a7abb62af1b6a4411a3f5ea5cf0cb6b47878cc0" },
+        { "folke/lua-dev.nvim", commit = "1933c7e014e69484572b7fa1bf73bc51c42f10f4" },
         -- Signature help
         { "ray-x/lsp_signature.nvim", commit = "8f89ab239ef2569096b6805ea093a322985b8e4e" },
       },
