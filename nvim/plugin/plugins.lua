@@ -31,8 +31,7 @@ packer.startup({
     "nanotee/luv-vimdocs",
 
     -- Libraries
-    { "nvim-lua/plenary.nvim", commit = "6bb0e09030a7c2af19bf288088ca815228de9429" },
-    { "tjdevries/lazy.nvim", commit = "238c1b9a661947b864a7d103f9d6b1f376c3b72f" },
+    { "nvim-lua/plenary.nvim", commit = "c2bb2d8fd5b44bfc6aad3a5463c84576a98dd4a9" },
 
     -- Optimisations for loading Lua modules
     { "lewis6991/impatient.nvim", commit = "282b99b817d61e6c6860addf5629b641925a937a" },
