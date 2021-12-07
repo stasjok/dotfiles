@@ -167,7 +167,7 @@ packer.startup({
     -- Git signs
     {
       "lewis6991/gitsigns.nvim",
-      commit = "daa233aabb4dbc7c870ea7300bcfeef96d49c2a3",
+      commit = "5eb87a0b05914d3763277ebe257bd5bafcdde8cd",
       config = function()
         require("plugins.gitsigns").config()
       end,
