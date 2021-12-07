@@ -41,7 +41,7 @@ packer.startup({
       "ful1e5/onedark.nvim",
       commit = "af8e8fc727c9b3b5db09f433d129e659c57f2972",
       config = function()
-        require("plugins.onedark").config()
+        require("plugin_configs.onedark").config()
       end,
     },
 
@@ -60,7 +60,7 @@ packer.startup({
         { "v", "<Leader>s" },
       },
       config = function()
-        require("plugins.surround").config()
+        require("plugin_configs.surround").config()
       end,
     },
 
@@ -69,7 +69,7 @@ packer.startup({
       "windwp/nvim-autopairs",
       commit = "18fe311bb967d16ddf2cc28e7e71f234c37d3e26",
       config = function()
-        require("plugins.autopairs").config()
+        require("plugin_configs.autopairs").config()
       end,
     },
 
@@ -78,7 +78,7 @@ packer.startup({
       "hrsh7th/nvim-cmp",
       commit = "d12ba90da372bfe5d9a103546ce1553341a2daff",
       config = function()
-        require("plugins.cmp").config()
+        require("plugin_configs.cmp").config()
       end,
       requires = {
         {
@@ -109,7 +109,7 @@ packer.startup({
       "L3MON4D3/LuaSnip",
       commit = "052807223ba4d9babb412f12f08da0b34bc083cf",
       config = function()
-        require("plugins.luasnip").config()
+        require("plugin_configs.luasnip").config()
       end,
     },
 
@@ -128,7 +128,7 @@ packer.startup({
       "nvim-treesitter/nvim-treesitter",
       commit = "1d66657e6d0f1f8f79ddc48ff1dac9788694cc2d",
       config = function()
-        require("plugins.treesitter").config()
+        require("plugin_configs.treesitter").config()
       end,
     },
 
@@ -137,7 +137,7 @@ packer.startup({
       "neovim/nvim-lspconfig",
       commit = "22b21bc000a8320675ea10f4f50f1bbd48d09ff2",
       config = function()
-        require("plugins.lspconfig").config()
+        require("plugin_configs.lspconfig").config()
       end,
       requires = {
         -- General language server
@@ -157,10 +157,10 @@ packer.startup({
       "nvim-telescope/telescope.nvim",
       commit = "6b1579741a0e8f1e0e63d0c6c364b968c157338e",
       cmd = "Telescope",
-      keys = require("plugins.telescope").keys,
+      keys = require("plugin_configs.telescope").keys,
       module = "telescope",
       config = function()
-        require("plugins.telescope").config()
+        require("plugin_configs.telescope").config()
       end,
     },
 
@@ -169,7 +169,7 @@ packer.startup({
       "lewis6991/gitsigns.nvim",
       commit = "5eb87a0b05914d3763277ebe257bd5bafcdde8cd",
       config = function()
-        require("plugins.gitsigns").config()
+        require("plugin_configs.gitsigns").config()
       end,
     },
 
@@ -181,7 +181,7 @@ packer.startup({
       keys = { { "n", "<Leader>g" } },
       wants = "diffview.nvim",
       config = function()
-        require("plugins.neogit").config()
+        require("plugin_configs.neogit").config()
       end,
     },
 
@@ -191,7 +191,7 @@ packer.startup({
       commit = "a603c236bf6212d33011f5e81c89c504b4aec929",
       cmd = { "DiffviewOpen", "DiffviewFileHistory" },
       config = function()
-        require("plugins.diffview").config()
+        require("plugin_configs.diffview").config()
       end,
     },
 
@@ -200,7 +200,7 @@ packer.startup({
       "editorconfig/editorconfig-vim",
       commit = "3078cd10b28904e57d878c0d0dab42aa0a9fdc89",
       config = function()
-        require("plugins.editorconfig").config()
+        require("plugin_configs.editorconfig").config()
       end,
     },
 
@@ -208,9 +208,9 @@ packer.startup({
     {
       "aserowy/tmux.nvim",
       commit = "71982a15c44d41795d17ce79d381032fdaf71a69",
-      keys = require("plugins.tmux").keys,
+      keys = require("plugin_configs.tmux").keys,
       config = function()
-        require("plugins.tmux").config()
+        require("plugin_configs.tmux").config()
       end,
     },
 
@@ -225,7 +225,7 @@ packer.startup({
       "Glench/Vim-Jinja2-Syntax",
       commit = "2c17843b074b06a835f88587e1023ceff7e2c7d1",
       config = function()
-        require("plugins.jinja").config()
+        require("plugin_configs.jinja").config()
       end,
     },
 
@@ -234,7 +234,7 @@ packer.startup({
       "pearofducks/ansible-vim",
       commit = "40e28ee318b968c09a1724cd25cd450330b136c9",
       config = function()
-        require("plugins.ansible").config()
+        require("plugin_configs.ansible").config()
       end,
     },
 
@@ -246,7 +246,7 @@ packer.startup({
       "chikamichi/mediawiki.vim",
       commit = "26e5737264354be41cb11d16d48132779795e168",
       config = function()
-        require("plugins.mediawiki").config()
+        require("plugin_configs.mediawiki").config()
       end,
     },
   },

@@ -29,7 +29,7 @@ function utils.on_attach(client, bufnr)
   vim.cmd([[
 augroup ShowDiagnostics
   autocmd! * <buffer>
-  autocmd CursorHold,CursorHoldI <buffer> lua require("plugins.lspconfig.utils").show_diagnostics()
+  autocmd CursorHold,CursorHoldI <buffer> lua require("plugin_configs.lspconfig.utils").show_diagnostics()
 augroup END]])
 
   -- Document highlight

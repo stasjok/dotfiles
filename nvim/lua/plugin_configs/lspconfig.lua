@@ -1,4 +1,4 @@
-local utils = require("plugins.lspconfig.utils")
+local utils = require("plugin_configs.lspconfig.utils")
 
 local lspconfig = {}
 
@@ -9,7 +9,7 @@ function lspconfig.config()
 
   -- Configuration of null-ls
   require("null-ls").config({
-    sources = require("plugins.null-ls").sources,
+    sources = require("plugin_configs.null-ls").sources,
   })
 
   -- List of configured language servers
@@ -33,7 +33,7 @@ function lspconfig.config()
   }
 
   for _, lsp_server in ipairs(lsp_servers) do
-    local status, config = pcall(require, "plugins.lspconfig." .. lsp_server)
+    local status, config = pcall(require, "plugin_configs.lspconfig." .. lsp_server)
     local final_config = default_config
     if status then
       final_config = vim.tbl_deep_extend("force", default_config, config)
