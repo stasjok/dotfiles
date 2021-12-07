@@ -17,8 +17,8 @@ function utils.on_attach(client, bufnr)
     ["<Leader>a"] = "<Cmd>lua vim.lsp.buf.code_action()<CR>",
     ["<Leader>d"] = '<Cmd>lua require("telescope.builtin").lsp_document_diagnostics()<CR>',
     ["<Leader>D"] = '<Cmd>lua require("telescope.builtin").lsp_workspace_diagnostics()<CR>',
-    ["]d"] = "<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
-    ["[d"] = "<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>",
+    ["]d"] = "<Cmd>lua vim.diagnostic.goto_next()<CR>",
+    ["[d"] = "<Cmd>lua vim.diagnostic.goto_prev()<CR>",
     ["<Leader>F"] = "<Cmd>lua vim.lsp.buf.formatting()<CR>",
   }) do
     buf_map("n", lhs, rhs)
@@ -55,7 +55,7 @@ function utils.show_diagnostics()
   local status, existing_float = pcall(vim.api.nvim_buf_get_var, 0, "lsp_floating_preview")
   if status and vim.api.nvim_win_is_valid(existing_float) then
   else
-    vim.lsp.diagnostic.show_line_diagnostics({ focusable = false })
+    vim.diagnostic.open_float()
   end
 end
 

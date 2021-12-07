@@ -7,27 +7,6 @@ function lspconfig.config()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
-  -- Diagnostics settings
-  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics,
-    {
-      virtual_text = false,
-      update_in_insert = true,
-    }
-  )
-
-  -- Diagnostics icons
-  local signs = {
-    Error = " ",
-    Warning = " ",
-    Hint = " ",
-    Information = " ",
-  }
-  for type, icon in pairs(signs) do
-    local hl = "LspDiagnosticsSign" .. type
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-  end
-
   -- Configuration of null-ls
   require("null-ls").config({
     sources = require("plugins.null-ls").sources,
