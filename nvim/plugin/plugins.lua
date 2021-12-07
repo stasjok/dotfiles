@@ -176,7 +176,7 @@ packer.startup({
     -- Git visual interface
     {
       "TimUntersberger/neogit",
-      commit = "2a9ce6bbe682c31dbd5cd59214eb0ae93dab4ab6",
+      commit = "0ff8e0c53092a9cb3a2bf138b05f7efd1f6d2481",
       cmd = "Neogit",
       keys = { { "n", "<Leader>g" } },
       wants = "diffview.nvim",
