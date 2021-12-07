@@ -53,7 +53,7 @@ function cmp.config()
       {
         name = "buffer",
         option = {
-          keyword_pattern = [[[a-zA-ZА-яЁё_][0-9a-zA-ZА-яЁё_-]\+]],
+          keyword_pattern = [[\k\+]],
           get_bufnrs = get_bufnrs,
         },
       },
