@@ -34,6 +34,9 @@ packer.startup({
     { "nvim-lua/plenary.nvim", commit = "6bb0e09030a7c2af19bf288088ca815228de9429" },
     { "tjdevries/lazy.nvim", commit = "238c1b9a661947b864a7d103f9d6b1f376c3b72f" },
 
+    -- Optimisations for loading Lua modules
+    { "lewis6991/impatient.nvim", commit = "282b99b817d61e6c6860addf5629b641925a937a" },
+
     -- Color schemes
     {
       "ful1e5/onedark.nvim",
