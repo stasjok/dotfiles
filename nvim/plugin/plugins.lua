@@ -188,7 +188,7 @@ packer.startup({
     -- Git diff viewer
     {
       "sindrets/diffview.nvim",
-      commit = "15ab6ab2fe88844238db1a175d18595fc2553c41",
+      commit = "a603c236bf6212d33011f5e81c89c504b4aec929",
       cmd = { "DiffviewOpen", "DiffviewFileHistory" },
       config = function()
         require("plugins.diffview").config()

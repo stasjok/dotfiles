@@ -2,6 +2,7 @@ local diffview = {}
 
 function diffview.config()
   require("diffview").setup({
+    enhanced_diff_hl = true,
     key_bindings = {
       view = {
         q = '<Cmd>lua require"diffview".close()<CR>',
