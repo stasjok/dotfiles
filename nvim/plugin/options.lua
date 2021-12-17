@@ -6,7 +6,6 @@ vim.opt.expandtab = true
 -- Options
 vim.opt.termguicolors = true
 vim.opt.mouse = "a"
-vim.opt.hidden = true
 
 -- Make <Esc> faster
 vim.opt.ttimeoutlen = 5
