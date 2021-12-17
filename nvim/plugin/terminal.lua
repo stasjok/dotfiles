@@ -24,4 +24,4 @@ _G.Terminal = {
 }
 
 vim.api.nvim_set_keymap("n", "<leader>t", "<Cmd>lua _G.Terminal.Open()<CR>", { noremap = true })
-vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
+vim.api.nvim_set_keymap("t", "<Esc><Esc>", "<C-\\><C-n>", { noremap = true })
