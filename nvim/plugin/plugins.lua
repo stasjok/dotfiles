@@ -232,7 +232,7 @@ packer.startup({
     -- Ansible
     {
       "pearofducks/ansible-vim",
-      commit = "40e28ee318b968c09a1724cd25cd450330b136c9",
+      commit = "469e55b101d85ff82687d975349b356b362194a6",
       config = function()
         require("plugin_configs.ansible").config()
       end,
