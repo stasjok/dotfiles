@@ -9,29 +9,17 @@ if exists('*GetYAMLAnsibleIndent')
 endif
 
 " From indent/ansible.vim
-let s:prev_task_regex = '\v^\s*-\s*(name|hosts|role):'
+let s:prev_task_regex = '\v^\s*-\s+(name|hosts|role):'
 
-" From indent/yaml.vim
-function s:FindPrevLessIndentedLine(lnum, ...)
-    let prevlnum = prevnonblank(a:lnum-1)
-    let curindent = a:0 ? a:1 : indent(a:lnum)
-    while           prevlnum
-                \&&  indent(prevlnum) >=  curindent
-                \&& getline(prevlnum) =~# '^\s*#'
-        let prevlnum = prevnonblank(prevlnum-1)
+function s:FindPrevLineMatchingRegex(lnum, regex)
+    let plnum = prevnonblank(a:lnum-1)
+    while plnum && getline(plnum) !~# a:regex
+        let plnum = prevnonblank(plnum-1)
     endwhile
-    return prevlnum
+    return plnum
 endfunction
 
-function s:FindPrevLEIndentedLineMatchingRegex(lnum, regex)
-    let plilnum = s:FindPrevLessIndentedLine(a:lnum, indent(a:lnum)+1)
-    while plilnum && getline(plilnum) !~# a:regex
-        let plilnum = s:FindPrevLessIndentedLine(plilnum)
-    endwhile
-    return plilnum
-endfunction
-
-" Extend GetYAMLIndent to support g:ansible_unindent_after_newline
+" Extend GetAnsibleIndent to unindent to previous task
 function GetYAMLAnsibleIndent(lnum)
     if a:lnum == 1 || !prevnonblank(a:lnum-1)
         return 0
@@ -39,7 +27,7 @@ function GetYAMLAnsibleIndent(lnum)
 
     if exists("g:ansible_unindent_after_newline")
         if (a:lnum-1) != prevnonblank(a:lnum-1)
-            let plilmr = s:FindPrevLEIndentedLineMatchingRegex(a:lnum-1,
+            let plilmr = s:FindPrevLineMatchingRegex(a:lnum,
                         \ s:prev_task_regex)
             if plilmr
                 return indent(plilmr)
@@ -66,6 +54,6 @@ function GetYAMLAnsibleIndent(lnum)
         "     |
         return shiftwidth() == 2 ? previndent+shiftwidth()*2 : previndent+shiftwidth()
     else
-        return GetYAMLIndent(a:lnum)
+        return GetAnsibleIndent(a:lnum)
     endif
 endfunction
