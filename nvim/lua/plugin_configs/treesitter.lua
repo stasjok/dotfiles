@@ -4,9 +4,13 @@ function treesitter.config()
   require("nvim-treesitter.configs").setup({
     highlight = {
       enable = true,
+      disable = function(_, _)
+        return vim.bo.filetype == "yaml.ansible"
+      end,
     },
     indent = {
       enable = true,
+      disable = { "yaml" },
     },
     incremental_selection = {
       enable = true,
