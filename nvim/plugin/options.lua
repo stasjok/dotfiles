@@ -9,6 +9,7 @@ vim.opt.mouse = "a"
 
 -- Make <Esc> faster
 vim.opt.ttimeoutlen = 5
+vim.opt.timeoutlen = 500
 
 -- Don't redraw the screen while executing macros
 vim.opt.lazyredraw = true
