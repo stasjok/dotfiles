@@ -95,7 +95,7 @@ packer.startup({
         },
         {
           "hrsh7th/cmp-buffer",
-          commit = "a706dc69c49110038fe570e5c9c33d6d4f67015b",
+          commit = "f83773e2f433a923997c5faad7ea689ec24d1785",
         },
         {
           "hrsh7th/cmp-cmdline",
