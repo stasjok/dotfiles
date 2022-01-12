@@ -13,9 +13,6 @@ ansiblels.settings = {
     ansible = {
       useFullyQualifiedCollectionNames = false,
     },
-    ansibleLint = {
-      arguments = "",
-    },
   },
 }
 
