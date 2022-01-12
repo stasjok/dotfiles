@@ -76,7 +76,7 @@ packer.startup({
     -- Autocompletion
     {
       "hrsh7th/nvim-cmp",
-      commit = "d12ba90da372bfe5d9a103546ce1553341a2daff",
+      commit = "ce0a3581e0fa6e3072bf06a97919d3e214ff00e6",
       config = function()
         require("plugin_configs.cmp").config()
       end,
