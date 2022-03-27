@@ -126,7 +126,7 @@ packer.startup({
     -- Tree-sitter
     {
       "nvim-treesitter/nvim-treesitter",
-      commit = "1d66657e6d0f1f8f79ddc48ff1dac9788694cc2d",
+      commit = "b995eebe84df88092a41cbfd591bfc1565f70d8e",
       config = function()
         require("plugin_configs.treesitter").config()
       end,
