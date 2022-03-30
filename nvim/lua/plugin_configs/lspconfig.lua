@@ -21,6 +21,7 @@ function lspconfig.config()
     "jsonls",
     "pyright",
     "rnix",
+    "terraformls",
   }
 
   -- Default language server configuration
