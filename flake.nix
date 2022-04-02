@@ -197,7 +197,7 @@
               inputs;
           in
           stable-current.linkFarm "nixpkgs-sources" nixpkgs-sources;
-      } // import ./flake/node-packages/node-composition.nix { pkgs = stable-current; };
+      } // import ./nix/node-packages/node-composition.nix { pkgs = stable-current; };
     };
 }
 
