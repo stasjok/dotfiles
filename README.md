@@ -11,8 +11,23 @@ I use [Windows Terminal](https://github.com/microsoft/terminal) and `FiraCode NF
 
 ## Packages
 
+### First time installation
+
 Install Nix 2.4 and later (https://nixos.org/manual/nix/stable/#chap-installation),
-then follow the instructions from [My Nix flake](https://github.com/stasjok/flake).
+then add to Nix configuration file (`/etc/nix/nix.conf` or `$HOME/.config/nix.conf`):
+
+```
+experimental-features = nix-command flakes
+```
+
+Install packages:
+
+```bash
+nix registry add mypkgs github:stasjok/dotfiles
+nix profile install mypkgs
+```
+
+### Upgrading
 
 In order to upgrade packages:
 
