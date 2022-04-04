@@ -76,25 +76,21 @@ def parse_query(query: str) -> dict[str, str]:
     return dict(map(lambda kv: (kv[0], kv[1][-1]), parse_qs(query).items()))
 
 
-def to_nix_attrs(attrs: dict[str, str], indent=0) -> str:
+def to_nix_attrs(attrs: dict[str, str], indent=0, sep="\n") -> str:
     lines = []
     for k, v in attrs.items():
-        lines.append(f'{"":{indent}}{k} = "{v}";')
-    return "\n".join(lines)
+        lines.append(f'{"":>{indent}}{k} = "{v}";')
+    return sep.join(lines)
 
 
 def get_nix_args(args: dict[str, str]) -> list[str]:
-    new_args = []
-    for k, v in args.items():
-        new_args.append(f'{k}="{v}";')
-    new_args_str = " ".join(new_args)
     return [
         "nix",
         "eval",
         "--impure",
         "--json",
         "--expr",
-        f'removeAttrs (builtins.fetchTree {{ {new_args_str} }}) [ "outPath" ]',
+        f'removeAttrs (builtins.fetchTree {{ {to_nix_attrs(args, sep=" ")} }}) [ "outPath" ]',
     ]
 
 
