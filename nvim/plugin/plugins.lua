@@ -27,10 +27,6 @@ packer.startup({
 
   -- Plugin specifications
   {
-    -- Docs
-    "nanotee/nvim-lua-guide",
-    "nanotee/luv-vimdocs",
-
     -- Libraries
     { "nvim-lua/plenary.nvim", commit = "c2bb2d8fd5b44bfc6aad3a5463c84576a98dd4a9" },
 

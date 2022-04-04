@@ -133,8 +133,11 @@
                 };
               });
             });
-            configure.packages.nix.start = with vimPlugins; [
+            nvim-plugins = callPackage ./nix/nvim-plugins { inherit (vimUtils) buildVimPlugin; };
+            configure.packages.nix.start = with vimPlugins; with nvim-plugins; [
               packer-nvim
+              nvim-lua-guide
+              luv-vimdocs
               # Remove dependencies because they are managed by packer
               (telescope-fzf-native-nvim.overrideAttrs (_: { dependencies = [ ]; }))
               # TODO: build grammars using nvim-treesitter lock file
