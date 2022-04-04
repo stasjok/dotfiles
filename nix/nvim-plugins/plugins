@@ -1,0 +1,13 @@
+# GitHub: <owner>/<repo>(/<rev-or-ref>)?(\?<params>)?
+#   stasjok/dotfiles
+#   stasjok/dotfiles/main
+#   stasjok/dotfiles/463cc7d7b2c58053041f678125b1ee2247c90aac
+#   stasjok/dotfiles/main?rev=463cc7d7b2c58053041f678125b1ee2247c90aac
+#   stasjok/dotfiles?rev=463cc7d7b2c58053041f678125b1ee2247c90aac
+# Git: (http|https|ssh)://<server>/<path>(\?<params>)?
+#   https://github.com/stasjok/dotfiles.git
+#   https://github.com/stasjok/dotfiles.git?ref=main
+#   https://github.com/stasjok/dotfiles.git?ref=main&rev=463cc7d7b2c58053041f678125b1ee2247c90aac
+
+nanotee/nvim-lua-guide
+nanotee/luv-vimdocs
