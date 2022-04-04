@@ -15,7 +15,7 @@ HEADER = """{ buildVimPlugin }:
 
 {
 """
-TAIL = "}"
+TAIL = "}\n"
 TEMPLATE = """  {name} = buildVimPlugin {{
     pname = "{pname}";
     version = "{version}";
