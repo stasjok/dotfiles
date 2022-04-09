@@ -133,8 +133,8 @@
                 };
               });
             });
-            nvim-plugins = vimPlugins // callPackage ./nix/nvim-plugins { inherit (vimUtils) buildVimPlugin; };
-            configure.packages.nix.start = with nvim-plugins; [
+            nvimPlugins = vimPlugins // callPackage ./nix/nvim-plugins { inherit (vimUtils) buildVimPlugin; };
+            configure.packages.nix.start = with nvimPlugins; [
               # Plugin management
               packer-nvim
               # Libraries
