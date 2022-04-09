@@ -47,16 +47,6 @@ packer.startup({
       },
     },
 
-    -- Tmux integration
-    {
-      "aserowy/tmux.nvim",
-      commit = "71982a15c44d41795d17ce79d381032fdaf71a69",
-      keys = require("plugin_configs.tmux").keys,
-      config = function()
-        require("plugin_configs.tmux").config()
-      end,
-    },
-
     -- Nix
     { "Freed-Wu/vim-nix", commit = "2fc254b90661f8190565b18874d0662bfcbec02c", ft = "nix" },
 

@@ -172,6 +172,8 @@
               diffview-nvim
               # EditorConfig
               editorconfig-nvim
+              # Tmux integration
+              tmux-nvim
             ];
             vimPackDir = vimUtils.packDir configure.packages;
             nvimDataDir = linkFarm "nvim-data-dir" [{ name = "nvim/site"; path = vimPackDir; }];

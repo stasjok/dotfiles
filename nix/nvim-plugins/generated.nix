@@ -45,4 +45,15 @@
       narHash = "sha256-XXR/48pbeGwKifYrhtEyMsOCUxejuIla60q0fSYFgTc=";
     };
   };
+  tmux-nvim = buildVimPlugin {
+    pname = "tmux.nvim";
+    version = "2022-04-06";
+    src = builtins.fetchTree {
+      type = "github";
+      owner = "aserowy";
+      repo = "tmux.nvim";
+      rev = "94a5b180b20b8374094f1170b26280898b4ca4d7";
+      narHash = "sha256-2TV/SiIqcPzwq6f/Odn2JKaH0cGiNQ8ABqMSb4bXPw8=";
+    };
+  };
 }
