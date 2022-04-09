@@ -137,6 +137,8 @@
             configure.packages.nix.start = with nvim-plugins; [
               # Plugin management
               packer-nvim
+              # Libraries
+              plenary-nvim
               # Docs
               nvim-lua-guide
               luv-vimdocs

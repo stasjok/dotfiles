@@ -27,9 +27,6 @@ packer.startup({
 
   -- Plugin specifications
   {
-    -- Libraries
-    { "nvim-lua/plenary.nvim", commit = "c2bb2d8fd5b44bfc6aad3a5463c84576a98dd4a9" },
-
     -- Optimisations for loading Lua modules
     { "lewis6991/impatient.nvim", commit = "282b99b817d61e6c6860addf5629b641925a937a" },
 
