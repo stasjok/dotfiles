@@ -36,13 +36,13 @@
   };
   surround-nvim = buildVimPlugin {
     pname = "surround.nvim";
-    version = "2021-11-05";
+    version = "2022-02-01";
     src = builtins.fetchTree {
       type = "github";
       owner = "ur4ltz";
       repo = "surround.nvim";
-      rev = "a21c3eeee2f139d20694ff70135b3557cadece1c";
-      narHash = "sha256-U0Kz99O7Vi9OAIxSFnqOfVtlVRvHlX2ExhPZnG0KSnE=";
+      rev = "549045828bbd9de0746b411a762fa8c382fb10ff";
+      narHash = "sha256-XXR/48pbeGwKifYrhtEyMsOCUxejuIla60q0fSYFgTc=";
     };
   };
 }
