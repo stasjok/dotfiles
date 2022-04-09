@@ -157,6 +157,8 @@
               cmp-nvim-lsp
               cmp_luasnip
               cmp-path
+              # Snippets
+              luasnip
               # Telescope
               telescope-nvim
               telescope-fzf-native-nvim

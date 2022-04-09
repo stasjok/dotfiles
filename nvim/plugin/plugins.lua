@@ -27,15 +27,6 @@ packer.startup({
 
   -- Plugin specifications
   {
-    -- Snippets
-    {
-      "L3MON4D3/LuaSnip",
-      commit = "79662d8bb61bbee6af88bf559d9ed41c28eb5b88",
-      config = function()
-        require("plugin_configs.luasnip").config()
-      end,
-    },
-
     -- Comments toggle
     {
       "b3nj5m1n/kommentary",
