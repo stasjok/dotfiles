@@ -159,6 +159,8 @@
               cmp-path
               # Snippets
               luasnip
+              # Comments toggle
+              kommentary
               # Telescope
               telescope-nvim
               telescope-fzf-native-nvim
