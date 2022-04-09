@@ -47,15 +47,6 @@ packer.startup({
       },
     },
 
-    -- Git signs
-    {
-      "lewis6991/gitsigns.nvim",
-      commit = "5eb87a0b05914d3763277ebe257bd5bafcdde8cd",
-      config = function()
-        require("plugin_configs.gitsigns").config()
-      end,
-    },
-
     -- Git visual interface
     {
       "TimUntersberger/neogit",
