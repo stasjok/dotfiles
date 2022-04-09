@@ -31,4 +31,4 @@ map("s", "<BS>", "<C-O>c")
 map("s", "<Del>", "<C-O>c")
 
 -- Load snippets
-require("luasnip.loaders.from_vscode").load({ paths = "~/.config/nvim/snippets" })
+require("luasnip.loaders.from_vscode").lazy_load({ paths = "~/.config/nvim/snippets" })
