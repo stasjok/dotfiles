@@ -161,14 +161,11 @@
               luasnip
               # Comments toggle
               kommentary
+              # Tree-sitter
+              (nvim-treesitter.withPlugins treesitterAllGrammars)
               # Telescope
               telescope-nvim
               telescope-fzf-native-nvim
-              # TODO: build grammars using nvim-treesitter lock file
-              (linkFarm "nvim-treesitter-parsers" [{
-                name = "parser";
-                path = tree-sitter.withPlugins treesitterAllGrammars;
-              }])
             ];
             vimPackDir = vimUtils.packDir configure.packages;
             nvimDataDir = linkFarm "nvim-data-dir" [{ name = "nvim/site"; path = vimPackDir; }];

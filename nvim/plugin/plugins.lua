@@ -27,15 +27,6 @@ packer.startup({
 
   -- Plugin specifications
   {
-    -- Tree-sitter
-    {
-      "nvim-treesitter/nvim-treesitter",
-      commit = "b995eebe84df88092a41cbfd591bfc1565f70d8e",
-      config = function()
-        require("plugin_configs.treesitter").config()
-      end,
-    },
-
     -- Configuration of language servers
     {
       "neovim/nvim-lspconfig",
