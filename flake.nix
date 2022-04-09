@@ -146,6 +146,8 @@
               onedark-nvim
               # File icons
               nvim-web-devicons
+              # Text objects surrounding
+              surround-nvim
               # Telescope
               telescope-nvim
               telescope-fzf-native-nvim

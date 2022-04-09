@@ -27,22 +27,6 @@ packer.startup({
 
   -- Plugin specifications
   {
-    -- Text objects surrounding
-    {
-      "blackCauldron7/surround.nvim",
-      commit = "a21c3eeee2f139d20694ff70135b3557cadece1c",
-      keys = {
-        { "n", "ys" },
-        { "n", "cs" },
-        { "n", "ds" },
-        { "n", "cq" },
-        { "v", "<Leader>s" },
-      },
-      config = function()
-        require("plugin_configs.surround").config()
-      end,
-    },
-
     -- Auto-pairs
     {
       "windwp/nvim-autopairs",

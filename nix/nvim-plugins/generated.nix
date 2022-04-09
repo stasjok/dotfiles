@@ -34,4 +34,15 @@
       narHash = "sha256-H5n1ExX8RWOLE4hBLHrCER840/1EoRNEVI9L4W/eDtc=";
     };
   };
+  surround-nvim = buildVimPlugin {
+    pname = "surround.nvim";
+    version = "2021-11-05";
+    src = builtins.fetchTree {
+      type = "github";
+      owner = "ur4ltz";
+      repo = "surround.nvim";
+      rev = "a21c3eeee2f139d20694ff70135b3557cadece1c";
+      narHash = "sha256-U0Kz99O7Vi9OAIxSFnqOfVtlVRvHlX2ExhPZnG0KSnE=";
+    };
+  };
 }
