@@ -7,8 +7,8 @@
       prompt: >
         Overwrite your configs if any (yes/no)?
         If `yes`, the following configs will be removed: nvim, fish.
-      private: no
-      default: no
+      private: false
+      default: false
 
   tasks:
     - name: get facts about target files/directories
