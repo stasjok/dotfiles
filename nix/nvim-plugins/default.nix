@@ -3,4 +3,8 @@
 let
   generated = import ./generated.nix { inherit buildVimPlugin; };
 in
-generated
+generated // {
+  onedark-nvim = generated.onedark-nvim.overrideAttrs (_: {
+    prePatch = "rm Makefile";
+  });
+}

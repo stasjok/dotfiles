@@ -33,15 +33,6 @@ packer.startup({
     -- Optimisations for loading Lua modules
     { "lewis6991/impatient.nvim", commit = "282b99b817d61e6c6860addf5629b641925a937a" },
 
-    -- Color schemes
-    {
-      "ful1e5/onedark.nvim",
-      commit = "dadf88aeed1799d9817736ae0b1e21a0fbb0caa4",
-      config = function()
-        require("plugin_configs.onedark").config()
-      end,
-    },
-
     -- File icons
     { "kyazdani42/nvim-web-devicons", commit = "da717e19678bd6ec33008cf92da05da1b8ceb87d" },
 

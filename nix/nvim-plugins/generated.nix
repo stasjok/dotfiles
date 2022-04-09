@@ -23,4 +23,15 @@
       narHash = "sha256-4iTrqXvqekkMXjlnyKMjTPhvvMaz086mDh1HhzM4zxw=";
     };
   };
+  onedark-nvim = buildVimPlugin {
+    pname = "onedark.nvim";
+    version = "2022-03-29";
+    src = builtins.fetchTree {
+      type = "github";
+      owner = "ful1e5";
+      repo = "onedark.nvim";
+      rev = "7b8ab0195efe9bbe07337419594e764167368a14";
+      narHash = "sha256-H5n1ExX8RWOLE4hBLHrCER840/1EoRNEVI9L4W/eDtc=";
+    };
+  };
 }
