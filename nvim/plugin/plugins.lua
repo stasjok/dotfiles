@@ -47,28 +47,6 @@ packer.startup({
       },
     },
 
-    -- Git visual interface
-    {
-      "TimUntersberger/neogit",
-      commit = "0ff8e0c53092a9cb3a2bf138b05f7efd1f6d2481",
-      cmd = "Neogit",
-      keys = { { "n", "<Leader>g" } },
-      wants = "diffview.nvim",
-      config = function()
-        require("plugin_configs.neogit").config()
-      end,
-    },
-
-    -- Git diff viewer
-    {
-      "sindrets/diffview.nvim",
-      commit = "a603c236bf6212d33011f5e81c89c504b4aec929",
-      cmd = { "DiffviewOpen", "DiffviewFileHistory" },
-      config = function()
-        require("plugin_configs.diffview").config()
-      end,
-    },
-
     -- EditorConfig
     {
       "editorconfig/editorconfig-vim",

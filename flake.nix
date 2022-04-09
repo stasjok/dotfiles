@@ -166,8 +166,10 @@
               # Telescope
               telescope-nvim
               telescope-fzf-native-nvim
-              # Git signs
+              # Git
               gitsigns-nvim
+              neogit
+              diffview-nvim
             ];
             vimPackDir = vimUtils.packDir configure.packages;
             nvimDataDir = linkFarm "nvim-data-dir" [{ name = "nvim/site"; path = vimPackDir; }];
