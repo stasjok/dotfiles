@@ -163,6 +163,11 @@
               kommentary
               # Tree-sitter
               (nvim-treesitter.withPlugins treesitterAllGrammars)
+              # LSP
+              nvim-lspconfig
+              null-ls-nvim
+              lsp_signature-nvim
+              lua-dev-nvim
               # Telescope
               telescope-nvim
               telescope-fzf-native-nvim
