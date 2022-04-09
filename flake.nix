@@ -148,6 +148,8 @@
               nvim-web-devicons
               # Text objects surrounding
               surround-nvim
+              # Auto-pairs
+              nvim-autopairs
               # Telescope
               telescope-nvim
               telescope-fzf-native-nvim

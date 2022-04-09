@@ -27,15 +27,6 @@ packer.startup({
 
   -- Plugin specifications
   {
-    -- Auto-pairs
-    {
-      "windwp/nvim-autopairs",
-      commit = "c027bbb7eb417ad0be7d5263b66c1638e971e36b",
-      config = function()
-        require("plugin_configs.autopairs").config()
-      end,
-    },
-
     -- Autocompletion
     {
       "hrsh7th/nvim-cmp",
