@@ -27,37 +27,6 @@ packer.startup({
 
   -- Plugin specifications
   {
-    -- Autocompletion
-    {
-      "hrsh7th/nvim-cmp",
-      commit = "ce0a3581e0fa6e3072bf06a97919d3e214ff00e6",
-      config = function()
-        require("plugin_configs.cmp").config()
-      end,
-      requires = {
-        {
-          "saadparwaiz1/cmp_luasnip",
-          commit = "d6f837f4e8fe48eeae288e638691b91b97d1737f",
-        },
-        {
-          "hrsh7th/cmp-nvim-lsp",
-          commit = "accbe6d97548d8d3471c04d512d36fa61d0e4be8",
-        },
-        {
-          "hrsh7th/cmp-path",
-          commit = "4d58224e315426e5ac4c5b218ca86cab85f80c79",
-        },
-        {
-          "hrsh7th/cmp-buffer",
-          commit = "f83773e2f433a923997c5faad7ea689ec24d1785",
-        },
-        {
-          "hrsh7th/cmp-cmdline",
-          commit = "29ca81a6f0f288e6311b3377d9d9684d22eac2ec",
-        },
-      },
-    },
-
     -- Snippets
     {
       "L3MON4D3/LuaSnip",

@@ -150,6 +150,13 @@
               surround-nvim
               # Auto-pairs
               nvim-autopairs
+              # Autocompletion
+              nvim-cmp
+              cmp-buffer
+              cmp-cmdline
+              cmp-nvim-lsp
+              cmp_luasnip
+              cmp-path
               # Telescope
               telescope-nvim
               telescope-fzf-native-nvim
