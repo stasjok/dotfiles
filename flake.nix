@@ -170,6 +170,8 @@
               gitsigns-nvim
               neogit
               diffview-nvim
+              # EditorConfig
+              editorconfig-nvim
             ];
             vimPackDir = vimUtils.packDir configure.packages;
             nvimDataDir = linkFarm "nvim-data-dir" [{ name = "nvim/site"; path = vimPackDir; }];
