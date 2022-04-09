@@ -1,24 +1,11 @@
 local utils = require("plugin_configs.lspconfig.utils")
-local diagnostics = require("null-ls").builtins.diagnostics
-local formatting = require("null-ls").builtins.formatting
 
 -- Capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
--- Configuration of null-ls
-require("null-ls").setup({
-  sources = {
-    diagnostics.shellcheck,
-    formatting.shfmt,
-    formatting.stylua,
-    formatting.black,
-  },
-})
-
 -- List of configured language servers
 local lsp_servers = {
-  "null-ls",
   "sumneko_lua",
   "bashls",
   "ansiblels",
