@@ -46,41 +46,6 @@ packer.startup({
         { "ray-x/lsp_signature.nvim", commit = "8f89ab239ef2569096b6805ea093a322985b8e4e" },
       },
     },
-
-    -- Nix
-    { "Freed-Wu/vim-nix", commit = "2fc254b90661f8190565b18874d0662bfcbec02c", ft = "nix" },
-
-    -- Fish
-    { "khaveesh/vim-fish-syntax", commit = "cf759d1ac42396ee2246a082eceb0debde04c445" },
-
-    -- Jinja
-    {
-      "Glench/Vim-Jinja2-Syntax",
-      commit = "2c17843b074b06a835f88587e1023ceff7e2c7d1",
-      config = function()
-        require("plugin_configs.jinja").config()
-      end,
-    },
-
-    -- Ansible
-    {
-      "pearofducks/ansible-vim",
-      commit = "469e55b101d85ff82687d975349b356b362194a6",
-      config = function()
-        require("plugin_configs.ansible").config()
-      end,
-    },
-
-    -- SaltStack
-    { "saltstack/salt-vim", commit = "6ca9e3500cc39dd417b411435d58a1b720b331cc" },
-
-    -- MediaWiki
-    {
-      "chikamichi/mediawiki.vim",
-      commit = "26e5737264354be41cb11d16d48132779795e168",
-      config = function()
-        require("plugin_configs.mediawiki").config()
-      end,
-    },
+    {},
   },
 })

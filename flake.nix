@@ -174,6 +174,13 @@
               editorconfig-nvim
               # Tmux integration
               tmux-nvim
+              # Languages
+              vim-nix
+              vim-fish-syntax
+              vim-jinja2-syntax
+              ansible-vim
+              salt-vim
+              mediawiki-vim
             ];
             vimPackDir = vimUtils.packDir configure.packages;
             nvimDataDir = linkFarm "nvim-data-dir" [{ name = "nvim/site"; path = vimPackDir; }];

@@ -56,4 +56,37 @@
       narHash = "sha256-2TV/SiIqcPzwq6f/Odn2JKaH0cGiNQ8ABqMSb4bXPw8=";
     };
   };
+  vim-fish-syntax = buildVimPlugin {
+    pname = "vim-fish-syntax";
+    version = "2022-01-06";
+    src = builtins.fetchTree {
+      type = "github";
+      owner = "khaveesh";
+      repo = "vim-fish-syntax";
+      rev = "bd6b832f33e8e1e52cb66d288d367e64d4a27afa";
+      narHash = "sha256-MRVUf0Q+IKajgnor4QSmEGJ4EeWw9Y526S/DfsYsF5w=";
+    };
+  };
+  vim-jinja2-syntax = buildVimPlugin {
+    pname = "vim-jinja2-syntax";
+    version = "2021-06-22";
+    src = builtins.fetchTree {
+      type = "github";
+      owner = "Glench";
+      repo = "Vim-Jinja2-Syntax";
+      rev = "2c17843b074b06a835f88587e1023ceff7e2c7d1";
+      narHash = "sha256-57kZn10XBpCRRXsFSSEIUngdIJSj3cmNQHnkObj+ro4=";
+    };
+  };
+  mediawiki-vim = buildVimPlugin {
+    pname = "mediawiki.vim";
+    version = "2015-11-15";
+    src = builtins.fetchTree {
+      type = "github";
+      owner = "chikamichi";
+      repo = "mediawiki.vim";
+      rev = "26e5737264354be41cb11d16d48132779795e168";
+      narHash = "sha256-Tgza7QAzNu0D5cuDyH/jR3rvTuoV2DRA2MBCKjiPUdE=";
+    };
+  };
 }
