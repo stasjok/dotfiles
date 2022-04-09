@@ -27,9 +27,6 @@ packer.startup({
 
   -- Plugin specifications
   {
-    -- Optimisations for loading Lua modules
-    { "lewis6991/impatient.nvim", commit = "282b99b817d61e6c6860addf5629b641925a937a" },
-
     -- Text objects surrounding
     {
       "blackCauldron7/surround.nvim",

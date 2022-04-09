@@ -2,9 +2,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
--- Speed up loading Lua modules in Neovim
-require("impatient")
-
 -- Clipboard integration with tmux
 if vim.env.TMUX then
   vim.g.clipboard = {
