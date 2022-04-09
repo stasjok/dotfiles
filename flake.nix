@@ -144,8 +144,11 @@
               luv-vimdocs
               # Color schemes
               onedark-nvim
-              # Remove dependencies because they are managed by packer
-              (telescope-fzf-native-nvim.overrideAttrs (_: { dependencies = [ ]; }))
+              # File icons
+              nvim-web-devicons
+              # Telescope
+              telescope-nvim
+              telescope-fzf-native-nvim
               # TODO: build grammars using nvim-treesitter lock file
               (linkFarm "nvim-treesitter-parsers" [{
                 name = "parser";

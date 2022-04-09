@@ -30,9 +30,6 @@ packer.startup({
     -- Optimisations for loading Lua modules
     { "lewis6991/impatient.nvim", commit = "282b99b817d61e6c6860addf5629b641925a937a" },
 
-    -- File icons
-    { "kyazdani42/nvim-web-devicons", commit = "da717e19678bd6ec33008cf92da05da1b8ceb87d" },
-
     -- Text objects surrounding
     {
       "blackCauldron7/surround.nvim",
@@ -135,18 +132,6 @@ packer.startup({
         -- Signature help
         { "ray-x/lsp_signature.nvim", commit = "8f89ab239ef2569096b6805ea093a322985b8e4e" },
       },
-    },
-
-    -- Telescope
-    {
-      "nvim-telescope/telescope.nvim",
-      commit = "6b1579741a0e8f1e0e63d0c6c364b968c157338e",
-      cmd = "Telescope",
-      keys = require("plugin_configs.telescope").keys,
-      module = "telescope",
-      config = function()
-        require("plugin_configs.telescope").config()
-      end,
     },
 
     -- Git signs
