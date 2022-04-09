@@ -53,6 +53,7 @@ def process_line(line: str) -> str:
     nix_args = get_nix_args(args)
     nix_output = run(nix_args, stdout=PIPE, check=True)
     plugin_src = json.loads(nix_output.stdout)
+    name = name.lower()
     args["rev"] = plugin_src["rev"]
     args["narHash"] = plugin_src["narHash"]
     plugin_args = {
