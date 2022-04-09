@@ -61,3 +61,11 @@
       file:
         path: ~/.local/share/nvim/site/pack/nix
         state: absent
+
+    - name: remove obsolete files from packer.nvim
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - ~/.local/share/nvim/site/pack/packer
+        - ~/.local/share/nvim/site/plugin/packer_compiled.lua
