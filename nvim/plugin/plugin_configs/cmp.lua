@@ -45,6 +45,7 @@ cmp.setup({
     { name = "nvim_lsp" },
     {
       name = "buffer",
+      group_index = 1,
       option = {
         keyword_pattern = [[\k\+]],
         get_bufnrs = get_bufnrs,
