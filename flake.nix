@@ -154,7 +154,6 @@
               cmp-cmdline
               cmp-nvim-lsp
               cmp_luasnip
-              cmp-path
               # Snippets
               luasnip
               # Comments toggle

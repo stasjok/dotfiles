@@ -6,7 +6,6 @@ local mapping = cmp.mapping
 local completion_menu_map = {
   luasnip = "[Snip]",
   nvim_lsp = "[LSP]",
-  path = "[Path]",
   buffer = "[Buf]",
   cmdline = "[Cmd]",
 }
@@ -44,7 +43,6 @@ cmp.setup({
   sources = {
     { name = "luasnip" },
     { name = "nvim_lsp" },
-    { name = "path" },
     {
       name = "buffer",
       option = {
@@ -137,7 +135,6 @@ cmp.setup({
 cmp.setup.cmdline(":", {
   sources = {
     { name = "cmdline" },
-    { name = "path" },
   },
 })
 
