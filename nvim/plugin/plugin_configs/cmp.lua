@@ -30,6 +30,7 @@ local function get_bufnrs()
     local buf = all_bufs[i]
     if
       vim.api.nvim_buf_get_option(buf, "buflisted")
+        and vim.api.nvim_buf_get_option(buf, "buftype") == ""
         and vim.api.nvim_buf_line_count(buf) <= max_buf_size
       or buf == cur_buf
     then
