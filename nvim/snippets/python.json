@@ -124,11 +124,6 @@
     "body": "return $1",
     "description": "Return"
   },
-  "/(^|(?<=\\W))\\./": {
-    "prefix": "/(^|(?<=\\W))\\./",
-    "body": "self.",
-    "description": "self."
-  },
   "sa": {
     "prefix": "sa",
     "body": "self.${1:attribute} = $1",
