@@ -65,7 +65,6 @@
             "/share/fish/vendor_functions.d"
           ];
           buildInputs = [ man-db ];
-
           postBuild = ''
             mandb --no-straycats $out/share/man
             whatis --manpath=$out/share/man --wildcard '*' | sort > $out/share/man/whatis
