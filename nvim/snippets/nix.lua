@@ -49,8 +49,8 @@ return {
   s(
     { trig = "inherit", dscr = "Inheriting attributes" },
     c(1, {
-      fmte("inherit ({}) {};", { i(1, "src-set"), r(2, 1, i(1, "attr")) }),
-      fmte("inherit {};", r(1, 1)),
+      fmte("inherit {};", r(1, 1, i(nil, "attr"))),
+      fmte("inherit ({}) {};", { i(1, "src-set"), r(2, 1) }),
     })
   ),
 }
