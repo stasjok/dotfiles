@@ -119,14 +119,17 @@
             configure.packages.nix.start = with vimPlugins; [
               # Libraries
               plenary-nvim
-              # Color schemes
+              # Interface
               onedark-nvim
-              # File icons
               nvim-web-devicons
-              # Text objects surrounding
-              surround-nvim
-              # Auto-pairs
-              nvim-autopairs
+              tmux-nvim
+              # Tree-sitter
+              nvim-treesitterWithPlugins
+              # LSP
+              nvim-lspconfig
+              null-ls-nvim
+              lsp_signature-nvim
+              lua-dev-nvim
               # Autocompletion
               nvim-cmp
               cmp-buffer
@@ -135,26 +138,19 @@
               cmp_luasnip
               # Snippets
               luasnip
-              # Comments toggle
-              kommentary
-              # Tree-sitter
-              nvim-treesitterWithPlugins
-              # LSP
-              nvim-lspconfig
-              null-ls-nvim
-              lsp_signature-nvim
-              lua-dev-nvim
               # Telescope
               telescope-nvim
               telescope-fzf-native-nvim
+              # Editing
+              surround-nvim
+              nvim-autopairs
+              kommentary
               # Git
               gitsigns-nvim
               neogit
               diffview-nvim
               # EditorConfig
               editorconfig-nvim
-              # Tmux integration
-              tmux-nvim
               # Languages
               vim-nix
               vim-fish-syntax
