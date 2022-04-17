@@ -76,6 +76,46 @@
 
         neovimWithPlugins =
           let
+            nvim-treesitterWithPlugins =
+              vimPlugins.nvim-treesitter.withPlugins (plugins: with plugins; [
+                tree-sitter-bash
+                tree-sitter-c
+                tree-sitter-cmake
+                tree-sitter-comment
+                tree-sitter-commonlisp
+                tree-sitter-cpp
+                tree-sitter-css
+                tree-sitter-dockerfile
+                tree-sitter-fennel
+                tree-sitter-fish
+                tree-sitter-go
+                tree-sitter-gomod
+                tree-sitter-hcl
+                tree-sitter-html
+                tree-sitter-java
+                tree-sitter-javascript
+                tree-sitter-jsdoc
+                tree-sitter-json
+                tree-sitter-json5
+                tree-sitter-latex
+                tree-sitter-lua
+                tree-sitter-make
+                tree-sitter-markdown
+                tree-sitter-nix
+                tree-sitter-perl
+                tree-sitter-php
+                tree-sitter-python
+                tree-sitter-query
+                tree-sitter-regex
+                tree-sitter-rst
+                tree-sitter-ruby
+                tree-sitter-rust
+                tree-sitter-toml
+                tree-sitter-tsx
+                tree-sitter-typescript
+                tree-sitter-vim
+                tree-sitter-yaml
+              ]);
             configure.packages.nix.start = with vimPlugins; [
               # Libraries
               plenary-nvim
@@ -101,7 +141,7 @@
               # Comments toggle
               kommentary
               # Tree-sitter
-              (nvim-treesitter.withPlugins (_: tree-sitter.allGrammars))
+              nvim-treesitterWithPlugins
               # LSP
               nvim-lspconfig
               null-ls-nvim
