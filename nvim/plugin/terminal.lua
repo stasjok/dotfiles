@@ -10,7 +10,10 @@ _G.Terminal = {
     if _G.TerminalBuffer == nil or not vim.api.nvim_buf_is_valid(_G.TerminalBuffer) then
       _G.TerminalBuffer = vim.api.nvim_create_buf(true, false)
       vim.api.nvim_set_current_buf(_G.TerminalBuffer)
-      vim.fn.termopen("fish", { on_exit = _G.Terminal.OnExit })
+      vim.fn.termopen("fish", {
+        on_exit = _G.Terminal.OnExit,
+        env = { XDG_DATA_DIRS = vim.env.HOME .. "/.nix-profile/share" },
+      })
       vim.api.nvim_command("startinsert")
     else
       vim.api.nvim_set_current_buf(_G.TerminalBuffer)
