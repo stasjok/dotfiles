@@ -195,10 +195,6 @@
             propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ mitogen_0_2 ];
           });
 
-        cacert = unstable.cacert.override {
-          extraCertificateFiles = [ ./cacerts/absolutbank_root_2017.crt ];
-        };
-
         # Reference input sources in order to avoid garbage collection
         sources =
           let
