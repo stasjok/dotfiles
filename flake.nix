@@ -62,6 +62,7 @@
           delta
           python3
           black
+          ansible_2_9
           ansible-lint
           yamllint
           shellcheck
@@ -162,27 +163,6 @@
             };
           in
           wrapNeovimUnstable neovim-unwrapped wrapNeovimArgs;
-
-        ansibleWithMitogen =
-          with python3.pkgs; let
-            # We need version 0.2 for ansible 2.9
-            mitogen_0_2 = mitogen.overridePythonAttrs (oldAttrs: rec {
-              version = "0.2.10";
-              src = fetchFromGitHub {
-                owner = "mitogen-hq";
-                repo = "mitogen";
-                rev = "v${version}";
-                sha256 = "sha256-SFwMgK1IKLwJS8k8w/N0A/+zMmBj9EN6m/58W/e7F4Q=";
-              };
-            });
-          in
-          ansible.overridePythonAttrs (oldAttrs: {
-            makeWrapperArgs = [
-              "--suffix ANSIBLE_STRATEGY_PLUGINS : ${mitogen_0_2}/${python.sitePackages}/ansible_mitogen"
-              "--set-default ANSIBLE_STRATEGY mitogen_linear"
-            ];
-            propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ mitogen_0_2 ];
-          });
 
         # Reference input sources in order to avoid garbage collection
         sources =
