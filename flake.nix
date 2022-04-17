@@ -3,25 +3,7 @@
 
   inputs = {
 
-    nixos-21-05 = {
-      type = "github";
-      owner = "NixOS";
-      repo = "nixpkgs";
-      # Released on 2022-03-05 17:28:07 via https://hydra.nixos.org/eval/1744839
-      rev = "530a53dcbc9437363471167a5e4762c5fcfa34a1";
-      narHash = "sha256-y53N7TyIkXsjMpOG7RhvqJFGDacLs9HlyHeSTBioqYU=";
-    };
-
-    nixos-21-11 = {
-      type = "github";
-      owner = "NixOS";
-      repo = "nixpkgs";
-      # Released on 2022-03-24 05:31:45 via https://hydra.nixos.org/eval/1750680
-      rev = "d2caa9377539e3b5ff1272ac3aa2d15f3081069f";
-      narHash = "sha256-AG40Nt5OWz0LBs5p457emOuwLKOvTtcv/2fUdnEN3Ws=";
-    };
-
-    nixpkgs-unstable = {
+    nixpkgs = {
       type = "github";
       owner = "NixOS";
       repo = "nixpkgs";
@@ -34,33 +16,26 @@
 
   outputs =
     { self
-    , nixos-21-05
-    , nixos-21-11
-    , nixpkgs-unstable
+    , nixpkgs
     } @ args:
 
     let
-      # Current stable nixpkgs
-      current-version = nixos-21-11;
       # Nixpkgs legacyPackages
-      stable-21-05 = nixos-21-05.legacyPackages.x86_64-linux;
-      stable-21-11 = nixos-21-11.legacyPackages.x86_64-linux;
-      unstable = nixpkgs-unstable.legacyPackages.x86_64-linux;
-      stable-current = current-version.legacyPackages.x86_64-linux;
+      unstable = nixpkgs.legacyPackages.x86_64-linux;
       # Nixpkgs lib
-      lib = current-version.lib;
+      lib = unstable.lib;
       # Shortcuts
-      inherit (stable-current)
+      inherit (unstable)
         fetchFromGitHub
         ;
     in
     {
       # Provide all upstream packages and lib
-      legacyPackages.x86_64-linux = stable-current;
+      legacyPackages.x86_64-linux = unstable;
       inherit lib;
 
       # Provide a package for nix profile with all my packages combined
-      defaultPackage.x86_64-linux = stable-current.buildEnv {
+      defaultPackage.x86_64-linux = unstable.buildEnv {
         name = "nix-profile-${self.lastModifiedDate or "1"}";
         paths = builtins.attrValues self.packages.x86_64-linux;
         extraOutputsToInstall = [ "man" ];
@@ -72,7 +47,7 @@
           "/share/fish/vendor_conf.d"
           "/share/fish/vendor_functions.d"
         ];
-        buildInputs = [ stable-current.man-db ];
+        buildInputs = [ unstable.man-db ];
 
         postBuild = ''
           mandb --no-straycats $out/share/man
@@ -84,7 +59,8 @@
       # My packages separately
       packages.x86_64-linux = rec {
         # Packages from current stable
-        inherit (stable-current)
+        inherit (unstable)
+          nix
           fish
           tmux
           git
@@ -101,22 +77,16 @@
           yamllint
           shellcheck
           shfmt
+          sumneko-lua-language-server
           stylua
           rnix-lsp
           terraform
-          ;
-        inherit (stable-current.nodePackages)
-          bash-language-server
-          node2nix
-          ;
-        # Packages from unstable
-        inherit (unstable)
-          nix
-          sumneko-lua-language-server
           terraform-ls
           ;
         inherit (unstable.nodePackages)
           pyright
+          bash-language-server
+          node2nix
           ;
 
         # Overrided packages
@@ -205,7 +175,7 @@
           wrapNeovimUnstable neovim-unwrapped wrapNeovimArgs;
 
         ansibleWithMitogen =
-          with stable-current.python3.pkgs; let
+          with unstable.python3.pkgs; let
             # We need version 0.2 for ansible 2.9
             mitogen_0_2 = mitogen.overridePythonAttrs (oldAttrs: rec {
               version = "0.2.10";
@@ -225,7 +195,7 @@
             propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ mitogen_0_2 ];
           });
 
-        cacert = stable-current.cacert.override {
+        cacert = unstable.cacert.override {
           extraCertificateFiles = [ ./cacerts/absolutbank_root_2017.crt ];
         };
 
@@ -237,8 +207,8 @@
               (name: value: { name = "share/nixpkgs/${name}"; path = value.outPath; })
               inputs;
           in
-          stable-current.linkFarm "nixpkgs-sources" nixpkgs-sources;
-      } // import ./nix/node-packages/node-composition.nix { pkgs = stable-current; };
+          unstable.linkFarm "nixpkgs-sources" nixpkgs-sources;
+      } // import ./nix/node-packages/node-composition.nix { pkgs = unstable; };
     };
 }
 
