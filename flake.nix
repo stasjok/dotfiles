@@ -20,22 +20,18 @@
     } @ args:
 
     let
-      # Nixpkgs legacyPackages
-      unstable = nixpkgs.legacyPackages.x86_64-linux;
-      # Nixpkgs lib
-      lib = unstable.lib;
-      # Shortcuts
-      inherit (unstable)
-        fetchFromGitHub
-        ;
+      pkgs = import "${nixpkgs}/pkgs/top-level" {
+        localSystem = "x86_64-linux";
+        overlays = [ self.overlays.default ];
+      };
     in
+    with pkgs;
     {
       # Provide all upstream packages and lib
-      legacyPackages.x86_64-linux = unstable;
-      inherit lib;
+      legacyPackages.x86_64-linux = pkgs;
 
       # Provide a package for nix profile with all my packages combined
-      defaultPackage.x86_64-linux = unstable.buildEnv {
+      defaultPackage.x86_64-linux = buildEnv {
         name = "nix-profile-${self.lastModifiedDate or "1"}";
         paths = builtins.attrValues self.packages.x86_64-linux;
         extraOutputsToInstall = [ "man" ];
@@ -47,7 +43,7 @@
           "/share/fish/vendor_conf.d"
           "/share/fish/vendor_functions.d"
         ];
-        buildInputs = [ unstable.man-db ];
+        buildInputs = [ man-db ];
 
         postBuild = ''
           mandb --no-straycats $out/share/man
@@ -59,7 +55,7 @@
       # My packages separately
       packages.x86_64-linux = rec {
         # Packages from current stable
-        inherit (unstable)
+        inherit
           nix
           fish
           tmux
@@ -83,7 +79,7 @@
           terraform
           terraform-ls
           ;
-        inherit (unstable.nodePackages)
+        inherit (nodePackages)
           pyright
           bash-language-server
           node2nix
@@ -91,7 +87,7 @@
 
         # Overrided packages
         neovimWithPlugins =
-          with unstable; let
+          let
             # Pin some of the tree-sitter grammars
             treesitterAllGrammars = p: builtins.attrValues (p // {
               tree-sitter-nix = p.tree-sitter-nix.overrideAttrs (_: {
@@ -175,7 +171,7 @@
           wrapNeovimUnstable neovim-unwrapped wrapNeovimArgs;
 
         ansibleWithMitogen =
-          with unstable.python3.pkgs; let
+          with python3.pkgs; let
             # We need version 0.2 for ansible 2.9
             mitogen_0_2 = mitogen.overridePythonAttrs (oldAttrs: rec {
               version = "0.2.10";
@@ -203,8 +199,10 @@
               (name: value: { name = "share/nixpkgs/${name}"; path = value.outPath; })
               inputs;
           in
-          unstable.linkFarm "nixpkgs-sources" nixpkgs-sources;
-      } // import ./nix/node-packages/node-composition.nix { pkgs = unstable; };
+          linkFarm "nixpkgs-sources" nixpkgs-sources;
+      } // import ./nix/node-packages/node-composition.nix { inherit pkgs; };
+
+      overlays.default = import ./nix/overlay;
     };
 }
 
