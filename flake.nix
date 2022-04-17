@@ -10,7 +10,7 @@
     narHash = "sha256-3lmFtbxH3BSUYkq7gTtoW9dLqkIAkjXWhlncfdx0wCk=";
   };
 
-  outputs = { self, nixpkgs } @ args:
+  outputs = { self, nixpkgs }:
 
     let
       pkgs = import "${nixpkgs}/pkgs/top-level" {
