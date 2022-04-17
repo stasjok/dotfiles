@@ -93,8 +93,7 @@
                 };
               });
             });
-            nvimPlugins = vimPlugins // callPackage ./nix/nvim-plugins { inherit (vimUtils) buildVimPlugin; };
-            configure.packages.nix.start = with nvimPlugins; [
+            configure.packages.nix.start = with vimPlugins; [
               # Libraries
               plenary-nvim
               # Docs

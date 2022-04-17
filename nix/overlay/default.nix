@@ -1,6 +1,8 @@
 final: prev:
 
-{ } // # Override python packages for all interpreters
+{
+  vimPlugins = prev.vimPlugins // prev.callPackage ../vim-plugins { };
+} // # Override python packages for all interpreters
 prev.lib.genAttrs [
   "python27"
   "python37"
