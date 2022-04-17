@@ -82,17 +82,6 @@
         # Overrided packages
         neovimWithPlugins =
           let
-            # Pin some of the tree-sitter grammars
-            treesitterAllGrammars = p: builtins.attrValues (p // {
-              tree-sitter-nix = p.tree-sitter-nix.overrideAttrs (_: {
-                src = fetchFromGitHub {
-                  owner = "cstrahan";
-                  repo = "tree-sitter-nix";
-                  rev = "6d6aaa50793b8265b6a8b6628577a0083d3b923d";
-                  sha256 = "sha256-iYdP50IQ0Kg9kv/U5GsHy3wUTn2O34Oq3Vmre3EzczE=";
-                };
-              });
-            });
             configure.packages.nix.start = with vimPlugins; [
               # Libraries
               plenary-nvim
@@ -118,7 +107,7 @@
               # Comments toggle
               kommentary
               # Tree-sitter
-              (nvim-treesitter.withPlugins treesitterAllGrammars)
+              (nvim-treesitter.withPlugins (_: tree-sitter.allGrammars))
               # LSP
               nvim-lspconfig
               null-ls-nvim
