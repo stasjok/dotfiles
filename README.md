@@ -13,7 +13,7 @@ I use [Windows Terminal](https://github.com/microsoft/terminal) and `FiraCode NF
 
 ### First time installation
 
-Install Nix 2.4 and later (https://nixos.org/manual/nix/stable/#chap-installation),
+Install Nix 2.7 and later (https://nixos.org/manual/nix/stable/#chap-installation),
 then add to Nix configuration file (`/etc/nix/nix.conf` or `$HOME/.config/nix.conf`):
 
 ```
@@ -32,7 +32,7 @@ nix profile install mypkgs
 In order to upgrade packages:
 
 ```
-nix profile upgrade defaultPackage.x86_64-linux
+nix profile upgrade packages.x86_64-linux.default
 ```
 
 ## Installation

@@ -18,68 +18,63 @@
         overlays = [ self.overlays.default ];
       };
     in
-    with pkgs;
     {
-      # Provide all upstream packages and lib
-      legacyPackages.x86_64-linux = pkgs;
+      packages.x86_64-linux = with pkgs; rec {
 
-      # Provide a package for nix profile with all my packages combined
-      defaultPackage.x86_64-linux = buildEnv {
-        name = "nix-profile-${self.lastModifiedDate or "1"}";
-        paths = builtins.attrValues self.packages.x86_64-linux;
-        extraOutputsToInstall = [ "man" ];
-        pathsToLink = [
-          "/bin"
-          "/share/man"
-          "/share/nixpkgs"
-          "/share/fish/vendor_completions.d"
-          "/share/fish/vendor_conf.d"
-          "/share/fish/vendor_functions.d"
-        ];
-        buildInputs = [ man-db ];
+        default = nix-profile;
 
-        postBuild = ''
-          mandb --no-straycats $out/share/man
-          whatis --manpath=$out/share/man --wildcard '*' | sort > $out/share/man/whatis
-          rm --dir $out/share/man/index.* $out/share/man/cat*
-        '';
-      };
+        nix-profile = buildEnv {
+          name = "nix-profile-${self.lastModifiedDate or "1"}";
+          paths = [
+            nix
+            fish
+            tmux
+            git
+            gnupg
+            neovimWithPlugins
+            exa
+            bat
+            fd
+            ripgrep
+            fzf
+            delta
+            python3
+            black
+            ansible_2_9
+            ansible-lint
+            yamllint
+            shellcheck
+            shfmt
+            sumneko-lua-language-server
+            stylua
+            rnix-lsp
+            terraform
+            terraform-ls
+            nodePackages.pyright
+            nodePackages.bash-language-server
+            nodePackages.vscode-langservers-extracted
+            nodePackages."@ansible/ansible-language-server"
+            nodePackages.node2nix
+            sources
+          ];
+          extraOutputsToInstall = [ "man" ];
+          pathsToLink = [
+            "/bin"
+            "/share/man"
+            "/share/nixpkgs"
+            "/share/fish/vendor_completions.d"
+            "/share/fish/vendor_conf.d"
+            "/share/fish/vendor_functions.d"
+          ];
+          buildInputs = [ man-db ];
 
-      # My packages separately
-      packages.x86_64-linux = rec {
-        # Packages from current stable
-        inherit
-          nix
-          fish
-          tmux
-          git
-          gnupg
-          exa
-          bat
-          fd
-          ripgrep
-          fzf
-          delta
-          python3
-          black
-          ansible_2_9
-          ansible-lint
-          yamllint
-          shellcheck
-          shfmt
-          sumneko-lua-language-server
-          stylua
-          rnix-lsp
-          terraform
-          terraform-ls
-          ;
-        inherit (nodePackages)
-          pyright
-          bash-language-server
-          node2nix
-          ;
+          postBuild = ''
+            mandb --no-straycats $out/share/man
+            whatis --manpath=$out/share/man --wildcard '*' | sort > $out/share/man/whatis
+            rm --dir $out/share/man/index.* $out/share/man/cat*
+          '';
+        };
 
-        # Overrided packages
         neovimWithPlugins =
           let
             configure.packages.nix.start = with vimPlugins; [
@@ -161,9 +156,12 @@
               inputs;
           in
           linkFarm "nixpkgs-sources" nixpkgs-sources;
-      } // import ./nix/node-packages/node-composition.nix { inherit pkgs; };
+      };
 
       overlays.default = import ./nix/overlay;
+
+      # Provide all upstream packages
+      legacyPackages.x86_64-linux = pkgs;
     };
 }
 

@@ -2,6 +2,9 @@ final: prev:
 
 {
   vimPlugins = prev.vimPlugins // prev.callPackage ../vim-plugins { };
+  nodePackages = prev.nodePackages // prev.callPackage ../node-packages/node-composition.nix {
+    nodejs = final.nodejs-14_x;
+  };
 } // # Override python packages for all interpreters
 prev.lib.genAttrs [
   "python27"
