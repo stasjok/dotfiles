@@ -10,8 +10,11 @@ end
 
 -- Auto-format on save
 local root_dir = lspconfig["sumneko_lua"].get_root_dir(vim.api.nvim_buf_get_name(0))
-local stylua_conf_exists = lsputil.path.exists(root_dir .. "/stylua.toml")
-  or lsputil.path.exists(root_dir .. "/.stylua.toml")
+local stylua_conf_exists = root_dir
+  and (
+    lsputil.path.exists(root_dir .. "/stylua.toml")
+    or lsputil.path.exists(root_dir .. "/.stylua.toml")
+  )
 
 if stylua_conf_exists then
   vim.cmd([[
