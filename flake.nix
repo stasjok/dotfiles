@@ -119,9 +119,6 @@
             configure.packages.nix.start = with vimPlugins; [
               # Libraries
               plenary-nvim
-              # Docs
-              nvim-lua-guide
-              luv-vimdocs
               # Color schemes
               onedark-nvim
               # File icons
