@@ -55,13 +55,11 @@
             nodePackages.vscode-langservers-extracted
             nodePackages."@ansible/ansible-language-server"
             nodePackages.node2nix
-            sources
           ];
           extraOutputsToInstall = [ "man" ];
           pathsToLink = [
             "/bin"
             "/share/man"
-            "/share/nixpkgs"
             "/share/fish/vendor_completions.d"
             "/share/fish/vendor_conf.d"
             "/share/fish/vendor_functions.d"
@@ -72,6 +70,8 @@
             mandb --no-straycats $out/share/man
             whatis --manpath=$out/share/man --wildcard '*' | sort > $out/share/man/whatis
             rm --dir $out/share/man/index.* $out/share/man/cat*
+            mkdir -p $out/src
+            ln -s ${nixpkgs} $out/src/nixpkgs
           '';
         };
 
@@ -146,16 +146,6 @@
             };
           in
           wrapNeovimUnstable neovim-unwrapped wrapNeovimArgs;
-
-        # Reference input sources in order to avoid garbage collection
-        sources =
-          let
-            inputs = removeAttrs args [ "self" ];
-            nixpkgs-sources = lib.mapAttrsToList
-              (name: value: { name = "share/nixpkgs/${name}"; path = value.outPath; })
-              inputs;
-          in
-          linkFarm "nixpkgs-sources" nixpkgs-sources;
       };
 
       overlays.default = import ./nix/overlay;
