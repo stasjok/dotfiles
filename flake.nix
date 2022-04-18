@@ -7,7 +7,6 @@
     repo = "nixpkgs";
     # Released on 2022-04-16 04:53:52 via https://hydra.nixos.org/eval/1755745
     rev = "0b43a436fbbf96ecda249c4b8df5a349fe9f5e15";
-    narHash = "sha256-3lmFtbxH3BSUYkq7gTtoW9dLqkIAkjXWhlncfdx0wCk=";
   };
 
   outputs = { self, nixpkgs }:
