@@ -25,14 +25,3 @@ autocmd!
 autocmd TextYankPost * silent! lua vim.highlight.on_yank {on_visual=false}
 augroup END
 ]])
-
--- From nvim-lua-guide
-function _G.put(...)
-  local objects = {}
-  for i = 1, select("#", ...) do
-    local v = select(i, ...)
-    table.insert(objects, vim.inspect(v))
-  end
-
-  print(table.concat(objects, "\n"))
-end
