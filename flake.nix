@@ -118,6 +118,7 @@
             configure.packages.nix.start = with vimPlugins; [
               # Libraries
               plenary-nvim
+              impatient-nvim
               # Interface
               onedark-nvim
               nvim-web-devicons
