@@ -14,10 +14,12 @@ require("luasnip.config").setup({
   updateevents = "TextChanged,TextChangedI",
   store_selection_keys = "<C-H>",
   parser_nested_assembler = function(pos, snip)
+    local s = require("luasnip").snippet
     local i = require("luasnip").insert_node
     local c = require("luasnip").choice_node
-    local snip_text = snip:get_static_text()
     snip.pos = nil
+    -- Have to create temporary snippet, see: https://github.com/L3MON4D3/LuaSnip/issues/400
+    local snip_text = s("", snip:copy()):get_static_text()
     return c(pos, { i(nil, snip_text), snip })
   end,
 })
