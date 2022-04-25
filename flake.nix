@@ -37,7 +37,7 @@
             ripgrep
             fzf
             delta
-            python3
+            pythonWithPackages
             black
             ansible_2_9
             ansible-lint
@@ -178,6 +178,11 @@
             };
           in
           wrapNeovimUnstable neovim-unwrapped wrapNeovimArgs;
+
+        pythonWithPackages = python3.withPackages (ps: with ps; [
+          requests
+          pyyaml
+        ]);
       };
 
       overlays.default = import ./nix/overlay;
