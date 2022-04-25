@@ -101,7 +101,7 @@
   },
   "def": {
     "prefix": "def",
-    "body": "def ${1:function}('${2:args}')${3: -> ${4:None}}:\n\t'''${5:docstring for $1}'''\n\t$6",
+    "body": "def ${1:function}(${2:args})${3: -> ${4:None}}:\n\t'''${5:docstring for $1}'''\n\t$6",
     "description": "Function definition"
   },
   "defi": {
