@@ -162,10 +162,7 @@
             vimPackDir = vimUtils.packDir configure.packages;
             nvimDataDir = linkFarm "nvim-data-dir" [{ name = "nvim/site"; path = vimPackDir; }];
             nvimWrapperDataDirArgs = [ "--set" "XDG_DATA_DIRS" nvimDataDir ];
-            nvimWrapperDisablePerlArgs = [
-              "--add-flags"
-              (lib.escapeShellArgs [ "--cmd" "let g:loaded_perl_provider=0" ])
-            ];
+            nvimWrapperDisablePerlArgs = [ "--add-flags" "--cmd 'let g:loaded_perl_provider=0'" ];
             neovimConfig = neovimUtils.makeNeovimConfig {
               withPython3 = false;
               withRuby = false;
