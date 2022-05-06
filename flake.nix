@@ -5,8 +5,8 @@
     type = "github";
     owner = "NixOS";
     repo = "nixpkgs";
-    # This evaluation was performed on 2022-04-16 14:49:55 via https://hydra.nixos.org/eval/1755745
-    rev = "faad370edcb37162401be50d45526f52bb16a713";
+    # This evaluation was performed on 2022-05-02 13:15:44 via https://hydra.nixos.org/eval/1759163
+    rev = "fb679d351ad1a9b5ef97441f55f790c94b9aec46";
   };
 
   outputs = { self, nixpkgs }:
@@ -39,7 +39,7 @@
             delta
             pythonWithPackages
             black
-            ansible_2_9
+            ansible
             ansible-lint
             yamllint
             shellcheck
