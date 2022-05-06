@@ -3,24 +3,8 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 -- Speed up loading Lua modules in Neovim
-do
-  -- impatient.nvim doesn't work with nix in my case, because it caches
-  -- module path. In nix all paths are valid and immutable.
-  -- I want to use a separate directory for every instance of neovim.
-  -- impatient.nvim uses `vim.fn.stdpath('cache')` to determine cache
-  -- directory. I'm using a hack here to temporary change XDG_CACHE_HOME
-  -- so that impatient.nvim will use separate directory per nix package.
-  local Path = require("plenary.path")
-  local orig_cache_dir = vim.env.XDG_CACHE_HOME
-  local default_cache_dir = Path:new(vim.env.HOME, ".cache")
-  local data_hash = vim.fn.sha256(vim.env.XDG_DATA_DIRS)
-  local cache_dir = Path:new(orig_cache_dir or default_cache_dir, "nvim", data_hash)
-  if Path:new(cache_dir, "nvim"):mkdir({ mode = 493, parents = true }) then
-    vim.env.XDG_CACHE_HOME = tostring(cache_dir)
-    require("impatient")
-    vim.env.XDG_CACHE_HOME = tostring(orig_cache_dir or default_cache_dir)
-  end
-end
+_G.__luacache_suffix = "_" .. vim.fn.sha256(vim.env.XDG_DATA_DIRS):sub(1, 7)
+require("impatient")
 
 -- Enable filetype.lua
 vim.g.did_load_filetypes = 0

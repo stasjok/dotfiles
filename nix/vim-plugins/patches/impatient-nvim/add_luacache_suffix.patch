@@ -1,0 +1,20 @@
+diff --git a/lua/impatient.lua b/lua/impatient.lua
+index 86fe6f4..4657caf 100644
+--- a/lua/impatient.lua
++++ b/lua/impatient.lua
+@@ -13,13 +13,13 @@ local M = {
+     cache = {},
+     profile = nil,
+     dirty = false,
+-    path = vim.fn.stdpath('cache')..'/luacache_chunks',
++    path = vim.fn.stdpath('cache')..'/luacache_chunks'..(_G.__luacache_suffix or ''),
+   },
+   modpaths = {
+     cache = {},
+     profile = nil,
+     dirty = false,
+-    path = vim.fn.stdpath('cache')..'/luacache_modpaths',
++    path = vim.fn.stdpath('cache')..'/luacache_modpaths'..(_G.__luacache_suffix or ''),
+   },
+   log = {}
+ }

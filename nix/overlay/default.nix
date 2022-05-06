@@ -1,7 +1,7 @@
 final: prev:
 
 {
-  vimPlugins = prev.vimPlugins // prev.callPackage ../vim-plugins { };
+  vimPlugins = prev.vimPlugins // prev.callPackage ../vim-plugins { inherit (prev) vimPlugins; };
   nodePackages = prev.nodePackages // prev.callPackage ../node-packages/node-composition.nix {
     nodejs = final.nodejs-14_x;
   };
