@@ -10,6 +10,7 @@ local lsp_servers = {
   "bashls",
   "ansiblels",
   "jsonls",
+  "yamlls",
   "pyright",
   "rnix",
   "terraformls",

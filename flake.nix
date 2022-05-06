@@ -54,6 +54,7 @@
             nodePackages.bash-language-server
             nodePackages.vscode-langservers-extracted
             nodePackages."@ansible/ansible-language-server"
+            nodePackages.yaml-language-server
             nodePackages.typescript
             nodePackages.typescript-language-server
             nodePackages.node2nix
