@@ -13,6 +13,7 @@ local lsp_servers = {
   "pyright",
   "rnix",
   "terraformls",
+  "tsserver",
 }
 
 -- Default language server configuration

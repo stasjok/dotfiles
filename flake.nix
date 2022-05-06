@@ -49,10 +49,13 @@
             rnix-lsp
             terraform
             terraform-ls
+            nodejs
             nodePackages.pyright
             nodePackages.bash-language-server
             nodePackages.vscode-langservers-extracted
             nodePackages."@ansible/ansible-language-server"
+            nodePackages.typescript
+            nodePackages.typescript-language-server
             nodePackages.node2nix
           ];
           extraOutputsToInstall = [ "man" ];
