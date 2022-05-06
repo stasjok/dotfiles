@@ -15,6 +15,7 @@ local lsp_servers = {
   "rnix",
   "terraformls",
   "tsserver",
+  "gopls",
 }
 
 -- Default language server configuration

@@ -50,6 +50,8 @@
             terraform
             terraform-ls
             nodejs
+            go
+            gopls
             nodePackages.pyright
             nodePackages.bash-language-server
             nodePackages.vscode-langservers-extracted
