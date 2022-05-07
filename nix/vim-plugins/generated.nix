@@ -3,13 +3,13 @@
 {
   onedark-nvim = buildVimPlugin {
     pname = "onedark.nvim";
-    version = "2022-03-29";
+    version = "2022-04-14";
     src = builtins.fetchTree {
       type = "github";
       owner = "ful1e5";
       repo = "onedark.nvim";
-      rev = "7b8ab0195efe9bbe07337419594e764167368a14";
-      narHash = "sha256-H5n1ExX8RWOLE4hBLHrCER840/1EoRNEVI9L4W/eDtc=";
+      rev = "1f56c498236790fd33f6d859542333d064be314b";
+      narHash = "sha256-Wg7vxAjhruLjKCKX+4WEvAGgkoHmZ8B2LNq1OzuZ/A0=";
     };
   };
   surround-nvim = buildVimPlugin {
