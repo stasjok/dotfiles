@@ -152,8 +152,8 @@
               nvim-autopairs
               kommentary
               # Git
+              vim-fugitive
               gitsigns-nvim
-              neogit
               diffview-nvim
               # EditorConfig
               editorconfig-nvim
