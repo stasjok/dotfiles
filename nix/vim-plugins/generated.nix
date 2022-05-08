@@ -69,13 +69,13 @@
   };
   lua-dev-nvim = buildVimPlugin {
     pname = "lua-dev.nvim";
-    version = "2022-05-04";
+    version = "2022-05-01";
     src = builtins.fetchTree {
       type = "github";
-      owner = "folke";
+      owner = "max397574";
       repo = "lua-dev.nvim";
-      rev = "fda3d256001b79c5659fb4d624b47ae712cee261";
-      narHash = "sha256-9njeafCXGjUjr1Xiri5v87PCV/7I+aeOQZQLU4R519g=";
+      rev = "54149d1a4b70ba3442d1424a2e27fd36afd02779";
+      narHash = "sha256-4CI+zahSziaVeZk7Voc7pNmMOUeQ4OFUIqW8hqD9FpQ=";
     };
   };
 }
