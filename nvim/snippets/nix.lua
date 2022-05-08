@@ -17,10 +17,6 @@ local function fmte(str, nodes)
 end
 
 return {
-  -- ''
-  --   $1
-  -- ''
-  s({ trig = "''", hidden = true }, fmt("''\n\t{}\n''", i(1))),
   -- let
   --   $1
   -- in

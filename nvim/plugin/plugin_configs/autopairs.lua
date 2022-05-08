@@ -6,6 +6,14 @@ require("nvim-autopairs").setup({
   fast_wrap = {},
 })
 
+-- Fix basic rules
+for _, rule in ipairs(npairs.config.rules) do
+  if rule.start_pair == "'" and rule.not_filetypes then
+    -- Disable '' in nix
+    table.insert(rule.not_filetypes, "nix")
+  end
+end
+
 -- Add spaces between parentheses
 -- https://github.com/windwp/nvim-autopairs/issues/78
 -- https://github.com/windwp/nvim-autopairs/wiki/Custom-rules/425d8b096433b1329808797ff78f3acf23bc438f
@@ -48,5 +56,8 @@ npairs.add_rules({
     :use_key("]"),
   Rule("= ", ";", "nix"):with_move(function(opts)
     return opts.char == ";"
+  end),
+  Rule("''", "''", "nix"):with_move(function(opts)
+    return opts.char == "'"
   end),
 })
