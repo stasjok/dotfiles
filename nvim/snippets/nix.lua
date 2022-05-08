@@ -8,8 +8,6 @@ local r = require("luasnip.nodes.restoreNode").R
 local m = require("luasnip.extras").match
 local fmt = require("luasnip.extras.fmt").fmt
 
-local ts_utils = require("nvim-treesitter.ts_utils")
-
 local function cr(pos, choices)
   return c(pos, choices, { restore_cursor = true })
 end
@@ -18,23 +16,7 @@ local function fmte(str, nodes)
   return fmt(str, nodes, { trim_empty = false, dedent = false })
 end
 
-local function is_in_ts_node(nodes)
-  if type(nodes) == "string" then
-    nodes = { nodes }
-  end
-  local node_at_cursor = ts_utils.get_node_at_cursor()
-  if node_at_cursor then
-    return vim.tbl_contains(nodes, node_at_cursor:type())
-  end
-end
-
 return {
-  -- attr = value;
-  s({ trig = ";", hidden = true }, fmt("{} = {};", { i(1, "attr"), i(2, "value") }), {
-    condition = function()
-      return is_in_ts_node({ "attrset", "let" })
-    end,
-  }),
   -- ''
   --   $1
   -- ''

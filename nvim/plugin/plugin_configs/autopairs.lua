@@ -46,4 +46,7 @@ npairs.add_rules({
     :with_cr(cond.none())
     :with_del(cond.none())
     :use_key("]"),
+  Rule("= ", ";", "nix"):with_move(function(opts)
+    return opts.char == ";"
+  end),
 })
