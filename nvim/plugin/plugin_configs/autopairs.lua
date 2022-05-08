@@ -62,8 +62,10 @@ npairs.add_rules({
   -- Nix
   Rule("= ", ";", "nix"):with_move(char_matches_end_pair),
   Rule("'", "'", "nix")
-    :with_pair(ts_conds.is_ts_node("indented_string"), nil)
+    :with_pair(cond.not_before_regex("[^%s]"), nil)
     :with_pair(cond.not_after_regex(npairs.config.ignored_next_char), nil)
+    :with_pair(ts_conds.is_ts_node("indented_string"), nil)
+    :with_move(cond.not_after_text("''"))
     :with_move(char_matches_end_pair),
   Rule("''", "''", "nix")
     :with_pair(ts_conds.is_not_ts_node({ "comment", "string", "indented_string" }), nil)
