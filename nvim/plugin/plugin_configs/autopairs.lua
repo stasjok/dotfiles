@@ -22,7 +22,7 @@ npairs.add_rules({
     :with_pair(function(opts)
       local pair = opts.line:sub(opts.col - 1, opts.col)
       return vim.tbl_contains({ "()", "{}", "[]" }, pair)
-    end)
+    end, nil)
     :with_move(cond.none())
     :with_cr(cond.none())
     :with_del(function(opts)
@@ -31,7 +31,7 @@ npairs.add_rules({
       return vim.tbl_contains({ "(  )", "{  }", "[  ]" }, context)
     end),
   Rule("", " )")
-    :with_pair(cond.none())
+    :with_pair(cond.none(), nil)
     :with_move(function(opts)
       return opts.char == ")"
     end)
@@ -39,7 +39,7 @@ npairs.add_rules({
     :with_del(cond.none())
     :use_key(")"),
   Rule("", " }")
-    :with_pair(cond.none())
+    :with_pair(cond.none(), nil)
     :with_move(function(opts)
       return opts.char == "}"
     end)
@@ -47,7 +47,7 @@ npairs.add_rules({
     :with_del(cond.none())
     :use_key("}"),
   Rule("", " ]")
-    :with_pair(cond.none())
+    :with_pair(cond.none(), nil)
     :with_move(function(opts)
       return opts.char == "]"
     end)
