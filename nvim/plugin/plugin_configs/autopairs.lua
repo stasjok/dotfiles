@@ -4,7 +4,7 @@ local cond = require("nvim-autopairs.conds")
 local ts_conds = require("nvim-autopairs.ts-conds")
 
 local function char_matches_end_pair(opts)
-  return opts.next_char == opts.char
+  return opts.char == opts.next_char:sub(1, 1)
 end
 
 require("nvim-autopairs").setup({
