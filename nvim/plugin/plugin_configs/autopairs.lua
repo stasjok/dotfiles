@@ -3,6 +3,10 @@ local Rule = require("nvim-autopairs.rule")
 local cond = require("nvim-autopairs.conds")
 local ts_conds = require("nvim-autopairs.ts-conds")
 
+local function char_matches_end_pair(opts)
+  return opts.next_char == opts.char
+end
+
 require("nvim-autopairs").setup({
   fast_wrap = {},
 })
@@ -56,19 +60,13 @@ npairs.add_rules({
     :with_del(cond.none())
     :use_key("]"),
   -- Nix
-  Rule("= ", ";", "nix"):with_move(function(opts)
-    return opts.char == ";"
-  end),
+  Rule("= ", ";", "nix"):with_move(char_matches_end_pair),
   Rule("'", "'", "nix")
     :with_pair(ts_conds.is_ts_node("indented_string"), nil)
     :with_pair(cond.not_after_regex(npairs.config.ignored_next_char), nil)
-    :with_move(function(opts)
-      return opts.char == "'"
-    end),
+    :with_move(char_matches_end_pair),
   Rule("''", "''", "nix")
     :with_pair(ts_conds.is_not_ts_node({ "comment", "string", "indented_string" }), nil)
     :with_pair(cond.not_before_text("''"), nil)
-    :with_move(function(opts)
-      return opts.char == "'"
-    end),
+    :with_move(char_matches_end_pair),
 })
