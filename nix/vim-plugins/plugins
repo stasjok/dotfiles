@@ -16,3 +16,4 @@ aserowy/tmux.nvim
 khaveesh/vim-fish-syntax
 Glench/Vim-Jinja2-Syntax
 chikamichi/mediawiki.vim
+folke/lua-dev.nvim

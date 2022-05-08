@@ -67,4 +67,15 @@
       narHash = "sha256-Tgza7QAzNu0D5cuDyH/jR3rvTuoV2DRA2MBCKjiPUdE=";
     };
   };
+  lua-dev-nvim = buildVimPlugin {
+    pname = "lua-dev.nvim";
+    version = "2022-05-04";
+    src = builtins.fetchTree {
+      type = "github";
+      owner = "folke";
+      repo = "lua-dev.nvim";
+      rev = "fda3d256001b79c5659fb4d624b47ae712cee261";
+      narHash = "sha256-9njeafCXGjUjr1Xiri5v87PCV/7I+aeOQZQLU4R519g=";
+    };
+  };
 }
