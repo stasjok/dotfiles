@@ -18,4 +18,7 @@ require("nvim-treesitter.configs").setup({
       node_decremental = "<C-Q>",
     },
   },
+  playground = {
+    enable = true,
+  },
 })

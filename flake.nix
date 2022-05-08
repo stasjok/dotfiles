@@ -131,6 +131,7 @@
               tmux-nvim
               # Tree-sitter
               nvim-treesitterWithPlugins
+              playground
               # LSP
               nvim-lspconfig
               null-ls-nvim
