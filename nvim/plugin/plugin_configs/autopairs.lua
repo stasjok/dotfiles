@@ -60,7 +60,7 @@ npairs.add_rules({
     :with_del(cond.none())
     :use_key("]"),
   -- Nix
-  Rule("= ", ";", "nix"):with_move(char_matches_end_pair),
+  Rule("=", ";", "nix"):with_move(char_matches_end_pair),
   Rule("'", "'", "nix")
     :with_pair(cond.not_before_regex("[^%s]"), nil)
     :with_pair(cond.not_after_regex(npairs.config.ignored_next_char), nil)
