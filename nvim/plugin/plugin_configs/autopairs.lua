@@ -3,10 +3,6 @@ local Rule = require("nvim-autopairs.rule")
 local cond = require("nvim-autopairs.conds")
 local ts_conds = require("nvim-autopairs.ts-conds")
 
-local function char_matches_end_pair(opts)
-  return opts.char == opts.next_char:sub(1, 1)
-end
-
 require("nvim-autopairs").setup({
   fast_wrap = {},
 })
@@ -16,6 +12,61 @@ for _, rule in ipairs(npairs.config.rules) do
   if rule.start_pair == "'" and rule.not_filetypes then
     -- Disable '' in nix
     table.insert(rule.not_filetypes, "nix")
+  end
+end
+
+-- Condition opts types
+
+---Condition options for `can_pair`, `can_move`
+---@class cond_opts_pair
+---@field ts_node string|string[]|nil
+---@field text string
+---@field rule Rule
+---@field bufnr number
+---@field col number
+---@field char string
+---@field line string
+---@field prev_char string
+---@field next_char string
+
+---Condition options for `can_del`
+---@class cond_opts_del
+---@field ts_node string|string[]|nil
+---@field bufnr number
+---@field prev_char string
+---@field next_char string
+---@field line string
+
+---Condition options for `can_cr`
+---@class cond_opts_cr
+---@field ts_node string|string[]|nil
+---@field check_endwise_ts boolean
+---@field rule Rule
+---@field bufnr number
+---@field col number
+---@field line string
+---@field prev_char string
+---@field next_char string
+
+---Check if entered character matches `end_pair`'s first char.
+---@param opts cond_opts_pair
+---@return boolean
+local function char_matches_end_pair(opts)
+  return opts.char == opts.next_char:sub(1, 1)
+end
+
+---Returns a simple function that checks if cursor is not in a single-line comment.
+---@param comment_char? string Character used for comments. Default: `#`
+---@return fun(opts: cond_opts_pair): false? #Autopairs condition
+local function not_in_comment(comment_char)
+  local comment = comment_char or "#"
+  ---Check if cursor is in single-line comment.
+  ---@param opts cond_opts_pair
+  ---@return false? #Autopairs condition
+  return function(opts)
+    if opts.line:sub(1, opts.col):find(comment, 1, true) then
+      return false
+    end
   end
 end
 
@@ -60,7 +111,10 @@ npairs.add_rules({
     :with_del(cond.none())
     :use_key("]"),
   -- Nix
-  Rule("=", ";", "nix"):with_move(char_matches_end_pair),
+  Rule("=", ";", "nix")
+    :with_pair(not_in_comment(), nil)
+    :with_pair(ts_conds.is_not_ts_node({ "source", "string", "indented_string" }), nil)
+    :with_move(char_matches_end_pair),
   Rule("'", "'", "nix")
     :with_pair(cond.not_before_regex("[^%s]"), nil)
     :with_pair(cond.not_after_regex(npairs.config.ignored_next_char), nil)
@@ -68,7 +122,8 @@ npairs.add_rules({
     :with_move(cond.not_after_text("''"))
     :with_move(char_matches_end_pair),
   Rule("''", "''", "nix")
-    :with_pair(ts_conds.is_not_ts_node({ "comment", "string", "indented_string" }), nil)
+    :with_pair(not_in_comment(), nil)
+    :with_pair(ts_conds.is_not_ts_node({ "source", "string", "indented_string" }), nil)
     :with_pair(cond.not_before_text("''"), nil)
     :with_move(char_matches_end_pair),
 })
