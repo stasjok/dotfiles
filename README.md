@@ -52,7 +52,3 @@ you already have some configs in place.
 Change default shell to `/nix/var/nix/profiles/per-user/<USERNAME>/profile/bin/fish`
 (or `/usr/bin/fish` if you installed it with package manager).
 You may need to edit `/etc/shells`.
-
-## Nvim
-
-Run command `:PackerSync` in neovim after first startup. Then restart neovim.
