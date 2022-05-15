@@ -1,7 +1,7 @@
-{ buildVimPlugin }:
+{ buildVimPluginFrom2Nix }:
 
 {
-  onedark-nvim = buildVimPlugin {
+  onedark-nvim = buildVimPluginFrom2Nix {
     pname = "onedark.nvim";
     version = "2022-04-14";
     src = builtins.fetchTree {
@@ -12,7 +12,7 @@
       narHash = "sha256-Wg7vxAjhruLjKCKX+4WEvAGgkoHmZ8B2LNq1OzuZ/A0=";
     };
   };
-  surround-nvim = buildVimPlugin {
+  surround-nvim = buildVimPluginFrom2Nix {
     pname = "surround.nvim";
     version = "2022-02-01";
     src = builtins.fetchTree {
@@ -23,7 +23,7 @@
       narHash = "sha256-XXR/48pbeGwKifYrhtEyMsOCUxejuIla60q0fSYFgTc=";
     };
   };
-  tmux-nvim = buildVimPlugin {
+  tmux-nvim = buildVimPluginFrom2Nix {
     pname = "tmux.nvim";
     version = "2022-04-06";
     src = builtins.fetchTree {
@@ -34,7 +34,7 @@
       narHash = "sha256-2TV/SiIqcPzwq6f/Odn2JKaH0cGiNQ8ABqMSb4bXPw8=";
     };
   };
-  vim-fish-syntax = buildVimPlugin {
+  vim-fish-syntax = buildVimPluginFrom2Nix {
     pname = "vim-fish-syntax";
     version = "2022-01-06";
     src = builtins.fetchTree {
@@ -45,7 +45,7 @@
       narHash = "sha256-MRVUf0Q+IKajgnor4QSmEGJ4EeWw9Y526S/DfsYsF5w=";
     };
   };
-  vim-jinja2-syntax = buildVimPlugin {
+  vim-jinja2-syntax = buildVimPluginFrom2Nix {
     pname = "vim-jinja2-syntax";
     version = "2021-06-22";
     src = builtins.fetchTree {
@@ -56,7 +56,7 @@
       narHash = "sha256-57kZn10XBpCRRXsFSSEIUngdIJSj3cmNQHnkObj+ro4=";
     };
   };
-  mediawiki-vim = buildVimPlugin {
+  mediawiki-vim = buildVimPluginFrom2Nix {
     pname = "mediawiki.vim";
     version = "2015-11-15";
     src = builtins.fetchTree {
@@ -67,7 +67,7 @@
       narHash = "sha256-Tgza7QAzNu0D5cuDyH/jR3rvTuoV2DRA2MBCKjiPUdE=";
     };
   };
-  lua-dev-nvim = buildVimPlugin {
+  lua-dev-nvim = buildVimPluginFrom2Nix {
     pname = "lua-dev.nvim";
     version = "2022-05-01";
     src = builtins.fetchTree {

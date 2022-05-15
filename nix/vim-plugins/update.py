@@ -11,12 +11,12 @@ from urllib.parse import parse_qs, urlsplit, urlunsplit
 DIR = Path(__file__).parent
 PLUGINS = Path.joinpath(DIR, "plugins")
 GENERATED = Path.joinpath(DIR, "generated.nix")
-HEADER = """{ buildVimPlugin }:
+HEADER = """{ buildVimPluginFrom2Nix }:
 
 {
 """
 TAIL = "}\n"
-TEMPLATE = """  {name} = buildVimPlugin {{
+TEMPLATE = """  {name} = buildVimPluginFrom2Nix {{
     pname = "{pname}";
     version = "{version}";
     src = builtins.fetchTree {{
