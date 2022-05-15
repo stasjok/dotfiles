@@ -99,13 +99,10 @@ return {
     i(3, "sha256"),
     t({ '";', "}" }),
   }, {
-    condition = function(line_to_cursor)
-      return line_to_cursor:sub(-18) == "builtins.fetchTree"
-    end,
     show_condition = function()
       local pos = vim.api.nvim_win_get_cursor(0)[2]
       local line_to_cursor = vim.api.nvim_get_current_line():sub(1, pos)
-      return line_to_cursor:match("builtins%.%a*$")
+      return line_to_cursor:find("^%s*%a+%s*=%s*%a*$") or line_to_cursor:find("builtins%.%a*$")
     end,
   }),
 }
