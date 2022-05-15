@@ -5,8 +5,8 @@
     type = "github";
     owner = "NixOS";
     repo = "nixpkgs";
-    # This evaluation was performed on 2022-05-02 13:15:44 via https://hydra.nixos.org/eval/1759163
-    rev = "fb679d351ad1a9b5ef97441f55f790c94b9aec46";
+    # Released on 2022-05-15 04:11:30 via https://hydra.nixos.org/eval/1759163
+    rev = "f7a22851667ac89ac1863ede0d8c386fc6eb12a0";
   };
 
   outputs = { self, nixpkgs }:
@@ -82,7 +82,7 @@
         neovimWithPlugins =
           let
             nvim-treesitterWithPlugins =
-              vimPlugins.nvim-treesitter.withPlugins (plugins: with plugins; [
+              vimPlugins.nvim-treesitter.withPlugins (_: with tree-sitter-grammars; [
                 tree-sitter-bash
                 tree-sitter-c
                 tree-sitter-cmake
