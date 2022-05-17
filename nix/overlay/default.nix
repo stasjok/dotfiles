@@ -28,6 +28,12 @@ prev.lib.genAttrs [
   (python: prev.${python}.override {
     packageOverrides = python-final: python-prev:
       {
+        ansible = python-prev.ansible.overridePythonAttrs (oldAttrs: {
+          propagatedBuildInputs = prev.lib.unique (oldAttrs.propagatedBuildInputs ++ (with python-final; [
+            # json_query filter
+            jmespath
+          ]));
+        });
         ansible-core = python-prev.ansible-core.overridePythonAttrs (oldAttrs: {
           makeWrapperArgs = [
             "--suffix ANSIBLE_STRATEGY_PLUGINS : ${python-final.mitogen}/${final.${python}.sitePackages}/ansible_mitogen"
