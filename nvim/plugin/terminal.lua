@@ -33,4 +33,5 @@ local function terminal_open()
 end
 
 map("n", "<Leader>t", terminal_open)
-map("t", "<Esc><Esc>", "<C-\\><C-n>")
+map("t", "<Esc>", "<C-\\><C-n>")
+map("t", "<C-\\><Esc>", "<Esc>")
