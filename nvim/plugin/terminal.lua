@@ -1,3 +1,10 @@
+local buf_delete = vim.api.nvim_buf_delete
+local buf_is_valid = vim.api.nvim_buf_is_valid
+local create_buf = vim.api.nvim_create_buf
+local set_current_buf = vim.api.nvim_set_current_buf
+local command = vim.api.nvim_command
+local map = vim.keymap.set
+
 vim.cmd([[
 augroup terminal
   autocmd!
@@ -5,26 +12,25 @@ augroup terminal
 augroup END
 ]])
 
-_G.Terminal = {
-  Open = function()
-    if _G.TerminalBuffer == nil or not vim.api.nvim_buf_is_valid(_G.TerminalBuffer) then
-      _G.TerminalBuffer = vim.api.nvim_create_buf(true, false)
-      vim.api.nvim_set_current_buf(_G.TerminalBuffer)
-      vim.fn.termopen("fish", {
-        on_exit = _G.Terminal.OnExit,
-        env = { XDG_DATA_DIRS = vim.env.HOME .. "/.nix-profile/share" },
-      })
-      vim.api.nvim_command("startinsert")
-    else
-      vim.api.nvim_set_current_buf(_G.TerminalBuffer)
-      vim.api.nvim_command("startinsert")
-    end
-  end,
-  OnExit = function()
-    vim.api.nvim_buf_delete(_G.TerminalBuffer, { force = true })
-    _G.TerminalBuffer = nil
-  end,
-}
+local function on_exit()
+  buf_delete(_G._my_terminal_buffer, { force = true })
+  _G._my_terminal_buffer = nil
+end
 
-vim.api.nvim_set_keymap("n", "<leader>t", "<Cmd>lua _G.Terminal.Open()<CR>", { noremap = true })
-vim.api.nvim_set_keymap("t", "<Esc><Esc>", "<C-\\><C-n>", { noremap = true })
+local function terminal_open()
+  if _G._my_terminal_buffer == nil or not buf_is_valid(_G._my_terminal_buffer) then
+    _G._my_terminal_buffer = create_buf(true, false)
+    set_current_buf(_G._my_terminal_buffer)
+    vim.fn.termopen("fish", {
+      on_exit = on_exit,
+      env = { XDG_DATA_DIRS = vim.env.HOME .. "/.nix-profile/share" },
+    })
+    command("startinsert")
+  else
+    set_current_buf(_G._my_terminal_buffer)
+    command("startinsert")
+  end
+end
+
+map("n", "<Leader>t", terminal_open)
+map("t", "<Esc><Esc>", "<C-\\><C-n>")
