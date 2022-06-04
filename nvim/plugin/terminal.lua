@@ -2,15 +2,23 @@ local buf_delete = vim.api.nvim_buf_delete
 local buf_is_valid = vim.api.nvim_buf_is_valid
 local create_buf = vim.api.nvim_create_buf
 local set_current_buf = vim.api.nvim_set_current_buf
+local create_augroup = vim.api.nvim_create_augroup
 local create_autocmd = vim.api.nvim_create_autocmd
+local opt_local = vim.opt_local
 local map = vim.keymap.set
 
-vim.cmd([[
-augroup terminal
-  autocmd!
-  autocmd TermOpen * setlocal nonumber norelativenumber sidescrolloff=0 signcolumn=auto
-augroup END
-]])
+local augroup = create_augroup("terminal", {})
+create_autocmd("TermOpen", {
+  group = augroup,
+  pattern = "*",
+  desc = "Set options for terminal window",
+  callback = function()
+    opt_local.number = false
+    opt_local.relativenumber = false
+    opt_local.signcolumn = "auto"
+    opt_local.sidescrolloff = 0
+  end,
+})
 
 local function on_exit()
   buf_delete(_G._my_terminal_buffer, { force = true })
