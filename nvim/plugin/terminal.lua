@@ -35,3 +35,4 @@ end
 map("n", "<Leader>t", terminal_open)
 map("t", "<Esc>", "<C-\\><C-n>")
 map("t", "<C-\\><Esc>", "<Esc>")
+map("t", "<M-PageUp>", "<C-\\><C-n><PageUp>")
