@@ -4,6 +4,7 @@ local s = luasnip.snippet
 local i = luasnip.insert_node
 local c = luasnip.choice_node
 
+-- Configuration
 luasnip.config.setup({
   updateevents = "TextChanged,TextChangedI",
   store_selection_keys = "<C-H>",
@@ -16,6 +17,12 @@ luasnip.config.setup({
   end,
 })
 
+-- Filetypes
+luasnip.filetype_extend("sls", { "jinja" })
+luasnip.filetype_extend("ansible", { "jinja", "jinja2" })
+luasnip.filetype_extend("jinja2", { "jinja" })
+
+-- Mapping functions
 local function luasnip_jump(n)
   return function()
     luasnip.jump(n)
