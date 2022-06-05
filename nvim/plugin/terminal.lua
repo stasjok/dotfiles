@@ -43,6 +43,6 @@ local function terminal_open()
 end
 
 map("n", "<Leader>t", terminal_open)
-map("t", "<Esc>", "<C-\\><C-n>")
+map("t", "<Esc>", "<C-\\><C-N>")
 map("t", "<C-\\><Esc>", "<Esc>")
-map("t", "<M-PageUp>", "<C-\\><C-n><PageUp>")
+map("t", "<M-PageUp>", "<C-\\><C-N><PageUp>")
