@@ -70,6 +70,8 @@ local function not_in_comment(comment_char)
   end
 end
 
+local jinja_filetypes = { "jinja", "jinja2", "yaml.ansible", "sls" }
+
 -- Add spaces between parentheses
 -- https://github.com/windwp/nvim-autopairs/issues/78
 -- https://github.com/windwp/nvim-autopairs/wiki/Custom-rules/425d8b096433b1329808797ff78f3acf23bc438f
@@ -126,4 +128,54 @@ npairs.add_rules({
     :with_pair(ts_conds.is_not_ts_node({ "source", "string", "indented_string" }), nil)
     :with_pair(cond.not_before_text("''"), nil)
     :with_move(char_matches_end_pair),
+  -- Jinja
+  Rule("%", "%", jinja_filetypes):with_pair(function(opts)
+    return opts.line:sub(opts.col - 1, opts.col) == "{}"
+  end, nil),
+  Rule("#", "#", jinja_filetypes):with_pair(function(opts)
+    return opts.line:sub(opts.col - 1, opts.col) == "{}"
+  end, nil),
+  Rule(" ", " ", jinja_filetypes)
+    :with_pair(function(opts)
+      local pair = opts.line:sub(opts.col - 2, opts.col + 1)
+      return vim.tbl_contains({ "{%%}", "{##}", "%-%}", "#-#}" }, pair)
+    end, nil)
+    :with_cr(cond.none())
+    :with_del(function(opts)
+      local col = vim.api.nvim_win_get_cursor(0)[2] + 1
+      local context = opts.line:sub(col - 3, col + 2)
+      return vim.tbl_contains({ "{%  %}", "{#  #}", "%-  %}", "#-  #}" }, context)
+    end),
+  Rule("", "%}", jinja_filetypes)
+    :with_pair(cond.none(), nil)
+    :with_move(function(opts)
+      return opts.char == "%"
+    end)
+    :with_cr(cond.none())
+    :with_del(cond.none())
+    :use_key("%"),
+  Rule("", "#}", jinja_filetypes)
+    :with_pair(cond.none(), nil)
+    :with_move(function(opts)
+      return opts.char == "#"
+    end)
+    :with_cr(cond.none())
+    :with_del(cond.none())
+    :use_key("#"),
+  Rule("", " %}", jinja_filetypes)
+    :with_pair(cond.none(), nil)
+    :with_move(function(opts)
+      return opts.char == "%"
+    end)
+    :with_cr(cond.none())
+    :with_del(cond.none())
+    :use_key("%"),
+  Rule("", " #}", jinja_filetypes)
+    :with_pair(cond.none(), nil)
+    :with_move(function(opts)
+      return opts.char == "#"
+    end)
+    :with_cr(cond.none())
+    :with_del(cond.none())
+    :use_key("#"),
 })
