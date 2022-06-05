@@ -5,8 +5,8 @@
     type = "github";
     owner = "NixOS";
     repo = "nixpkgs";
-    # Released on 2022-05-15 04:11:30 via https://hydra.nixos.org/eval/1759163
-    rev = "f7a22851667ac89ac1863ede0d8c386fc6eb12a0";
+    # Released on 2022-06-05 12:22:33 via https://hydra.nixos.org/eval/1765480
+    rev = "7f5523d1333ca8ec626612e17cb8f63c9a621450";
   };
 
   outputs = { self, nixpkgs }:
