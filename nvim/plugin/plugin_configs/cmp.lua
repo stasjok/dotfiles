@@ -48,7 +48,7 @@ cmp.setup({
       name = "buffer",
       group_index = 1,
       option = {
-        keyword_pattern = [[\<\k\{4,30}\>]],
+        keyword_pattern = [[\<\k\{3,30}\>]],
         get_bufnrs = get_bufnrs,
       },
     },
