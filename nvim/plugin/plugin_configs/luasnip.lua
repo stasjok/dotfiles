@@ -1,22 +1,13 @@
-local map = require("map").map
-local map_expr = require("map").map_expr
-local replace_termcodes_wrap = require("map").replace_termcodes_wrap
+local luasnip = require("luasnip")
+local map = vim.keymap.set
+local s = luasnip.snippet
+local i = luasnip.insert_node
+local c = luasnip.choice_node
 
-local function change_choice()
-  if require("luasnip").choice_active() then
-    return "<Cmd>lua require('luasnip').change_choice(1)<CR>"
-  else
-    return "<Ignore>"
-  end
-end
-
-require("luasnip.config").setup({
+luasnip.config.setup({
   updateevents = "TextChanged,TextChangedI",
   store_selection_keys = "<C-H>",
   parser_nested_assembler = function(pos, snip)
-    local s = require("luasnip").snippet
-    local i = require("luasnip").insert_node
-    local c = require("luasnip").choice_node
     snip.pos = nil
     -- Have to create temporary snippet, see: https://github.com/L3MON4D3/LuaSnip/issues/400
     local snip_text = s("", snip:copy()):get_static_text()
@@ -24,11 +15,25 @@ require("luasnip.config").setup({
   end,
 })
 
+local function luasnip_jump(n)
+  return function()
+    luasnip.jump(n)
+  end
+end
+
+local function luasnip_change_choice(n)
+  return function()
+    if luasnip.choice_active() then
+      luasnip.change_choice(n)
+    end
+  end
+end
+
 -- Mappings
-map("i", "<C-H>", "<Cmd>lua require('luasnip').expand()<CR>")
-map({ "i", "s", "n" }, "<C-J>", "<Cmd>lua require('luasnip').jump(1)<CR>")
-map({ "i", "s", "n" }, "<C-K>", "<Cmd>lua require('luasnip').jump(-1)<CR>")
-map_expr({ "i", "s", "n" }, "<C-L>", replace_termcodes_wrap(change_choice))
+map("i", "<C-H>", luasnip.expand)
+map({ "i", "s", "n" }, "<C-J>", luasnip_jump(1))
+map({ "i", "s", "n" }, "<C-K>", luasnip_jump(-1))
+map({ "i", "s", "n" }, "<C-L>", luasnip_change_choice(1))
 map("s", "<BS>", "<C-O>c")
 map("s", "<Del>", "<C-O>c")
 
