@@ -7,6 +7,7 @@ local c = luasnip.choice_node
 luasnip.config.setup({
   updateevents = "TextChanged,TextChangedI",
   store_selection_keys = "<C-H>",
+  snip_env = nil,
   parser_nested_assembler = function(pos, snip)
     snip.pos = nil
     -- Have to create temporary snippet, see: https://github.com/L3MON4D3/LuaSnip/issues/400
