@@ -39,6 +39,7 @@ map("s", "<BS>", "<C-O>c")
 map("s", "<Del>", "<C-O>c")
 
 -- Load snippets
+luasnip.cleanup()
 local opts = {
   paths = vim.api.nvim_get_runtime_file("snippets", true),
 }
