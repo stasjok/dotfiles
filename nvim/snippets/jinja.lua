@@ -19,14 +19,15 @@ local types = require("luasnip.util.types")
 local events = require("luasnip.util.events")
 local parse = require("luasnip.util.parser").parse_snippet
 local ai = require("luasnip.nodes.absolute_indexer")
+local cr = require("snippets.nodes").cr
 
 local snippets = {}
 for statement, opts in pairs({
   ["for"] = {
-    nodes = c(1, {
+    nodes = cr(1, {
       { r(1, 1, i(nil, "item")), t(" in "), r(2, 2, i(nil, "list")) },
       { r(1, 1), t(" in "), r(2, 2), t(" if "), i(3, "filter") },
-    }, { restore_cursor = true }),
+    }),
   },
   ["if"] = {
     dscr = "If statement",

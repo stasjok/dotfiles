@@ -7,10 +7,7 @@ local d = require("luasnip.nodes.dynamicNode").D
 local r = require("luasnip.nodes.restoreNode").R
 local m = require("luasnip.extras").match
 local fmt = require("luasnip.extras.fmt").fmt
-
-local function cr(pos, choices)
-  return c(pos, choices, { restore_cursor = true })
-end
+local cr = require("snippets.nodes").cr
 
 local function fmte(str, nodes)
   return fmt(str, nodes, { trim_empty = false, dedent = false })
