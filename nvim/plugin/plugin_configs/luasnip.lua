@@ -18,9 +18,9 @@ luasnip.config.setup({
 })
 
 -- Filetypes
-luasnip.filetype_extend("sls", { "jinja" })
-luasnip.filetype_extend("ansible", { "jinja", "jinja2" })
-luasnip.filetype_extend("jinja2", { "jinja" })
+luasnip.filetype_set("sls", { "sls", "jinja" })
+luasnip.filetype_set("ansible", { "ansible", "jinja", "jinja2" })
+luasnip.filetype_set("jinja2", { "jinja2", "jinja" })
 
 -- Mapping functions
 local function luasnip_jump(n)
