@@ -20,6 +20,8 @@ local events = require("luasnip.util.events")
 local parse = require("luasnip.util.parser").parse_snippet
 local ai = require("luasnip.nodes.absolute_indexer")
 local cr = require("snippets.nodes").cr
+local expand_conds = require("snippets.expand_conditions")
+local show_conds = require("snippets.show_conditions")
 
 local snippets = {}
 for statement, opts in pairs({
@@ -68,10 +70,8 @@ for statement, opts in pairs({
       i(0),
       t({ "", "{%- end" .. statement .. " %}" }),
     }, {
-      condition = conds.line_begin,
-      show_condition = function(line_to_cursor)
-        return line_to_cursor:find("^%s*%a*$")
-      end,
+      condition = expand_conds.is_line_beginning,
+      show_condition = show_conds.is_line_beginning(),
     })
   )
 end
