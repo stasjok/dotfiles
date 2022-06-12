@@ -27,10 +27,8 @@ local snippets = {}
 
 for statement, opts in pairs({
   ["for"] = {
-    nodes = cr(1, {
-      { r(1, 1, i(nil, "item")), t(" in "), r(2, 2, i(nil, "list")) },
-      { r(1, 1), t(" in "), r(2, 2), t(" if "), i(3, "filter") },
-    }),
+    dscr = "For loop",
+    nodes = { i(1, "item"), t(" in "), i(2, "list") },
   },
   ["if"] = {
     dscr = "If statement",
@@ -44,6 +42,7 @@ for statement, opts in pairs({
   call = {
     dscr = "Call block",
     nodes = { i(1, "macro_name"), t("("), i(2), t(")") },
+    trim = "-",
   },
   filter = {
     dscr = "Filter section",
