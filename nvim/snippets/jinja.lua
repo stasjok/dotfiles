@@ -24,6 +24,7 @@ local expand_conds = require("snippets.expand_conditions")
 local show_conds = require("snippets.show_conditions")
 
 local snippets = {}
+
 for statement, opts in pairs({
   ["for"] = {
     nodes = cr(1, {
@@ -75,5 +76,19 @@ for statement, opts in pairs({
     })
   )
 end
+
+snippets[#snippets + 1] = s({
+  trig = "if",
+  dscr = "Inline if statement",
+  wordTrig = false,
+}, {
+  t("{% if "),
+  i(1, "condition"),
+  t(" %}"),
+  i(0),
+  t("{% endif %}"),
+}, {
+  show_condition = show_conds.is_not_line_beginning(),
+})
 
 return snippets
