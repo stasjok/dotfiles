@@ -20,6 +20,7 @@ local events = require("luasnip.util.events")
 local parse = require("luasnip.util.parser").parse_snippet
 local ai = require("luasnip.nodes.absolute_indexer")
 local cr = require("snippets.nodes").cr
+local wn = require("snippets.nodes").wrapped_nodes
 local expand_conds = require("snippets.expand_conditions")
 local show_conds = require("snippets.show_conditions")
 
@@ -38,6 +39,7 @@ for statement, opts in pairs({
     dscr = "Macro definition",
     nodes = { i(1, "macro_name"), t("("), i(2), t(")") },
     trim = "-",
+    inline = false,
   },
   call = {
     dscr = "Call block",
@@ -62,7 +64,7 @@ for statement, opts in pairs({
     snippets,
     s({ trig = statement, dscr = opts.dscr or statement }, {
       t("{%- " .. statement .. (opts.space or " ")),
-      sn(1, opts.nodes),
+      wn(1, opts.nodes, true),
       t({ " " .. (opts.trim or "") .. "%}", "" }),
       f(function(_, snip)
         return snip.env.SELECT_DEDENT
@@ -74,20 +76,23 @@ for statement, opts in pairs({
       show_condition = show_conds.is_line_beginning(),
     })
   )
+  if opts.inline ~= false then
+    table.insert(
+      snippets,
+      s({ trig = statement, dscr = "Inline " .. (opts.dscr or statement), wordTrig = false }, {
+        t("{% " .. statement .. (opts.space or " ")),
+        wn(1, opts.nodes, true),
+        t(" %}"),
+        f(function(_, snip)
+          return snip.env.SELECT_DEDENT
+        end),
+        i(0),
+        t("{% end" .. statement .. " %}"),
+      }, {
+        show_condition = show_conds.is_not_line_beginning(),
+      })
+    )
+  end
 end
-
-snippets[#snippets + 1] = s({
-  trig = "if",
-  dscr = "Inline if statement",
-  wordTrig = false,
-}, {
-  t("{% if "),
-  i(1, "condition"),
-  t(" %}"),
-  i(0),
-  t("{% endif %}"),
-}, {
-  show_condition = show_conds.is_not_line_beginning(),
-})
 
 return snippets
