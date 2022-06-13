@@ -21,6 +21,7 @@ local parse = require("luasnip.util.parser").parse_snippet
 local ai = require("luasnip.nodes.absolute_indexer")
 local cr = require("snippets.nodes").cr
 local wn = require("snippets.nodes").wrapped_nodes
+local select_dedent = require("snippets.functions").select_dedent
 local expand_conds = require("snippets.expand_conditions")
 local show_conds = require("snippets.show_conditions")
 
@@ -66,9 +67,7 @@ for statement, opts in pairs({
       t("{%- " .. statement .. (opts.space or " ")),
       wn(1, opts.nodes, true),
       t({ " " .. (opts.trim or "") .. "%}", "" }),
-      f(function(_, snip)
-        return snip.env.SELECT_DEDENT
-      end),
+      f(select_dedent),
       i(0),
       t({ "", "{%- end" .. statement .. " %}" }),
     }, {
@@ -83,9 +82,7 @@ for statement, opts in pairs({
         t("{% " .. statement .. (opts.space or " ")),
         wn(1, opts.nodes, true),
         t(" %}"),
-        f(function(_, snip)
-          return snip.env.SELECT_DEDENT
-        end),
+        f(select_dedent),
         i(0),
         t("{% end" .. statement .. " %}"),
       }, {
