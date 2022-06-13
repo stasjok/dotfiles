@@ -7,6 +7,7 @@ local c = luasnip.choice_node
 -- Configuration
 luasnip.config.setup({
   updateevents = "TextChanged,TextChangedI",
+  region_check_events = "InsertEnter",
   store_selection_keys = "<C-H>",
   snip_env = nil,
   parser_nested_assembler = function(pos, snip)
