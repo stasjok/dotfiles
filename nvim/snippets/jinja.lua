@@ -68,7 +68,7 @@ for statement, opts in pairs({
       wn(1, opts.nodes, true),
       t({ " " .. (opts.trim or "") .. "%}", "" }),
       f(select_dedent),
-      i(0),
+      i(2),
       t({ "", "{%- end" .. statement .. " %}" }),
     }, {
       condition = expand_conds.is_line_beginning,
@@ -83,7 +83,7 @@ for statement, opts in pairs({
         wn(1, opts.nodes, true),
         t(" %}"),
         f(select_dedent),
-        i(0),
+        i(2),
         t("{% end" .. statement .. " %}"),
       }, {
         show_condition = show_conds.is_not_line_beginning(),
