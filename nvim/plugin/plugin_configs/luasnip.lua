@@ -1,4 +1,5 @@
 local luasnip = require("luasnip")
+local on_the_fly = require("luasnip.extras.otf").on_the_fly
 local map = vim.keymap.set
 local s = luasnip.snippet
 local i = luasnip.insert_node
@@ -38,11 +39,24 @@ local function luasnip_change_choice(n)
   end
 end
 
+local function on_the_fly_insert()
+  local register = vim.fn.getcharstr()
+  if #register == 1 and register:match('[%w"*+-]') then
+    on_the_fly(register)
+  end
+end
+
+local function on_the_fly_visual()
+  return "c<C-F>" .. vim.v.register
+end
+
 -- Mappings
 map("i", "<C-H>", luasnip.expand)
 map({ "i", "s", "n" }, "<C-J>", luasnip_jump(1))
 map({ "i", "s", "n" }, "<C-K>", luasnip_jump(-1))
 map({ "i", "s", "n" }, "<C-L>", luasnip_change_choice(1))
+map("i", "<C-F>", on_the_fly_insert)
+map("x", "<C-F>", on_the_fly_visual, { remap = true, expr = true })
 map("s", "<BS>", "<C-O>c")
 map("s", "<Del>", "<C-O>c")
 
