@@ -5,13 +5,10 @@ local functions = {}
 ---@param parent table The immediate parent of the functionNode
 ---@return string
 function functions.select_dedent(_, parent)
-  while parent do
-    if parent.env then
-      return parent.env.SELECT_DEDENT
-    end
+  while not parent.env do
     parent = parent.parent
   end
-  return ""
+  return parent.env.SELECT_DEDENT
 end
 
 return functions
