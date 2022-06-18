@@ -157,8 +157,12 @@ local function jinja_statement_generator(block, inline)
         }),
       }
     end
+    local stored = { nodes or {} }
+    if block then
+      table.insert(stored, { f(select_dedent), i(1) })
+    end
     return s(snip_args, snip_nodes, {
-      stored = { nodes or {}, { f(select_dedent), i(1) } },
+      stored = stored,
       condition = opts.condition,
       show_condition = opts.show_condition,
     })
