@@ -9,11 +9,6 @@
     "body": "${2:expression_if_true} if ${1:condition} else ${3:expression_if_false}",
     "description": "If expression"
   },
-  "ablock": {
-    "prefix": "ablock",
-    "body": "{%${1:-} ${2:block} ${3:statements} %}\n$4\n{%${1} end${2} %}",
-    "description": "Arbitrary block"
-  },
   "extends": {
     "prefix": "extends",
     "body": "{%${1:-} extends '${2:template_file}' %}",
