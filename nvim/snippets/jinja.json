@@ -9,16 +9,6 @@
     "body": "${2:expression_if_true} if ${1:condition} else ${3:expression_if_false}",
     "description": "If expression"
   },
-  "set": {
-    "prefix": "set",
-    "body": "{%${1:-} set ${2:var} = ${3:value} %}",
-    "description": "Variable assignment"
-  },
-  "setb": {
-    "prefix": "setb",
-    "body": "{%${1:-} set ${2:var} %}\n$3\n{%${1} endset %}",
-    "description": "Block assignment"
-  },
   "ablock": {
     "prefix": "ablock",
     "body": "{%${1:-} ${2:block} ${3:statements} %}\n$4\n{%${1} end${2} %}",

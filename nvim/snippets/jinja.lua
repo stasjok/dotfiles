@@ -234,4 +234,40 @@ for statement, opts in pairs({
   table.insert(snippets, snip_fun(snip_opts, opts.nodes, opts))
 end
 
+table.insert(
+  snippets,
+  s({ trig = "set", dscr = "Variable assignment" }, {
+    cr(1, {
+      {
+        d(1, block_start),
+        t("set "),
+        r(2, 1, i(1, "var")),
+        t(" = "),
+        r(3, 2, i(1, "value")),
+        t(" %}"),
+      },
+      {
+        d(1, block_start),
+        t("set "),
+        r(2, 1),
+        t({ " %}", "" }),
+        r(3, 2),
+        t({ "", "" }),
+        rep(1),
+        t("endset %}"),
+      },
+      {
+        t("{% set "),
+        r(1, 1),
+        t(" %}"),
+        r(2, 2),
+        t("{% endset %}"),
+      },
+    }),
+  }, {
+    condition = expand_conds.is_line_beginning,
+    show_condition = show_conds.is_line_beginning(),
+  })
+)
+
 return snippets
