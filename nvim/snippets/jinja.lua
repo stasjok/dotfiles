@@ -201,6 +201,7 @@ for statement, opts in pairs({
     dscr = "Macro definition",
     nodes = { i(1, "macro_name"), t("("), i(2), t(")") },
     trim_block = true,
+    inline = false,
   },
   call = {
     dscr = "Call block",
@@ -227,11 +228,13 @@ for statement, opts in pairs({
   opts.condition = expand_conds.is_line_beginning
   opts.show_condition = show_conds.is_line_beginning()
   table.insert(snippets, snip_fun(vim.deepcopy(snip_opts), vim.deepcopy(opts.nodes), opts))
-  snip_fun = opts.block ~= false and jinja_inline_block or jinja_inline_statement
-  snip_opts.wordTrig = false
-  opts.condition = nil
-  opts.show_condition = show_conds.is_not_line_beginning()
-  table.insert(snippets, snip_fun(snip_opts, opts.nodes, opts))
+  if opts.inline ~= false then
+    snip_fun = opts.block ~= false and jinja_inline_block or jinja_inline_statement
+    snip_opts.wordTrig = false
+    opts.condition = nil
+    opts.show_condition = show_conds.is_not_line_beginning()
+    table.insert(snippets, snip_fun(snip_opts, opts.nodes, opts))
+  end
 end
 
 table.insert(
