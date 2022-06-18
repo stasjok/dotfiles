@@ -94,7 +94,7 @@ local function block_start()
   return sn(nil, nodes)
 end
 
----@alias JinjaGeneratorOpts {no_space?: boolean, end_statement?: string, trim_block?: boolean, condition?: function, show_condition?: function}
+---@alias JinjaGeneratorOpts {no_space?: boolean, end_statement?: string, trim_block?: boolean, append_newline?:boolean, condition?: function, show_condition?: function}
 
 ---Returns a function for creating a snippet for jinja block
 ---@param block boolean If `true` returns block statement
@@ -157,6 +157,9 @@ local function jinja_statement_generator(block, inline)
         }),
       }
     end
+    if opts.append_newline and not inline then
+      table.insert(snip_nodes, t({ "", "" }))
+    end
     local stored = { nodes or {} }
     if block then
       table.insert(stored, { f(select_dedent), i(1) })
@@ -183,6 +186,17 @@ for statement, opts in pairs({
     dscr = "If statement",
     nodes = i(1, "condition"),
   },
+  ["else"] = {
+    dscr = "Else statement",
+    block = false,
+    append_newline = true,
+  },
+  elif = {
+    dscr = "Elif statement",
+    nodes = i(1, "condition"),
+    block = false,
+    append_newline = true,
+  },
   macro = {
     dscr = "Macro definition",
     nodes = { i(1, "macro_name"), t("("), i(2), t(")") },
@@ -205,17 +219,19 @@ for statement, opts in pairs({
     dscr = "Raw block",
   },
 }) do
+  local snip_fun = opts.block ~= false and jinja_block or jinja_statement
   local snip_opts = {
     trig = statement,
     dscr = opts.dscr or statement,
   }
   opts.condition = expand_conds.is_line_beginning
   opts.show_condition = show_conds.is_line_beginning()
-  table.insert(snippets, jinja_block(vim.deepcopy(snip_opts), vim.deepcopy(opts.nodes), opts))
+  table.insert(snippets, snip_fun(vim.deepcopy(snip_opts), vim.deepcopy(opts.nodes), opts))
+  snip_fun = opts.block ~= false and jinja_inline_block or jinja_inline_statement
   snip_opts.wordTrig = false
   opts.condition = nil
   opts.show_condition = show_conds.is_not_line_beginning()
-  table.insert(snippets, jinja_inline_block(snip_opts, opts.nodes, opts))
+  table.insert(snippets, snip_fun(snip_opts, opts.nodes, opts))
 end
 
 return snippets
