@@ -94,7 +94,7 @@ local function block_start()
   return sn(nil, nodes)
 end
 
----@alias JinjaGeneratorOpts {no_space?: boolean, end_statement?: string, right_trim?: boolean, condition?: function, show_condition?: function}
+---@alias JinjaGeneratorOpts {no_space?: boolean, end_statement?: string, trim_block?: boolean, condition?: function, show_condition?: function}
 
 ---Returns a function for creating a snippet for jinja block
 ---@param block boolean If `true` returns block statement
@@ -126,7 +126,15 @@ local function jinja_statement_generator(block, inline)
     end
     if not inline then
       local inline_nodes = snip_nodes
-      local end_block = opts.right_trim and t(" -%}") or t(" %}")
+      local end_block
+      local repeat_block
+      if opts.trim_block then
+        end_block = t(" -%}")
+        repeat_block = l(l._1:gsub("^{%%  ?", "{%%- "), 1)
+      else
+        end_block = t(" %}")
+        repeat_block = rep(1)
+      end
       snip_nodes = {
         d(1, block_start),
         t(statement),
@@ -138,7 +146,7 @@ local function jinja_statement_generator(block, inline)
           t({ "", "" }),
           r(3, 2),
           t({ "", "" }),
-          rep(1),
+          repeat_block,
           t(end_statement .. " %}"),
         })
       end
@@ -174,12 +182,12 @@ for statement, opts in pairs({
   macro = {
     dscr = "Macro definition",
     nodes = { i(1, "macro_name"), t("("), i(2), t(")") },
-    right_trim = true,
+    trim_block = true,
   },
   call = {
     dscr = "Call block",
     nodes = { i(1, "macro_name"), t("("), i(2), t(")") },
-    right_trim = true,
+    trim_block = true,
   },
   filter = {
     dscr = "Filter block",
