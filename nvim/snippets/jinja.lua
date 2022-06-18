@@ -109,7 +109,7 @@ local function jinja_statement_generator(block, inline)
     opts = opts or {}
     local statement = type(snip_args) == "string" and snip_args or snip_args.trig
     -- local end_statement = opts.end_statement or ("end" .. statement)
-    local end_statement = opts.end_statement or ("end" .. "for")
+    local end_statement = opts.end_statement or ("end" .. statement)
     if not opts.no_space and type(nodes) == "table" and not vim.tbl_isempty(nodes) then
       statement = statement .. " "
     end
