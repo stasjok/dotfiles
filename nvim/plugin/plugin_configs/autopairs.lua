@@ -115,7 +115,10 @@ npairs.add_rules({
   -- Lua
   Rule("=", ",", "lua")
     :with_pair(cond.not_after_regex("%s?}", 2), nil)
-    :with_pair(ts_conds.is_ts_node("table_constructor"), nil)
+    :with_pair(
+      ts_conds.is_ts_node({ "table_constructor", "field", "bracket_index_expression" }),
+      nil
+    )
     :with_cr(cond.none())
     :with_move(char_matches_end_pair),
   -- Nix
