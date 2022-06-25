@@ -15,6 +15,7 @@ require("telescope").load_extension("fzf")
 
 -- Mappings
 local mappings = {
+  ["<Leader>R"] = "resume()",
   ["<Leader><Space>"] = "buffers()",
   ["<Leader>f"] = "find_files()",
   ["<Leader>s"] = "live_grep()",
