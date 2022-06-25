@@ -116,6 +116,7 @@ npairs.add_rules({
   Rule("=", ";", "nix")
     :with_pair(not_in_comment(), nil)
     :with_pair(ts_conds.is_not_ts_node({ "source", "string", "indented_string" }), nil)
+    :with_cr(cond.none())
     :with_move(char_matches_end_pair),
   Rule("'", "'", "nix")
     :with_pair(cond.not_before_regex("[^%s]"), nil)
