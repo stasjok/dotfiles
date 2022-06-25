@@ -112,6 +112,12 @@ npairs.add_rules({
     :with_cr(cond.none())
     :with_del(cond.none())
     :use_key("]"),
+  -- Lua
+  Rule("=", ",", "lua")
+    :with_pair(cond.not_after_regex("%s?}", 2), nil)
+    :with_pair(ts_conds.is_ts_node("table_constructor"), nil)
+    :with_cr(cond.none())
+    :with_move(char_matches_end_pair),
   -- Nix
   Rule("=", ";", "nix")
     :with_pair(not_in_comment(), nil)
