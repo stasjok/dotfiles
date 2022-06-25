@@ -149,13 +149,13 @@ local function jinja_statement_generator(block, inline)
           repeat_block,
           t(end_statement .. " %}"),
         })
+        snip_nodes = {
+          cr(1, {
+            snip_nodes,
+            inline_nodes,
+          }),
+        }
       end
-      snip_nodes = {
-        cr(1, {
-          snip_nodes,
-          inline_nodes,
-        }),
-      }
     end
     if opts.append_newline and not inline then
       table.insert(snip_nodes, t({ "", "" }))
