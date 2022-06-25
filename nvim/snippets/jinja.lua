@@ -212,12 +212,18 @@ for statement, opts in pairs({
     dscr = "Filter block",
     nodes = i(1, "filter_name"),
   },
+  raw = {
+    dscr = "Raw block",
+  },
   block = {
     dscr = "Block tag",
     nodes = i(1, "tag"),
   },
-  raw = {
-    dscr = "Raw block",
+  extends = {
+    dscr = "Extend tag",
+    nodes = { t('"'), i(1, "filename"), t('"') },
+    block = false,
+    inline = false,
   },
 }) do
   local snip_fun = opts.block ~= false and jinja_block or jinja_statement
