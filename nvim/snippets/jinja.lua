@@ -106,21 +106,31 @@ local function jinja_statement_generator(block, inline)
   ---@param opts? JinjaGeneratorOpts Options affecting resulting snippet
   ---@return table
   return function(snip_args, nodes, opts)
+    nodes = nodes or {}
     opts = opts or {}
     local statement = type(snip_args) == "string" and snip_args or snip_args.trig
-    -- local end_statement = opts.end_statement or ("end" .. statement)
     local end_statement = opts.end_statement or ("end" .. statement)
     if not opts.no_space and type(nodes) == "table" and not vim.tbl_isempty(nodes) then
       statement = statement .. " "
     end
+    ---Returns restoreNode if block or snippetNode if not
+    ---@param pos number Position
+    ---@return table
+    local function statement_nodes(pos)
+      if block then
+        return r(pos, "statement_nodes")
+      else
+        return wn(pos, nodes)
+      end
+    end
     local snip_nodes = {
       t("{% " .. statement),
-      r(1, 1),
+      statement_nodes(1),
       t(" %}"),
     }
     if block then
       vim.list_extend(snip_nodes, {
-        r(2, 2),
+        r(2, "content_nodes"),
         t("{% " .. end_statement .. " %}"),
       })
     end
@@ -138,13 +148,13 @@ local function jinja_statement_generator(block, inline)
       snip_nodes = {
         d(1, block_start),
         t(statement),
-        r(2, 1),
+        statement_nodes(2),
         end_block,
       }
       if block then
         vim.list_extend(snip_nodes, {
           t({ "", "" }),
-          r(3, 2),
+          r(3, "content_nodes"),
           t({ "", "" }),
           repeat_block,
           t(end_statement .. " %}"),
@@ -160,9 +170,12 @@ local function jinja_statement_generator(block, inline)
     if opts.append_newline and not inline then
       table.insert(snip_nodes, t({ "", "" }))
     end
-    local stored = { nodes or {} }
+    local stored = {}
     if block then
-      table.insert(stored, { f(select_dedent), i(1) })
+      stored = {
+        statement_nodes = nodes,
+        content_nodes = { f(select_dedent), i(1) },
+      }
     end
     return s(snip_args, snip_nodes, {
       stored = stored,
@@ -214,6 +227,53 @@ for statement, opts in pairs({
   },
   raw = {
     dscr = "Raw block",
+  },
+  include = {
+    dscr = "Include tag",
+    nodes = {
+      t('"'),
+      cr(1, {
+        { r(1, "filename", i(nil, "filename")), t('"') },
+        { r(1, "filename"), t('" ignore missing') },
+        { r(1, "filename"), t('" without context') },
+        { r(1, "filename"), t('" ignore missing without context') },
+      }),
+    },
+    block = false,
+    inline = false,
+  },
+  import = {
+    dscr = "Import tag",
+    nodes = {
+      t('"'),
+      cr(1, {
+        r(1, "statement", {
+          i(1, "filename"),
+          t('"'),
+          n(2, " as ", ""),
+          dl(2, l._1:match("[^/]*$"):match("^[^.]*"), 1),
+        }),
+        { r(1, "statement"), t(" with context") },
+      }),
+    },
+    block = false,
+    inline = false,
+  },
+  from = {
+    dscr = "Import specific names from a template",
+    nodes = {
+      t('"'),
+      cr(1, {
+        r(1, "statement", {
+          i(1, "filename"),
+          t('" import '),
+          i(2, "name"),
+        }),
+        { r(1, "statement"), t(" with context") },
+      }),
+    },
+    block = false,
+    inline = false,
   },
   block = {
     dscr = "Block tag",

@@ -9,21 +9,6 @@
     "body": "${2:expression_if_true} if ${1:condition} else ${3:expression_if_false}",
     "description": "If expression"
   },
-  "include": {
-    "prefix": "include",
-    "body": "{%${1:-} include '${2:template_file}'${3:${4: ignore missing}${5: without context}} %}",
-    "description": "Include tag"
-  },
-  "import": {
-    "prefix": "import",
-    "body": "{%${1:-} import '${2:template_file}'${3: as ${4:$2}}${5: with context} %}",
-    "description": "Import template macros"
-  },
-  "from": {
-    "prefix": "from",
-    "body": "{%${1:-} from '${2:template_file}' import ${3:name}${4: as ${5:$3}}${6: with context} %}",
-    "description": "Import from template"
-  },
   "do": {
     "prefix": "do",
     "body": "{%${1:-} do ${2:${3:var}.${4:append}(${5})} %}",
