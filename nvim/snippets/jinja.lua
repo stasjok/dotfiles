@@ -195,6 +195,16 @@ for statement, opts in pairs({
     dscr = "For loop",
     nodes = { i(1, "item"), t(" in "), i(2, "list") },
   },
+  ["do"] = {
+    dscr = "Expression statement",
+    nodes = cr(1, {
+      r(1, "var", i(nil, "var")),
+      { r(1, "var"), t(".append("), r(2, "x", i(nil)), t(")") },
+      { r(1, "var"), t(".update("), r(2, "x"), t(")") },
+    }),
+    block = false,
+    inline = false,
+  },
   ["if"] = {
     dscr = "If statement",
     nodes = i(1, "condition"),
