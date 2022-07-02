@@ -12,8 +12,8 @@ generated // {
       type = "github";
       owner = "L3MON4D3";
       repo = "LuaSnip";
-      rev = "79b2019c68a2ff5ae4d732d50746c901dd45603a";
-      narHash = "sha256-ZYrhr5Zoa1239jyM7H2FoyFdcc69gOlc7OZ6pBmTn9Y=";
+      rev = "295cc9e422060b3200234b42cbee6dde1dfee765";
+      narHash = "sha256-5W9NAiHa4NbcPLeeIjc0iykUL1uPTWa+OohNHWvB+LI=";
     };
   });
   lua-dev-nvim = generated.lua-dev-nvim.overrideAttrs (_: {
