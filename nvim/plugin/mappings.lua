@@ -2,7 +2,7 @@ local map = require("map").map
 local map_expr = require("map").map_expr
 
 -- Leader shouldn't work by itself
-map({ "n", "v" }, "<Leader>", "<Nop>")
+map({ "n", "x" }, "<Leader>", "<Nop>")
 
 -- Emacs-like mappings
 map("!", "<C-B>", "<Left>")
