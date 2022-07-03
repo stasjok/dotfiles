@@ -349,6 +349,29 @@ table.insert(
   })
 )
 
+---Prepend nodes for jinja filter or test
+---@param name string Name of the filter or test
+---@param nodes boolean | table If `false`, returns `name`, if `true` returns `name($1)`, if `table` returns `name($nodes)`
+---@return table #Nodes
+local function jinja_nodes_for_filter(name, nodes)
+  if nodes then
+    local filter_start = t(name .. "(")
+    if type(nodes) == "table" then
+      if getmetatable(nodes) then
+        nodes = { filter_start, nodes, t(")") }
+      else
+        table.insert(nodes, 1, filter_start)
+        table.insert(nodes, t(")"))
+      end
+    else
+      nodes = { filter_start, i(1), t(")") }
+    end
+  else
+    nodes = t(name)
+  end
+  return nodes
+end
+
 -- Filters
 for filter, nodes in pairs({
   abs = false,
@@ -497,26 +520,58 @@ for filter, nodes in pairs({
   }),
   xmlattr = c(1, { t(""), t("false") }),
 }) do
-  if nodes then
-    local filter_start = t(filter .. "(")
-    if type(nodes) == "table" then
-      if getmetatable(nodes) then
-        nodes = { filter_start, nodes, t(")") }
-      else
-        table.insert(nodes, 1, filter_start)
-        table.insert(nodes, t(")"))
-      end
-    else
-      nodes = { filter_start, i(1), t(")") }
-    end
-  else
-    nodes = t(filter)
-  end
+  nodes = jinja_nodes_for_filter(filter, nodes)
   table.insert(
     snippets,
     s({ trig = filter, dscr = "`" .. filter .. "` filter" }, nodes, {
       condition = expand_conds.is_after("|%s*"),
       show_condition = show_conds.is_after("|%s*"),
+    })
+  )
+end
+
+-- Tests
+for test, nodes in pairs({
+  boolean = false,
+  callable = false,
+  defined = false,
+  divisibleby = i(1, "num"),
+  eq = true,
+  equalto = true,
+  escaped = false,
+  even = false,
+  ["false"] = false,
+  filter = false,
+  float = false,
+  ge = true,
+  gt = true,
+  greaterthan = true,
+  ["in"] = true,
+  integer = false,
+  iterable = false,
+  le = true,
+  lower = false,
+  lt = true,
+  lessthan = true,
+  mapping = false,
+  ne = false,
+  none = false,
+  number = false,
+  odd = false,
+  sameas = true,
+  sequence = false,
+  string = false,
+  test = false,
+  ["true"] = false,
+  undefined = false,
+  upper = false,
+}) do
+  nodes = jinja_nodes_for_filter(test, nodes)
+  table.insert(
+    snippets,
+    s({ trig = test, dscr = "`" .. test .. "` test" }, nodes, {
+      condition = expand_conds.is_after("is%s+"),
+      show_condition = show_conds.is_after("is%s+"),
     })
   )
 end
