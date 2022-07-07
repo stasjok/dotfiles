@@ -94,6 +94,15 @@ local function block_start()
   return sn(nil, nodes)
 end
 
+---Returns a function for functionNode that returns ` %}` or ` -%}` based on `trim_end_block` and `b:jinja_trim_blocks`
+---@param trim_end_block boolean Is trimming of end block needed?
+---@return function
+local function block_end(trim_end_block)
+  return function()
+    return (trim_end_block and not get_trim_block()) and " -%}" or " %}"
+  end
+end
+
 ---@alias JinjaGeneratorOpts {no_space?: boolean, end_statement?: string, trim_block?: boolean, append_newline?:boolean, condition?: function, show_condition?: function}
 
 ---Returns a function for creating a snippet for jinja block
@@ -139,7 +148,7 @@ local function jinja_statement_generator(block, inline)
       local end_block
       local repeat_block
       if opts.trim_block then
-        end_block = t(" -%}")
+        end_block = p(block_end(true))
         repeat_block = l(l._1:gsub("^{%%  ?", "{%%- "), 1)
       else
         end_block = t(" %}")
@@ -329,7 +338,8 @@ table.insert(
         d(1, block_start),
         t("set "),
         r(2, 1),
-        t({ " %}", "" }),
+        p(block_end(true)),
+        t({ "", "" }),
         r(3, 2),
         t({ "", "" }),
         rep(1),
