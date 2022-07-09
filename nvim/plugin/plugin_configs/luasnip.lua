@@ -20,19 +20,13 @@ local function jinja_ft_func(ft)
   return function()
     ---@type {[1]: integer, [2]: integer}
     local pos = win_get_cursor(0)
+    local first_context_line = pos[1] >= 2 and pos[1] - 2 or pos[1] - 1
     ---@type string[]
-    local context = buf_get_text(
-      0,
-      pos[1] >= 2 and pos[1] - 2 or pos[1] - 1,
-      0,
-      pos[1] - 1,
-      pos[2],
-      {}
-    )
+    local context = buf_get_text(0, first_context_line, 0, pos[1] - 1, pos[2], {})
     if #context == 1 then
       table.insert(context, 1, "")
     end
-    if context[2]:find("|%s*[%w_]*$", -20) or context[1]:sub(-1) == "|" then
+    if context[2]:find("|%s*[%w_]*$", -20) or context[1]:find("|%s*$", -4) then
       return { "jinja_filters" }
     elseif context[2]:find("is%s+[%w_]*$", -20) then
       return { "jinja_tests" }
