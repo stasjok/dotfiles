@@ -7,11 +7,37 @@ local i = luasnip.insert_node
 local c = luasnip.choice_node
 local win_get_cursor = vim.api.nvim_win_get_cursor
 local buf_get_text = vim.api.nvim_buf_get_text
+local is_ansible = require("snippets.jinja_utils").is_ansible
+local is_salt = require("snippets.jinja_utils").is_salt
 
 -- Filetypes
 luasnip.filetype_set("sls", { "sls", "jinja" })
 luasnip.filetype_set("ansible", { "ansible", "jinja", "jinja2" })
 luasnip.filetype_set("jinja2", { "jinja2", "jinja" })
+
+---Returns filetypes for jinja filters
+---@return string[]
+local function filters_filetypes()
+  local ft = { "jinja_filters" }
+  if is_salt() then
+    table.insert(ft, "salt_filters")
+  elseif is_ansible() then
+    table.insert(ft, "ansible_filters")
+  end
+  return ft
+end
+
+---Returns filetypes for jinja tests
+---@return string[]
+local function tests_filetypes()
+  local ft = { "jinja_tests" }
+  if is_salt() then
+    table.insert(ft, "salt_tests")
+  elseif is_ansible() then
+    table.insert(ft, "ansible_tests")
+  end
+  return ft
+end
 
 ---Returns `ft_func` for filetypes using jinja
 ---@param ft string Fallback filetype
@@ -27,9 +53,9 @@ local function jinja_ft_func(ft)
       table.insert(context, 1, "")
     end
     if context[2]:find("|%s*[%w_]*$", -20) or context[1]:find("|%s*$", -4) then
-      return { "jinja_filters" }
+      return filters_filetypes()
     elseif context[2]:find("is%s+[%w_]*$", -20) then
-      return { "jinja_tests" }
+      return tests_filetypes()
     else
       return { ft, "jinja_statements" }
     end
@@ -54,8 +80,6 @@ setmetatable(ft_func, {
   end,
 })
 
-local jinja_virtual = { "jinja_statements", "jinja_filters", "jinja_tests" }
-
 -- Configuration
 luasnip.config.setup({
   updateevents = "TextChanged,TextChangedI",
@@ -64,10 +88,38 @@ luasnip.config.setup({
   snip_env = nil,
   ft_func = ft_func,
   load_ft_func = extend_load_ft({
-    jinja = vim.list_slice(jinja_virtual),
-    jinja2 = vim.list_slice(jinja_virtual),
-    sls = vim.list_slice(jinja_virtual),
-    ansible = vim.list_slice(jinja_virtual),
+    jinja = {
+      "jinja_statements",
+      "jinja_filters",
+      "jinja_tests",
+      "salt_filters",
+      "salt_tests",
+      "ansible_filters",
+      "ansible_tests",
+    },
+    jinja2 = {
+      "jinja_statements",
+      "jinja_filters",
+      "jinja_tests",
+      "salt_filters",
+      "salt_tests",
+      "ansible_filters",
+      "ansible_tests",
+    },
+    sls = {
+      "jinja_statements",
+      "jinja_filters",
+      "jinja_tests",
+      "salt_filters",
+      "salt_tests",
+    },
+    ansible = {
+      "jinja_statements",
+      "jinja_filters",
+      "jinja_tests",
+      "ansible_filters",
+      "ansible_tests",
+    },
   }),
   parser_nested_assembler = function(pos, snip)
     snip.pos = nil
