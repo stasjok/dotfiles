@@ -190,7 +190,7 @@ jinja_utils.jinja_inline_block = jinja_statement_generator(true, true)
 ---@param name string Name of the filter or test
 ---@param nodes boolean | table If `false`, returns `name`, if `true` returns `name($1)`, if `table` returns `name($nodes)`
 ---@return table #Nodes
-function jinja_utils.jinja_nodes_for_filter(name, nodes)
+local function jinja_nodes_for_filter(name, nodes)
   if nodes then
     local filter_start = t(name .. "(")
     if type(nodes) == "table" then
@@ -207,10 +207,23 @@ function jinja_utils.jinja_nodes_for_filter(name, nodes)
       nodes = { filter_start, i(1), t(")") }
     end
   else
-    -- False
+    -- False or nil
     nodes = t(name)
   end
   return nodes
+end
+
+---Returns jinja filter or test snippets
+---@param filters {dscr?: string, nodes?: table|boolean} Filter or test definitions
+---@return table
+function jinja_utils.jinja_filter_snippets(filters)
+  local snippets = {}
+  for trig, opts in pairs(filters) do
+    local dscr = opts.dscr or trig
+    local nodes = jinja_nodes_for_filter(trig, opts.nodes)
+    table.insert(snippets, s({ trig = trig, dscr = dscr }, nodes))
+  end
+  return snippets
 end
 
 return jinja_utils
