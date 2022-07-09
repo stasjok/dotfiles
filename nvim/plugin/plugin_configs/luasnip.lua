@@ -47,7 +47,7 @@ local function on_the_fly_insert()
 end
 
 local function on_the_fly_visual()
-  return "c<C-F>" .. vim.v.register
+  return "c<C-E>" .. vim.v.register
 end
 
 -- Mappings
@@ -55,8 +55,8 @@ map("i", "<C-H>", luasnip.expand)
 map({ "i", "s", "n" }, "<C-J>", luasnip_jump(1))
 map({ "i", "s", "n" }, "<C-K>", luasnip_jump(-1))
 map({ "i", "s", "n" }, "<C-L>", luasnip_change_choice(1))
-map("i", "<C-F>", on_the_fly_insert)
-map("x", "<C-F>", on_the_fly_visual, { remap = true, expr = true })
+map("i", "<C-E>", on_the_fly_insert)
+map("x", "<C-E>", on_the_fly_visual, { remap = true, expr = true })
 map("s", "<BS>", "<C-O>c")
 map("s", "<Del>", "<C-O>c")
 

@@ -105,14 +105,7 @@ cmp.setup({
       "i",
       "c",
     }),
-    ["<C-E>"] = mapping(function()
-      if cmp.visible() then
-        cmp.abort()
-      end
-    end, {
-      "i",
-      "c",
-    }),
+    ["<C-E>"] = mapping(mapping.abort(), { "i", "c" }),
     ["<C-N>"] = mapping({
       i = mapping.select_next_item(),
       c = function(fallback)
