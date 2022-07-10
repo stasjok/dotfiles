@@ -19,11 +19,6 @@
     "body": "match(${1:'${2:regex}'}${3:${4:, ignorecase=True}${5:, multiline=True}})",
     "description": "Tests that a string matches the regex"
   },
-  "to_num": {
-    "prefix": "to_num",
-    "body": "to_num",
-    "description": "Converts a string to its numerical value"
-  },
   "yaml": {
     "prefix": "yaml",
     "body": "yaml${1:(flow_style=False)}",
