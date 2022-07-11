@@ -19,11 +19,6 @@
     "body": "${2:expression_if_true} if ${1:condition} else ${3:expression_if_false}",
     "description": "If expression"
   },
-  "match": {
-    "prefix": "match",
-    "body": "match(${1:'${2:regex}'}${3:${4:, ignorecase=True}${5:, multiline=True}})",
-    "description": "Tests that a string matches the regex"
-  },
   "show_full_context": {
     "prefix": "show_full_context",
     "body": "show_full_context()",
