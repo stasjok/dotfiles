@@ -6,8 +6,8 @@
         "path": "./jinja.json"
       },
       {
-        "language": "jinja2",
-        "path": "./jinja2.json"
+        "language": "ansible_filters",
+        "path": "./ansible_filters.json"
       },
       {
         "language": "sls",

@@ -1,14 +1,4 @@
 {
-  "fact": {
-    "prefix": "fact",
-    "body": "ansible_facts['${1:hostname}']",
-    "description": "Ansible fact"
-  },
-  "managed": {
-    "prefix": "managed",
-    "body": "{{ ansible_managed | comment${1} }}",
-    "description": "Ansible managed variable"
-  },
   "mandatory": {
     "prefix": "mandatory",
     "body": "mandatory(${1:msg='${2:Mandatory variable is not defined.}'})",

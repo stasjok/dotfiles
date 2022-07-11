@@ -13,7 +13,6 @@ local is_salt = require("snippets.jinja_utils").is_salt
 -- Filetypes
 luasnip.filetype_set("sls", { "sls", "jinja" })
 luasnip.filetype_set("ansible", { "ansible", "jinja", "jinja2" })
-luasnip.filetype_set("jinja2", { "jinja2", "jinja" })
 
 ---Returns filetypes for jinja filters
 ---@return string[]
@@ -64,7 +63,6 @@ end
 
 local ft_func = {
   jinja = jinja_ft_func("jinja"),
-  jinja2 = jinja_ft_func("jinja2"),
   sls = jinja_ft_func("sls"),
   ansible = jinja_ft_func("ansible"),
 }
@@ -89,15 +87,6 @@ luasnip.config.setup({
   ft_func = ft_func,
   load_ft_func = extend_load_ft({
     jinja = {
-      "jinja_statements",
-      "jinja_filters",
-      "jinja_tests",
-      "salt_filters",
-      "salt_tests",
-      "ansible_filters",
-      "ansible_tests",
-    },
-    jinja2 = {
       "jinja_statements",
       "jinja_filters",
       "jinja_tests",
