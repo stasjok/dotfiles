@@ -11,6 +11,8 @@ local p = require("luasnip.extras").partial
 local cr = require("snippets.nodes").cr
 local wn = require("snippets.nodes").wrapped_nodes
 local select_dedent = require("snippets.functions").select_dedent
+local expand_conds = require("snippets.expand_conditions")
+local show_conds = require("snippets.show_conditions")
 
 local jinja_utils = {}
 
@@ -185,6 +187,32 @@ jinja_utils.jinja_statement = jinja_statement_generator(false, false)
 jinja_utils.jinja_inline_statement = jinja_statement_generator(false, true)
 jinja_utils.jinja_block = jinja_statement_generator(true, false)
 jinja_utils.jinja_inline_block = jinja_statement_generator(true, true)
+
+---Returns jinja statement snippets
+---@param statements {dscr?: string, nodes?: table|boolean, block?: boolean, inline?: boolean, no_space?: boolean, end_statement?: string, trim_block?: boolean, append_newline?:boolean} Statement definitions
+---@return table
+function jinja_utils.jinja_statement_snippets(statements)
+  local snippets = {}
+  for trig, opts in pairs(statements) do
+    local snip_fun = opts.block ~= false and jinja_utils.jinja_block or jinja_utils.jinja_statement
+    local snip_opts = {
+      trig = trig,
+      dscr = opts.dscr or trig,
+    }
+    opts.condition = expand_conds.is_line_beginning
+    opts.show_condition = show_conds.is_line_beginning()
+    table.insert(snippets, snip_fun(vim.deepcopy(snip_opts), vim.deepcopy(opts.nodes), opts))
+    if opts.inline ~= false then
+      snip_fun = opts.block ~= false and jinja_utils.jinja_inline_block
+        or jinja_utils.jinja_inline_statement
+      snip_opts.wordTrig = false
+      opts.condition = nil
+      opts.show_condition = show_conds.is_not_line_beginning()
+      table.insert(snippets, snip_fun(snip_opts, opts.nodes, opts))
+    end
+  end
+  return snippets
+end
 
 ---Prepend nodes for jinja filter or test
 ---@param name string Name of the filter or test

@@ -24,21 +24,6 @@
     "body": "match(${1:'${2:regex}'}${3:${4:, ignorecase=True}${5:, multiline=True}})",
     "description": "Tests that a string matches the regex"
   },
-  "import_yaml": {
-    "prefix": "import_yaml",
-    "body": "{%${1:-} import_yaml '${2:${3:defaults}.yaml}' as ${4:$3} %}",
-    "description": "Import yaml from file"
-  },
-  "import_json": {
-    "prefix": "import_json",
-    "body": "{%${1:-} import_json '${2:${3:defaults}.json}' as ${4:$3} %}",
-    "description": "Import json from file"
-  },
-  "import_text": {
-    "prefix": "import_text",
-    "body": "{%${1:-} import_text '${2:${3:}.txt}' as ${4:$3} %}",
-    "description": "Import text from file"
-  },
   "show_full_context": {
     "prefix": "show_full_context",
     "body": "show_full_context()",

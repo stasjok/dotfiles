@@ -13,10 +13,8 @@ local expand_conds = require("snippets.expand_conditions")
 local show_conds = require("snippets.show_conditions")
 local utils = require("snippets.jinja_utils")
 
-local snippets = {}
-
 -- Jinja statements
-for statement, opts in pairs({
+local snippets = utils.jinja_statement_snippets({
   ["for"] = {
     dscr = "For loop",
     nodes = { i(1, "item"), t(" in "), i(2, "list") },
@@ -121,23 +119,7 @@ for statement, opts in pairs({
     block = false,
     inline = false,
   },
-}) do
-  local snip_fun = opts.block ~= false and utils.jinja_block or utils.jinja_statement
-  local snip_opts = {
-    trig = statement,
-    dscr = opts.dscr or statement,
-  }
-  opts.condition = expand_conds.is_line_beginning
-  opts.show_condition = show_conds.is_line_beginning()
-  table.insert(snippets, snip_fun(vim.deepcopy(snip_opts), vim.deepcopy(opts.nodes), opts))
-  if opts.inline ~= false then
-    snip_fun = opts.block ~= false and utils.jinja_inline_block or utils.jinja_inline_statement
-    snip_opts.wordTrig = false
-    opts.condition = nil
-    opts.show_condition = show_conds.is_not_line_beginning()
-    table.insert(snippets, snip_fun(snip_opts, opts.nodes, opts))
-  end
-end
+})
 
 table.insert(
   snippets,
