@@ -14,34 +14,42 @@ local is_salt = require("snippets.jinja_utils").is_salt
 luasnip.filetype_set("sls", { "sls", "jinja" })
 luasnip.filetype_set("ansible", { "ansible", "jinja", "jinja2" })
 
----Returns filetypes for jinja filters
----@return string[]
-local function filters_filetypes()
-  local ft = { "jinja_filters" }
-  if is_salt() then
-    table.insert(ft, "salt_filters")
-  elseif is_ansible() then
-    table.insert(ft, "ansible_filters")
-  end
-  return ft
-end
-
----Returns filetypes for jinja tests
----@return string[]
-local function tests_filetypes()
-  local ft = { "jinja_tests" }
-  if is_salt() then
-    table.insert(ft, "salt_tests")
-  elseif is_ansible() then
-    table.insert(ft, "ansible_tests")
-  end
-  return ft
-end
-
 ---Returns `ft_func` for filetypes using jinja
 ---@param ft string Fallback filetype
 ---@return function
 local function jinja_ft_func(ft)
+  -- List of jinja filters filetypes
+  local filters_filetypes = setmetatable({
+    sls = { "jinja_filters", "salt_filters" },
+    ansible = { "jinja_filters", "ansible_filters" },
+  }, {
+    __index = function(t)
+      if is_salt() then
+        return rawget(t, "sls")
+      elseif is_ansible() then
+        return rawget(t, "ansible")
+      else
+        return { "jinja_filters" }
+      end
+    end,
+  })
+
+  -- List of jinja tests filetypes
+  local tests_filetypes = setmetatable({
+    sls = { "jinja_tests", "salt_tests" },
+    ansible = { "jinja_tests", "ansible_tests" },
+  }, {
+    __index = function(t)
+      if is_salt() then
+        return rawget(t, "sls")
+      elseif is_ansible() then
+        return rawget(t, "ansible")
+      else
+        return { "jinja_tests" }
+      end
+    end,
+  })
+
   return function()
     ---@type {[1]: integer, [2]: integer}
     local pos = win_get_cursor(0)
@@ -52,9 +60,9 @@ local function jinja_ft_func(ft)
       table.insert(context, 1, "")
     end
     if context[2]:find("|%s*[%w_]*$", -20) or context[1]:find("|%s*$", -4) then
-      return filters_filetypes()
+      return filters_filetypes[ft]
     elseif context[2]:find("is%s+[%w_]*$", -20) then
-      return tests_filetypes()
+      return tests_filetypes[ft]
     else
       return { ft, "jinja_statements" }
     end
