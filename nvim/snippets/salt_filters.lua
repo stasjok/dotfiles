@@ -2,6 +2,7 @@ local t = require("luasnip.nodes.textNode").T
 local i = require("luasnip.nodes.insertNode").I
 local c = require("luasnip.nodes.choiceNode").C
 local r = require("luasnip.nodes.restoreNode").R
+local n = require("luasnip.extras").nonempty
 local cr = require("snippets.nodes").cr
 local jinja_filter_snippets = require("snippets.jinja_utils").jinja_filter_snippets
 
@@ -323,4 +324,49 @@ return jinja_filter_snippets({
   python = { dscr = "Serialize an object to a string of Python" },
   load_yaml = { dscr = "Deserialize a YAML string to object" },
   load_json = { dscr = "Deserialize a JSON string to object" },
+  -- 3005
+  flatten = {
+    dscr = "Flatten a list",
+    nodes = c(1, {
+      t(""),
+      r(1, 1, i(1, "1")),
+      t("preserve_nulls=true"),
+      { r(1, 1), t(", preserve_nulls=true") },
+    }),
+  },
+  dict_to_sls_yaml_params = {
+    dscr = "Render a YAML string from a dictionary as a list of single key-value pairs",
+    nodes = c(1, { t(""), t("flow_style=true") }),
+  },
+  combinations = { dscr = "Returns n-length subsequences of elements", nodes = i(1, "2") },
+  combinations_with_replacement = {
+    dscr = "Returns n-length subsequences of elements allowing individual elements to be repeated",
+    nodes = i(1, "2"),
+  },
+  compress = {
+    dscr = "Filters elements returning only those that have a corresponding element evaluated to True",
+    nodes = { i(1, "selectors") },
+  },
+  permutations = {
+    dscr = "Return successive n-length permutations of elements",
+    nodes = c(1, { t(""), i(1, "2") }),
+  },
+  product = {
+    dscr = "Returns cartesian product",
+    nodes = cr(1, {
+      r(1, 1, i(1)),
+      { r(1, 1), n(1, ", ", ""), t("repeat="), i(2, "2") },
+    }),
+  },
+  zip = {
+    dscr = "Aggregates elements from each of the iterables",
+    nodes = i(1, "list"),
+  },
+  zip_longest = {
+    dscr = "Aggregates elements from each of the iterables filling missing values with `fillvalue`",
+    nodes = cr(1, {
+      r(1, 1, i(1, "list")),
+      { r(1, 1), t(", "), t("fillvalue="), i(2, "none") },
+    }),
+  },
 })
