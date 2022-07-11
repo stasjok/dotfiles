@@ -15,7 +15,7 @@ luasnip.filetype_set("sls", { "sls", "jinja" })
 luasnip.filetype_set("ansible", { "ansible", "jinja", "jinja2" })
 
 ---Returns `ft_func` for filetypes using jinja
----@param ft string Fallback filetype
+---@param ft "jinja" | "sls" | "ansible" Filetype for `ft_func`
 ---@return function
 local function jinja_ft_func(ft)
   -- List of jinja filters filetypes
@@ -50,6 +50,22 @@ local function jinja_ft_func(ft)
     end,
   })
 
+  -- List of jinja statements filetypes
+  local statements_filetypes = setmetatable({
+    sls = { "jinja_statements", "salt_statements" },
+    ansible = { "jinja_statements" },
+  }, {
+    __index = function(t)
+      if is_salt() then
+        return rawget(t, "sls")
+      elseif is_ansible() then
+        return rawget(t, "ansible")
+      else
+        return { "jinja_statements" }
+      end
+    end,
+  })
+
   return function()
     ---@type {[1]: integer, [2]: integer}
     local pos = win_get_cursor(0)
@@ -64,7 +80,7 @@ local function jinja_ft_func(ft)
     elseif context[2]:find("is%s+[%w_]*$", -20) then
       return tests_filetypes[ft]
     else
-      return { ft, "jinja_statements" }
+      return vim.list_extend({ ft }, statements_filetypes[ft])
     end
   end
 end
@@ -80,7 +96,9 @@ setmetatable(ft_func, {
     local buf_filetypes = vim.split(vim.bo.filetype, ".", { plain = true })
     local filetypes = {}
     for _, ft in ipairs(buf_filetypes) do
-      vim.list_extend(filetypes, t[ft] and t[ft]() or { ft })
+      for _, filetype in ipairs(t[ft] and t[ft]() or { ft }) do
+        table.insert(filetypes, filetype)
+      end
     end
     return filetypes
   end,
@@ -98,6 +116,7 @@ luasnip.config.setup({
       "jinja_statements",
       "jinja_filters",
       "jinja_tests",
+      "salt_statements",
       "salt_filters",
       "salt_tests",
       "ansible_filters",
@@ -107,6 +126,7 @@ luasnip.config.setup({
       "jinja_statements",
       "jinja_filters",
       "jinja_tests",
+      "salt_statements",
       "salt_filters",
       "salt_tests",
     },
