@@ -5,6 +5,30 @@ final: prev:
   nodePackages = prev.nodePackages // prev.callPackage ../node-packages/node-composition.nix {
     nodejs = final.nodejs-14_x;
   };
+  tree-sitter = prev.tree-sitter.override {
+    extraGrammars = {
+      tree-sitter-markdown = {
+        src = fetchTree {
+          type = "github";
+          owner = "MDeiml";
+          repo = "tree-sitter-markdown";
+          rev = "69d9f46028870e8215caff77b34e4f3144b68cc7";
+          narHash = "sha256-EAGDdSWf3hw07NjiM3GvkqcusmsjkN2JFuc+wFmQBww=";
+        };
+        location = "tree-sitter-markdown";
+      };
+      tree-sitter-markdown-inline = {
+        src = fetchTree {
+          type = "github";
+          owner = "MDeiml";
+          repo = "tree-sitter-markdown";
+          rev = "69d9f46028870e8215caff77b34e4f3144b68cc7";
+          narHash = "sha256-EAGDdSWf3hw07NjiM3GvkqcusmsjkN2JFuc+wFmQBww=";
+        };
+        location = "tree-sitter-markdown-inline";
+      };
+    };
+  };
 } // # Override python packages for all interpreters
 prev.lib.genAttrs [
   "python27"

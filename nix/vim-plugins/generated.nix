@@ -3,13 +3,13 @@
 {
   onedark-nvim = buildVimPluginFrom2Nix {
     pname = "onedark.nvim";
-    version = "2022-06-04";
+    version = "2022-07-11";
     src = builtins.fetchTree {
       type = "github";
       owner = "ful1e5";
       repo = "onedark.nvim";
-      rev = "9f9afacaeb8abe01c5fc666139ccf82d3747d68d";
-      narHash = "sha256-4ZZtaZ76GbHQCir+JSCIoavIvfq0M6GFxsGhVY0TQLM=";
+      rev = "b5161f0c631571640485be5d1c059cab82c86872";
+      narHash = "sha256-tSsIgkngc4FSFm1Lch4Gb6Zx5hRCNU8Gish5629j8C8=";
     };
   };
   surround-nvim = buildVimPluginFrom2Nix {
@@ -25,13 +25,13 @@
   };
   tmux-nvim = buildVimPluginFrom2Nix {
     pname = "tmux.nvim";
-    version = "2022-05-26";
+    version = "2022-06-14";
     src = builtins.fetchTree {
       type = "github";
       owner = "aserowy";
       repo = "tmux.nvim";
-      rev = "6f6f4eb7152e2eed4bfd75fd1c2207bb66a3fb8e";
-      narHash = "sha256-RkT12YinjfjtCmZosj/jYEMkDNLek6qeFpyWFigoLtE=";
+      rev = "7b19060fccfbd1791ae17ec2372e0bc836f9d519";
+      narHash = "sha256-jE8O/8vh7A5FmLhSegKS4iCyGai9N6tZVj418cn1CYo=";
     };
   };
   vim-fish-syntax = buildVimPluginFrom2Nix {
