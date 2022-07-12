@@ -1,102 +1,26 @@
 local luasnip = require("luasnip")
-local on_the_fly = require("luasnip.extras.otf").on_the_fly
-local extend_load_ft = require("luasnip.extras.filetype_functions").extend_load_ft
-local map = vim.keymap.set
 local s = luasnip.snippet
 local i = luasnip.insert_node
 local c = luasnip.choice_node
-local win_get_cursor = vim.api.nvim_win_get_cursor
-local buf_get_text = vim.api.nvim_buf_get_text
-local is_ansible = require("snippets.jinja_utils").is_ansible
-local is_salt = require("snippets.jinja_utils").is_salt
+local on_the_fly = require("luasnip.extras.otf").on_the_fly
+local extend_load_ft = require("luasnip.extras.filetype_functions").extend_load_ft
+local jinja_ft_func = require("snippets.jinja_utils").jinja_ft_func
+local map = vim.keymap.set
 
 -- Filetypes
 luasnip.filetype_set("sls", { "sls", "jinja" })
 luasnip.filetype_set("ansible", { "ansible", "jinja", "jinja2" })
 
----Returns `ft_func` for filetypes using jinja
----@param ft "jinja" | "sls" | "ansible" Filetype for `ft_func`
----@return function
-local function jinja_ft_func(ft)
-  -- List of jinja filters filetypes
-  local filters_filetypes = setmetatable({
-    sls = { "jinja_filters", "salt_filters" },
-    ansible = { "jinja_filters", "ansible_filters" },
-  }, {
-    __index = function(t)
-      if is_salt() then
-        return rawget(t, "sls")
-      elseif is_ansible() then
-        return rawget(t, "ansible")
-      else
-        return { "jinja_filters" }
-      end
-    end,
-  })
-
-  -- List of jinja tests filetypes
-  local tests_filetypes = setmetatable({
-    sls = { "jinja_tests", "salt_tests" },
-    ansible = { "jinja_tests", "ansible_tests" },
-  }, {
-    __index = function(t)
-      if is_salt() then
-        return rawget(t, "sls")
-      elseif is_ansible() then
-        return rawget(t, "ansible")
-      else
-        return { "jinja_tests" }
-      end
-    end,
-  })
-
-  -- List of jinja statements filetypes
-  local statements_filetypes = setmetatable({
-    sls = { "jinja_statements", "salt_statements" },
-    ansible = { "jinja_statements" },
-  }, {
-    __index = function(t)
-      if is_salt() then
-        return rawget(t, "sls")
-      elseif is_ansible() then
-        return rawget(t, "ansible")
-      else
-        return { "jinja_statements" }
-      end
-    end,
-  })
-
-  return function()
-    ---@type {[1]: integer, [2]: integer}
-    local pos = win_get_cursor(0)
-    local first_context_line = pos[1] >= 2 and pos[1] - 2 or pos[1] - 1
-    ---@type string[]
-    local context = buf_get_text(0, first_context_line, 0, pos[1] - 1, pos[2], {})
-    if #context == 1 then
-      table.insert(context, 1, "")
-    end
-    if context[2]:find("|%s*[%w_]*$", -20) or context[1]:find("|%s*$", -4) then
-      return filters_filetypes[ft]
-    elseif context[2]:find("is%s+[%w_]*$", -20) then
-      return tests_filetypes[ft]
-    else
-      return vim.list_extend({ ft }, statements_filetypes[ft])
-    end
-  end
-end
-
-local ft_func = {
+---@type fun(): string[] Returns a list of snippet filetypes for current cursor position
+local ft_func = setmetatable({
   jinja = jinja_ft_func("jinja"),
   sls = jinja_ft_func("sls"),
   ansible = jinja_ft_func("ansible"),
-}
-
-setmetatable(ft_func, {
-  __call = function(t)
-    local buf_filetypes = vim.split(vim.bo.filetype, ".", { plain = true })
+}, {
+  __call = function(tbl)
     local filetypes = {}
-    for _, ft in ipairs(buf_filetypes) do
-      for _, filetype in ipairs(t[ft] and t[ft]() or { ft }) do
+    for ft in vim.gsplit(vim.bo.filetype, ".", true) do
+      for _, filetype in ipairs(tbl[ft] and tbl[ft]() or { ft }) do
         table.insert(filetypes, filetype)
       end
     end
