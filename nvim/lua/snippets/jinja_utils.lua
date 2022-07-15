@@ -24,7 +24,7 @@ local jinja_utils = {}
 local function match_file_path(strings)
   strings = type(strings) == "table" and strings or { strings }
   ---@diagnostic disable-next-line: missing-parameter
-  local path = vim.fn.expand("%:p:h")
+  local path = vim.fn.expand("%:p:h") --[[@as string]]
   for _, str in ipairs(strings) do
     if path:find(str, 1, true) then
       return true
@@ -101,14 +101,8 @@ function jinja_utils.jinja_ft_func(ft)
     ---@type {[1]: integer, [2]: integer}
     local pos = win_get_cursor(0)
     ---@type string[]
-    local context = buf_get_text(
-      0,
-      pos[1] >= 2 and pos[1] - 2 or pos[1] - 1,
-      0,
-      pos[1] - 1,
-      pos[2],
-      {}
-    )
+    local context =
+      buf_get_text(0, pos[1] >= 2 and pos[1] - 2 or pos[1] - 1, 0, pos[1] - 1, pos[2], {})
     if #context == 1 then
       table.insert(context, 1, "")
     end
