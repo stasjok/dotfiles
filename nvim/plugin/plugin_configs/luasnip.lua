@@ -26,7 +26,7 @@ local ft_func = setmetatable({
     end
     return filetypes
   end,
-})
+}) --[[@as function]]
 
 -- Configuration
 luasnip.config.setup({
