@@ -121,6 +121,7 @@
                 tree-sitter-typescript
                 tree-sitter-vim
                 tree-sitter-yaml
+                tree-sitter-jinja2
               ]);
             configure.packages.nix.start = with vimPlugins; [
               # Libraries

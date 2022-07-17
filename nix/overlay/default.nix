@@ -25,6 +25,15 @@ final: prev:
           src = tree-sitter-markdown-src;
           location = "tree-sitter-markdown-inline";
         };
+        tree-sitter-jinja2 = {
+          src = fetchTree {
+            type = "github";
+            owner = "theHamsta";
+            repo = "tree-sitter-jinja2";
+            rev = "3fa73cd4a871bf88e95d61adc8e66e7fb09016a1";
+            narHash = "sha256-LhyWfhtS1M+5m3wVnlHkM7e0yAG+Cfb1iBS1QuslG/c=";
+          };
+        };
       };
     };
 } // # Override python packages for all interpreters
