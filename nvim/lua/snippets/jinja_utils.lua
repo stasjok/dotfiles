@@ -15,6 +15,8 @@ local expand_conds = require("snippets.expand_conditions")
 local show_conds = require("snippets.show_conditions")
 local win_get_cursor = vim.api.nvim_win_get_cursor
 local buf_get_text = vim.api.nvim_buf_get_text
+local get_captures_at_cursor = require("treesitter.utils").get_captures_at_cursor
+local get_node_text_before_cursor = require("treesitter.utils").get_node_text_before_cursor
 
 local jinja_utils = {}
 
@@ -97,30 +99,36 @@ local statements_filetypes = setmetatable({
 ---@param ft "jinja" | "sls" Filetype for `ft_func`
 ---@return fun(): string[]
 function jinja_utils.jinja_ft_func(ft)
+  local query_string = [[
+    (jinja_stuff) @jinja
+    (text) @text
+  ]]
+  vim.treesitter.set_query("jinja2", "ft_func", query_string)
+
   return function()
-    ---@type {[1]: integer, [2]: integer}
-    local pos = win_get_cursor(0)
-    ---@type string[]
-    local context =
-      buf_get_text(0, pos[1] >= 2 and pos[1] - 2 or pos[1] - 1, 0, pos[1] - 1, pos[2], {})
-    if #context == 1 then
-      table.insert(context, 1, "")
+    local filetypes = {}
+    local captures = get_captures_at_cursor(0, "ft_func", "jinja2")
+    for _, capture in ipairs(captures) do
+      if capture[1] == "jinja" then
+        local text = get_node_text_before_cursor(capture[2], 0)
+        if text:find("|%s*[%w_]*$", -40) then
+          vim.list_extend(filetypes, filters_filetypes[ft])
+        elseif text:find("is%s+[%w_]*$", -40) then
+          vim.list_extend(filetypes, tests_filetypes[ft])
+        end
+      elseif capture[1] == "text" then
+        vim.list_extend(filetypes, statements_filetypes[ft])
+      end
     end
-    if context[2]:find("|%s*[%w_]*$", -20) or context[1]:find("|%s*$", -4) then
-      return filters_filetypes[ft]
-    elseif context[2]:find("is%s+[%w_]*$", -20) then
-      return tests_filetypes[ft]
-    else
-      return vim.list_extend({ ft }, statements_filetypes[ft])
-    end
+    table.insert(filetypes, ft)
+    return filetypes
   end
 end
 
 ---LuaSnip `ft_func` for ansible filetype
 ---@return string[]
 function jinja_utils.ansible_ft_func()
-  ---@type {[1]: integer, [2]: integer}
-  local pos = win_get_cursor(0)
+  local pos = win_get_cursor(0) --[[@as {[1]: integer, [2]: integer}]]
   ---@type string[]
   local context =
     buf_get_text(0, pos[1] >= 2 and pos[1] - 2 or pos[1] - 1, 0, pos[1] - 1, pos[2], {})
