@@ -45,58 +45,58 @@ local function is_ansible()
   return vim.bo.filetype == "yaml.ansible" or match_file_path({ "ansible", "role" })
 end
 
----Returns `ft_func` for filetypes using jinja
----@param ft "jinja" | "sls" | "ansible" Filetype for `ft_func`
----@return function
+-- List of jinja filters filetypes
+local filters_filetypes = setmetatable({
+  sls = { "jinja_filters", "salt_filters" },
+  ansible = { "jinja_filters", "ansible_filters" },
+}, {
+  __index = function(tbl)
+    if is_salt() then
+      return rawget(tbl, "sls")
+    elseif is_ansible() then
+      return rawget(tbl, "ansible")
+    else
+      return { "jinja_filters" }
+    end
+  end,
+})
+
+-- List of jinja tests filetypes
+local tests_filetypes = setmetatable({
+  sls = { "jinja_tests", "salt_tests" },
+  ansible = { "jinja_tests", "ansible_tests" },
+}, {
+  __index = function(tbl)
+    if is_salt() then
+      return rawget(tbl, "sls")
+    elseif is_ansible() then
+      return rawget(tbl, "ansible")
+    else
+      return { "jinja_tests" }
+    end
+  end,
+})
+
+-- List of jinja statements filetypes
+local statements_filetypes = setmetatable({
+  sls = { "jinja_statements", "salt_statements" },
+  ansible = { "jinja_statements" },
+}, {
+  __index = function(tbl)
+    if is_salt() then
+      return rawget(tbl, "sls")
+    elseif is_ansible() then
+      return rawget(tbl, "ansible")
+    else
+      return { "jinja_statements" }
+    end
+  end,
+})
+
+---Returns LuaSnip `ft_func` for jinja or sls filetypes
+---@param ft "jinja" | "sls" Filetype for `ft_func`
+---@return fun(): string[]
 function jinja_utils.jinja_ft_func(ft)
-  -- List of jinja filters filetypes
-  local filters_filetypes = setmetatable({
-    sls = { "jinja_filters", "salt_filters" },
-    ansible = { "jinja_filters", "ansible_filters" },
-  }, {
-    __index = function(tbl)
-      if is_salt() then
-        return rawget(tbl, "sls")
-      elseif is_ansible() then
-        return rawget(tbl, "ansible")
-      else
-        return { "jinja_filters" }
-      end
-    end,
-  })
-
-  -- List of jinja tests filetypes
-  local tests_filetypes = setmetatable({
-    sls = { "jinja_tests", "salt_tests" },
-    ansible = { "jinja_tests", "ansible_tests" },
-  }, {
-    __index = function(tbl)
-      if is_salt() then
-        return rawget(tbl, "sls")
-      elseif is_ansible() then
-        return rawget(tbl, "ansible")
-      else
-        return { "jinja_tests" }
-      end
-    end,
-  })
-
-  -- List of jinja statements filetypes
-  local statements_filetypes = setmetatable({
-    sls = { "jinja_statements", "salt_statements" },
-    ansible = { "jinja_statements" },
-  }, {
-    __index = function(tbl)
-      if is_salt() then
-        return rawget(tbl, "sls")
-      elseif is_ansible() then
-        return rawget(tbl, "ansible")
-      else
-        return { "jinja_statements" }
-      end
-    end,
-  })
-
   return function()
     ---@type {[1]: integer, [2]: integer}
     local pos = win_get_cursor(0)
@@ -113,6 +113,24 @@ function jinja_utils.jinja_ft_func(ft)
     else
       return vim.list_extend({ ft }, statements_filetypes[ft])
     end
+  end
+end
+
+---LuaSnip `ft_func` for ansible filetype
+---@return string[]
+function jinja_utils.ansible_ft_func()
+  ---@type {[1]: integer, [2]: integer}
+  local pos = win_get_cursor(0)
+  ---@type string[]
+  local context =
+    buf_get_text(0, pos[1] >= 2 and pos[1] - 2 or pos[1] - 1, 0, pos[1] - 1, pos[2], {})
+  context = table.concat(context, "\n")
+  if context:find("|%s*[%w_]*$", -30) then
+    return filters_filetypes["ansible"]
+  elseif context:find("is%s+[%w_]*$", -30) then
+    return tests_filetypes["ansible"]
+  else
+    return vim.list_extend({ "ansible" }, statements_filetypes["ansible"])
   end
 end
 

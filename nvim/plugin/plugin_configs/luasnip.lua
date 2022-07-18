@@ -5,17 +5,18 @@ local c = luasnip.choice_node
 local on_the_fly = require("luasnip.extras.otf").on_the_fly
 local extend_load_ft = require("luasnip.extras.filetype_functions").extend_load_ft
 local jinja_ft_func = require("snippets.jinja_utils").jinja_ft_func
+local ansible_ft_func = require("snippets.jinja_utils").ansible_ft_func
 local map = vim.keymap.set
 
 -- Filetypes
 luasnip.filetype_set("sls", { "sls", "jinja" })
-luasnip.filetype_set("ansible", { "ansible", "jinja", "jinja2" })
+luasnip.filetype_set("ansible", { "ansible", "jinja" })
 
 ---@type fun(): string[] Returns a list of snippet filetypes for current cursor position
 local ft_func = setmetatable({
   jinja = jinja_ft_func("jinja"),
   sls = jinja_ft_func("sls"),
-  ansible = jinja_ft_func("ansible"),
+  ansible = ansible_ft_func,
 }, {
   __call = function(tbl)
     local filetypes = {}
