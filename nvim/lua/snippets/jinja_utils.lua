@@ -20,6 +20,8 @@ local get_string_parser = vim.treesitter.get_string_parser
 local get_query = vim.treesitter.get_query
 local get_captures_at_cursor = require("treesitter.utils").get_captures_at_cursor
 local get_node_text_before_cursor = require("treesitter.utils").get_node_text_before_cursor
+local get_node_text_before_cursor_string =
+  require("treesitter.utils").get_node_text_before_cursor_string
 
 local jinja_utils = {}
 
@@ -141,24 +143,6 @@ local function get_cursor_relative_to_node(node, row, col)
   else
     return row - start_row, col
   end
-end
-
----Returns the text from node start position to cursor position
----@param node table The node
----@param lines string[] Source lines
----@param row integer Cursor row
----@param col integer Cursor column
----@return string
-local function get_node_text_before_cursor_string(node, lines, row, col)
-  local start_line, start_col = node:start()
-  local result = vim.list_slice(lines, start_line + 1, row + 1)
-  if #result == 1 then
-    result[1] = string.sub(result[1], start_col + 1, col)
-  else
-    result[1] = string.sub(result[1], start_col + 1)
-    result[#result] = string.sub(result[#result], 1, col)
-  end
-  return table.concat(result, "\n")
 end
 
 ---Returns LuaSnip `ft_func` for ansible filetype

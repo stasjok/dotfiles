@@ -61,4 +61,24 @@ function utils.get_node_text_before_cursor(node, winnr)
   return table.concat(lines, "\n")
 end
 
+---Returns the text from node start position to provided cursor position
+---@param node table The node
+---@param lines string[] Source lines
+---@param row integer Cursor row
+---@param col integer Cursor column
+---@return string
+function utils.get_node_text_before_cursor_string(node, lines, row, col)
+  local start_row, start_col = node:start()
+  local result = vim.list_slice(lines, start_row + 1, row + 1)
+  if #result == 0 then
+    return ""
+  elseif #result == 1 then
+    return string.sub(result[1], start_col + 1, col)
+  else
+    result[1] = string.sub(result[1], start_col + 1)
+    result[#result] = string.sub(result[#result], 1, col)
+  end
+  return table.concat(result, "\n")
+end
+
 return utils
