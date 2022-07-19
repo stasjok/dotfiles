@@ -37,6 +37,7 @@ luasnip.config.setup({
   load_ft_func = extend_load_ft({
     jinja = {
       "jinja_statements",
+      "jinja_stuff",
       "jinja_filters",
       "jinja_tests",
       "salt_statements",
@@ -47,6 +48,7 @@ luasnip.config.setup({
     },
     sls = {
       "jinja_statements",
+      "jinja_stuff",
       "jinja_filters",
       "jinja_tests",
       "salt_statements",
@@ -55,6 +57,7 @@ luasnip.config.setup({
     },
     ansible = {
       "jinja_statements",
+      "jinja_stuff",
       "jinja_filters",
       "jinja_tests",
       "ansible_filters",

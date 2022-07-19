@@ -179,7 +179,7 @@ function jinja_utils.jinja_ft_func(ft)
     elseif text_to_cursor:find("is%s+[%w_]*$", -40) then
       return tests_filetypes[ft]
     else
-      return {}
+      return { "jinja_stuff" }
     end
   end
 

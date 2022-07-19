@@ -14,11 +14,6 @@
     "body": "{{ ansible_managed | comment${1} }}",
     "description": "Ansible managed variable"
   },
-  "ife": {
-    "prefix": "ife",
-    "body": "${2:expression_if_true} if ${1:condition} else ${3:expression_if_false}",
-    "description": "If expression"
-  },
   "show_full_context": {
     "prefix": "show_full_context",
     "body": "show_full_context()",
