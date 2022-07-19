@@ -211,7 +211,7 @@ function jinja_utils.jinja_ft_func(ft)
                 get_node_text_before_cursor(jinja_capture[2], node_text, jinja_capture[3])
               vim.list_extend(filetypes, jinja_filetypes(text))
             elseif jinja_capture[1] == "text" then
-              vim.list_extend(filetypes, statements_filetypes["ansible"])
+              vim.list_extend(filetypes, statements_filetypes[ft])
             end
           end
         elseif capture[1] == "jinja" then
@@ -220,7 +220,7 @@ function jinja_utils.jinja_ft_func(ft)
         end
         table.insert(filetypes, "jinja")
       end
-      table.insert(filetypes, "ansible")
+      table.insert(filetypes, ft)
       return filetypes
     end,
   }
