@@ -1,7 +1,0 @@
-{
-  "managed": {
-    "prefix": "managed",
-    "body": "{{ ansible_managed | comment${1} }}",
-    "description": "Ansible managed variable"
-  },
-}

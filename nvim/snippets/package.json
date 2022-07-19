@@ -2,10 +2,6 @@
   "contributes": {
     "snippets": [
       {
-        "language": "jinja",
-        "path": "./jinja.json"
-      },
-      {
         "language": "ansible_filters",
         "path": "./ansible_filters.json"
       },

@@ -18,4 +18,14 @@ return {
     }),
     t('"]'),
   }),
+  s({ trig = "ansible_managed", dscr = "The ansible_managed string" }, {
+    t("ansible_managed"),
+  }, {
+    condition = function()
+      return vim.bo.filetype ~= "yaml.ansible"
+    end,
+    show_condition = function()
+      return vim.bo.filetype ~= "yaml.ansible"
+    end,
+  }),
 }
