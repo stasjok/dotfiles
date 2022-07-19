@@ -57,6 +57,7 @@ function jinja_utils.jinja_ft_func(ft)
   vim.treesitter.set_query("jinja2", "ft_func", query_string)
   query_string = [[
     (block_mapping_pair
+      key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
       value: (flow_node [
         (plain_scalar (string_scalar))
         (double_quote_scalar)
@@ -64,19 +65,60 @@ function jinja_utils.jinja_ft_func(ft)
       ] @value))
 
     (block_mapping_pair
+      key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
       value: (block_node
         (block_scalar) @value))
 
-    (block_sequence_item
-      (flow_node [
+    (block_mapping_pair
+      key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
+      value: (block_node
+        (block_sequence
+          (block_sequence_item
+            (flow_node [
+              (plain_scalar (string_scalar))
+              (double_quote_scalar)
+              (single_quote_scalar)
+            ] @value)))))
+
+    (block_mapping_pair
+      key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
+      value: (block_node
+        (block_sequence
+          (block_sequence_item
+            (block_node
+              (block_scalar) @value)))))
+
+    (block_mapping_pair
+      key: (flow_node) @key (#any-of? @key "when" "that" "var")
+      value: (flow_node [
         (plain_scalar (string_scalar))
         (double_quote_scalar)
         (single_quote_scalar)
-      ] @value))
+      ] @jinja))
 
-    (block_sequence_item
-      (block_node
-        (block_scalar) @value))
+    (block_mapping_pair
+      key: (flow_node) @key (#any-of? @key "when" "that" "var")
+      value: (block_node
+        (block_scalar) @jinja))
+
+    (block_mapping_pair
+      key: (flow_node) @key (#any-of? @key "when" "that" "var")
+      value: (block_node
+        (block_sequence
+          (block_sequence_item
+            (flow_node [
+              (plain_scalar (string_scalar))
+              (double_quote_scalar)
+              (single_quote_scalar)
+            ] @jinja)))))
+
+    (block_mapping_pair
+      key: (flow_node) @key (#any-of? @key "when" "that" "var")
+      value: (block_node
+        (block_sequence
+          (block_sequence_item
+            (block_node
+              (block_scalar) @jinja)))))
   ]]
   vim.treesitter.set_query("yaml", "ft_func", query_string)
 
@@ -160,15 +202,21 @@ function jinja_utils.jinja_ft_func(ft)
       local filetypes = {}
       local captures = get_captures_at_cursor(0, "ft_func", "yaml")
       for _, capture in ipairs(captures) do
-        local node_text = get_node_text(capture[2], 0)
-        local jinja_captures = get_captures_at_cursor(0, "ft_func", "jinja2", capture[2])
-        for _, jinja_capture in ipairs(jinja_captures) do
-          if jinja_capture[1] == "jinja" then
-            local text = get_node_text_before_cursor(jinja_capture[2], node_text, jinja_capture[3])
-            vim.list_extend(filetypes, jinja_filetypes(text))
-          elseif jinja_capture[1] == "text" then
-            vim.list_extend(filetypes, statements_filetypes["ansible"])
+        if capture[1] == "value" then
+          local node_text = get_node_text(capture[2], 0)
+          local jinja_captures = get_captures_at_cursor(0, "ft_func", "jinja2", capture[2])
+          for _, jinja_capture in ipairs(jinja_captures) do
+            if jinja_capture[1] == "jinja" then
+              local text =
+                get_node_text_before_cursor(jinja_capture[2], node_text, jinja_capture[3])
+              vim.list_extend(filetypes, jinja_filetypes(text))
+            elseif jinja_capture[1] == "text" then
+              vim.list_extend(filetypes, statements_filetypes["ansible"])
+            end
           end
+        elseif capture[1] == "jinja" then
+          local text = get_node_text_before_cursor(capture[2], 0)
+          vim.list_extend(filetypes, jinja_filetypes(text))
         end
         table.insert(filetypes, "jinja")
       end
