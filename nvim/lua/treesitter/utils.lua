@@ -68,7 +68,7 @@ function utils.get_captures_at_cursor(winnr, query_name, lang, source_node)
 
   local query = get_query(lang, query_name)
   for id, node in query:iter_captures(root, source, row, row + 1) do
-    if is_in_node_range(node, row, col) then
+    if is_in_node_range(node, row, col - 1) then
       table.insert(captures, { query.captures[id], node, cursor_byte })
     end
   end
