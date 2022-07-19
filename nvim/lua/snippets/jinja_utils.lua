@@ -13,12 +13,7 @@ local wn = require("snippets.nodes").wrapped_nodes
 local select_dedent = require("snippets.functions").select_dedent
 local expand_conds = require("snippets.expand_conditions")
 local show_conds = require("snippets.show_conditions")
-local is_in_node_range = require("nvim-treesitter.ts_utils").is_in_node_range
-local get_cursor_0 = require("utils").get_cursor_0
-local get_string_parser = vim.treesitter.get_string_parser
-local get_query = vim.treesitter.get_query
 local get_node_text = vim.treesitter.get_node_text
-local buf_get_offset = vim.api.nvim_buf_get_offset
 local get_captures_at_cursor = require("treesitter.utils").get_captures_at_cursor
 local get_node_text_before_cursor = require("treesitter.utils").get_node_text_before_cursor
 
@@ -129,24 +124,6 @@ function jinja_utils.jinja_ft_func(ft)
   end
 end
 
----Returns cursor position relative to tree-sitter node
----@param node table
----@param row integer
----@param col integer
----@return integer row
----@return integer col
----@return integer byte_offset
-local function get_cursor_relative_to_node(node, row, col)
-  local start_row, start_col, start_byte = node:start() --[[@as integer, integer, integer]]
-  if row < start_row or row == start_row and col < start_col then
-    return 0, 0, 0
-  elseif row == start_row then
-    return 0, col - start_col, col - start_col
-  else
-    return row - start_row, col, buf_get_offset(0, row) - start_byte + col
-  end
-end
-
 ---Returns LuaSnip `ft_func` for ansible filetype
 ---@return fun(): string[]
 function jinja_utils.ansible_ft_func()
@@ -184,27 +161,18 @@ function jinja_utils.ansible_ft_func()
     local captures = get_captures_at_cursor(0, "ft_func", "yaml")
     local filetypes = {}
     for _, capture in ipairs(captures) do
-      local node = capture[2]
-      local node_text = get_node_text(node, 0)
-      local row, col = get_cursor_0()
-      local node_row, node_col, node_byte = get_cursor_relative_to_node(node, row, col)
-      local parser = get_string_parser(node_text, "jinja2")
-      ---@diagnostic disable-next-line: need-check-nil
-      local root = parser:parse()[1]:root()
-      local query = get_query("jinja2", "ft_func")
-      for id, jinja_node in query:iter_captures(root, node_text, node_row, node_row + 1) do
-        if is_in_node_range(jinja_node, node_row, node_col) then
-          local jinja_capture = query.captures[id]
-          if jinja_capture == "jinja" then
-            local text = get_node_text_before_cursor(jinja_node, node_text, node_byte)
-            if text:find("|%s*[%w_]*$", -40) then
-              vim.list_extend(filetypes, filters_filetypes["ansible"])
-            elseif text:find("is%s+[%w_]*$", -40) then
-              vim.list_extend(filetypes, tests_filetypes["ansible"])
-            end
-          elseif jinja_capture == "text" then
-            vim.list_extend(filetypes, statements_filetypes["ansible"])
+      local node_text = get_node_text(capture[2], 0)
+      local jinja_captures = get_captures_at_cursor(0, "ft_func", "jinja2", capture[2])
+      for _, jinja_capture in ipairs(jinja_captures) do
+        if jinja_capture[1] == "jinja" then
+          local text = get_node_text_before_cursor(jinja_capture[2], node_text, jinja_capture[3])
+          if text:find("|%s*[%w_]*$", -40) then
+            vim.list_extend(filetypes, filters_filetypes["ansible"])
+          elseif text:find("is%s+[%w_]*$", -40) then
+            vim.list_extend(filetypes, tests_filetypes["ansible"])
           end
+        elseif jinja_capture[1] == "text" then
+          vim.list_extend(filetypes, statements_filetypes["ansible"])
         end
       end
       table.insert(filetypes, "jinja")
