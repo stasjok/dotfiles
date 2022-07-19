@@ -46,56 +46,8 @@ local function is_ansible()
   return vim.bo.filetype == "yaml.ansible" or match_file_path({ "ansible", "role" })
 end
 
--- List of jinja filters filetypes
-local filters_filetypes = setmetatable({
-  sls = { "jinja_filters", "salt_filters" },
-  ansible = { "jinja_filters", "ansible_filters" },
-}, {
-  __index = function(tbl)
-    if is_salt() then
-      return rawget(tbl, "sls")
-    elseif is_ansible() then
-      return rawget(tbl, "ansible")
-    else
-      return { "jinja_filters" }
-    end
-  end,
-})
-
--- List of jinja tests filetypes
-local tests_filetypes = setmetatable({
-  sls = { "jinja_tests", "salt_tests" },
-  ansible = { "jinja_tests", "ansible_tests" },
-}, {
-  __index = function(tbl)
-    if is_salt() then
-      return rawget(tbl, "sls")
-    elseif is_ansible() then
-      return rawget(tbl, "ansible")
-    else
-      return { "jinja_tests" }
-    end
-  end,
-})
-
--- List of jinja statements filetypes
-local statements_filetypes = setmetatable({
-  sls = { "jinja_statements", "salt_statements" },
-  ansible = { "jinja_statements" },
-}, {
-  __index = function(tbl)
-    if is_salt() then
-      return rawget(tbl, "sls")
-    elseif is_ansible() then
-      return rawget(tbl, "ansible")
-    else
-      return { "jinja_statements" }
-    end
-  end,
-})
-
 ---Returns LuaSnip `ft_func` for jinja or sls filetypes
----@param ft "jinja" | "sls" Filetype for `ft_func`
+---@param ft "jinja" | "sls" | "ansible" Filetype for `ft_func`
 ---@return fun(): string[]
 function jinja_utils.jinja_ft_func(ft)
   local query_string = [[
@@ -103,31 +55,7 @@ function jinja_utils.jinja_ft_func(ft)
     (text) @text
   ]]
   vim.treesitter.set_query("jinja2", "ft_func", query_string)
-
-  return function()
-    local filetypes = {}
-    local captures = get_captures_at_cursor(0, "ft_func", "jinja2")
-    for _, capture in ipairs(captures) do
-      if capture[1] == "jinja" then
-        local text = get_node_text_before_cursor(capture[2], 0)
-        if text:find("|%s*[%w_]*$", -40) then
-          vim.list_extend(filetypes, filters_filetypes[ft])
-        elseif text:find("is%s+[%w_]*$", -40) then
-          vim.list_extend(filetypes, tests_filetypes[ft])
-        end
-      elseif capture[1] == "text" then
-        vim.list_extend(filetypes, statements_filetypes[ft])
-      end
-    end
-    table.insert(filetypes, ft)
-    return filetypes
-  end
-end
-
----Returns LuaSnip `ft_func` for ansible filetype
----@return fun(): string[]
-function jinja_utils.ansible_ft_func()
-  local query_string = [[
+  query_string = [[
     (block_mapping_pair
       value: (flow_node [
         (plain_scalar (string_scalar))
@@ -151,35 +79,106 @@ function jinja_utils.ansible_ft_func()
         (block_scalar) @value))
   ]]
   vim.treesitter.set_query("yaml", "ft_func", query_string)
-  query_string = [[
-    (jinja_stuff) @jinja
-    (text) @text
-  ]]
-  vim.treesitter.set_query("jinja2", "ft_func", query_string)
 
-  return function()
-    local captures = get_captures_at_cursor(0, "ft_func", "yaml")
-    local filetypes = {}
-    for _, capture in ipairs(captures) do
-      local node_text = get_node_text(capture[2], 0)
-      local jinja_captures = get_captures_at_cursor(0, "ft_func", "jinja2", capture[2])
-      for _, jinja_capture in ipairs(jinja_captures) do
-        if jinja_capture[1] == "jinja" then
-          local text = get_node_text_before_cursor(jinja_capture[2], node_text, jinja_capture[3])
-          if text:find("|%s*[%w_]*$", -40) then
-            vim.list_extend(filetypes, filters_filetypes["ansible"])
-          elseif text:find("is%s+[%w_]*$", -40) then
-            vim.list_extend(filetypes, tests_filetypes["ansible"])
-          end
-        elseif jinja_capture[1] == "text" then
-          vim.list_extend(filetypes, statements_filetypes["ansible"])
+  -- List of jinja filters filetypes
+  local filters_filetypes = setmetatable({
+    sls = { "jinja_filters", "salt_filters" },
+    ansible = { "jinja_filters", "ansible_filters" },
+  }, {
+    __index = function(tbl)
+      if is_salt() then
+        return rawget(tbl, "sls")
+      elseif is_ansible() then
+        return rawget(tbl, "ansible")
+      else
+        return { "jinja_filters" }
+      end
+    end,
+  })
+
+  -- List of jinja tests filetypes
+  local tests_filetypes = setmetatable({
+    sls = { "jinja_tests", "salt_tests" },
+    ansible = { "jinja_tests", "ansible_tests" },
+  }, {
+    __index = function(tbl)
+      if is_salt() then
+        return rawget(tbl, "sls")
+      elseif is_ansible() then
+        return rawget(tbl, "ansible")
+      else
+        return { "jinja_tests" }
+      end
+    end,
+  })
+
+  -- List of jinja statements filetypes
+  local statements_filetypes = setmetatable({
+    sls = { "jinja_statements", "salt_statements" },
+    ansible = { "jinja_statements" },
+  }, {
+    __index = function(tbl)
+      if is_salt() then
+        return rawget(tbl, "sls")
+      elseif is_ansible() then
+        return rawget(tbl, "ansible")
+      else
+        return { "jinja_statements" }
+      end
+    end,
+  })
+
+  ---Return filetypes in jinja context
+  ---@param text_to_cursor string
+  ---@return string[]
+  local function jinja_filetypes(text_to_cursor)
+    if text_to_cursor:find("|%s*[%w_]*$", -40) then
+      return filters_filetypes[ft]
+    elseif text_to_cursor:find("is%s+[%w_]*$", -40) then
+      return tests_filetypes[ft]
+    else
+      return {}
+    end
+  end
+
+  local ft_funcs = {
+    jinja = function()
+      local filetypes = {}
+      local captures = get_captures_at_cursor(0, "ft_func", "jinja2")
+      for _, capture in ipairs(captures) do
+        if capture[1] == "jinja" then
+          local text = get_node_text_before_cursor(capture[2], 0)
+          vim.list_extend(filetypes, jinja_filetypes(text))
+        elseif capture[1] == "text" then
+          vim.list_extend(filetypes, statements_filetypes[ft])
         end
       end
-      table.insert(filetypes, "jinja")
-    end
-    table.insert(filetypes, "ansible")
-    return filetypes
-  end
+      table.insert(filetypes, ft)
+      return filetypes
+    end,
+    ansible = function()
+      local filetypes = {}
+      local captures = get_captures_at_cursor(0, "ft_func", "yaml")
+      for _, capture in ipairs(captures) do
+        local node_text = get_node_text(capture[2], 0)
+        local jinja_captures = get_captures_at_cursor(0, "ft_func", "jinja2", capture[2])
+        for _, jinja_capture in ipairs(jinja_captures) do
+          if jinja_capture[1] == "jinja" then
+            local text = get_node_text_before_cursor(jinja_capture[2], node_text, jinja_capture[3])
+            vim.list_extend(filetypes, jinja_filetypes(text))
+          elseif jinja_capture[1] == "text" then
+            vim.list_extend(filetypes, statements_filetypes["ansible"])
+          end
+        end
+        table.insert(filetypes, "jinja")
+      end
+      table.insert(filetypes, "ansible")
+      return filetypes
+    end,
+  }
+  ft_funcs.sls = ft_funcs.jinja
+
+  return ft_funcs[ft]
 end
 
 ---Returns a function for getting boolean option from a vim variable
