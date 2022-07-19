@@ -45,38 +45,23 @@ end
 
 ---Returns the text from node start position to cursor position
 ---@param node table The node
----@param winnr integer Window number
+---@param source string | integer | nil The window or string from which the node is extracted
+---@param cursor_byte integer? Byte offset of the cursor position is source is a string
 ---@return string
-function utils.get_node_text_before_cursor(node, winnr)
-  winnr = winnr or 0
-  local bufnr = win_get_buf(winnr) --[[@as integer]]
-  local row, col = get_cursor_0(winnr)
-  local start_row, start_col = node:start() --[[@as integer, integer, integer]]
-  if row < start_row or row == start_row and col < start_col then
-    return ""
-  end
-  local lines = buf_get_text(bufnr, start_row, start_col, row, col, {}) --[[@as table]]
-  return table.concat(lines, "\n")
-end
-
----Returns the text from node start position to provided cursor position
----@param node table The node
----@param lines string[] Source lines
----@param row integer Cursor row
----@param col integer Cursor column
----@return string
-function utils.get_node_text_before_cursor_string(node, lines, row, col)
-  local start_row, start_col = node:start()
-  local result = vim.list_slice(lines, start_row + 1, row + 1)
-  if #result == 0 then
-    return ""
-  elseif #result == 1 then
-    return string.sub(result[1], start_col + 1, col)
+function utils.get_node_text_before_cursor(node, source, cursor_byte)
+  local start_row, start_col, start_byte = node:start() --[[@as integer, integer, integer]]
+  if type(source) == "string" then
+    return source:sub(start_byte + 1, cursor_byte)
   else
-    result[1] = string.sub(result[1], start_col + 1)
-    result[#result] = string.sub(result[#result], 1, col)
+    local winnr = source or 0
+    local bufnr = win_get_buf(winnr) --[[@as integer]]
+    local row, col = get_cursor_0(winnr)
+    if row < start_row or row == start_row and col < start_col then
+      return ""
+    end
+    local lines = buf_get_text(bufnr, start_row, start_col, row, col, {}) --[[@as table]]
+    return table.concat(lines, "\n")
   end
-  return table.concat(result, "\n")
 end
 
 return utils
