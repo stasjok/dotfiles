@@ -170,6 +170,22 @@ function jinja_utils.jinja_ft_func(ft)
     end,
   })
 
+  -- List of jinja stuff filetypes
+  local jinja_stuff_filetypes = setmetatable({
+    sls = { "jinja_stuff", "salt_jinja_stuff" },
+    ansible = { "jinja_stuff", "ansible_jinja_stuff" },
+  }, {
+    __index = function(tbl)
+      if is_salt() then
+        return rawget(tbl, "sls")
+      elseif is_ansible() then
+        return rawget(tbl, "ansible")
+      else
+        return { "jinja_stuff" }
+      end
+    end,
+  })
+
   ---Return filetypes in jinja context
   ---@param text_to_cursor string
   ---@return string[]
@@ -179,7 +195,7 @@ function jinja_utils.jinja_ft_func(ft)
     elseif text_to_cursor:find("is%s+[%w_]*$", -40) then
       return tests_filetypes[ft]
     else
-      return { "jinja_stuff" }
+      return jinja_stuff_filetypes[ft]
     end
   end
 

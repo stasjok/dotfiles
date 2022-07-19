@@ -1,27 +1,7 @@
 {
-  "d": {
-    "prefix": "d",
-    "body": "${1:dict}['${2:key}']",
-    "description": "Dict value"
-  },
-  "fact": {
-    "prefix": "fact",
-    "body": "ansible_facts['${1:hostname}']",
-    "description": "Ansible fact"
-  },
   "managed": {
     "prefix": "managed",
     "body": "{{ ansible_managed | comment${1} }}",
     "description": "Ansible managed variable"
   },
-  "show_full_context": {
-    "prefix": "show_full_context",
-    "body": "show_full_context()",
-    "description": "Output all variables present in the current Jinja context"
-  },
-  "raise": {
-    "prefix": "raise",
-    "body": "raise('${1:Custom Error}')",
-    "description": "Raise error from jinja"
-  }
 }
