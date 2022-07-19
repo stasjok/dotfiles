@@ -10,13 +10,12 @@ local map = vim.keymap.set
 
 -- Filetypes
 luasnip.filetype_set("sls", { "sls", "jinja" })
-luasnip.filetype_set("ansible", { "ansible", "jinja" })
 
 ---@type fun(): string[] Returns a list of snippet filetypes for current cursor position
 local ft_func = setmetatable({
   jinja = jinja_ft_func("jinja"),
   sls = jinja_ft_func("sls"),
-  ansible = ansible_ft_func,
+  ansible = ansible_ft_func(),
 }, {
   __call = function(tbl)
     local filetypes = {}
