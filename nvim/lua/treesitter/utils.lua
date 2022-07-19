@@ -1,9 +1,9 @@
-local win_get_cursor = vim.api.nvim_win_get_cursor
 local win_get_buf = vim.api.nvim_win_get_buf
 local buf_get_text = vim.api.nvim_buf_get_text
 local get_parser = vim.treesitter.get_parser
 local get_query = vim.treesitter.get_query
 local is_in_node_range = require("nvim-treesitter.ts_utils").is_in_node_range
+local get_cursor_0 = require("utils").get_cursor_0
 
 local utils = {}
 
@@ -16,8 +16,7 @@ function utils.get_captures_at_cursor(winnr, query_name, lang)
   local captures = {}
   winnr = winnr or 0
   local bufnr = win_get_buf(winnr) --[[@as integer]]
-  local cursor = win_get_cursor(winnr) --[[@as {[1]: integer, [2]: integer}]]
-  local row, col = cursor[1] - 1, cursor[2]
+  local row, col = get_cursor_0(winnr)
 
   local parser = get_parser(bufnr, lang)
   if not parser then
@@ -51,8 +50,7 @@ end
 function utils.get_node_text_before_cursor(node, winnr)
   winnr = winnr or 0
   local bufnr = win_get_buf(winnr) --[[@as integer]]
-  local cursor = win_get_cursor(winnr) --[[@as {[1]: integer, [2]: integer}]]
-  local row, col = cursor[1] - 1, cursor[2]
+  local row, col = get_cursor_0(winnr)
   local start_row, start_col = node:start() --[[@as integer, integer, integer]]
   if row < start_row or row == start_row and col < start_col then
     return ""

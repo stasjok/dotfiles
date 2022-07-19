@@ -13,9 +13,9 @@ local wn = require("snippets.nodes").wrapped_nodes
 local select_dedent = require("snippets.functions").select_dedent
 local expand_conds = require("snippets.expand_conditions")
 local show_conds = require("snippets.show_conditions")
-local win_get_cursor = vim.api.nvim_win_get_cursor
 local get_node_lines = require("nvim-treesitter.ts_utils").get_node_text
 local is_in_node_range = require("nvim-treesitter.ts_utils").is_in_node_range
+local get_cursor_0 = require("utils").get_cursor_0
 local get_string_parser = vim.treesitter.get_string_parser
 local get_query = vim.treesitter.get_query
 local get_captures_at_cursor = require("treesitter.utils").get_captures_at_cursor
@@ -185,8 +185,7 @@ function jinja_utils.ansible_ft_func()
       local node = capture[2]
       local node_lines = get_node_lines(node, 0)
       local node_text = table.concat(node_lines, "\n")
-      local cursor = win_get_cursor(0) --[[@as {[1]: integer, [2]: integer}]]
-      local row, col = cursor[1] - 1, cursor[2]
+      local row, col = get_cursor_0()
       local node_row, node_col = get_cursor_relative_to_node(node, row, col)
       local parser = get_string_parser(node_text, "jinja2")
       ---@diagnostic disable-next-line: need-check-nil
