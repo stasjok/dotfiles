@@ -1,24 +1,4 @@
 {
-  "s": {
-    "prefix": "s",
-    "body": "salt['${1:pillar.get}'](${2:args})",
-    "description": "Call a Salt function"
-  },
-  "p": {
-    "prefix": "p",
-    "body": "salt['pillar.get']('${1:key}'${2/.+/, /}${2:default})",
-    "description": "Get a Pillar value"
-  },
-  "c": {
-    "prefix": "c",
-    "body": "salt['config.get']('${1:key}'${2/.+/, /}${2:default})",
-    "description": "Get a config/pillar value"
-  },
-  "g": {
-    "prefix": "g",
-    "body": "salt['grains.get']('${1:key}')",
-    "description": "Grains value"
-  },
   "include": {
     "prefix": "include",
     "body": "include:\n\t- $0",
