@@ -6,25 +6,8 @@ final: prev:
     nodejs = final.nodejs-14_x;
   };
   tree-sitter =
-    let
-      tree-sitter-markdown-src = fetchTree {
-        type = "github";
-        owner = "MDeiml";
-        repo = "tree-sitter-markdown";
-        rev = "69d9f46028870e8215caff77b34e4f3144b68cc7";
-        narHash = "sha256-EAGDdSWf3hw07NjiM3GvkqcusmsjkN2JFuc+wFmQBww=";
-      };
-    in
     prev.tree-sitter.override {
       extraGrammars = {
-        tree-sitter-markdown = {
-          src = tree-sitter-markdown-src;
-          location = "tree-sitter-markdown";
-        };
-        tree-sitter-markdown-inline = {
-          src = tree-sitter-markdown-src;
-          location = "tree-sitter-markdown-inline";
-        };
         tree-sitter-jinja2 = {
           src = fetchTree {
             type = "github";
