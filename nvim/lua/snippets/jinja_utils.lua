@@ -194,6 +194,8 @@ function jinja_utils.jinja_ft_func(ft)
       return filters_filetypes[ft]
     elseif text_to_cursor:find("is%s+[%w_]*$", -40) then
       return tests_filetypes[ft]
+    elseif text_to_cursor:find("is%s+not%s+[%w_]*$", -40) then
+      return tests_filetypes[ft]
     else
       return jinja_stuff_filetypes[ft]
     end
