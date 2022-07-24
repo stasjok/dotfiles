@@ -5,6 +5,7 @@ local c = luasnip.choice_node
 local on_the_fly = require("luasnip.extras.otf").on_the_fly
 local extend_load_ft = require("luasnip.extras.filetype_functions").extend_load_ft
 local jinja_ft_func = require("snippets.jinja_utils").jinja_ft_func
+local buf_get_name = vim.api.nvim_buf_get_name
 local map = vim.keymap.set
 
 -- Filetypes
@@ -15,6 +16,13 @@ local ft_func = setmetatable({
   jinja = jinja_ft_func("jinja"),
   sls = jinja_ft_func("sls"),
   ansible = jinja_ft_func("ansible"),
+  lua = function()
+    if buf_get_name(0):find("_spec%.lua$") then
+      return { "lua", "lua_spec" }
+    else
+      return { "lua" }
+    end
+  end,
 }, {
   __call = function(tbl)
     local filetypes = {}
@@ -66,6 +74,10 @@ luasnip.config.setup({
       "ansible_jinja_stuff",
       "ansible_filters",
       "ansible_tests",
+    },
+    lua = {
+      "lua",
+      "lua_spec",
     },
   }),
   parser_nested_assembler = function(pos, snip)

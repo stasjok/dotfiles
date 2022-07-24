@@ -1,0 +1,18 @@
+snippet describe Context block
+	describe("${1:block_title}", function()
+		$0
+	end)
+snippet it A test
+	it("${1:test_title}", function()
+		$0
+	end)
+snippet pending A placeholder for test
+	pending("${1:test_title}")
+snippet before_each Run before each child test
+	before_each(function()
+		$0
+	end)
+snippet after_each Run after each child test
+	after_each(function()
+		$0
+	end)
