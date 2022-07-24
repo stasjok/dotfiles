@@ -17,7 +17,8 @@ local ft_func = setmetatable({
   sls = jinja_ft_func("sls"),
   ansible = jinja_ft_func("ansible"),
   lua = function()
-    if buf_get_name(0):find("_spec%.lua$") then
+    local buf_name = buf_get_name(0)
+    if buf_name:sub(-9, #buf_name) == "_spec.lua" then
       return { "lua", "lua_spec" }
     else
       return { "lua" }
