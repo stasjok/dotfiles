@@ -1,3 +1,4 @@
+local buf_get_option = vim.api.nvim_buf_get_option
 local win_get_buf = vim.api.nvim_win_get_buf
 local buf_get_text = vim.api.nvim_buf_get_text
 local buf_get_offset = vim.api.nvim_buf_get_offset
@@ -29,16 +30,18 @@ local function get_cursor_relative_to_node(node, row, col)
 end
 
 ---Returns a list of captures `{capture_name, node}` at cursor
+---@param query_name string The name of the query (i.e. "highlights")
 ---@param winnr? integer The window
----@param query_name? string The name of the query (i.e. "highlights")
 ---@param lang? string The filetype of a parser
 ---@param source_node? table The node for getting a range
 ---  (can be used to parse a part of the buffer as different filetype)
 ---@return {[1]: string, [2]:table, [3]: integer?}[] #`{capture_name, node, byte_offset_to_cursor?}[]`
-function utils.get_captures_at_cursor(winnr, query_name, lang, source_node)
+function utils.get_captures_at_cursor(query_name, winnr, lang, source_node)
   winnr = winnr or 0
   ---@type integer | string
-  local source = win_get_buf(winnr) --[[@as integer]]
+  local source
+  source = win_get_buf(winnr) --[[@as integer]]
+  lang = lang or buf_get_option(source, "filetype")
   local row, col, cursor_byte, parser
   row, col = get_cursor_0(winnr)
   if source_node then

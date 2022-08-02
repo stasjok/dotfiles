@@ -204,7 +204,7 @@ function jinja_utils.jinja_ft_func(ft)
   local ft_funcs = {
     jinja = function()
       local filetypes = {}
-      local captures = get_captures_at_cursor(0, "ft_func", "jinja2")
+      local captures = get_captures_at_cursor("ft_func", 0, "jinja2")
       for _, capture in ipairs(captures) do
         if capture[1] == "jinja" then
           local text = get_node_text_before_cursor(capture[2], 0)
@@ -218,11 +218,11 @@ function jinja_utils.jinja_ft_func(ft)
     end,
     ansible = function()
       local filetypes = {}
-      local captures = get_captures_at_cursor(0, "ft_func", "yaml")
+      local captures = get_captures_at_cursor("ft_func", 0, "yaml")
       for _, capture in ipairs(captures) do
         if capture[1] == "value" then
           local node_text = get_node_text(capture[2], 0)
-          local jinja_captures = get_captures_at_cursor(0, "ft_func", "jinja2", capture[2])
+          local jinja_captures = get_captures_at_cursor("ft_func", 0, "jinja2", capture[2])
           for _, jinja_capture in ipairs(jinja_captures) do
             if jinja_capture[1] == "jinja" then
               local text =
