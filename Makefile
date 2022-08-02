@@ -1,4 +1,4 @@
-nvim_functional = tests/nvim/functional/*_spec.lua
+nvim_functional := $(wildcard tests/nvim/functional/*_spec.lua)
 
 .PHONY : test
 test : test_nvim
