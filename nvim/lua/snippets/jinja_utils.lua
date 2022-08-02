@@ -50,77 +50,83 @@ end
 ---@param ft "jinja" | "sls" | "ansible" Filetype for `ft_func`
 ---@return fun(): string[]
 function jinja_utils.jinja_ft_func(ft)
-  local query_string = [[
-    (jinja_stuff) @jinja
-    (text) @text
-  ]]
-  vim.treesitter.set_query("jinja2", "ft_func", query_string)
-  query_string = [[
-    (block_mapping_pair
-      key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
-      value: (flow_node [
-        (plain_scalar (string_scalar))
-        (double_quote_scalar)
-        (single_quote_scalar)
-      ] @value))
+  vim.treesitter.query.set_query(
+    "jinja2",
+    "ft_func",
+    [[
+      (jinja_stuff) @jinja
+      (text) @text
+    ]]
+  )
+  vim.treesitter.query.set_query(
+    "yaml",
+    "ft_func",
+    [[
+      (block_mapping_pair
+        key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
+        value: (flow_node [
+          (plain_scalar (string_scalar))
+          (double_quote_scalar)
+          (single_quote_scalar)
+        ] @value))
 
-    (block_mapping_pair
-      key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
-      value: (block_node
-        (block_scalar) @value))
+      (block_mapping_pair
+        key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
+        value: (block_node
+          (block_scalar) @value))
 
-    (block_mapping_pair
-      key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
-      value: (block_node
-        (block_sequence
-          (block_sequence_item
-            (flow_node [
-              (plain_scalar (string_scalar))
-              (double_quote_scalar)
-              (single_quote_scalar)
-            ] @value)))))
+      (block_mapping_pair
+        key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
+        value: (block_node
+          (block_sequence
+            (block_sequence_item
+              (flow_node [
+                (plain_scalar (string_scalar))
+                (double_quote_scalar)
+                (single_quote_scalar)
+              ] @value)))))
 
-    (block_mapping_pair
-      key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
-      value: (block_node
-        (block_sequence
-          (block_sequence_item
-            (block_node
-              (block_scalar) @value)))))
+      (block_mapping_pair
+        key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
+        value: (block_node
+          (block_sequence
+            (block_sequence_item
+              (block_node
+                (block_scalar) @value)))))
 
-    (block_mapping_pair
-      key: (flow_node) @key (#any-of? @key "when" "that" "var")
-      value: (flow_node [
-        (plain_scalar (string_scalar))
-        (double_quote_scalar)
-        (single_quote_scalar)
-      ] @jinja))
+      (block_mapping_pair
+        key: (flow_node) @key (#any-of? @key "when" "that" "var")
+        value: (flow_node [
+          (plain_scalar (string_scalar))
+          (double_quote_scalar)
+          (single_quote_scalar)
+        ] @jinja))
 
-    (block_mapping_pair
-      key: (flow_node) @key (#any-of? @key "when" "that" "var")
-      value: (block_node
-        (block_scalar) @jinja))
+      (block_mapping_pair
+        key: (flow_node) @key (#any-of? @key "when" "that" "var")
+        value: (block_node
+          (block_scalar) @jinja))
 
-    (block_mapping_pair
-      key: (flow_node) @key (#any-of? @key "when" "that" "var")
-      value: (block_node
-        (block_sequence
-          (block_sequence_item
-            (flow_node [
-              (plain_scalar (string_scalar))
-              (double_quote_scalar)
-              (single_quote_scalar)
-            ] @jinja)))))
+      (block_mapping_pair
+        key: (flow_node) @key (#any-of? @key "when" "that" "var")
+        value: (block_node
+          (block_sequence
+            (block_sequence_item
+              (flow_node [
+                (plain_scalar (string_scalar))
+                (double_quote_scalar)
+                (single_quote_scalar)
+              ] @jinja)))))
 
-    (block_mapping_pair
-      key: (flow_node) @key (#any-of? @key "when" "that" "var")
-      value: (block_node
-        (block_sequence
-          (block_sequence_item
-            (block_node
-              (block_scalar) @jinja)))))
-  ]]
-  vim.treesitter.set_query("yaml", "ft_func", query_string)
+      (block_mapping_pair
+        key: (flow_node) @key (#any-of? @key "when" "that" "var")
+        value: (block_node
+          (block_sequence
+            (block_sequence_item
+              (block_node
+                (block_scalar) @jinja)))))
+    ]]
+  )
 
   -- List of jinja filters filetypes
   local filters_filetypes = setmetatable({
