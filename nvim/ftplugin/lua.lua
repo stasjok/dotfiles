@@ -1,4 +1,3 @@
-local lspconfig = require("lspconfig")
 local lsputil = require("lspconfig.util")
 local test_directory = require("plenary.test_harness").test_directory
 local map = vim.keymap.set
@@ -22,13 +21,8 @@ if buf_name:sub(-9, #buf_name) == "_spec.lua" then
 end
 
 -- Auto-format on save
-local root_dir = lspconfig["sumneko_lua"].get_root_dir(buf_name)
-local stylua_conf_exists = root_dir
-  and (
-    lsputil.path.exists(root_dir .. "/stylua.toml")
-    or lsputil.path.exists(root_dir .. "/.stylua.toml")
-  )
-
+-- TODO: Use vim.fs from 0.8
+local stylua_conf_exists = lsputil.root_pattern(".stylua.toml", "stylua.toml")(buf_name)
 if stylua_conf_exists then
   local augroup = create_augroup("LuaAutoFormat", { clear = false })
   clear_autocmds({ group = augroup, buffer = 0 })
