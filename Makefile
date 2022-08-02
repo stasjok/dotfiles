@@ -1,10 +1,17 @@
+nvim_functional = tests/nvim/functional/*_spec.lua
+
 .PHONY : test
-test : nvim_test
+test : test_nvim
 
-.PHONY : nvim_test
-nvim_test : nvim_functional_test
+.PHONY : test_all
+test_all : test_nvim
 
-.PHONY : nvim_functional_test
-nvim_functional_test :
-	nvim --headless --noplugin -u NORC -c \
-	    "lua require('plenary.test_harness').test_directory('nvim/tests/functional')"
+.PHONY : test_nvim
+test_nvim : test_nvim_functional
+
+.PHONY : test_nvim_functional
+test_nvim_functional : $(nvim_functional)
+
+.PHONY : $(nvim_functional)
+$(nvim_functional) :
+	nvim --headless -c "lua require('plenary.busted').run('$@')"

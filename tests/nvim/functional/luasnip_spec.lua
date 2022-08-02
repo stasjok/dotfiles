@@ -1,4 +1,3 @@
-local command = vim.api.nvim_command
 local get_current_line = vim.api.nvim_get_current_line
 local win_get_cursor = vim.api.nvim_win_get_cursor
 local buf_set_lines = vim.api.nvim_buf_set_lines
@@ -6,7 +5,6 @@ local feedkeys = require("map").feedkeys
 
 describe("LuaSnip", function()
   -- Load LuaSnip configuration
-  command("runtime plugin/plugin_configs/luasnip.lua")
   local luasnip = require("luasnip")
 
   it("can load snippet", function()
