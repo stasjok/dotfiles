@@ -30,6 +30,7 @@
             tmux
             git
             gnupg
+            gnumake
             neovimWithPlugins
             exa
             bat
