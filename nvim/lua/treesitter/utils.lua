@@ -81,7 +81,7 @@ end
 ---Returns the text from node start position to cursor position
 ---@param node table The node
 ---@param source string | integer | nil The window or string from which the node is extracted
----@param cursor_byte integer? Byte offset of the cursor position is source is a string
+---@param cursor_byte integer? Byte offset of the cursor position if source is a string
 ---@return string
 function utils.get_node_text_before_cursor(node, source, cursor_byte)
   local start_row, start_col, start_byte = node:start() --[[@as integer, integer, integer]]
