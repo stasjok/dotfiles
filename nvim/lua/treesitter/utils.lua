@@ -115,4 +115,9 @@ function utils.get_node_text_before_cursor(node, source, cursor_byte)
   end
 end
 
+---@diagnostic disable-next-line: undefined-global
+if _IS_TEST then
+  utils.get_cursor_relative_to_node = get_cursor_relative_to_node
+end
+
 return utils
