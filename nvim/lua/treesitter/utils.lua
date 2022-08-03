@@ -6,7 +6,6 @@ local get_parser = vim.treesitter.get_parser
 local get_string_parser = vim.treesitter.get_string_parser
 local get_query = vim.treesitter.get_query
 local get_node_text = vim.treesitter.get_node_text
-local is_in_node_range = require("nvim-treesitter.ts_utils").is_in_node_range
 local get_cursor_0 = require("utils").get_cursor_0
 
 local utils = {}
@@ -27,6 +26,20 @@ local function get_cursor_relative_to_node(node, row, col)
   else
     return row - start_row, col, buf_get_offset(0, row) - start_byte + col
   end
+end
+
+---Determines whether (line, col) position is in node range
+---@param node table A node defining the range
+---@param line integer A line (0-based)
+---@param col integer A column (0-based)
+---@param end_inclusive? boolean Whether to allow position on node end
+---@return boolean
+function utils.is_in_node_range(node, line, col, end_inclusive)
+  local start_line, start_col, end_line, end_col = node:range()
+  local is_after_node_start = line > start_line or line == start_line and col >= start_col
+  local is_before_node_end = line < end_line
+    or line == end_line and (end_inclusive and col <= end_col or col < end_col)
+  return is_after_node_start and is_before_node_end
 end
 
 ---Returns a list of captures `{capture_name, node}` at cursor
@@ -61,7 +74,7 @@ function utils.get_captures_at_cursor(query_name, winnr, lang, source_node)
   local root
   for _, tree in ipairs(parser:parse()) do
     root = tree:root()
-    if root and is_in_node_range(root, row, col) then
+    if root and utils.is_in_node_range(root, row, col) then
       break
     end
   end
@@ -74,7 +87,7 @@ function utils.get_captures_at_cursor(query_name, winnr, lang, source_node)
     return captures
   end
   for id, node in query:iter_captures(root, source, row, row + 1) do
-    if is_in_node_range(node, row, col - 1) then
+    if utils.is_in_node_range(node, row, col, true) then
       table.insert(captures, { query.captures[id], node, cursor_byte })
     end
   end
