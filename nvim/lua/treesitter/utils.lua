@@ -44,19 +44,19 @@ end
 
 ---Returns a list of captures `{capture_name, node}` at cursor
 ---@param query_name string The name of the query (i.e. "highlights")
----@param winnr? integer The window
+---@param window? integer The window
 ---@param lang? string The filetype of a parser
 ---@param source_node? table The node for getting a range
 ---  (can be used to parse a part of the buffer as different filetype)
 ---@return {[1]: string, [2]:table, [3]: integer?}[] #`{capture_name, node, byte_offset_to_cursor?}[]`
-function utils.get_captures_at_cursor(query_name, winnr, lang, source_node)
-  winnr = winnr or 0
+function utils.get_captures_at_cursor(query_name, window, lang, source_node)
+  window = window or 0
   ---@type integer | string
   local source
-  source = win_get_buf(winnr) --[[@as integer]]
+  source = win_get_buf(window) --[[@as integer]]
   lang = lang or buf_get_option(source, "filetype")
   local row, col, cursor_byte, parser
-  row, col = get_cursor_0(winnr)
+  row, col = get_cursor_0(window)
   if source_node then
     source = get_node_text(source_node, source) --[[@as string]]
     row, col, cursor_byte = get_cursor_relative_to_node(source_node, row, col)
