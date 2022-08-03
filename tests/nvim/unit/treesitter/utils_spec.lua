@@ -139,14 +139,92 @@ describe("treesitter.utils", function()
   describe("get_captures_at_cursor", function()
     local get_captures_at_cursor = utils.get_captures_at_cursor
 
+    stub.new(utils, "is_in_node_range", false)
+    after_each(function()
+      utils.is_in_node_range:clear()
+    end)
+
+    vim.treesitter.get_parser.invokes(function()
+      error("Failed to load parser")
+    end)
+
     it("does not error if there is no parser", function()
-      vim.treesitter.get_parser.invokes(function()
-        error("Failed to load parser")
-      end)
       assert.has_no.errors(function()
         get_captures_at_cursor("test")
       end)
     end)
+
+    vim.treesitter.get_parser.returns()
+
+    it("returns empty table if there is no parser", function()
+      ---@diagnostic disable-next-line: missing-parameter
+      assert.are.same({}, get_captures_at_cursor())
+      assert.stub(vim.treesitter.get_parser).is.called(1)
+      assert.are.same({}, get_captures_at_cursor("test"))
+      assert.stub(vim.treesitter.get_parser).is.called(2)
+    end)
+
+    vim.treesitter.get_parser.returns({
+      parse = function()
+        return {}
+      end,
+    })
+
+    it("returns empty table if there is no trees", function()
+      assert.are.same({}, get_captures_at_cursor("test"))
+      assert.stub(vim.treesitter.get_parser).is.called(1)
+    end)
+
+    local parsed = {
+      { root = stub.new(nil, nil, "tree_root1") },
+      { root = stub.new() },
+      { root = stub.new(nil, nil, "tree_root2") },
+    }
+    vim.treesitter.get_parser.returns({
+      parse = function()
+        return parsed
+      end,
+    })
+    after_each(function()
+      for _, tree in ipairs(parsed) do
+        tree.root:clear()
+      end
+    end)
+
+    it("returns empty table if cursor is not in any tree range", function()
+      assert.are.same({}, get_captures_at_cursor("test"))
+      assert.stub(parsed[1].root).is.called(1)
+      assert.stub(parsed[2].root).is.called(1)
+      assert.stub(parsed[3].root).is.called(1)
+      assert.stub(utils.is_in_node_range).is.called(2)
+      assert.stub(vim.treesitter.get_query).is_not.called()
+    end)
+
+    -- row, col are nils, because nvim_win_get_cursor is stub
+    utils.is_in_node_range.on_call_with("tree_root2", nil, nil).returns(true)
+
+    it("can find current tree", function()
+      assert.are.same({}, get_captures_at_cursor("test"))
+      assert.stub(parsed[1].root).is.called(1)
+      assert.stub(parsed[2].root).is.called(1)
+      assert.stub(parsed[3].root).is.called(1)
+      assert.stub(utils.is_in_node_range).is.called(2)
+      assert.stub(vim.treesitter.get_query).is.called(1)
+    end)
+
+    utils.is_in_node_range.on_call_with("tree_root1", nil, nil).returns(true)
+    utils.is_in_node_range.on_call_with("tree_root2", nil, nil).returns(false)
+
+    it("can short-circuit during finding current tree", function()
+      assert.are.same({}, get_captures_at_cursor("test"))
+      assert.stub(parsed[1].root).is.called(1)
+      assert.stub(parsed[2].root).is_not.called()
+      assert.stub(parsed[3].root).is_not.called()
+      assert.stub(utils.is_in_node_range).is.called(1)
+      assert.stub(vim.treesitter.get_query).is.called(1)
+    end)
+
+    utils.is_in_node_range:revert()
   end)
 
   -- Revert stubs

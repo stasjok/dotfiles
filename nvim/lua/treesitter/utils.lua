@@ -73,8 +73,9 @@ function utils.get_captures_at_cursor(query_name, window, lang, source_node)
 
   local root
   for _, tree in ipairs(parser:parse()) do
-    root = tree:root()
-    if root and utils.is_in_node_range(root, row, col) then
+    local tree_root = tree:root()
+    if tree_root and utils.is_in_node_range(tree_root, row, col) then
+      root = tree_root
       break
     end
   end
