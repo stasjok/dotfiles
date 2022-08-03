@@ -5,9 +5,8 @@ describe("treesitter.utils", function()
     local get_captures_at_cursor = utils.get_captures_at_cursor
     local text = [[
 -- Comment
-if string.sub("hello", 1) then
-  vim.cmd("setlocal tabstop=8 expandtab")
-  print("Hello, world!")
+if string.sub("test", 1) then
+  print("setlocal tabstop=8 expandtab")
 end
 ]]
     local lines = vim.split(text, "\n", { plain = true })
@@ -16,16 +15,9 @@ end
       "test",
       [[
         (comment) @comment
-        (string) @string
-        (function_call
-          (arguments) @fun_args)
+        (string content: _ @string_content)
         (if_statement
           consequence: (_) @if_block)
-        (function_call
-          name: (dot_index_expression) @vimcmd
-          arguments: (arguments
-            (string content: _ @vim))
-          (#eq? @vimcmd "vim.cmd"))
       ]]
     )
     vim.treesitter.query.set_query("vim", "test", "(set_item option: (option_name) @option)")
@@ -65,6 +57,36 @@ end
       assert.are.equal(1, #captures)
       assert.are.equal("comment", captures[1][1])
       assert.are.equal("comment", captures[1][2]:type())
+    end)
+
+    vim.api.nvim_win_set_cursor(0, { 2, 14 })
+
+    it("returns empty table outside captures", function()
+      assert.are.same({}, get_captures_at_cursor("test"))
+    end)
+
+    vim.api.nvim_win_set_cursor(0, { 2, 15 })
+
+    it("works on capture start", function()
+      local captures = get_captures_at_cursor("test")
+      assert.are.equal(1, #captures)
+      assert.are.equal("string_content", captures[1][1])
+      assert.are.equal("string_content", captures[1][2]:type())
+    end)
+
+    vim.api.nvim_win_set_cursor(0, { 2, 19 })
+
+    it("works on capture end (inclusive)", function()
+      local captures = get_captures_at_cursor("test")
+      assert.are.equal(1, #captures)
+      assert.are.equal("string_content", captures[1][1])
+      assert.are.equal("string_content", captures[1][2]:type())
+    end)
+
+    vim.api.nvim_win_set_cursor(0, { 2, 20 })
+
+    it("works after capture end", function()
+      assert.are.same({}, get_captures_at_cursor("test"))
     end)
   end)
 end)
