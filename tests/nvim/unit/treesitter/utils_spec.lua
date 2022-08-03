@@ -138,6 +138,15 @@ describe("treesitter.utils", function()
 
   describe("get_captures_at_cursor", function()
     local get_captures_at_cursor = utils.get_captures_at_cursor
+
+    it("does not error if there is no parser", function()
+      vim.treesitter.get_parser.invokes(function()
+        error("Failed to load parser")
+      end)
+      assert.has_no.errors(function()
+        get_captures_at_cursor("test")
+      end)
+    end)
   end)
 
   -- Revert stubs

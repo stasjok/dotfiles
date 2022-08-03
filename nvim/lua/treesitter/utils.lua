@@ -55,19 +55,19 @@ function utils.get_captures_at_cursor(query_name, window, lang, source_node)
   local source
   source = win_get_buf(window) --[[@as integer]]
   lang = lang or buf_get_option(source, "filetype")
-  local row, col, cursor_byte, parser
+  local row, col, cursor_byte, ok, parser
   row, col = get_cursor_0(window)
   if source_node then
     source = get_node_text(source_node, source) --[[@as string]]
     row, col, cursor_byte = get_cursor_relative_to_node(source_node, row, col)
-    parser = get_string_parser(source, lang)
+    ok, parser = pcall(get_string_parser, source, lang)
   else
-    parser = get_parser(source, lang)
+    ok, parser = pcall(get_parser, source, lang)
   end
 
   local captures = {}
 
-  if not parser then
+  if not ok or not parser then
     return captures
   end
 

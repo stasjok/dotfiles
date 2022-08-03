@@ -22,9 +22,6 @@ end
     )
     vim.treesitter.query.set_query("vim", "test", "(set_item option: (option_name) @option)")
 
-    -- vim.treesitter.get_parser fails with empty filetype
-    vim.opt_local.filetype = "vim"
-
     it("returns empty result without args", function()
       ---@diagnostic disable-next-line: missing-parameter
       assert.are.same({}, get_captures_at_cursor())
