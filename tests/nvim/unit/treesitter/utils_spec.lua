@@ -364,6 +364,75 @@ describe("treesitter.utils", function()
     utils.is_in_node_range:revert()
   end)
 
+  describe("get_node_text_before_cursor", function()
+    local get_node_text_before_cursor = utils.get_node_text_before_cursor
+    local get_cursor_0 = _G.package.loaded.utils.get_cursor_0
+    local function get_node(start_row, start_col, start_byte)
+      return {
+        start = function()
+          return start_row, start_col, start_byte
+        end,
+      }
+    end
+
+    it("returns text from node start to cursor in window", function()
+      -- Stub's returns for window 0 is defined earlier: buf = 2, cursor = 1, 4
+      vim.api.nvim_buf_get_text.returns({ "line1" })
+      assert.are.equal("line1", get_node_text_before_cursor(get_node(0, 3, 3)))
+      assert.stub(vim.api.nvim_buf_get_text).was.called_with(2, 0, 3, 1, 4, match._)
+    end)
+
+    vim.api.nvim_win_get_buf.on_call_with(1100).returns(10)
+    get_cursor_0.on_call_with(1100).returns(6, 1)
+
+    it("returns text from node start to cursor in another window", function()
+      vim.api.nvim_buf_get_text.returns({ "line1", "line2", "", "line4", "" })
+      assert.are.equal(
+        "line1\nline2\n\nline4\n",
+        get_node_text_before_cursor(get_node(3, 8, 12), 1100)
+      )
+      assert.stub(vim.api.nvim_buf_get_text).was.called_with(10, 3, 8, 6, 1, match._)
+    end)
+
+    it("returns one symbol if cursor is directly after node start", function()
+      vim.api.nvim_buf_get_text.returns({ "c" })
+      assert.are.equal("c", get_node_text_before_cursor(get_node(6, 0, 12), 1100))
+      assert.stub(vim.api.nvim_buf_get_text).was.called_with(10, 6, 0, 6, 1, match._)
+    end)
+
+    it("returns empty string if node start is after cursor", function()
+      assert.are.equal("", get_node_text_before_cursor(get_node(6, 2, 12), 1100))
+      assert.are.equal("", get_node_text_before_cursor(get_node(6, 20, 12), 1100))
+      assert.are.equal("", get_node_text_before_cursor(get_node(7, 1, 12), 1100))
+      assert.stub(vim.api.nvim_buf_get_text).was_not.called()
+    end)
+
+    it("returns empty string if node start is at cursor", function()
+      vim.api.nvim_buf_get_text.returns({ "" })
+      assert.are.equal("", get_node_text_before_cursor(get_node(6, 1, 12), 1100))
+      assert.stub(vim.api.nvim_buf_get_text).was.called_with(10, 6, 1, 6, 1, match._)
+    end)
+
+    it("can return text from text source", function()
+      assert.are.equal("a", get_node_text_before_cursor(get_node(0, 0, 0), "abc", 1))
+      assert.are.equal("ab", get_node_text_before_cursor(get_node(0, 0, 0), "abc", 2))
+      assert.are.equal("bc", get_node_text_before_cursor(get_node(0, 1, 1), "abc", 3))
+      assert.are.equal("cdef", get_node_text_before_cursor(get_node(0, 2, 2), "abcdef", 30))
+      assert.are.equal("b", get_node_text_before_cursor(get_node(1, 1, 6), "1234\nabcd", 7))
+      assert.stub(vim.api.nvim_buf_get_text).was_not.called()
+    end)
+
+    it("returns empty string if cursor_byte equals node start byte", function()
+      assert.are.equal("", get_node_text_before_cursor(get_node(0, 3, 3), "abcd", 3))
+      assert.stub(vim.api.nvim_buf_get_text).was_not.called()
+    end)
+
+    it("returns empty string if cursor_byte is less than node start byte", function()
+      assert.are.equal("", get_node_text_before_cursor(get_node(0, 3, 3), "abcd", 2))
+      assert.stub(vim.api.nvim_buf_get_text).was_not.called()
+    end)
+  end)
+
   -- Revert stubs
   for module, keys in pairs(stubs) do
     for _, key in ipairs(keys) do
