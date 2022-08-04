@@ -1,3 +1,6 @@
+-- TODO: Replace with upstreamed version from neovim 0.8
+local get_node_at_cursor = require("nvim-treesitter.ts_utils").get_node_at_cursor
+
 describe("treesitter.utils", function()
   local utils = require("treesitter.utils")
 
@@ -32,10 +35,10 @@ end
     vim.cmd("new")
     local second_win = vim.api.nvim_get_current_win()
     vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
-    vim.api.nvim_win_set_cursor(second_win, { 1, 1 })
     vim.api.nvim_set_current_win(win)
 
     it("works with all args for inactive windows", function()
+      vim.api.nvim_win_set_cursor(second_win, { 1, 1 })
       assert.are_not.equal(vim.api.nvim_get_current_win(), second_win)
       assert.are_not.equal("lua", vim.bo.filetype)
       local captures = get_captures_at_cursor("test", second_win, "lua")
@@ -44,46 +47,108 @@ end
       assert.are.equal("comment", captures[1][2]:type())
     end)
 
+    -- Destroy second window, other tests will be run in main window
     vim.api.nvim_buf_delete(vim.api.nvim_win_get_buf(second_win), { force = true })
     vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
     vim.opt_local.filetype = "lua"
-    vim.api.nvim_win_set_cursor(0, { 1, 1 })
 
     it("works without optional args", function()
+      vim.api.nvim_win_set_cursor(0, { 1, 1 })
       local captures = get_captures_at_cursor("test")
       assert.are.equal(1, #captures)
       assert.are.equal("comment", captures[1][1])
       assert.are.equal("comment", captures[1][2]:type())
     end)
 
-    vim.api.nvim_win_set_cursor(0, { 2, 14 })
-
     it("returns empty table outside captures", function()
+      vim.api.nvim_win_set_cursor(0, { 2, 14 })
       assert.are.same({}, get_captures_at_cursor("test"))
     end)
-
-    vim.api.nvim_win_set_cursor(0, { 2, 15 })
 
     it("works on capture start", function()
+      vim.api.nvim_win_set_cursor(0, { 2, 15 })
       local captures = get_captures_at_cursor("test")
       assert.are.equal(1, #captures)
       assert.are.equal("string_content", captures[1][1])
       assert.are.equal("string_content", captures[1][2]:type())
     end)
-
-    vim.api.nvim_win_set_cursor(0, { 2, 19 })
 
     it("works on capture end (inclusive)", function()
+      vim.api.nvim_win_set_cursor(0, { 2, 19 })
       local captures = get_captures_at_cursor("test")
       assert.are.equal(1, #captures)
       assert.are.equal("string_content", captures[1][1])
       assert.are.equal("string_content", captures[1][2]:type())
     end)
 
-    vim.api.nvim_win_set_cursor(0, { 2, 20 })
-
     it("works after capture end", function()
+      vim.api.nvim_win_set_cursor(0, { 2, 20 })
       assert.are.same({}, get_captures_at_cursor("test"))
+    end)
+
+    it("can return overlapping captures", function()
+      vim.api.nvim_win_set_cursor(0, { 3, 12 })
+      local captures = get_captures_at_cursor("test")
+      assert.are.equal(2, #captures)
+      table.sort(captures, function(a, b)
+        return a[1] < b[1]
+      end)
+      assert.are.equal("if_block", captures[1][1])
+      assert.are.equal("block", captures[1][2]:type())
+      assert.are.equal("string_content", captures[2][1])
+      assert.are.equal("string_content", captures[2][2]:type())
+    end)
+
+    describe("source_node", function()
+      vim.api.nvim_win_set_cursor(0, { 3, 22 })
+      -- String have three nodes (index from 0): start quote, string, end quote
+      local source_node = get_node_at_cursor():child(1)
+      assert.are.equal("setlocal tabstop=8 expandtab", vim.treesitter.get_node_text(source_node, 0))
+
+      it("works with source_node", function()
+        vim.api.nvim_win_set_cursor(0, { 3, 22 })
+        local captures = get_captures_at_cursor("test", 0, "vim", source_node)
+        assert.are.equal(1, #captures)
+        assert.are.equal("option", captures[1][1])
+        assert.are.equal("option_name", captures[1][2]:type())
+        assert.are.equal(13, captures[1][3])
+      end)
+
+      it("works outside captures", function()
+        vim.api.nvim_win_set_cursor(0, { 3, 12 })
+        local captures = get_captures_at_cursor("test", 0, "vim", source_node)
+        assert.are.same({}, captures)
+      end)
+
+      it("works before capture start", function()
+        vim.api.nvim_win_set_cursor(0, { 3, 17 })
+        local captures = get_captures_at_cursor("test", 0, "vim", source_node)
+        assert.are.same({}, captures)
+      end)
+
+      it("works on capture start", function()
+        vim.api.nvim_win_set_cursor(0, { 3, 18 })
+        local captures = get_captures_at_cursor("test", 0, "vim", source_node)
+        assert.are.equal(1, #captures)
+        assert.are.equal("option", captures[1][1])
+        assert.are.equal("option_name", captures[1][2]:type())
+        assert.are.equal(9, captures[1][3])
+      end)
+
+      it("works on capture end (end-inclusive)", function()
+        vim.api.nvim_win_set_cursor(0, { 3, 25 })
+        local captures = get_captures_at_cursor("test", 0, "vim", source_node)
+        assert.are.equal(1, #captures)
+        assert.are.equal("option", captures[1][1])
+        assert.are.equal("option_name", captures[1][2]:type())
+        assert.are.equal(16, captures[1][3])
+      end)
+
+      it("works after capture start", function()
+        vim.api.nvim_win_set_cursor(0, { 3, 26 })
+        local captures = get_captures_at_cursor("test", 0, "vim", source_node)
+        assert.are.same({}, captures)
+      end)
     end)
   end)
 end)
