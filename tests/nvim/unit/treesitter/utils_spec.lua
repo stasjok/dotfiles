@@ -224,6 +224,80 @@ describe("treesitter.utils", function()
       assert.stub(vim.treesitter.get_query).is.called(1)
     end)
 
+    local get_cursor_0 = _G.package.loaded.utils.get_cursor_0
+    -- Query with empty iterator by default
+    local query = {
+      captures = { "capture1", "capture2", "capture3" },
+      iter_captures = stub(nil, nil, function()
+        return function()
+          return nil
+        end
+      end),
+    }
+    vim.treesitter.get_query.returns(query)
+    -- Current window
+    vim.api.nvim_win_get_buf.on_call_with(0).returns(2)
+    vim.api.nvim_buf_get_option.on_call_with(2, "filetype").returns("lua")
+    get_cursor_0.on_call_with(0).returns(1, 4)
+
+    it("returns empty table if captures are not found", function()
+      assert.are.same({}, get_captures_at_cursor("test"))
+      assert.stub(vim.treesitter.get_query).is.called_with("lua", "test")
+      assert.stub(query.iter_captures).is.called_with(match._, "tree_root1", 2, 1, 2)
+      assert.stub(utils.is_in_node_range).is.called(1)
+    end)
+
+    query.iter_captures
+      .on_call_with(match._, "tree_root1", 2, 1, 2)
+      .returns(pairs({ [1] = "node1", [3] = "node3" }))
+
+    it("returns empty table if captures are found, but not on cursor", function()
+      assert.are.same({}, get_captures_at_cursor("test1", nil, "lang"))
+      assert.stub(vim.treesitter.get_query).is.called_with("lang", "test1")
+      assert.stub(query.iter_captures).is.called_with(match._, "tree_root1", 2, 1, 2)
+      assert.stub(utils.is_in_node_range).is.called(3)
+    end)
+
+    utils.is_in_node_range.on_call_with("node3", 1, 4, true).returns(true)
+
+    it("returns matches only in node range", function()
+      assert.are.same({ { "capture3", "node3" } }, get_captures_at_cursor("test"))
+      assert.stub(vim.treesitter.get_query).is.called_with("lua", "test")
+      assert.stub(query.iter_captures).is.called_with(match._, "tree_root1", 2, 1, 2)
+      assert.stub(utils.is_in_node_range).is.called(3)
+    end)
+
+    -- Second window
+    vim.api.nvim_win_get_buf.on_call_with(1003).returns(3)
+    vim.api.nvim_buf_get_option.on_call_with(3, "filetype").returns("vim")
+    get_cursor_0.on_call_with(1003).returns(2, 5)
+    query.iter_captures
+      .on_call_with(match._, "tree_root1", 3, 2, 3)
+      .returns(pairs({ [1] = "node1", [2] = "node2", [3] = "node3" }))
+    utils.is_in_node_range.on_call_with("node2", 2, 5, true).returns(true)
+    utils.is_in_node_range.on_call_with("node3", 2, 5, true).returns(true)
+
+    it("returns matches for specific windows", function()
+      assert.are.same({
+        { "capture2", "node2" },
+        { "capture3", "node3" },
+      }, get_captures_at_cursor("test", 1003))
+      assert.stub(vim.treesitter.get_query).is.called_with("vim", "test")
+      assert.stub(query.iter_captures).is.called_with(match._, "tree_root1", 3, 2, 3)
+      assert.stub(utils.is_in_node_range).is.called(4)
+    end)
+
+    utils.is_in_node_range.on_call_with("node1", 2, 5, true).returns(true)
+
+    it("works for window", function()
+      assert.are.same({
+        { "capture1", "node1" },
+        { "capture2", "node2" },
+        { "capture3", "node3" },
+      }, get_captures_at_cursor("query", 1003, "type"))
+      assert.stub(vim.treesitter.get_query).is.called_with("type", "query")
+    end)
+
     utils.is_in_node_range:revert()
   end)
 
