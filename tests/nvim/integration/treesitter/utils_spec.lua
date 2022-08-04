@@ -1,29 +1,30 @@
 -- TODO: Replace with upstreamed version from neovim 0.8
 local get_node_at_cursor = require("nvim-treesitter.ts_utils").get_node_at_cursor
+local feedkeys = require("map").feedkeys
 
 describe("treesitter.utils", function()
   local utils = require("treesitter.utils")
-
-  describe("get_captures_at_cursor", function()
-    local get_captures_at_cursor = utils.get_captures_at_cursor
-    local text = [[
+  local text = [[
 -- Comment
 if string.sub("test", 1) then
   print("setlocal tabstop=8 expandtab")
 end
 ]]
-    local lines = vim.split(text, "\n", { plain = true })
-    vim.treesitter.query.set_query(
-      "lua",
-      "test",
-      [[
-        (comment) @comment
-        (string content: _ @string_content)
-        (if_statement
-          consequence: (_) @if_block)
-      ]]
-    )
-    vim.treesitter.query.set_query("vim", "test", "(set_item option: (option_name) @option)")
+  local lines = vim.split(text, "\n", { plain = true })
+  vim.treesitter.query.set_query(
+    "lua",
+    "test",
+    [[
+      (comment) @comment
+      (string content: _ @string_content)
+      (if_statement
+        consequence: (_) @if_block)
+    ]]
+  )
+  vim.treesitter.query.set_query("vim", "test", "(set_item option: (option_name) @option)")
+
+  describe("get_captures_at_cursor", function()
+    local get_captures_at_cursor = utils.get_captures_at_cursor
 
     it("returns empty result without args", function()
       ---@diagnostic disable-next-line: missing-parameter
@@ -149,6 +150,91 @@ end
         local captures = get_captures_at_cursor("test", 0, "vim", source_node)
         assert.are.same({}, captures)
       end)
+
+      clear()
+    end)
+  end)
+
+  describe("get_node_text_before_cursor", function()
+    local get_node_text_before_cursor = utils.get_node_text_before_cursor
+    vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
+    vim.opt_local.filetype = "lua"
+    vim.treesitter.get_parser():parse()
+
+    it("works for oneline nodes", function()
+      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      local node = get_node_at_cursor(0, true) --[[@as table]]
+      assert.are.equal("comment", node:type())
+
+      assert.are.equal("", get_node_text_before_cursor(node, 0))
+      vim.api.nvim_win_set_cursor(0, { 1, 1 })
+      assert.are.equal("-", get_node_text_before_cursor(node, 0))
+      vim.api.nvim_win_set_cursor(0, { 1, 4 })
+      assert.are.equal("-- C", get_node_text_before_cursor(node, 0))
+      -- Can't place cursor after last character in normal mode
+      vim.api.nvim_win_set_cursor(0, { 1, 10 })
+      -- Use visual mode to move cursor after last character
+      feedkeys("vl", "x")
+      assert.are.equal("-- Comment", get_node_text_before_cursor(node, 0))
+      -- Leave visual mode
+      feedkeys("<Esc>", "x")
+      vim.api.nvim_win_set_cursor(0, { 2, 0 })
+      assert.are.equal("-- Comment\n", get_node_text_before_cursor(node, 0))
+      vim.api.nvim_win_set_cursor(0, { 2, 3 })
+      assert.are.equal("-- Comment\nif ", get_node_text_before_cursor(node, 0))
+    end)
+
+    it("works for multiline nodes", function()
+      local win = vim.api.nvim_get_current_win()
+      vim.api.nvim_win_set_cursor(0, { 2, 0 })
+      local node = get_node_at_cursor() --[[@as table]]
+      assert.are.equal("if_statement", node:type())
+
+      vim.api.nvim_win_set_cursor(0, { 2, 0 })
+      assert.are.equal("", get_node_text_before_cursor(node, win))
+      vim.api.nvim_win_set_cursor(0, { 2, 2 })
+      assert.are.equal("if", get_node_text_before_cursor(node, win))
+      vim.api.nvim_win_set_cursor(0, { 3, 7 })
+      assert.are.equal(
+        'if string.sub("test", 1) then\n  print',
+        get_node_text_before_cursor(node, win)
+      )
+    end)
+
+    it("works for strings", function()
+      vim.api.nvim_win_set_cursor(0, { 2, 0 })
+      local node = get_node_at_cursor() --[[@as table]]
+      assert.are.equal("if_statement", node:type())
+
+      assert.are.equal("", get_node_text_before_cursor(node, text, 11))
+      assert.are.equal("if", get_node_text_before_cursor(node, text, 13))
+      assert.are.equal("if", get_node_text_before_cursor(node, text, 13))
+      assert.are.equal('if string.sub("test", 1) then', get_node_text_before_cursor(node, text, 40))
+      assert.are.equal(
+        'if string.sub("test", 1) then\n  print',
+        get_node_text_before_cursor(node, text, 48)
+      )
+    end)
+
+    it("returns empty string if node is starting after cursor", function()
+      vim.api.nvim_win_set_cursor(0, { 3, 4 })
+      local node = get_node_at_cursor() --[[@as table]]
+      assert.are.equal("identifier", node:type())
+
+      vim.api.nvim_win_set_cursor(0, { 3, 2 })
+      assert.are.equal("", get_node_text_before_cursor(node))
+      vim.api.nvim_win_set_cursor(0, { 3, 1 })
+      assert.are.equal("", get_node_text_before_cursor(node))
+      vim.api.nvim_win_set_cursor(0, { 3, 0 })
+      assert.are.equal("", get_node_text_before_cursor(node))
+      vim.api.nvim_win_set_cursor(0, { 2, 4 })
+      assert.are.equal("", get_node_text_before_cursor(node))
+      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      assert.are.equal("", get_node_text_before_cursor(node))
+      assert.are.equal("", get_node_text_before_cursor(node, text, 42))
+      assert.are.equal("", get_node_text_before_cursor(node, text, 40))
+      assert.are.equal("", get_node_text_before_cursor(node, text, 4))
+      assert.are.equal("", get_node_text_before_cursor(node, text, 0))
     end)
   end)
 end)
