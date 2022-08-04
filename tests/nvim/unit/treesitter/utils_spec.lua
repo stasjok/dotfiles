@@ -104,6 +104,11 @@ describe("treesitter.utils", function()
     end)
   end)
 
+  -- Pretend that every line is 10 chars long
+  vim.api.nvim_buf_get_offset.invokes(function(_, line)
+    return line * 10
+  end)
+
   describe("get_cursor_relative_to_node", function()
     local get_cursor_relative_to_node = utils.get_cursor_relative_to_node
     local node = {
@@ -111,11 +116,6 @@ describe("treesitter.utils", function()
         return 1, 4, 14
       end,
     }
-    -- Pretend that every line is 10 chars long
-    vim.api.nvim_buf_get_offset.invokes(function(_, line)
-      return line * 10
-    end)
-
     it("returns zeroes before node start", function()
       assert.are.same({ 0, 0, 0 }, { get_cursor_relative_to_node(node, 0, 0) })
       assert.are.same({ 0, 0, 0 }, { get_cursor_relative_to_node(node, 0, 10) })
@@ -140,6 +140,14 @@ describe("treesitter.utils", function()
 
   describe("get_captures_at_cursor", function()
     local get_captures_at_cursor = utils.get_captures_at_cursor
+
+    ---Compare capture pairs for table.sort
+    ---@param a {[1]: string, [2]: table, [3]?: integer}
+    ---@param b {[1]: string, [2]: table, [3]?: integer}
+    ---@return boolean
+    local function captures_comp(a, b)
+      return a[1] < b[1]
+    end
 
     stub.new(utils, "is_in_node_range", false)
     after_each(function()
@@ -278,10 +286,12 @@ describe("treesitter.utils", function()
     utils.is_in_node_range.on_call_with("node3", 2, 5, true).returns(true)
 
     it("returns matches for specific windows", function()
+      local captures = get_captures_at_cursor("test", 1003)
+      table.sort(captures, captures_comp)
       assert.are.same({
         { "capture2", "node2" },
         { "capture3", "node3" },
-      }, get_captures_at_cursor("test", 1003))
+      }, captures)
       assert.stub(vim.treesitter.get_query).is.called_with("vim", "test")
       assert.stub(query.iter_captures).is.called_with(match._, "tree_root1", 3, 2, 3)
       assert.stub(utils.is_in_node_range).is.called(4)
@@ -290,14 +300,67 @@ describe("treesitter.utils", function()
     utils.is_in_node_range.on_call_with("node1", 2, 5, true).returns(true)
 
     it("works for window", function()
+      local captures = get_captures_at_cursor("query", 1003, "type")
+      table.sort(captures, captures_comp)
       assert.are.same({
         { "capture1", "node1" },
         { "capture2", "node2" },
         { "capture3", "node3" },
-      }, get_captures_at_cursor("query", 1003, "type"))
+      }, captures)
       assert.stub(vim.treesitter.get_query).is.called_with("type", "query")
     end)
 
+    describe("source_node", function()
+      local source_node = {
+        start = function()
+          return 4, 1, 41
+        end,
+      }
+      vim.api.nvim_win_get_buf.on_call_with(1004).returns(4)
+      vim.api.nvim_buf_get_option.on_call_with(4, "filetype").returns("lua")
+      get_cursor_0.on_call_with(1004).returns(4, 3)
+      vim.treesitter.get_node_text.returns("source_node_text")
+      vim.treesitter.get_string_parser.returns({
+        parse = function()
+          return parsed
+        end,
+      })
+      query.iter_captures
+        .on_call_with(match._, "tree_root1", "source_node_text", 0, 1)
+        .returns(pairs({ [1] = "node1" }))
+      utils.is_in_node_range.on_call_with("node1", 0, 2, true).returns(true)
+
+      it("can find captures inside source node", function()
+        assert.are.same(
+          { { "capture1", "node1", 2 } },
+          get_captures_at_cursor("test", 1004, nil, source_node)
+        )
+        assert.stub(vim.treesitter.get_node_text).was.called_with(source_node, 4)
+        assert.stub(vim.treesitter.get_string_parser).was.called_with("source_node_text", "lua")
+        assert.stub(utils.is_in_node_range).was.called_with("node1", 0, 2, true)
+      end)
+
+      vim.api.nvim_win_get_buf.on_call_with(1005).returns(4)
+      get_cursor_0.on_call_with(1005).returns(5, 0)
+      query.iter_captures
+        .on_call_with(match._, "tree_root1", "source_node_text", 1, 2)
+        .returns(pairs({ [1] = "node1", [2] = "node2" }))
+      utils.is_in_node_range.on_call_with("node1", 1, 0, true).returns(true)
+      utils.is_in_node_range.on_call_with("node2", 1, 0, true).returns(true)
+
+      it("can fine multiple captures inside source node", function()
+        local captures = get_captures_at_cursor("test", 1005, "vim", source_node)
+        table.sort(captures, captures_comp)
+        assert.are.same({
+          { "capture1", "node1", 9 },
+          { "capture2", "node2", 9 },
+        }, captures)
+        assert.stub(vim.treesitter.get_node_text).was.called_with(source_node, 4)
+        assert.stub(vim.treesitter.get_string_parser).was.called_with("source_node_text", "vim")
+        assert.stub(utils.is_in_node_range).was.called_with("node1", 1, 0, true)
+        assert.stub(utils.is_in_node_range).was.called_with("node2", 1, 0, true)
+      end)
+    end)
     utils.is_in_node_range:revert()
   end)
 
