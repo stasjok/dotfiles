@@ -1,5 +1,7 @@
+local stub = require("luassert.stub")
+local match = require("luassert.match")
+
 describe("treesitter.utils", function()
-  local stub = require("luassert.stub")
   -- Preload modules in order to replace it with stubs
   require("utils")
   -- List of stubs
@@ -200,8 +202,7 @@ describe("treesitter.utils", function()
       assert.stub(vim.treesitter.get_query).is_not.called()
     end)
 
-    -- row, col are nils, because nvim_win_get_cursor is stub
-    utils.is_in_node_range.on_call_with("tree_root2", nil, nil).returns(true)
+    utils.is_in_node_range.on_call_with("tree_root2", match._, match._).returns(true)
 
     it("can find current tree", function()
       assert.are.same({}, get_captures_at_cursor("test"))
@@ -212,8 +213,7 @@ describe("treesitter.utils", function()
       assert.stub(vim.treesitter.get_query).is.called(1)
     end)
 
-    utils.is_in_node_range.on_call_with("tree_root1", nil, nil).returns(true)
-    utils.is_in_node_range.on_call_with("tree_root2", nil, nil).returns(false)
+    utils.is_in_node_range.on_call_with("tree_root1", match._, match._).returns(true)
 
     it("can short-circuit during finding current tree", function()
       assert.are.same({}, get_captures_at_cursor("test"))
