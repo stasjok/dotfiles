@@ -4,6 +4,7 @@ local cond = require("nvim-autopairs.conds")
 local ts_conds = require("nvim-autopairs.ts-conds")
 
 require("nvim-autopairs").setup({
+  enable_check_bracket_line = false,
   fast_wrap = {},
 })
 
