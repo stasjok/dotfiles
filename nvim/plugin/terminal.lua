@@ -9,6 +9,8 @@ local buf_get_lines = vim.api.nvim_buf_get_lines
 local command = vim.api.nvim_command
 local create_augroup = vim.api.nvim_create_augroup
 local create_autocmd = vim.api.nvim_create_autocmd
+local get_proc = vim.api.nvim_get_proc
+local get_proc_children = vim.api.nvim_get_proc_children
 local opt_local = vim.opt_local
 local map = vim.keymap.set
 
@@ -73,7 +75,29 @@ local function terminal_open()
   end
 end
 
+local procs_which_uses_esc = {
+  nvim = true,
+  vim = true,
+  fzf = true,
+}
+
+local function is_proc_uses_esc(pid)
+  if procs_which_uses_esc[get_proc(pid).name] then
+    return true
+  end
+  for _, child_pid in ipairs(get_proc_children(pid)) do
+    if is_proc_uses_esc(child_pid) then
+      return true
+    end
+  end
+  return false
+end
+
+local function terminal_esc()
+  return is_proc_uses_esc(vim.b.terminal_job_pid) and "<Esc>" or "<C-\\><C-N>"
+end
+
 map("n", "<Leader>t", terminal_open)
-map("t", "<Esc>", "<C-\\><C-N>")
+map("t", "<Esc>", terminal_esc, { expr = true })
 map("t", "<C-\\><Esc>", "<Esc>")
 map("t", "<M-PageUp>", "<C-\\><C-N><PageUp>")
