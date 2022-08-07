@@ -11,7 +11,14 @@ end
 ansiblels.settings = {
   ansible = {
     ansible = {
-      useFullyQualifiedCollectionNames = false,
+      useFullyQualifiedCollectionNames = true,
+    },
+    python = {
+      interpreterPath = "python3",
+    },
+    completion = {
+      provideRedirectModules = true,
+      provideModuleOptionAliases = true,
     },
   },
 }
