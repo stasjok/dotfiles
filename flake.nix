@@ -189,6 +189,8 @@
         pythonWithPackages = python3.withPackages (ps: with ps; [
           requests
           pyyaml
+          # ansible-language-server uses python to get sys.path in order to get collections list
+          ansible
         ]);
       };
 
