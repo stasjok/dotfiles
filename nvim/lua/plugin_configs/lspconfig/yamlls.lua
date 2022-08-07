@@ -1,7 +1,11 @@
 local yamlls = {}
 local on_attach = require("plugin_configs.lspconfig.utils").on_attach
 
-yamlls.settings = {}
+yamlls.settings = {
+  yaml = {
+    customTags = { "!vault" },
+  },
+}
 
 yamlls.on_attach = function(client, buffer)
   on_attach(client, buffer)
