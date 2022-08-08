@@ -1,13 +1,7 @@
 {
   description = "Nix flake for my dotfiles";
 
-  inputs.nixpkgs = {
-    type = "github";
-    owner = "NixOS";
-    repo = "nixpkgs";
-    # Released on 2022-07-20 02:43:39 via https://hydra.nixos.org/eval/1772160
-    rev = "6f884c2f43c7bb105816303eb4867da672ec6f39";
-  };
+  inputs.nixpkgs.url = "nixpkgs";
 
   outputs = { self, nixpkgs }:
 
