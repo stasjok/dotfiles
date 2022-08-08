@@ -25,6 +25,7 @@
             git
             gnupg
             gnumake
+            go-task
             neovimWithPlugins
             exa
             bat
