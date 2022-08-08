@@ -1,6 +1,7 @@
 if status is-login
     # Set PATH
-    fish_add_path ~/.nix-profile/bin /nix/var/nix/profiles/default/bin
+    set -q fish_user_paths; and set -e fish_user_paths
+    fish_add_path --path ~/.nix-profile/bin /nix/var/nix/profiles/default/bin
     # Set EDITOR
     set --universal --export EDITOR nvim
     # Force nix packages to use system locale
