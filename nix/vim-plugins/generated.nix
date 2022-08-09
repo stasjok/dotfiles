@@ -25,24 +25,24 @@
   };
   tmux-nvim = buildVimPluginFrom2Nix {
     pname = "tmux.nvim";
-    version = "2022-06-14";
+    version = "2022-08-02";
     src = builtins.fetchTree {
       type = "github";
       owner = "aserowy";
       repo = "tmux.nvim";
-      rev = "7b19060fccfbd1791ae17ec2372e0bc836f9d519";
-      narHash = "sha256-jE8O/8vh7A5FmLhSegKS4iCyGai9N6tZVj418cn1CYo=";
+      rev = "925dc91f569e8db84d0443693efe2321dc3ba7e7";
+      narHash = "sha256-T2aCa1Rq+elCsWf6GTmlS7Or4HaRaQtc4POXGaLc+UE=";
     };
   };
   vim-fish-syntax = buildVimPluginFrom2Nix {
     pname = "vim-fish-syntax";
-    version = "2022-01-06";
+    version = "2022-08-05";
     src = builtins.fetchTree {
       type = "github";
       owner = "khaveesh";
       repo = "vim-fish-syntax";
-      rev = "bd6b832f33e8e1e52cb66d288d367e64d4a27afa";
-      narHash = "sha256-MRVUf0Q+IKajgnor4QSmEGJ4EeWw9Y526S/DfsYsF5w=";
+      rev = "f3744201a10addee5f1bf43146b611c39a1a5e4e";
+      narHash = "sha256-bXF0IkibtPPSGDvHCDYUrJ2KWCBlnrtuSPfid4cowC0=";
     };
   };
   vim-jinja2-syntax = buildVimPluginFrom2Nix {

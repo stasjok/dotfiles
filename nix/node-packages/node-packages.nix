@@ -4,13 +4,13 @@
 
 let
   sources = {
-    "@flatten-js/interval-tree-1.0.18" = {
+    "@flatten-js/interval-tree-1.0.19" = {
       name = "_at_flatten-js_slash_interval-tree";
       packageName = "@flatten-js/interval-tree";
-      version = "1.0.18";
+      version = "1.0.19";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@flatten-js/interval-tree/-/interval-tree-1.0.18.tgz";
-        sha512 = "o72sZErW0Y1C82Cg7nk82ojJ/22EtmKyp5I3eNqgcOKFp/VCzetATYYjJIqOBBaR7FQ/MFj/ZpsmP38mL4TkYA==";
+        url = "https://registry.npmjs.org/@flatten-js/interval-tree/-/interval-tree-1.0.19.tgz";
+        sha512 = "E+uCpmzAP6EL1L0VDligIg2oUnwbzhSMRXts8Ct7OQ+i+dFEgefExcKnTwGFa+MUZGYAIKHBoUWo/f/lhqc1Ew==";
       };
     };
     "balanced-match-1.0.2" = {
@@ -196,7 +196,7 @@ in
       sha512 = "CT5pHMndxE93K7uDWANfHPZWGMjRIUOt/jy5xahy+BVRnjLbc5KGRFGoLVN1bLfJ4S00qE8X936wY6HMoIBV1A==";
     };
     dependencies = [
-      sources."@flatten-js/interval-tree-1.0.18"
+      sources."@flatten-js/interval-tree-1.0.19"
       sources."balanced-match-1.0.2"
       sources."brace-expansion-2.0.1"
       sources."fs.realpath-1.0.0"
