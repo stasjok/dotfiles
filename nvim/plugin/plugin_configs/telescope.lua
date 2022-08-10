@@ -21,7 +21,7 @@ local mappings = {
   ["<Leader>s"] = "live_grep()",
   ["<Leader>S"] = "grep_string()",
   ["<Leader>;"] = "commands()",
-  ["<Leader>h"] = "help_tags()",
+  ["<Leader>hh"] = "help_tags()",
 }
 
 for lhs, picker in pairs(mappings) do
