@@ -6,15 +6,6 @@ final: prev: {
 
   tree-sitter = prev.tree-sitter.override {
     extraGrammars = {
-      tree-sitter-lua = {
-        src = fetchTree {
-          type = "github";
-          owner = "MunifTanjim";
-          repo = "tree-sitter-lua";
-          rev = "c9ece5b2d348f917052db5a2da9bd4ecff07426c";
-          narHash = "sha256-NSsv5sZ8w2wHrtTpvvkoIqOejgfNZGvRac4Znij1UIY=";
-        };
-      };
       tree-sitter-jinja2 = {
         src = fetchTree {
           type = "github";
