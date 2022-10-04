@@ -11,7 +11,6 @@ do
       config_home .. "/after",
     }
     vim.opt.packpath = {
-      config_home,
       rtp[1],
       vim.env.VIMRUNTIME,
     }
