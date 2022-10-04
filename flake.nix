@@ -119,7 +119,7 @@
                 tree-sitter-yaml
                 tree-sitter-jinja2
               ]);
-            configure.packages.nix.start = with vimPlugins; [
+            plugins = with vimPlugins; [
               # Libraries
               plenary-nvim
               impatient-nvim
@@ -164,22 +164,16 @@
               salt-vim
               mediawiki-vim
             ];
-            vimPackDir = vimUtils.packDir configure.packages;
-            nvimDataDir = linkFarm "nvim-data-dir" [{ name = "nvim/site"; path = vimPackDir; }];
-            nvimWrapperDataDirArgs = [ "--set" "XDG_DATA_DIRS" nvimDataDir ];
-            nvimWrapperDisablePerlArgs = [ "--add-flags" "--cmd 'let g:loaded_perl_provider=0'" ];
             neovimConfig = neovimUtils.makeNeovimConfig {
+              inherit plugins;
               withPython3 = false;
               withRuby = false;
-              inherit configure;
-            };
-            # Use vim-pack-dir as env, not as vimrc
-            wrapNeovimArgs = neovimConfig // {
               wrapRc = false;
-              wrapperArgs = neovimConfig.wrapperArgs ++ nvimWrapperDataDirArgs ++ nvimWrapperDisablePerlArgs;
             };
+            wrapperDisablePerlArgs = [ "--add-flags" "--cmd 'let g:loaded_perl_provider=0'" ];
+            wrapperArgs = neovimConfig.wrapperArgs ++ wrapperDisablePerlArgs;
           in
-          wrapNeovimUnstable neovim-unwrapped wrapNeovimArgs;
+          wrapNeovimUnstable neovim-unwrapped (neovimConfig // { inherit wrapperArgs; });
 
         pythonWithPackages = python3.withPackages (ps: with ps; [
           requests
