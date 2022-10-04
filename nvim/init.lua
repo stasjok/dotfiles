@@ -1,3 +1,23 @@
+do
+  -- Optimize 'runtimepath' if running from Nix
+  local rtp = vim.opt.runtimepath:get() --[=[@as string[]]=]
+  if rtp[1]:find("vim-pack-dir", 0, true) then
+    local config_home = vim.env.XDG_CONFIG_HOME and vim.env.XDG_CONFIG_HOME .. "/nvim"
+      or vim.env.HOME .. "/.config/nvim"
+    vim.opt.runtimepath = {
+      config_home,
+      rtp[1],
+      vim.env.VIMRUNTIME,
+      config_home .. "/after",
+    }
+    vim.opt.packpath = {
+      config_home,
+      rtp[1],
+      vim.env.VIMRUNTIME,
+    }
+  end
+end
+
 -- Set <Leader> to <Space> and <LocalLeader> to `\`
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
