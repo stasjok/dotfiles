@@ -19,8 +19,7 @@ function sumneko_lua.root_dir(fname)
 end
 
 function sumneko_lua.on_attach(client, buffer)
-  on_attach(client, buffer)
-  client.resolved_capabilities.document_formatting = false
+  on_attach(client, buffer, { format = false })
 end
 
 local library = get_runtime({ "" }, true, { is_lua = true })

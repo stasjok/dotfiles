@@ -1,8 +1,18 @@
-local buf_map = require("map").buf_map
+local map = vim.keymap.set
 
 local utils = {}
 
-function utils.on_attach(client, bufnr)
+---Callback invoked when LSP client attaches to a buffer
+---@param client integer LSP client ID
+---@param bufnr integer Buffer number
+---@param opts? { format?: boolean }
+function utils.on_attach(client, bufnr, opts)
+  local function buf_map(mode, lhs, rhs)
+    map(mode, lhs, rhs, { buffer = bufnr })
+  end
+
+  opts = opts or {}
+
   -- Mappings
   for lhs, rhs in pairs({
     ["gd"] = '<Cmd>lua require("telescope.builtin").lsp_definitions()<CR>',
@@ -19,11 +29,19 @@ function utils.on_attach(client, bufnr)
     ["<Leader>D"] = '<Cmd>lua require("telescope.builtin").lsp_workspace_diagnostics()<CR>',
     ["]d"] = "<Cmd>lua vim.diagnostic.goto_next()<CR>",
     ["[d"] = "<Cmd>lua vim.diagnostic.goto_prev()<CR>",
-    ["<Leader>F"] = "<Cmd>lua vim.lsp.buf.formatting()<CR>",
   }) do
     buf_map("n", lhs, rhs)
   end
-  buf_map("x", "<Leader>F", ":lua vim.lsp.buf.range_formatting()<CR>")
+
+  -- Formatting
+  if opts.format ~= false then
+    if client.supports_method("textDocument/formatting") then
+      buf_map("n", "<Leader>F", vim.lsp.buf.format or vim.lsp.buf.formatting)
+    end
+    if client.supports_method("textDocument/rangeFormatting") then
+      buf_map("x", "<Leader>F", vim.lsp.buf.format or vim.lsp.buf.range_formatting)
+    end
+  end
 
   -- Show diagnostics automatically
   vim.cmd([[
