@@ -33,16 +33,6 @@ function utils.on_attach(client, bufnr, opts)
     buf_map("n", lhs, rhs)
   end
 
-  -- Formatting
-  if opts.format ~= false then
-    if client.supports_method("textDocument/formatting") then
-      buf_map("n", "<Leader>F", vim.lsp.buf.format or vim.lsp.buf.formatting)
-    end
-    if client.supports_method("textDocument/rangeFormatting") then
-      buf_map("x", "<Leader>F", vim.lsp.buf.format or vim.lsp.buf.range_formatting)
-    end
-  end
-
   -- Show diagnostics automatically
   vim.cmd([[
 augroup ShowDiagnostics

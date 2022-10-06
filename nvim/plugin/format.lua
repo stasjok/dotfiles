@@ -1,0 +1,61 @@
+local buf_get_option = vim.api.nvim_buf_get_option
+local map = vim.keymap.set
+local buf_format = vim.lsp.buf.format
+local create_augroup = vim.api.nvim_create_augroup
+local create_autocmd = vim.api.nvim_create_autocmd
+
+---@class FormatFiletypeSettings
+---@field server string? Language server name to use for formatting
+
+---Format settings
+---@type { [string]: FormatFiletypeSettings }
+local settings = {
+  lua = {
+    server = "null-ls",
+  },
+}
+
+---Returns a function for formatting with specific client id
+---@param client_id integer The id of the client
+---@return function
+local function format_with_client_id(client_id)
+  return function()
+    buf_format({ id = client_id })
+  end
+end
+
+---@class AutocmdCallbackArgument
+---@field id integer The autocmd ID
+---@field event string The name of the event that triggered the autocmd
+---@field group integer? The autocmd group ID if it exists
+---@field match string The match for which this autocmd was executed
+---@field buf integer Currently effective buffer number
+---@field file string File name of the buffer
+
+---@class LspAttachCallbackArgument: AutocmdCallbackArgument
+---@field data { client_id: integer }
+
+---An autocmd callback for configuring format
+---@param args LspAttachCallbackArgument
+local function configure_format(args)
+  local ft = buf_get_option(args.buf, "filetype")
+  local client = vim.lsp.get_client_by_id(args.data.client_id)
+  if settings[ft] and settings[ft].server and client.name ~= settings[ft].server then
+    return
+  end
+  -- Mappings
+  local format_fun = format_with_client_id(client.id)
+  if client.server_capabilities.documentFormattingProvider then
+    map("n", "<Leader>F", format_fun, { buffer = args.buf })
+  end
+  if client.server_capabilities.documentRangeFormattingProvider then
+    map("x", "<Leader>F", format_fun, { buffer = args.buf })
+  end
+end
+
+-- Configure format on LspAttach event
+local format_augroup = create_augroup("FormatConfiguration", { clear = true })
+create_autocmd("LspAttach", {
+  group = format_augroup,
+  callback = configure_format,
+})
