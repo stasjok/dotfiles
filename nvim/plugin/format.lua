@@ -1,17 +1,34 @@
 local buf_get_option = vim.api.nvim_buf_get_option
 local map = vim.keymap.set
 local buf_format = vim.lsp.buf.format
+local fs_stat = vim.loop.fs_stat
 local create_augroup = vim.api.nvim_create_augroup
 local create_autocmd = vim.api.nvim_create_autocmd
+local clear_autocmds = vim.api.nvim_clear_autocmds
+
+---@class FormatConditionArgs
+---@field buf integer Current buffer number
+---@field client table LSP client object
 
 ---@class FormatFiletypeSettings
 ---@field server string? Language server name to use for formatting
+---@field on_save boolean | fun(args: FormatConditionArgs): boolean | nil Whether to enable format on save
 
 ---Format settings
 ---@type { [string]: FormatFiletypeSettings }
 local settings = {
   lua = {
     server = "null-ls",
+    ---@param args FormatConditionArgs
+    ---@return boolean
+    on_save = function(args)
+      return args.client.config.root_dir
+        and (
+          fs_stat(args.client.config.root_dir .. "/stylua.toml")
+          or fs_stat(args.client.config.root_dir .. "/.stylua.toml")
+          or fs_stat(args.client.config.root_dir .. "/.styluaignore")
+        )
+    end,
   },
 }
 
@@ -43,13 +60,36 @@ local function configure_format(args)
   if settings[ft] and settings[ft].server and client.name ~= settings[ft].server then
     return
   end
-  -- Mappings
+
   local format_fun = format_with_client_id(client.id)
+
+  -- Mappings
   if client.server_capabilities.documentFormattingProvider then
     map("n", "<Leader>F", format_fun, { buffer = args.buf })
   end
   if client.server_capabilities.documentRangeFormattingProvider then
     map("x", "<Leader>F", format_fun, { buffer = args.buf })
+  end
+
+  -- Format on save
+  if settings[ft] then
+    if
+      settings[ft].on_save == true
+      or type(settings[ft].on_save) == "function"
+        and settings[ft].on_save({
+          buf = args.buf,
+          client = client,
+        })
+    then
+      local format_on_save_augroup = create_augroup("FormatOnSave", { clear = false })
+      clear_autocmds({ group = format_on_save_augroup, buffer = args.buf })
+      create_autocmd("BufWritePre", {
+        desc = "Format on save",
+        group = format_on_save_augroup,
+        buffer = args.buf,
+        callback = format_fun,
+      })
+    end
   end
 end
 
