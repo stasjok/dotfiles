@@ -13,6 +13,8 @@ local clear_autocmds = vim.api.nvim_clear_autocmds
 ---@class FormatFiletypeSettings
 ---@field server string? Language server name to use for formatting
 ---@field on_save boolean | fun(args: FormatConditionArgs): boolean | nil Whether to enable format on save
+---@field override_document_formatting boolean? Override documentFormattingProvider capability
+---@field override_document_range_formatting boolean? Override documentRangeFormattingProvider capability
 
 ---Format settings
 ---@type { [string]: FormatFiletypeSettings }
@@ -29,6 +31,10 @@ local settings = {
           or fs_stat(args.client.config.root_dir .. "/.styluaignore")
         )
     end,
+  },
+  yaml = {
+    server = "yamlls",
+    override_document_formatting = true,
   },
 }
 
@@ -57,8 +63,17 @@ end
 local function configure_format(args)
   local ft = buf_get_option(args.buf, "filetype")
   local client = vim.lsp.get_client_by_id(args.data.client_id)
+  -- Don't do anything if server is not matched
   if settings[ft] and settings[ft].server and client.name ~= settings[ft].server then
     return
+  end
+
+  -- Override capabilities
+  if settings[ft] and settings[ft].override_document_formatting then
+    client.server_capabilities.documentFormattingProvider = true
+  end
+  if settings[ft] and settings[ft].override_document_range_formatting then
+    client.server_capabilities.documentRangeFormattingProvider = true
   end
 
   local format_fun = format_with_client_id(client.id)
