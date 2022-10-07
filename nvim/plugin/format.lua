@@ -32,6 +32,9 @@ local settings = {
         )
     end,
   },
+  nix = {
+    on_save = true,
+  },
   yaml = {
     server = "yamlls",
     override_document_formatting = true,
