@@ -81,33 +81,35 @@ local function configure_format(args)
 
   local format_fun = format_with_client_id(client.id)
 
-  -- Mappings
   if client.server_capabilities.documentFormattingProvider then
+    -- Mappings
     map("n", "<Leader>F", format_fun, { buffer = args.buf })
-  end
-  if client.server_capabilities.documentRangeFormattingProvider then
-    map("x", "<Leader>F", format_fun, { buffer = args.buf })
+
+    -- Format on save
+    if settings[ft] then
+      if
+        settings[ft].on_save == true
+        or vim.is_callable(settings[ft].on_save)
+          and settings[ft].on_save({
+            buf = args.buf,
+            client = client,
+          })
+      then
+        local format_on_save_augroup = create_augroup("FormatOnSave", { clear = false })
+        clear_autocmds({ group = format_on_save_augroup, buffer = args.buf })
+        create_autocmd("BufWritePre", {
+          desc = "Format on save",
+          group = format_on_save_augroup,
+          buffer = args.buf,
+          callback = format_fun,
+        })
+      end
+    end
   end
 
-  -- Format on save
-  if settings[ft] then
-    if
-      settings[ft].on_save == true
-      or vim.is_callable(settings[ft].on_save)
-        and settings[ft].on_save({
-          buf = args.buf,
-          client = client,
-        })
-    then
-      local format_on_save_augroup = create_augroup("FormatOnSave", { clear = false })
-      clear_autocmds({ group = format_on_save_augroup, buffer = args.buf })
-      create_autocmd("BufWritePre", {
-        desc = "Format on save",
-        group = format_on_save_augroup,
-        buffer = args.buf,
-        callback = format_fun,
-      })
-    end
+  if client.server_capabilities.documentRangeFormattingProvider then
+    -- Mappings
+    map("x", "<Leader>F", format_fun, { buffer = args.buf })
   end
 end
 
