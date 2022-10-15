@@ -93,7 +93,7 @@ local function configure_format(args)
   if settings[ft] then
     if
       settings[ft].on_save == true
-      or type(settings[ft].on_save) == "function"
+      or vim.is_callable(settings[ft].on_save)
         and settings[ft].on_save({
           buf = args.buf,
           client = client,
