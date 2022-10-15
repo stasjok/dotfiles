@@ -4,6 +4,17 @@ final: prev: {
     nodejs = final.nodejs-14_x;
   };
 
+  lua5_1 = prev.lua5_1.override {
+    packageOverrides = luaFinal: luaPrev: {
+      plenary-nvim = luaPrev.plenary-nvim.overrideAttrs (_: {
+        prePatch = ''
+          rm -r lua/luassert
+        '';
+        dependencies = with final.vimPlugins; [ luassert ];
+      });
+    };
+  };
+
   tree-sitter = prev.tree-sitter.override {
     extraGrammars = {
       tree-sitter-jinja2 = {
