@@ -1,0 +1,125 @@
+From c69d1d6168ef731dca373d8df1036101e1c9d6aa Mon Sep 17 00:00:00 2001
+From: Stanislav Asunkin <1353637+stasjok@users.noreply.github.com>
+Date: Mon, 17 Oct 2022 21:38:35 +0300
+Subject: [PATCH] fix(cmp): don't use default highlight groups
+
+---
+ lua/onedark/theme.lua | 86 +++++++++++++++++++++----------------------
+ 1 file changed, 42 insertions(+), 44 deletions(-)
+
+diff --git a/lua/onedark/theme.lua b/lua/onedark/theme.lua
+index 306930a..99c0ab7 100644
+--- a/lua/onedark/theme.lua
++++ b/lua/onedark/theme.lua
+@@ -319,18 +319,18 @@ theme.setup = function(cfg)
+ 
+     -- purescript
+     purescriptModule = { fg = c.blue0 },
+-    purescriptModuleKeyword = { fg = c.purple0},
+-    purescriptWhere = { fg = c.purple0},
++    purescriptModuleKeyword = { fg = c.purple0 },
++    purescriptWhere = { fg = c.purple0 },
+     purescriptImport = { fg = c.blue0 },
+     purescriptImportAs = { fg = c.blue0 },
+     purescriptConstructor = { fg = c.red0 },
+     purescriptTypeVar = { fg = c.orange0 },
+-    purescriptType = { fg = c.yellow1},
+-    purescriptStructure = { fg = c.purple0},
+-    purescriptOperator = { fg = c.cyan0},
+-    purescriptOperatorType = { fg = c.cyan0},
+-    purescriptAsKeyword = { fg = c.purple0},
+-    purescriptImportKeyword = { fg = c.purple0},
++    purescriptType = { fg = c.yellow1 },
++    purescriptStructure = { fg = c.purple0 },
++    purescriptOperator = { fg = c.cyan0 },
++    purescriptOperatorType = { fg = c.cyan0 },
++    purescriptAsKeyword = { fg = c.purple0 },
++    purescriptImportKeyword = { fg = c.purple0 },
+     purescriptImportParams = { fg = c.cyan0 },
+     purescriptDelimiter = { fg = c.cyan0 },
+ 
+@@ -491,47 +491,45 @@ theme.setup = function(cfg)
+     ALEErrorSign = { fg = c.red1 },
+ 
+     -- Cmp
+-    CmpItemAbbrDeprecatedDefault = { fg = util.darken(c.fg0, 0.4) },
+-    CmpItemAbbrDefault = { link = 'CmpItemAbbrDeprecatedDefault' },
+-    CmpItemKindDefault = { fg = util.darken(c.fg0, 0.8) },
+-    CmpItemMenuDefault = { link = 'CmpItemKindDefault' },
++    CmpItemAbbr = { fg = util.darken(c.fg0, 0.4) },
++    CmpItemKind = { fg = util.darken(c.fg0, 0.8) },
++    CmpItemMenu = { link = 'CmpItemKind' },
+     CmpItemAbbrDeprecated = { fg = c.fg_gutter, style = Styles.Strikethrough },
+     CmpItemAbbrMatch = { fg = c.green0 },
+     CmpItemAbbrMatchFuzzy = { link = 'CmpItemAbbrMatch' },
+ 
+     -- Cmp Item Kind
+-    CmpItemKindColorDefault = { fg = c.red2 },
+-    CmpItemKindPropertyDefault = { fg = c.cyan0 },
+-    CmpItemKindSnippetDefault = { fg = c.green0 },
+-
+-    CmpItemKindVariableDefault = { fg = c.red0 },
+-    CmpItemKindClassDefault = { link = 'CmpItemKindVariableDefault' },
+-    CmpItemKindEnumDefault = { link = 'CmpItemKindVariableDefault' },
+-    CmpItemKindInterfaceDefault = { link = 'CmpItemKindVariableDefault' },
+-    CmpItemKindTextDefault = { link = 'CmpItemKindVariableDefault' },
+-
+-    CmpItemKindKeywordDefault = { fg = c.cyan0 },
+-    CmpItemKindFieldDefault = { link = 'CmpItemKindKeywordDefault' },
+-    CmpItemKindUnitDefault = { link = 'CmpItemKindKeywordDefault' },
+-    CmpItemKindValueDefault = { link = 'CmpItemKindKeywordDefault' },
+-
+-    CmpItemKindFileDefault = { fg = c.orange1 },
+-    CmpItemKindFolderDefault = { link = 'CmpItemKindFileDefault' },
+-
+-    CmpItemKindFunctionDefault = { fg = c.purple0 },
+-    CmpItemKindConstructorDefault = { link = 'CmpItemKindFunctionDefault' },
+-    CmpItemKindEventDefault = { link = 'CmpItemKindFunctionDefault' },
+-    CmpItemKindMethodDefault = { link = 'CmpItemKindFunctionDefault' },
+-
+-    CmpItemKindOperatorDefault = { fg = c.cyan0 },
+-    CmpItemKindEnumMemberDefault = { link = 'CmpItemKindOperatorDefault' },
+-    CmpItemKindReferenceDefault = { link = 'CmpItemKindOperatorDefault' },
+-    CmpItemKindTypeParameter = { link = 'CmpItemKindOperatorDefault' },
+-
+-    CmpItemKindConstantDefault = { fg = c.yellow1 },
+-    CmpItemKindModuleDefault = { link = 'CmpItemKindConstantDefault' },
+-    CmpItemKindStructDefault = { link = 'CmpItemKindConstantDefault' },
+-    CmpItemKindTypeParameterDefault = { link = 'CmpItemKindConstantDefault' },
++    CmpItemKindColor = { fg = c.red2 },
++    CmpItemKindProperty = { fg = c.cyan0 },
++    CmpItemKindSnippet = { fg = c.green0 },
++
++    CmpItemKindVariable = { fg = c.red0 },
++    CmpItemKindClass = { link = 'CmpItemKindVariable' },
++    CmpItemKindEnum = { link = 'CmpItemKindVariable' },
++    CmpItemKindInterface = { link = 'CmpItemKindVariable' },
++    CmpItemKindText = { link = 'CmpItemKindVariable' },
++
++    CmpItemKindKeyword = { fg = c.cyan0 },
++    CmpItemKindField = { link = 'CmpItemKindKeyword' },
++    CmpItemKindUnit = { link = 'CmpItemKindKeyword' },
++    CmpItemKindValue = { link = 'CmpItemKindKeyword' },
++
++    CmpItemKindFile = { fg = c.orange1 },
++    CmpItemKindFolder = { link = 'CmpItemKindFile' },
++
++    CmpItemKindFunction = { fg = c.purple0 },
++    CmpItemKindConstructor = { link = 'CmpItemKindFunction' },
++    CmpItemKindEvent = { link = 'CmpItemKindFunction' },
++    CmpItemKindMethod = { link = 'CmpItemKindFunction' },
++
++    CmpItemKindOperator = { fg = c.cyan0 },
++    CmpItemKindEnumMember = { link = 'CmpItemKindOperator' },
++    CmpItemKindReference = { link = 'CmpItemKindOperator' },
++    CmpItemKindTypeParameter = { link = 'CmpItemKindOperator' },
++
++    CmpItemKindConstant = { fg = c.yellow1 },
++    CmpItemKindModule = { link = 'CmpItemKindConstant' },
++    CmpItemKindStruct = { link = 'CmpItemKindConstant' },
+ 
+     -- nvim-notify
+     NotifyERRORTitle = { fg = util.darken(c.error, 0.9) },
+-- 
+2.37.3
+
