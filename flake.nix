@@ -164,8 +164,12 @@
               salt-vim
               mediawiki-vim
             ];
+            luaPackages = p: with p; [
+              jsregexp
+            ];
             neovimConfig = neovimUtils.makeNeovimConfig {
               inherit plugins;
+              extraLuaPackages = luaPackages;
               withPython3 = false;
               withRuby = false;
               wrapRc = false;
