@@ -1,5 +1,3 @@
-NVIM := nvim
-
 nvim_unit := $(wildcard tests/nvim/unit/*/*_spec.lua)
 nvim_integration := $(wildcard tests/nvim/integration/*/*_spec.lua)
 nvim_functional := $(wildcard tests/nvim/functional/test_*.lua)
@@ -23,41 +21,39 @@ test_nvim_integration tests/nvim/integration : $(nvim_integration)
 .PHONY : test_nvim_functional tests/nvim/functional
 test_nvim_functional tests/nvim/functional : $(nvim_functional_plenary) $(nvim_functional)
 
-define lua_get_vimruntime :=
-io.stdout:write(vim.env.VIMRUNTIME);
-vim.cmd.q()
-endef
+NVIM := nvim
+export VIM := $(shell VIM= VIMRUNTIME= $(NVIM) --headless -u NONE --cmd 'echo $$VIM | q' 2>&1)
+export VIMRUNTIME := $(shell VIM= VIMRUNTIME= $(NVIM) --headless -u NONE --cmd 'echo $$VIMRUNTIME | q' 2>&1)
+export MYVIMRC := tests/nvim/minimal_init.lua
+export XDG_CONFIG_HOME := $(abspath .)
+export XDG_DATA_HOME :=
+export XDG_STATE_HOME := $(abspath tests/nvim/state)
+export XDG_CACHE_HOME := $(abspath tests/nvim/cache)
+export XDG_CONFIG_DIRS :=
+export XDG_DATA_DIRS :=
 
-define lua_get_vim_pack_dir :=
-io.stdout:write(vim.tbl_filter(function(s) return s:find("vim-pack-dir", 1, true) end, vim.opt.rtp:get())[1]);
-vim.cmd.q()
-endef
+unexport LUA_PATH LUA_CPATH
 
-VIMRUNTIME := $(shell VIM= VIMRUNTIME= $(NVIM) --headless -u NONE -i NONE --cmd 'lua $(lua_get_vimruntime)')
-VIMPACKDIR := $(shell $(NVIM) --headless -u NONE -i NONE --cmd 'lua $(lua_get_vim_pack_dir)')
-nvim_home := $(abspath ./nvim)
-nvim_init := $(nvim_home)/init.lua
-nvim_rtp := $(nvim_home),$(VIMPACKDIR),$(VIMRUNTIME),$(nvim_home)/after
-nvim_packpath := $(VIMPACKDIR),$(VIMRUNTIME)
-nvim_rtp_args := --cmd "set rtp=$(nvim_rtp) packpath=$(nvim_packpath)"
-nvim_args_minimal := --headless -n -i NONE -u NONE $(nvim_rtp_args)
-nvim_args_full := --headless -n --clean -u $(nvim_init) $(nvim_rtp_args) --cmd 'lua vim.env.MYVIMRC = "$(nvim_init)"'
+nvim_args := --headless -u $(MYVIMRC) --noplugins -n -i NONE
 
-# Remove environment variables when running inside neovim terminal
-unexport VIM VIMRUNTIME MYVIMRC LUA_PATH LUA_CPATH
+$(XDG_STATE_HOME) :
+	mkdir "$(XDG_STATE_HOME)"
+
+$(XDG_CACHE_HOME) :
+	mkdir "$(XDG_CACHE_HOME)"
 
 .PHONY : $(nvim_unit)
-$(nvim_unit) :
-	$(NVIM) $(nvim_args_minimal) -c "lua require('plenary.busted').run('$@')"
+$(nvim_unit) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME)
+	$(NVIM) $(nvim_args) -c "lua require('plenary.busted').run('$@')"
 
 .PHONY : $(nvim_integration)
-$(nvim_integration) :
-	$(NVIM) $(nvim_args_minimal) -c "lua require('plenary.busted').run('$@')"
-
-.PHONY : $(nvim_functional_plenary)
-$(nvim_functional_plenary) :
-	$(NVIM) $(nvim_args_full) -c "lua require('plenary.busted').run('$@')"
+$(nvim_integration) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME)
+	$(NVIM) $(nvim_args) -c "lua require('plenary.busted').run('$@')"
 
 .PHONY : $(nvim_functional)
-$(nvim_functional) :
-	$(NVIM) $(nvim_args_minimal) -c "lua require('mini.test').setup()" -c "lua MiniTest.run_file('$@')"
+$(nvim_functional) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME)
+	$(NVIM) $(nvim_args) -c "lua require('mini.test').setup(); MiniTest.run_file('$@')"
+
+.PHONY : $(nvim_functional_plenary)
+$(nvim_functional_plenary) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME)
+	$(NVIM) --headless --clean -u nvim/init.lua -n --cmd "set rtp^=nvim" -c "lua require('plenary.busted').run('$@')"

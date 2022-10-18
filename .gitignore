@@ -1,2 +1,5 @@
 fish/fish_variables
 /result
+# Temporary directories for tests
+/tests/nvim/state
+/tests/nvim/cache
