@@ -2,7 +2,8 @@ NVIM := nvim
 
 nvim_unit := $(wildcard tests/nvim/unit/*/*_spec.lua)
 nvim_integration := $(wildcard tests/nvim/integration/*/*_spec.lua)
-nvim_functional := $(wildcard tests/nvim/functional/*_spec.lua)
+nvim_functional := $(wildcard tests/nvim/functional/test_*.lua)
+nvim_functional_plenary := $(wildcard tests/nvim/functional/*_spec.lua)
 
 .PHONY : test
 test : test_all
@@ -20,7 +21,7 @@ test_nvim_unit tests/nvim/unit : $(nvim_unit)
 test_nvim_integration tests/nvim/integration : $(nvim_integration)
 
 .PHONY : test_nvim_functional tests/nvim/functional
-test_nvim_functional tests/nvim/functional : $(nvim_functional)
+test_nvim_functional tests/nvim/functional : $(nvim_functional_plenary) $(nvim_functional)
 
 define lua_get_vimruntime :=
 io.stdout:write(vim.env.VIMRUNTIME);
@@ -53,6 +54,10 @@ $(nvim_unit) :
 $(nvim_integration) :
 	$(NVIM) $(nvim_args_minimal) -c "lua require('plenary.busted').run('$@')"
 
+.PHONY : $(nvim_functional_plenary)
+$(nvim_functional_plenary) :
+	$(NVIM) $(nvim_args_full) -c "lua require('plenary.busted').run('$@')"
+
 .PHONY : $(nvim_functional)
 $(nvim_functional) :
-	$(NVIM) $(nvim_args_full) -c "lua require('plenary.busted').run('$@')"
+	$(NVIM) $(nvim_args_minimal) -c "lua require('mini.test').setup()" -c "lua MiniTest.run_file('$@')"
