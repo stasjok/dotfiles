@@ -45,6 +45,7 @@ function GetYAMLAnsibleIndent(lnum)
                 \                         '|%(%(\:\ )@!.)*)\:'.
                 \         '%(\ [|>][+\-]?|)'.
                 \         '%(\s+\#.*|\s*)$'
+    let s:keyvalueregex = '\v^\s*\w+:\s+[^ {[|>!]'
     if prevline =~# '\v^\s*-$'
         " -
         "   |
@@ -53,6 +54,13 @@ function GetYAMLAnsibleIndent(lnum)
         " - something:
         "     |
         return shiftwidth() == 2 ? previndent+shiftwidth()*2 : previndent+shiftwidth()
+    elseif prevline =~# s:keyvalueregex
+        " key: value
+        " |
+        "
+        " Value starts with any character except '{', '[' (scalars),
+        " '|', '>' (block scalars), '!' (tag name)
+        return previndent
     else
         return GetAnsibleIndent(a:lnum)
     endif
