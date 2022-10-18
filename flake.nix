@@ -123,6 +123,7 @@
               # Libraries
               plenary-nvim
               impatient-nvim
+              mini-nvim
               # Interface
               onedark-nvim
               nvim-web-devicons
