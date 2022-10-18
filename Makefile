@@ -57,3 +57,7 @@ $(nvim_functional) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME)
 .PHONY : $(nvim_functional_plenary)
 $(nvim_functional_plenary) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME)
 	$(NVIM) --headless --clean -u nvim/init.lua -n --cmd "set rtp^=nvim" -c "lua require('plenary.busted').run('$@')"
+
+.PHONY : clean
+clean :
+	rm -rfv "$(XDG_STATE_HOME)" "$(XDG_CACHE_HOME)"
