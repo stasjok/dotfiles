@@ -5,7 +5,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 -- Speed up loading Lua modules in Neovim
-local luacache_suffix = vim.fn.sha256(vim.env.XDG_DATA_DIRS):sub(1, 7)
+local luacache_suffix = vim.fn.sha256(vim.o.runtimepath):sub(1, 7)
 local stdcache = vim.fn.stdpath("cache")
 _G.__luacache_config = {
   chunks = {
