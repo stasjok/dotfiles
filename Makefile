@@ -1,5 +1,5 @@
 nvim_unit := $(wildcard tests/nvim/unit/*_spec.lua tests/nvim/unit/*/*_spec.lua)
-nvim_integration := $(wildcard tests/nvim/integration/*/*_spec.lua)
+nvim_integration := $(wildcard tests/nvim/integration/*_spec.lua tests/nvim/integration/*/*_spec.lua)
 nvim_functional := $(wildcard tests/nvim/functional/test_*.lua)
 nvim_functional_plenary := $(wildcard tests/nvim/functional/*_spec.lua)
 
