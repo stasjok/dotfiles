@@ -1,3 +1,5 @@
+local assert = require("luassert")
+
 describe("test_nvim", function()
   describe("runtimepath", function()
     it("has current directory first", function()
