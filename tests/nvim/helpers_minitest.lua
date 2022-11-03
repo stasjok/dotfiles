@@ -30,17 +30,22 @@ helpers.expect.no_match = MiniTest.new_expectation(
 )
 
 -- Modified new_child_neovim()
-helpers.new_child = function(minimal)
-  minimal = minimal == nil and true or minimal
+helpers.new_child = function(opts)
+  opts = vim.tbl_extend("keep", opts or {}, { minimal = false }) --[[@as table]]
 
   local child = MiniTest.new_child_neovim()
-  local init = minimal and "tests/nvim/minimal_init.lua" or "nvim/init.lua"
+
+  local args
+  if opts.minimal then
+    args = { "-u", "tests/nvim/minimal_init.lua", "--noplugin" }
+  else
+    args = { "-u", "nvim/init.lua" }
+  end
+  -- Because MiniTest uses `--clean` arg, we need to add home directory (current) manually
+  vim.list_extend(args, { "--cmd", "set runtimepath^=nvim" })
 
   child.setup = function()
-    child.restart(
-      { "-u", init, "--cmd", "set rtp^=nvim" },
-      { nvim_executable = vim.env.NVIMPATH or "nvim" }
-    )
+    child.restart(args, { nvim_executable = vim.env.NVIMPATH or "nvim" })
     child.bo.readonly = false
   end
 
