@@ -39,10 +39,10 @@ unexport LUA_PATH LUA_CPATH
 nvim_args := --headless -u $(MYVIMRC) --noplugins -n -i NONE
 
 $(XDG_STATE_HOME) :
-	mkdir "$(XDG_STATE_HOME)"
+	mkdir -p "$(XDG_STATE_HOME)/nvim"
 
 $(XDG_CACHE_HOME) :
-	mkdir "$(XDG_CACHE_HOME)"
+	mkdir -p "$(XDG_CACHE_HOME)/nvim"
 
 .PHONY : $(nvim_unit_plenary)
 $(nvim_unit_plenary) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME)
