@@ -24,8 +24,8 @@ test_nvim_functional tests/nvim/functional : $(nvim_functional_plenary) $(nvim_f
 
 NVIM := nvim
 export NVIMPATH := $(NVIM)
-export VIM := $(shell VIM= VIMRUNTIME= $(NVIM) --headless -u NONE --cmd 'echo $$VIM | q' 2>&1)
-export VIMRUNTIME := $(shell VIM= VIMRUNTIME= $(NVIM) --headless -u NONE --cmd 'echo $$VIMRUNTIME | q' 2>&1)
+export VIM :=
+export VIMRUNTIME :=
 export MYVIMRC := tests/nvim/minimal_init.lua
 export XDG_CONFIG_HOME := $(abspath .)
 export XDG_DATA_HOME :=
