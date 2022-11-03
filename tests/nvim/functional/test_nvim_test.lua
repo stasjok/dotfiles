@@ -79,6 +79,15 @@ T["child"]["options"] = function()
   eq(child.go.shadafile, "NONE")
 end
 
+T["child"]["stdpath"] = function()
+  eq(child.fn.stdpath("data"), "nvim")
+  eq(child.fn.stdpath("state"), vim.fn.fnamemodify("tests/nvim/state/nvim", ":p:h"))
+  eq(child.fn.stdpath("log"), vim.fn.fnamemodify("tests/nvim/state/nvim", ":p:h"))
+  eq(child.fn.stdpath("cache"), vim.fn.fnamemodify("tests/nvim/cache/nvim", ":p:h"))
+  eq(child.fn.stdpath("config_dirs"), {})
+  eq(child.fn.stdpath("data_dirs"), {})
+end
+
 ---@diagnostic disable-next-line: redefined-local
 local child = helpers.new_child({ minimal = true })
 

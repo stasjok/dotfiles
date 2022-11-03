@@ -90,4 +90,35 @@ describe("test_nvim", function()
       assert.equals("NONE", vim.go.shadafile)
     end)
   end)
+
+  describe("stdpath", function()
+    it("config", function()
+      assert.equals(vim.fn.fnamemodify("nvim", ":p:h"), vim.fn.stdpath("config"))
+    end)
+
+    it("data", function()
+      -- Not sure why it's `nvim`
+      assert.equals("nvim", vim.fn.stdpath("data"))
+    end)
+
+    it("state", function()
+      assert.equals(vim.fn.fnamemodify("tests/nvim/state/nvim", ":p:h"), vim.fn.stdpath("state"))
+    end)
+
+    it("log", function()
+      assert.equals(vim.fn.fnamemodify("tests/nvim/state/nvim", ":p:h"), vim.fn.stdpath("log"))
+    end)
+
+    it("cache", function()
+      assert.equals(vim.fn.fnamemodify("tests/nvim/cache/nvim", ":p:h"), vim.fn.stdpath("cache"))
+    end)
+
+    it("config_dirs", function()
+      assert.are.same({}, vim.fn.stdpath("config_dirs"))
+    end)
+
+    it("data_dirs", function()
+      assert.are.same({}, vim.fn.stdpath("data_dirs"))
+    end)
+  end)
 end)
