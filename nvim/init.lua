@@ -1,4 +1,4 @@
-require("helpers").set_rtp()
+require("utils").set_rtp()
 
 -- Set <Leader> to <Space> and <LocalLeader> to `\`
 vim.g.mapleader = " "

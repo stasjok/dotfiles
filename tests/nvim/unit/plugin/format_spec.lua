@@ -1,10 +1,10 @@
-local utils = require("test.utils")
+local helpers = dofile("tests/nvim/helpers.lua")
 local match = require("luassert.match")
 local stub = require("luassert.stub")
 
 describe("plugin/format", function()
   -- Stubs
-  local revert_stubs = utils.stubs({
+  local revert_stubs = helpers.stubs({
     [vim.api] = {
       "nvim_buf_get_option",
       "nvim_create_augroup",

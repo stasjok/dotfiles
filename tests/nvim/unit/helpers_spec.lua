@@ -1,115 +1,132 @@
-describe("helpers", function()
-  local helpers = require("helpers")
+local stub = require("luassert.stub")
+local spy = require("luassert.spy")
+local match = require("luassert.match")
 
-  describe("set_rtp()", function()
-    -- Backup values
-    local rtp_orig = vim.opt.runtimepath:get()
-    local packpath_orig = vim.opt.packpath:get()
-    local home_orig = vim.env.HOME
-    local xdg_home_orig = vim.env.XDG_CONFIG_HOME
+describe("test.utils", function()
+  local helpers = dofile("tests/nvim/helpers.lua")
 
-    before_each(function()
-      vim.opt.runtimepath = rtp_orig
-      vim.opt.packpath = packpath_orig
+  describe("stubs()", function()
+    -- Stub `after_each` for this block
+    local after_each_orig = after_each
+    after_each = stub.new()
+    after_each_orig(function()
+      after_each:clear()
     end)
 
-    after_each(function()
-      vim.opt.runtimepath = rtp_orig
-      vim.opt.packpath = packpath_orig
-      vim.env.HOME = home_orig
-      vim.env.XDG_CONFIG_HOME = xdg_home_orig
+    local funcs = {
+      a = function() end,
+      b = {
+        function() end,
+        function() end,
+      },
+      c = {
+        [1] = function() end,
+        x = function() end,
+        y = function() end,
+        z = {
+          i = function() end,
+          j = function() end,
+        },
+      },
+    }
+
+    it("works", function()
+      local revert = helpers.stubs({ [funcs] = { "a" } })
+      assert.equals(true, spy.is_spy(funcs.a))
+      funcs.a()
+      assert.spy(funcs.a).called(1)
+      assert.spy(funcs.a).called_with()
+      assert.spy(funcs.a).returned_with()
+      -- Call a function that should clear all stubs
+      after_each.calls[1].refs[1]()
+      assert.spy(funcs.a).was_not_called()
+      assert.equals(false, spy.is_spy(funcs.b))
+      assert.equals(false, spy.is_spy(funcs.b[1]))
+      assert.equals(false, spy.is_spy(funcs.c))
+      assert.equals(false, spy.is_spy(funcs.c.x))
+      assert.stub(after_each).called(1)
+      assert.stub(after_each).called_with(match.is_function())
+      revert()
+      assert.equals(false, spy.is_spy(funcs.a))
+      assert.equals("function", type(funcs.a))
     end)
 
-    local home = "/home/test"
-    local vimpack = "/nix/store/csk449qk4kxgkkgdv44z8j2yri30xphx-vim-pack-dir"
-    local runtime = vim.env.VIMRUNTIME
-    local rtp_nix = {
-      vimpack,
-      "/home/test/.config/nvim",
-      runtime,
-    }
-    local rtp_default = {
-      "/home/test/.config/nvim",
-      runtime,
-    }
-    local rtp_test = {
-      "nvim",
-      vimpack,
-      runtime,
-    }
+    it("works with strings", function()
+      local revert = helpers.stubs({ [funcs] = "a" })
+      assert.equals(true, spy.is_spy(funcs.a))
+      assert.equals(false, spy.is_spy(funcs.b))
+      assert.equals(false, spy.is_spy(funcs.b[1]))
+      assert.equals(false, spy.is_spy(funcs.c))
+      assert.equals(false, spy.is_spy(funcs.c.x))
+      revert()
+      assert.equals(false, spy.is_spy(funcs.a))
+      assert.equals("function", type(funcs.a))
+    end)
 
-    local tests = {
-      ["works when XDG_CONFIG_HOME is not defined"] = {
-        rtp = rtp_nix,
-        expect_rtp = {
-          home .. "/.config/nvim",
-          vimpack,
-          runtime,
-          home .. "/.config/nvim/after",
-        },
-        expect_packpath = {
-          vimpack,
-          runtime,
-        },
-      },
-      ["works when XDG_CONFIG_HOME is defined"] = {
-        rtp = rtp_nix,
-        xdg_home = "/rtp",
-        expect_rtp = {
-          "/rtp/nvim",
-          vimpack,
-          runtime,
-          "/rtp/nvim/after",
-        },
-        expect_packpath = {
-          vimpack,
-          runtime,
-        },
-      },
-      ["works when XDG_CONFIG_HOME is empty"] = {
-        rtp = rtp_nix,
-        xdg_home = "",
-        expect_rtp = {
-          home .. "/.config/nvim",
-          vimpack,
-          runtime,
-          home .. "/.config/nvim/after",
-        },
-        expect_packpath = {
-          vimpack,
-          runtime,
-        },
-      },
-      ["works when vim-pack-dir second"] = {
-        rtp = rtp_test,
-        xdg_home = "/rtp",
-        expect_rtp = {
-          "/rtp/nvim",
-          vimpack,
-          runtime,
-          "/rtp/nvim/after",
-        },
-        expect_packpath = {
-          vimpack,
-          runtime,
-        },
-      },
-      ["doesn't do anything if not running a nix version"] = {
-        rtp = rtp_default,
-        expect_rtp = rtp_default,
-        expect_packpath = packpath_orig,
-      },
-    }
+    it("works for multiple functions to stub", function()
+      local revert = helpers.stubs({
+        [funcs] = "a",
+        [funcs.c] = { "x", "y" },
+      })
+      assert.equals(true, spy.is_spy(funcs.a))
+      assert.equals(false, spy.is_spy(funcs.b))
+      assert.equals(false, spy.is_spy(funcs.b[1]))
+      assert.equals(false, spy.is_spy(funcs.b[2]))
+      assert.equals(false, spy.is_spy(funcs.c))
+      assert.equals(false, spy.is_spy(funcs.c[1]))
+      assert.equals(true, spy.is_spy(funcs.c.x))
+      assert.equals(true, spy.is_spy(funcs.c.y))
+      assert.equals(false, spy.is_spy(funcs.c.z))
+      revert()
+      assert.equals(false, spy.is_spy(funcs.a))
+      assert.equals(false, spy.is_spy(funcs.b))
+      assert.equals(false, spy.is_spy(funcs.b[1]))
+      assert.equals(false, spy.is_spy(funcs.b[2]))
+      assert.equals(false, spy.is_spy(funcs.c))
+      assert.equals(false, spy.is_spy(funcs.c[1]))
+      assert.equals(false, spy.is_spy(funcs.c.x))
+      assert.equals(false, spy.is_spy(funcs.c.y))
+      assert.equals(false, spy.is_spy(funcs.c.z))
+    end)
 
-    for desc, opts in pairs(tests) do
-      it(desc, function()
-        vim.opt.rtp = opts.rtp
-        vim.env.HOME = opts.home or home
-        vim.env.XDG_CONFIG_HOME = opts.xdg_home
-        helpers.set_rtp()
-        assert.are.same(opts.expect_rtp, vim.opt.rtp:get())
-        assert.are.same(opts.expect_packpath, vim.opt.packpath:get())
-      end)
-    end
+    it("works with numeric keys", function()
+      local revert = helpers.stubs({
+        [funcs] = "a",
+        [funcs.b] = { 1, 2 },
+        [funcs.c] = 1,
+      })
+      assert.equals(true, spy.is_spy(funcs.a))
+      assert.equals(false, spy.is_spy(funcs.b))
+      assert.equals(true, spy.is_spy(funcs.b[1]))
+      assert.equals(true, spy.is_spy(funcs.b[2]))
+      assert.equals(false, spy.is_spy(funcs.c))
+      assert.equals(true, spy.is_spy(funcs.c[1]))
+      assert.equals(false, spy.is_spy(funcs.c.x))
+      assert.equals(false, spy.is_spy(funcs.c.y))
+      assert.equals(false, spy.is_spy(funcs.c.z))
+      funcs.a()
+      funcs.b[1]()
+      funcs.c[1]()
+      assert.spy(funcs.a).called(1)
+      assert.spy(funcs.b[1]).called(1)
+      assert.spy(funcs.c[1]).called(1)
+      after_each.calls[1].refs[1]()
+      assert.spy(funcs.a).was_not_called()
+      assert.spy(funcs.b[1]).was_not_called()
+      assert.spy(funcs.c[1]).was_not_called()
+      revert()
+      assert.equals(false, spy.is_spy(funcs.a))
+      assert.equals(false, spy.is_spy(funcs.b))
+      assert.equals(false, spy.is_spy(funcs.b[1]))
+      assert.equals(false, spy.is_spy(funcs.b[2]))
+      assert.equals(false, spy.is_spy(funcs.c))
+      assert.equals(false, spy.is_spy(funcs.c[1]))
+      assert.equals(false, spy.is_spy(funcs.c.x))
+      assert.equals(false, spy.is_spy(funcs.c.y))
+      assert.equals(false, spy.is_spy(funcs.c.z))
+    end)
+
+    -- Clear a module with stubbed functions
+    after_each = after_each_orig
   end)
 end)
