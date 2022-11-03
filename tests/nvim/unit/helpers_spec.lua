@@ -32,6 +32,11 @@ describe("helpers", function()
       "/home/test/.config/nvim",
       runtime,
     }
+    local rtp_test = {
+      "nvim",
+      vimpack,
+      runtime,
+    }
 
     local tests = {
       ["works when XDG_CONFIG_HOME is not defined"] = {
@@ -69,6 +74,20 @@ describe("helpers", function()
           vimpack,
           runtime,
           home .. "/.config/nvim/after",
+        },
+        expect_packpath = {
+          vimpack,
+          runtime,
+        },
+      },
+      ["works when vim-pack-dir second"] = {
+        rtp = rtp_test,
+        xdg_home = "/rtp",
+        expect_rtp = {
+          "/rtp/nvim",
+          vimpack,
+          runtime,
+          "/rtp/nvim/after",
         },
         expect_packpath = {
           vimpack,
