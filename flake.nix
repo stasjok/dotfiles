@@ -197,7 +197,10 @@
         src = ./.;
         buildInputs = [ self.packages.x86_64-linux.default ];
         phases = [ "unpackPhase" "checkPhase" "installPhase" ];
-        checkPhase = "make test";
+        checkPhase = ''
+          export LANG=C.UTF-8;
+          make test
+        '';
         doCheck = true;
         installPhase = "mkdir -p $out";
       };

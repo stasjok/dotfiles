@@ -21,29 +21,16 @@ T["checkhealth"] = function()
     end
   end
 
-  local is_nix = vim.env.name == "nix-profile-test"
   local ignore = {
     "`tree-sitter` executable not found",
     "No clipboard tool found",
-    -- It's expected when I run tests inside neovim terminal
+    -- It's expected when running tests inside neovim terminal
     "$TERM differs from the tmux `default-terminal` setting",
-  }
-  local ignore_in_nix = {
-    -- TODO: find out why LOCALE_ARCHIVE doesn't work in nix build
-    -- even if I explicitly specify it in environment variable
-    "Locale does not support UTF-8",
   }
   local function filter_errors(s)
     for _, match in ipairs(ignore) do
       if string.find(s, match, 8, true) then
         return false
-      end
-    end
-    if is_nix then
-      for _, match in ipairs(ignore_in_nix) do
-        if string.find(s, match, 8, true) then
-          return false
-        end
       end
     end
     return true
