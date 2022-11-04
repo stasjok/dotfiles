@@ -107,6 +107,7 @@ describe("test_nvim", function()
 
     it("log", function()
       assert.equals(vim.fn.fnamemodify("tests/nvim/state/nvim", ":p:h"), vim.fn.stdpath("log"))
+      assert.equals(vim.fn.fnamemodify("tests/nvim/state/nvim/log", ":p"), vim.env.NVIM_LOG_FILE)
     end)
 
     it("cache", function()

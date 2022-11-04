@@ -26,6 +26,7 @@ NVIM := nvim
 export NVIMPATH := $(NVIM)
 export VIM :=
 export VIMRUNTIME :=
+export NVIM_LOG_FILE :=
 export MYVIMRC := tests/nvim/minimal_init.lua
 export XDG_CONFIG_HOME := $(abspath .)
 export XDG_DATA_HOME :=
