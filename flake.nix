@@ -19,6 +19,7 @@
         nix-profile = buildEnv {
           name = "nix-profile-${self.lastModifiedDate or "1"}";
           paths = [
+            glibcLocales
             nix
             fish
             tmux
@@ -60,6 +61,7 @@
           extraOutputsToInstall = [ "man" ];
           pathsToLink = [
             "/bin"
+            "/lib/locale"
             "/share/man"
             "/share/fish/vendor_completions.d"
             "/share/fish/vendor_conf.d"

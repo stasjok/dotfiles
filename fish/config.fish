@@ -4,12 +4,8 @@ if status is-login
     fish_add_path --path ~/.nix-profile/bin /nix/var/nix/profiles/default/bin
     # Set EDITOR
     set --universal --export EDITOR nvim
-    # Force nix packages to use system locale
-    if test -f /usr/lib/locale/locale-archive
-        set --universal --export LOCALE_ARCHIVE /usr/lib/locale/locale-archive
-    else if test -d /usr/lib/locale
-        set --universal --export LOCPATH /usr/lib/locale
-    end
+    # Point nix packages to locale archive
+    set --universal --export LOCALE_ARCHIVE ~/.nix-profile/lib/locale/locale-archive
     # Set $NIX_SSL_CERT_FILE so that Nixpkgs applications like curl work.
     if not set -q NIX_SSL_CERT_FILE
         if test -e /etc/ssl/certs/ca-certificates.crt # NixOS, Ubuntu, Debian, Gentoo, Arch
