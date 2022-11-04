@@ -190,7 +190,6 @@
 
       overlays.default = import ./nix/overlay;
 
-      # checks.x86_64-linux.default = self.packages.x86_64-linux.default;
       checks.x86_64-linux.default = pkgs.stdenv.mkDerivation {
         name = "nix-profile-test";
         src = ./.;
