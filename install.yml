@@ -6,7 +6,7 @@
     - name: force
       prompt: >
         Overwrite your configs if any (yes/no)?
-        If `yes`, the following configs will be removed: nvim, fish.
+        If `yes`, the following configs will be removed: nvim, fish, tmux, git.
       private: false
       default: false
 
@@ -18,6 +18,7 @@
       loop:
         - ~/.config/nvim
         - ~/.config/fish
+        - ~/.config/tmux
         - ~/.config/git
 
     - name: remove any existing files/directories
@@ -46,8 +47,8 @@
 
     - name: make symlink for tmux configuration
       file:
-        path: ~/.tmux.conf
-        src: "{{ playbook_dir }}/tmux/tmux.conf"
+        path: ~/.config/tmux
+        src: "{{ playbook_dir }}/tmux"
         force: "{{ force|bool }}"
         state: link
 
@@ -69,3 +70,8 @@
       loop:
         - ~/.local/share/nvim/site/pack/packer
         - ~/.local/share/nvim/site/plugin/packer_compiled.lua
+
+    - name: Removing obsolete tmux.conf file
+      ansible.builtin.file:
+        path: ~/.tmux.conf
+        state: absent
