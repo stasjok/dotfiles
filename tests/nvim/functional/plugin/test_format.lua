@@ -11,8 +11,7 @@ local T = new_set({
   },
 })
 
--- <Esc> here is to unblock after 'F' if mapping is not defined
-local format_mapping = { "<Space>F", "<Esc>" }
+local format_mapping = vim.api.nvim_replace_termcodes("<Space>F", true, false, true)
 local tests = {
   lua = {
     ext = "lua",
@@ -21,7 +20,6 @@ local tests = {
     formatted_string = "local a = 1",
     formatting = true,
     range_formatting = false,
-    wait = 50,
     on_save = true,
     extra_files = { "stylua.toml" },
   },
@@ -42,7 +40,6 @@ local tests = {
     string = "a=1",
     formatted_string = "a = 1",
     formatting = true,
-    wait = 150,
   },
   sh = {
     lsp_name = "null-ls",
@@ -69,7 +66,7 @@ local function prepare_test_dir(ft, test)
   child.api.nvim_cmd({ cmd = "edit", args = { "test." .. (test.ext or ft) } }, {})
   child.set_lines(test.string)
   repeat
-    vim.loop.sleep(50)
+    vim.loop.sleep(20)
     -- get_active_clients() is failing if calling too early
     local success, number_of_clients = pcall(
       child.lua_get,
@@ -85,13 +82,13 @@ for ft, test in pairs(tests) do
 
   T[ft]["normal-mode mapping"] = function()
     prepare_test_dir(ft, test)
-    child.type_keys(test.wait or 50, format_mapping)
+    child.api.nvim_feedkeys(format_mapping, "tx", false)
     eq(child.get_lines(), { test.formatting and test.formatted_string or test.string })
   end
 
   T[ft]["visual-mode mapping"] = function()
     prepare_test_dir(ft, test)
-    child.type_keys(test.wait or 50, "ggVG", format_mapping)
+    child.api.nvim_feedkeys("ggVG" .. format_mapping, "tx", false)
     eq(child.get_lines(), { test.range_formatting and test.formatted_string or test.string })
   end
 
