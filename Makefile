@@ -2,7 +2,7 @@ nvim_unit_plenary := $(wildcard tests/nvim/unit/*_spec.lua tests/nvim/unit/*/*_s
 nvim_integration_plenary := $(wildcard tests/nvim/integration/*_spec.lua tests/nvim/integration/*/*_spec.lua)
 nvim_integration_minitest := $(wildcard tests/nvim/integration/test_*.lua)
 nvim_functional_plenary := $(wildcard tests/nvim/functional/*_spec.lua)
-nvim_functional_minitest := $(wildcard tests/nvim/functional/test_*.lua)
+nvim_functional_minitest := $(wildcard tests/nvim/functional/test_*.lua tests/nvim/functional/*/test_*.lua)
 
 .PHONY : test
 test : test_all
@@ -34,6 +34,7 @@ export XDG_STATE_HOME := $(abspath tests/nvim/state)
 export XDG_CACHE_HOME := $(abspath tests/nvim/cache)
 export XDG_CONFIG_DIRS :=
 export XDG_DATA_DIRS :=
+export TMPDIR := $(abspath tests/nvim/tmp)
 
 unexport LUA_PATH LUA_CPATH
 
@@ -45,26 +46,29 @@ $(XDG_STATE_HOME) :
 $(XDG_CACHE_HOME) :
 	mkdir -p "$(XDG_CACHE_HOME)/nvim"
 
+$(TMPDIR) :
+	mkdir -p "$(TMPDIR)"
+
 .PHONY : $(nvim_unit_plenary)
-$(nvim_unit_plenary) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME)
+$(nvim_unit_plenary) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME) $(TMPDIR)
 	$(NVIM) $(nvim_args) -c "lua require('plenary.busted').run('$@')"
 
 .PHONY : $(nvim_integration_plenary)
-$(nvim_integration_plenary) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME)
+$(nvim_integration_plenary) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME) $(TMPDIR)
 	$(NVIM) $(nvim_args) -c "lua require('plenary.busted').run('$@')"
 
 .PHONY : $(nvim_integration_minitest)
-$(nvim_integration_minitest) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME)
+$(nvim_integration_minitest) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME) $(TMPDIR)
 	$(NVIM) $(nvim_args) -c "lua require('mini.test').setup(); MiniTest.run_file('$@')"
 
 .PHONY : $(nvim_functional_plenary)
-$(nvim_functional_plenary) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME)
+$(nvim_functional_plenary) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME) $(TMPDIR)
 	$(NVIM) --headless --clean -u nvim/init.lua -n --cmd "set rtp^=nvim" -c "lua require('plenary.busted').run('$@')"
 
 .PHONY : $(nvim_functional_minitest)
-$(nvim_functional_minitest) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME)
+$(nvim_functional_minitest) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME) $(TMPDIR)
 	$(NVIM) $(nvim_args) -c "lua require('mini.test').setup(); MiniTest.run_file('$@')"
 
 .PHONY : clean
 clean :
-	rm -rfv "$(XDG_STATE_HOME)" "$(XDG_CACHE_HOME)"
+	rm -rfv "$(XDG_STATE_HOME)" "$(XDG_CACHE_HOME)" "$(TMPDIR)"

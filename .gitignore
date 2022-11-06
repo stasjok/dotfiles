@@ -3,3 +3,4 @@ fish/fish_variables
 # Temporary directories for tests
 /tests/nvim/state
 /tests/nvim/cache
+/tests/nvim/tmp
