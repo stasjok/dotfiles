@@ -1,4 +1,5 @@
 {
+    "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
     "actions": 
     [
@@ -11,18 +12,19 @@
             "keys": "ctrl+c"
         },
         {
-            "command": "find",
-            "keys": "ctrl+shift+f"
-        },
-        {
             "command": "unbound",
             "keys": "alt+enter"
+        },
+        {
+            "command": "find",
+            "keys": "ctrl+shift+f"
         }
     ],
     "alwaysShowTabs": true,
     "copyFormatting": "none",
     "copyOnSelect": true,
-    "defaultProfile": "{2c4de342-38b7-51cf-b940-2309a097f518}",
+    "defaultProfile": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
+    "disableAnimations": true,
     "experimental.rendering.software": false,
     "initialRows": 40,
     "launchMode": "maximized",
@@ -31,35 +33,50 @@
         "defaults": 
         {
             "antialiasingMode": "cleartype",
-            "fontFace": "FiraCode NF",
-            "fontSize": 10,
-            "fontWeight": "normal",
-            "padding": "4, 4"
+            "bellStyle": "none",
+            "colorScheme": "One Dark",
+            "cursorShape": "filledBox",
+            "font": 
+            {
+                "face": "FiraCode NF",
+                "size": 10,
+                "weight": "normal"
+            },
+            "intenseTextStyle": "bold",
+            "padding": "4, 4",
+            "scrollbarState": "hidden",
+            "suppressApplicationTitle": true
         },
         "list": 
         [
             {
-                "commandline": "powershell.exe",
+                "colorScheme": "Campbell",
+                "cursorShape": "bar",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "hidden": false,
-                "name": "Windows PowerShell"
+                "name": "Windows PowerShell",
+                "scrollbarState": "visible"
             },
             {
-                "commandline": "cmd.exe",
+                "colorScheme": "Campbell",
+                "cursorShape": "bar",
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
-                "name": "Command Prompt"
+                "name": "Command Prompt",
+                "scrollbarState": "visible"
             },
             {
-                "colorScheme": "Solarized Dark Custom",
-                "cursorShape": "filledBox",
                 "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
                 "hidden": false,
                 "name": "Ubuntu",
-                "scrollbarState": "hidden",
                 "source": "Windows.Terminal.Wsl",
-                "startingDirectory": "\\\\wsl$\\Ubuntu\\home\\stas",
-                "suppressApplicationTitle": true
+                "startingDirectory": "\\\\wsl$\\Ubuntu\\home\\stas"
+            },
+            {
+                "guid": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
+                "hidden": false,
+                "name": "Debian",
+                "source": "Windows.Terminal.Wsl"
             },
             {
                 "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
@@ -68,22 +85,30 @@
                 "source": "Windows.Terminal.Azure"
             },
             {
-                "colorScheme": "One Dark",
                 "commandline": "ssh server2",
-                "cursorShape": "filledBox",
+                "guid": "{604bcda3-9e7c-5ec3-aa15-a7cc2b834770}",
                 "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
-                "name": "Server 2",
-                "scrollbarState": "hidden",
-                "suppressApplicationTitle": true
+                "name": "Server 2"
             },
             {
-                "colorScheme": "One Dark",
-                "commandline": "ssh ab-proxy",
-                "cursorShape": "filledBox",
+                "commandline": "ssh admAsunkinSS@192.168.176.15",
+                "guid": "{beb369b6-813e-49c7-a489-7489f35e2275}",
+                "hidden": false,
                 "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
-                "name": "Ab-proxy",
-                "scrollbarState": "hidden",
-                "suppressApplicationTitle": true
+                "name": "vr-jump"
+            },
+            {
+                "commandline": "ssh admAsunkinSS@192.168.177.15",
+                "guid": "{1ee3fb4e-dce2-47e1-b01d-e9bd52d871bf}",
+                "hidden": false,
+                "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
+                "name": "cb-jump"
+            },
+            {
+                "commandline": "ssh ab-proxy",
+                "guid": "{b21f647d-e26e-5c0a-b59e-66a951ea33db}",
+                "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
+                "name": "Ab-proxy"
             }
         ]
     },
