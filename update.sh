@@ -18,5 +18,5 @@ ansible-playbook install.yml --extra-vars "force=False"
 
 if [[ -n $TMUX ]]; then
     echo "Sourcing tmux config..."
-    tmux source-file ~/.tmux.conf
+    tmux source-file ~/.config/tmux/tmux.conf
 fi
