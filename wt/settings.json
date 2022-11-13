@@ -12,12 +12,12 @@
             "keys": "ctrl+c"
         },
         {
-            "command": "unbound",
-            "keys": "alt+enter"
-        },
-        {
             "command": "find",
             "keys": "ctrl+shift+f"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+enter"
         }
     ],
     "alwaysShowTabs": true,
@@ -161,29 +161,6 @@
             "yellow": "#C19C00"
         },
         {
-            "background": "#2E3440",
-            "black": "#3B4252",
-            "blue": "#81A1C1",
-            "brightBlack": "#4C566A",
-            "brightBlue": "#81A1C1",
-            "brightCyan": "#8FBCBB",
-            "brightGreen": "#A3BE8C",
-            "brightPurple": "#B48EAD",
-            "brightRed": "#BF616A",
-            "brightWhite": "#ECEFF4",
-            "brightYellow": "#EBCB8B",
-            "cursorColor": "#5E81AC",
-            "cyan": "#88C0D0",
-            "foreground": "#D8DEE9",
-            "green": "#A3BE8C",
-            "name": "Nord",
-            "purple": "#B48EAD",
-            "red": "#BF616A",
-            "selectionBackground": "#434C5E",
-            "white": "#E5E9F0",
-            "yellow": "#EBCB8B"
-        },
-        {
             "background": "#282C34",
             "black": "#20232A",
             "blue": "#61AFEF",
@@ -272,29 +249,6 @@
             "purple": "#D33682",
             "red": "#DC322F",
             "selectionBackground": "#FFFFFF",
-            "white": "#EEE8D5",
-            "yellow": "#B58900"
-        },
-        {
-            "background": "#002B36",
-            "black": "#002B36",
-            "blue": "#268BD2",
-            "brightBlack": "#073642",
-            "brightBlue": "#2A9BEB",
-            "brightCyan": "#31BAB0",
-            "brightGreen": "#9BB300",
-            "brightPurple": "#ED3D92",
-            "brightRed": "#CB4B16",
-            "brightWhite": "#FDF6E3",
-            "brightYellow": "#CF9C00",
-            "cursorColor": "#006680",
-            "cyan": "#2AA198",
-            "foreground": "#839496",
-            "green": "#859900",
-            "name": "Solarized Dark Custom",
-            "purple": "#D33682",
-            "red": "#DC322F",
-            "selectionBackground": "#999999",
             "white": "#EEE8D5",
             "yellow": "#B58900"
         },
