@@ -35,8 +35,8 @@ if status is-login
     or set MANPATH ~/.nix-profile/share/man $MANPATH
     # Set up ssh-agent
     find_ssh_agent
-    # Load Solarized Theme
-    theme_one_dark_load
+    # Load Theme
+    echo y | fish_config theme save kanagawa
 end
 
 if status is-interactive
