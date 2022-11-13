@@ -127,7 +127,7 @@
               impatient-nvim
               mini-nvim
               # Interface
-              onedark-nvim
+              kanagawa-nvim
               nvim-web-devicons
               tmux-nvim
               # Tree-sitter

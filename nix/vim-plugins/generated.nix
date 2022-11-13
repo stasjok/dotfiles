@@ -1,17 +1,6 @@
 { buildVimPluginFrom2Nix }:
 
 {
-  onedark-nvim = buildVimPluginFrom2Nix {
-    pname = "onedark.nvim";
-    version = "2022-07-11";
-    src = builtins.fetchTree {
-      type = "github";
-      owner = "ful1e5";
-      repo = "onedark.nvim";
-      rev = "b5161f0c631571640485be5d1c059cab82c86872";
-      narHash = "sha256-tSsIgkngc4FSFm1Lch4Gb6Zx5hRCNU8Gish5629j8C8=";
-    };
-  };
   surround-nvim = buildVimPluginFrom2Nix {
     pname = "surround.nvim";
     version = "2022-02-01";
