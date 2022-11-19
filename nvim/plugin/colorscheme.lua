@@ -19,6 +19,9 @@ if status then
       -- Enable optional
       mini = true,
     },
+    custom_highlights = {
+      TermCursor = { bg = "#179299" },
+    },
   })
   catppuccin.load()
 end

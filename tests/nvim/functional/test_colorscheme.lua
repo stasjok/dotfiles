@@ -81,7 +81,9 @@ T["colorscheme"]["catppuccin options"] = function()
 
   -- Overrides
   eq(options.color_overrides, {})
-  eq(options.highlight_overrides, {})
+  eq(options.highlight_overrides, { all = {
+    TermCursor = { bg = "#179299" },
+  } })
 end
 
 return T
