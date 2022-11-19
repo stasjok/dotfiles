@@ -36,7 +36,7 @@ if status is-login
     # Set up ssh-agent
     find_ssh_agent
     # Load Theme
-    echo y | fish_config theme save kanagawa
+    echo y | fish_config theme save "Catppuccin Macchiato"
 end
 
 if status is-interactive
