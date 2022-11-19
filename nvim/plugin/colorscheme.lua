@@ -1,11 +1,24 @@
-local status, kanagawa = pcall(require, "kanagawa")
+local status, catppuccin = pcall(require, "catppuccin")
 
 if status then
-  kanagawa.setup({
-    overrides = {
-      -- Match cursor in terminal
-      TermCursor = { bg = "#54546D" },
+  catppuccin.setup({
+    flavour = "macchiato",
+    background = {
+      light = "latte",
+      dark = "macchiato",
+    },
+    styles = {
+      conditionals = {},
+      keywords = { "italic" },
+    },
+    integrations = {
+      -- Disable default
+      nvimtree = false,
+      dashboard = false,
+      indent_blankline = false,
+      -- Enable optional
+      mini = true,
     },
   })
-  kanagawa.load()
+  catppuccin.load()
 end
