@@ -21,6 +21,7 @@
         - ~/.config/fish
         - ~/.config/tmux
         - ~/.config/git
+        - ~/.config/bat
 
     - name: Removing any existing files and directories
       ansible.builtin.file:
@@ -59,6 +60,13 @@
         src: "{{ playbook_dir }}/git"
         state: link
 
+    - name: Making symlink for bat configuration
+      ansible.builtin.file:
+        path: ~/.config/bat
+        src: "{{ playbook_dir }}/bat"
+        state: link
+      notify: Building bat cache
+
     - name: Removing obsolete directory for vim plugins from nix
       ansible.builtin.file:
         path: ~/.local/share/nvim/site/pack/nix
@@ -76,3 +84,8 @@
       ansible.builtin.file:
         path: ~/.tmux.conf
         state: absent
+
+  handlers:
+    - name: Building bat cache
+      ansible.builtin.command:
+        cmd: bat cache --build
