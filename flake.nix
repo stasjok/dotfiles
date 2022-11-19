@@ -90,6 +90,7 @@
               mini-nvim
               # Interface
               kanagawa-nvim
+              catppuccin-nvim
               nvim-web-devicons
               tmux-nvim
               # Tree-sitter
