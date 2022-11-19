@@ -26,15 +26,6 @@ final: prev: {
           narHash = "sha256-LhyWfhtS1M+5m3wVnlHkM7e0yAG+Cfb1iBS1QuslG/c=";
         };
       };
-      tree-sitter-cpp = {
-        src = fetchTree {
-          type = "github";
-          owner = "tree-sitter";
-          repo = "tree-sitter-cpp";
-          rev = "d5e90fba898f320db48d81ddedd78d52c67c1fed";
-          narHash = "sha256-04KygtIMjggs6QQKYG60/QfLUGAM7c2wvXLKzsAJawQ=";
-        };
-      };
     };
   };
 

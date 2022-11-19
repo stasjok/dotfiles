@@ -79,46 +79,8 @@
 
         neovimWithPlugins =
           let
-            nvim-treesitterWithPlugins =
-              vimPlugins.nvim-treesitter.withPlugins (p: with p; [
-                tree-sitter-bash
-                tree-sitter-c
-                tree-sitter-cmake
-                tree-sitter-comment
-                tree-sitter-commonlisp
-                tree-sitter-cpp
-                tree-sitter-css
-                tree-sitter-dockerfile
-                tree-sitter-fennel
-                tree-sitter-fish
-                tree-sitter-go
-                tree-sitter-gomod
-                tree-sitter-hcl
-                tree-sitter-html
-                tree-sitter-java
-                tree-sitter-javascript
-                tree-sitter-jsdoc
-                tree-sitter-json
-                tree-sitter-json5
-                tree-sitter-latex
-                tree-sitter-lua
-                tree-sitter-make
-                tree-sitter-markdown
-                tree-sitter-markdown-inline
-                tree-sitter-nix
-                tree-sitter-perl
-                tree-sitter-php
-                tree-sitter-python
-                tree-sitter-query
-                tree-sitter-regex
-                tree-sitter-rst
-                tree-sitter-ruby
-                tree-sitter-rust
-                tree-sitter-toml
-                tree-sitter-tsx
-                tree-sitter-typescript
-                tree-sitter-vim
-                tree-sitter-yaml
+            nvim-treesitterWithPlugins = with vimPlugins.nvim-treesitter;
+              withPlugins (p: with p; allGrammars ++ [
                 tree-sitter-jinja2
               ]);
             plugins = with vimPlugins; [
