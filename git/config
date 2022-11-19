@@ -18,3 +18,5 @@
     log = delta
     reflog = delta
     show = delta
+[delta]
+    syntax-theme = "Catppuccin-macchiato"
