@@ -54,6 +54,7 @@ do
 end
 
 -- Clipboard integration with tmux
+-- TODO: should be default in neovim 0.9
 if vim.env.TMUX then
   vim.g.clipboard = {
     name = "tmux-send-to-clipboard",
