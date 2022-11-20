@@ -14,7 +14,7 @@ I use [Windows Terminal](https://github.com/microsoft/terminal) and `FiraCode NF
 ### First time installation
 
 Install Nix 2.7 and later (https://nixos.org/manual/nix/stable/#chap-installation),
-then add to Nix configuration file (`/etc/nix/nix.conf` or `$HOME/.config/nix.conf`):
+then add to Nix configuration file (`/etc/nix/nix.conf` or `$HOME/.config/nix/nix.conf`):
 
 ```
 experimental-features = nix-command flakes
