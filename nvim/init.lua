@@ -46,6 +46,8 @@ do
       },
       custom_highlights = {
         TermCursor = { bg = "#179299" },
+        -- Commit hash in Fugitive Status
+        fugitiveHash = { link = "Type" },
       },
     })
 
