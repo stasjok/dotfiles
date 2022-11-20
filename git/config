@@ -9,6 +9,8 @@
     tree = log --oneline --decorate --all --graph
 [pull]
     ff = only
+[merge]
+    conflictStyle = zdiff3
 [status]
     showUntrackedFiles = all
 [diff]
