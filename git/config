@@ -18,6 +18,7 @@
     log = delta
     reflog = delta
     show = delta
+    blame = delta
 [delta]
     features = catppuccin-macchiato
     line-numbers = true
@@ -35,3 +36,6 @@
     line-numbers-zero-style = "#494d64"
     line-numbers-left-format = "{nm:^1}⋮"
     line-numbers-right-format = "{np:^1}│"
+    blame-format = "{author:<18} ({commit:>8}) {timestamp:>15}"
+    blame-palette = "#181926 #1e2030 #24273a #363a4f"
+    blame-separator-style = blue
