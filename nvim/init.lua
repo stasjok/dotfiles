@@ -5,19 +5,21 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 -- Speed up loading Lua modules in Neovim
-local luacache_suffix = vim.fn.sha256(vim.o.runtimepath):sub(1, 7)
-local stdcache = vim.fn.stdpath("cache")
-_G.__luacache_config = {
-  chunks = {
-    enable = true,
-    path = string.format("%s/luacache_chunks_%s", stdcache, luacache_suffix),
-  },
-  modpaths = {
-    enable = true,
-    path = string.format("%s/luacache_modpaths_%s", stdcache, luacache_suffix),
-  },
-}
-require("impatient")
+do
+  local luacache_suffix = vim.fn.sha256(vim.o.runtimepath):sub(1, 7)
+  local stdcache = vim.fn.stdpath("cache")
+  _G.__luacache_config = {
+    chunks = {
+      enable = true,
+      path = string.format("%s/luacache_chunks_%s", stdcache, luacache_suffix),
+    },
+    modpaths = {
+      enable = true,
+      path = string.format("%s/luacache_modpaths_%s", stdcache, luacache_suffix),
+    },
+  }
+  pcall(require, "impatient")
+end
 
 -- Colorscheme
 do
@@ -67,10 +69,10 @@ if vim.env.TMUX then
   }
 end
 
--- Highlight on Yank
-vim.cmd([[
-augroup highlight_on_yank
-autocmd!
-autocmd TextYankPost * silent! lua vim.highlight.on_yank {on_visual=false}
-augroup END
-]])
+-- Highlight a selection on Yank
+vim.api.nvim_create_autocmd("TextYankPost", {
+  group = vim.api.nvim_create_augroup("highlight_on_yank", {}),
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+})
