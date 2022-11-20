@@ -20,3 +20,6 @@ if [[ -n $TMUX ]]; then
     echo "Sourcing tmux config..."
     tmux source-file ~/.config/tmux/tmux.conf
 fi
+
+echo "Updating bat binary cache..."
+bat cache --build
