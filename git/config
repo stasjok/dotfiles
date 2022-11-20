@@ -19,4 +19,19 @@
     reflog = delta
     show = delta
 [delta]
+    features = catppuccin-macchiato
+    line-numbers = true
+    true-color = always
+[delta "catppuccin-macchiato"]
     syntax-theme = "Catppuccin-macchiato"
+    plus-style = syntax "#3b474a"
+    plus-emph-style = syntax "#53675b"
+    plus-empty-line-marker-style = plus-style
+    minus-style = syntax "#48384b"
+    minus-emph-style = syntax "#6c4a5b"
+    minus-empty-line-marker-style = minus-style
+    line-numbers-minus-style = "#ed8796"
+    line-numbers-plus-style = "#a6da95"
+    line-numbers-zero-style = "#494d64"
+    line-numbers-left-format = "{nm:^1}⋮"
+    line-numbers-right-format = "{np:^1}│"
