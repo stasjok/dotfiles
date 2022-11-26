@@ -26,9 +26,9 @@ local settings = {
     on_save = function(args)
       return args.client.config.root_dir
         and (
-          fs_stat(args.client.config.root_dir .. "/stylua.toml")
-          or fs_stat(args.client.config.root_dir .. "/.stylua.toml")
-          or fs_stat(args.client.config.root_dir .. "/.styluaignore")
+          fs_stat(args.client.config.root_dir .. "/stylua.toml") ~= nil
+          or fs_stat(args.client.config.root_dir .. "/.stylua.toml") ~= nil
+          or fs_stat(args.client.config.root_dir .. "/.styluaignore") ~= nil
         )
     end,
   },
@@ -38,6 +38,9 @@ local settings = {
   yaml = {
     server = "yamlls",
     override_document_formatting = true,
+  },
+  fish = {
+    on_save = true,
   },
 }
 

@@ -49,6 +49,14 @@ local tests = {
     range_formatting = false,
     on_save = false,
   },
+  fish = {
+    lsp_name = "null-ls",
+    string = "ls  -l",
+    formatted_string = "ls -l",
+    formatting = true,
+    range_formatting = false,
+    on_save = true,
+  },
 }
 
 local function prepare_test_dir(ft, test)

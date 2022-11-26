@@ -6,5 +6,6 @@ require("null-ls").setup({
     formatting.shfmt,
     formatting.stylua,
     formatting.black,
+    formatting.fish_indent,
   },
 })
