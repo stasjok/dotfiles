@@ -22,23 +22,13 @@ test_nvim_integration tests/nvim/integration : $(nvim_integration_plenary) $(nvi
 .PHONY : test_nvim_functional tests/nvim/functional
 test_nvim_functional tests/nvim/functional : $(nvim_functional_plenary) $(nvim_functional_minitest)
 
-NVIM := nvim
-export NVIMPATH := $(NVIM)
-export VIM :=
-export VIMRUNTIME :=
-export NVIM_LOG_FILE :=
-export MYVIMRC := tests/nvim/minimal_init.lua
 export XDG_CONFIG_HOME := $(abspath .)
 export XDG_DATA_HOME :=
-export XDG_STATE_HOME := $(abspath tests/nvim/state)
-export XDG_CACHE_HOME := $(abspath tests/nvim/cache)
+export XDG_STATE_HOME := $(abspath tests/.state)
+export XDG_CACHE_HOME := $(abspath tests/.cache)
 export XDG_CONFIG_DIRS :=
 export XDG_DATA_DIRS :=
-export TMPDIR := $(abspath tests/nvim/tmp)
-
-unexport LUA_PATH LUA_CPATH
-
-nvim_args := --headless -u $(MYVIMRC) --noplugins -n -i NONE
+export TMPDIR := $(abspath tests/.tmp)
 
 $(XDG_STATE_HOME) :
 	mkdir -p "$(XDG_STATE_HOME)/nvim"
@@ -48,6 +38,17 @@ $(XDG_CACHE_HOME) :
 
 $(TMPDIR) :
 	mkdir -p "$(TMPDIR)"
+
+NVIM := nvim
+export NVIMPATH := $(NVIM)
+export VIM :=
+export VIMRUNTIME :=
+export NVIM_LOG_FILE :=
+export MYVIMRC := tests/nvim/minimal_init.lua
+
+unexport LUA_PATH LUA_CPATH
+
+nvim_args := --headless -u $(MYVIMRC) --noplugins -n -i NONE
 
 .PHONY : $(nvim_unit_plenary)
 $(nvim_unit_plenary) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME) $(TMPDIR)

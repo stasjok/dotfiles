@@ -81,10 +81,10 @@ end
 
 T["child"]["stdpath"] = function()
   eq(child.fn.stdpath("data"), "nvim")
-  eq(child.fn.stdpath("state"), vim.fn.fnamemodify("tests/nvim/state/nvim", ":p:h"))
-  eq(child.fn.stdpath("log"), vim.fn.fnamemodify("tests/nvim/state/nvim", ":p:h"))
-  eq(vim.env.NVIM_LOG_FILE, vim.fn.fnamemodify("tests/nvim/state/nvim/log", ":p"))
-  eq(child.fn.stdpath("cache"), vim.fn.fnamemodify("tests/nvim/cache/nvim", ":p:h"))
+  eq(child.fn.stdpath("state"), vim.loop.fs_realpath("tests/.state/nvim"))
+  eq(child.fn.stdpath("log"), vim.loop.fs_realpath("tests/.state/nvim"))
+  eq(vim.env.NVIM_LOG_FILE, vim.loop.fs_realpath("tests/.state/nvim/log"))
+  eq(child.fn.stdpath("cache"), vim.loop.fs_realpath("tests/.cache/nvim"))
   eq(child.fn.stdpath("config_dirs"), {})
   eq(child.fn.stdpath("data_dirs"), {})
 end
