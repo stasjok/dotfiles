@@ -36,8 +36,8 @@
             delta
             pythonWithPackages
             black
-            ansible
-            ansible-lint
+            ansible_2_12
+            (ansible-lint.override { ansible-core = ansible_2_12; })
             yamllint
             shellcheck
             shfmt
@@ -162,7 +162,7 @@
         phases = [ "unpackPhase" "checkPhase" "installPhase" ];
         checkPhase = ''
           export LANG=C.UTF-8;
-          make test
+          make test FROM_NIX=true
         '';
         doCheck = true;
         installPhase = "mkdir -p $out";

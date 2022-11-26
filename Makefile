@@ -8,7 +8,7 @@ nvim_functional_minitest := $(wildcard tests/nvim/functional/test_*.lua tests/nv
 test : test_all
 
 .PHONY : test_all
-test_all : test_nvim
+test_all : test_nvim test_nix
 
 .PHONY : test_nvim tests/nvim
 test_nvim tests/nvim : test_nvim_unit test_nvim_integration test_nvim_functional
@@ -69,6 +69,17 @@ $(nvim_functional_plenary) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME) $(TMPDIR)
 .PHONY : $(nvim_functional_minitest)
 $(nvim_functional_minitest) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME) $(TMPDIR)
 	$(NVIM) $(nvim_args) -c "lua require('mini.test').setup(); MiniTest.run_file('$@')"
+
+.PHONY : test_nix tests/nix
+test_nix tests/nix : tests/nix/test_profile.fish
+
+.PHONY : tests/nix/test_profile.fish
+tests/nix/test_profile.fish :
+ifdef FROM_NIX
+	fish tests/nix/test_profile.fish
+else
+	nix shell .#default -c fish tests/nix/test_profile.fish
+endif
 
 .PHONY : clean
 clean :
