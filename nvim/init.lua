@@ -44,9 +44,13 @@ do
         -- Enable optional
         mini = true,
       },
-      custom_highlights = {
-        TermCursor = { bg = "#179299" },
-      },
+      custom_highlights = function(_)
+        return {
+          TermCursor = { bg = "#179299" },
+          ["@text.diff.add"] = { link = "diffAdded" },
+          ["@text.diff.delete"] = { link = "diffRemoved" },
+        }
+      end,
     })
 
     catppuccin.load()

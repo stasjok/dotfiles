@@ -22,17 +22,16 @@ T["colorscheme"]["catppuccin options"] = function()
   eq(child.lua_get("require('catppuccin').flavour"), "macchiato")
 
   -- Options
-  local options = child.lua_get("require('catppuccin').options")
-  eq(options.background, {
+  eq(child.lua_get("require('catppuccin').options.background"), {
     light = "latte",
     dark = "macchiato",
   })
-  eq(options.transparent_background, false)
-  eq(options.term_colors, false)
-  eq(options.dim_inactive.enabled, false)
+  eq(child.lua_get("require('catppuccin').options.transparent_background"), false)
+  eq(child.lua_get("require('catppuccin').options.term_colors"), false)
+  eq(child.lua_get("require('catppuccin').options.dim_inactive.enabled"), false)
 
   -- Styles
-  eq(options.styles, {
+  eq(child.lua_get("require('catppuccin').options.styles"), {
     comments = { "italic" },
     conditionals = {},
     loops = {},
@@ -76,14 +75,27 @@ T["colorscheme"]["catppuccin options"] = function()
     },
     mini = true,
   }) do
-    eq({ integration = options.integrations[integration] }, { integration = opts })
+    eq({
+      integration = child.lua_get(
+        "require('catppuccin').options.integrations[...]",
+        { integration }
+      ),
+    }, { integration = opts })
   end
 
-  -- Overrides
-  eq(options.color_overrides, {})
-  eq(options.highlight_overrides, { all = {
-    TermCursor = { bg = "#179299" },
-  } })
+  -- Color overrides
+  eq(child.lua_get("require('catppuccin').options.color_overrides"), {})
+
+  -- Highlight groups
+  local groups = child.api.nvim__get_hl_defs(0)
+  ---@param color string Hex color like `#aaaaaa`
+  ---@return integer
+  local function to_int(color)
+    return tonumber(string.sub(color, 2), 16)
+  end
+  eq(groups.TermCursor, { background = to_int("#179299") })
+  eq(groups["@text.diff.add"], { link = "diffAdded" })
+  eq(groups["@text.diff.delete"], { link = "diffRemoved" })
 end
 
 return T
