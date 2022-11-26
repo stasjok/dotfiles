@@ -92,26 +92,27 @@ describe("test_nvim", function()
   end)
 
   describe("stdpath", function()
+    local home = vim.loop.fs_realpath("tests/.home")
+
     it("config", function()
-      assert.equals(vim.fn.fnamemodify("nvim", ":p:h"), vim.fn.stdpath("config"))
+      assert.equals(vim.loop.fs_realpath("nvim"), vim.fn.stdpath("config"))
     end)
 
     it("data", function()
-      -- Not sure why it's `nvim`
-      assert.equals("nvim", vim.fn.stdpath("data"))
+      assert.equals(home .. "/.local/share/nvim", vim.fn.stdpath("data"))
     end)
 
     it("state", function()
-      assert.equals(vim.loop.fs_realpath("tests/.state/nvim"), vim.fn.stdpath("state"))
+      assert.equals(home .. "/.local/state/nvim", vim.fn.stdpath("state"))
     end)
 
     it("log", function()
-      assert.equals(vim.loop.fs_realpath("tests/.state/nvim"), vim.fn.stdpath("log"))
-      assert.equals(vim.loop.fs_realpath("tests/.state/nvim/log"), vim.env.NVIM_LOG_FILE)
+      assert.equals(home .. "/.local/state/nvim", vim.fn.stdpath("log"))
+      assert.equals(home .. "/.local/state/nvim/log", vim.env.NVIM_LOG_FILE)
     end)
 
     it("cache", function()
-      assert.equals(vim.loop.fs_realpath("tests/.cache/nvim"), vim.fn.stdpath("cache"))
+      assert.equals(home .. "/.cache/nvim", vim.fn.stdpath("cache"))
     end)
 
     it("config_dirs", function()

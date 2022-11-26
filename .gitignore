@@ -1,6 +1,5 @@
-fish/fish_variables
+/fish/fish_variables
 /result
 # Temporary directories for tests
-/tests/.state
-/tests/.cache
+/tests/.home
 /tests/.tmp

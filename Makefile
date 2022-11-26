@@ -10,6 +10,25 @@ test : test_all
 .PHONY : test_all
 test_all : test_nvim test_nix
 
+# Directories
+export HOME := $(abspath tests/.home)
+export XDG_CONFIG_HOME := $(abspath .)
+export XDG_DATA_HOME := $(HOME)/.local/share
+export XDG_STATE_HOME := $(HOME)/.local/state
+export XDG_CACHE_HOME := $(HOME)/.cache
+export XDG_CONFIG_DIRS :=
+export XDG_DATA_DIRS :=
+export TMPDIR := $(abspath tests/.tmp)
+
+.PHONY : dirs
+dirs : $(HOME) $(TMPDIR)
+
+$(HOME) :
+	mkdir -p "$(HOME)"
+
+$(TMPDIR) :
+	mkdir -p "$(TMPDIR)"
+
 .PHONY : test_nvim tests/nvim
 test_nvim tests/nvim : test_nvim_unit test_nvim_integration test_nvim_functional
 
@@ -22,23 +41,7 @@ test_nvim_integration tests/nvim/integration : $(nvim_integration_plenary) $(nvi
 .PHONY : test_nvim_functional tests/nvim/functional
 test_nvim_functional tests/nvim/functional : $(nvim_functional_plenary) $(nvim_functional_minitest)
 
-export XDG_CONFIG_HOME := $(abspath .)
-export XDG_DATA_HOME :=
-export XDG_STATE_HOME := $(abspath tests/.state)
-export XDG_CACHE_HOME := $(abspath tests/.cache)
-export XDG_CONFIG_DIRS :=
-export XDG_DATA_DIRS :=
-export TMPDIR := $(abspath tests/.tmp)
-
-$(XDG_STATE_HOME) :
-	mkdir -p "$(XDG_STATE_HOME)/nvim"
-
-$(XDG_CACHE_HOME) :
-	mkdir -p "$(XDG_CACHE_HOME)/nvim"
-
-$(TMPDIR) :
-	mkdir -p "$(TMPDIR)"
-
+# Neovim
 NVIM := nvim
 export NVIMPATH := $(NVIM)
 export VIM :=
@@ -51,36 +54,38 @@ unexport LUA_PATH LUA_CPATH
 nvim_args := --headless -u $(MYVIMRC) --noplugins -n -i NONE
 
 .PHONY : $(nvim_unit_plenary)
-$(nvim_unit_plenary) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME) $(TMPDIR)
+$(nvim_unit_plenary) : dirs
 	$(NVIM) $(nvim_args) -c "lua require('plenary.busted').run('$@')"
 
 .PHONY : $(nvim_integration_plenary)
-$(nvim_integration_plenary) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME) $(TMPDIR)
+$(nvim_integration_plenary) : dirs
 	$(NVIM) $(nvim_args) -c "lua require('plenary.busted').run('$@')"
 
 .PHONY : $(nvim_integration_minitest)
-$(nvim_integration_minitest) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME) $(TMPDIR)
+$(nvim_integration_minitest) : dirs
 	$(NVIM) $(nvim_args) -c "lua require('mini.test').setup(); MiniTest.run_file('$@')"
 
 .PHONY : $(nvim_functional_plenary)
-$(nvim_functional_plenary) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME) $(TMPDIR)
+$(nvim_functional_plenary) : dirs
 	$(NVIM) --headless --clean -u nvim/init.lua -n --cmd "set rtp^=nvim" -c "lua require('plenary.busted').run('$@')"
 
 .PHONY : $(nvim_functional_minitest)
-$(nvim_functional_minitest) : $(XDG_STATE_HOME) $(XDG_CACHE_HOME) $(TMPDIR)
+$(nvim_functional_minitest) : dirs
 	$(NVIM) $(nvim_args) -c "lua require('mini.test').setup(); MiniTest.run_file('$@')"
 
+# Nix
 .PHONY : test_nix tests/nix
 test_nix tests/nix : tests/nix/test_profile.fish
 
 .PHONY : tests/nix/test_profile.fish
-tests/nix/test_profile.fish :
+tests/nix/test_profile.fish : dirs
 ifdef FROM_NIX
 	fish tests/nix/test_profile.fish
 else
 	nix shell .#default -c fish tests/nix/test_profile.fish
 endif
 
+# Cleaning
 .PHONY : clean
 clean :
-	rm -rfv "$(XDG_STATE_HOME)" "$(XDG_CACHE_HOME)" "$(TMPDIR)"
+	rm -rfv tests/.home tests/.tmp
