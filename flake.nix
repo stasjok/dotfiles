@@ -100,7 +100,7 @@
               nvim-lspconfig
               null-ls-nvim
               lsp_signature-nvim
-              lua-dev-nvim
+              neodev-nvim
               # Autocompletion
               nvim-cmp
               cmp-buffer

@@ -5,13 +5,10 @@ local utils = {}
 ---Callback invoked when LSP client attaches to a buffer
 ---@param client integer LSP client ID
 ---@param bufnr integer Buffer number
----@param opts? { format?: boolean }
-function utils.on_attach(client, bufnr, opts)
+function utils.on_attach(client, bufnr)
   local function buf_map(mode, lhs, rhs)
     map(mode, lhs, rhs, { buffer = bufnr })
   end
-
-  opts = opts or {}
 
   -- Mappings
   for lhs, rhs in pairs({

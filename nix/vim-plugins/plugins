@@ -15,5 +15,3 @@ aserowy/tmux.nvim
 khaveesh/vim-fish-syntax
 Glench/Vim-Jinja2-Syntax
 chikamichi/mediawiki.vim
-# Fork of folke/lua-dev.nvim
-max397574/lua-dev.nvim/54149d1a4b70ba3442d1424a2e27fd36afd02779
