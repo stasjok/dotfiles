@@ -43,6 +43,7 @@
             shfmt
             sumneko-lua-language-server
             stylua
+            marksman
             rnix-lsp
             terraform
             terraform-ls
