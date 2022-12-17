@@ -43,4 +43,11 @@ T["test"]["marksman"] = function()
   expect.no_equality(0, #symbols.result)
 end
 
+T["test"]["markdownlint"] = function()
+  local diagnostics = child.lua_get("vim.diagnostic.get(...)", { 0, { lnum = 0 } })
+  eq(1, #diagnostics)
+  eq("markdownlint", diagnostics[1].source)
+  eq("MD009/no-trailing-spaces", diagnostics[1].code)
+end
+
 return T
