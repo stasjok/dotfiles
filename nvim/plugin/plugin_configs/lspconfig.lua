@@ -12,6 +12,7 @@ local lsp_servers = {
   "yamlls",
   "pyright",
   "rnix",
+  "marksman",
   "terraformls",
   "tsserver",
   "gopls",
