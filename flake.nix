@@ -44,6 +44,7 @@
             sumneko-lua-language-server
             stylua
             marksman
+            ltex-ls
             rnix-lsp
             terraform
             terraform-ls
