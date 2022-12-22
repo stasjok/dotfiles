@@ -22,8 +22,8 @@ function utils.on_attach(client, bufnr)
     ["<Leader>r"] = "<Cmd>lua vim.lsp.buf.rename()<CR>",
     ["K"] = "<Cmd>lua vim.lsp.buf.hover()<CR>",
     ["<Leader>a"] = "<Cmd>lua vim.lsp.buf.code_action()<CR>",
-    ["<Leader>d"] = '<Cmd>lua require("telescope.builtin").lsp_document_diagnostics()<CR>',
-    ["<Leader>D"] = '<Cmd>lua require("telescope.builtin").lsp_workspace_diagnostics()<CR>',
+    ["<Leader>d"] = '<Cmd>lua require("telescope.builtin").diagnostics({bufnr = 0})<CR>',
+    ["<Leader>D"] = '<Cmd>lua require("telescope.builtin").diagnostics()<CR>',
     ["]d"] = "<Cmd>lua vim.diagnostic.goto_next()<CR>",
     ["[d"] = "<Cmd>lua vim.diagnostic.goto_prev()<CR>",
   }) do
