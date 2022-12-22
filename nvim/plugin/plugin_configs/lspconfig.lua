@@ -13,6 +13,7 @@ local lsp_servers = {
   "pyright",
   "rnix",
   "marksman",
+  "ltex",
   "terraformls",
   "tsserver",
   "gopls",
