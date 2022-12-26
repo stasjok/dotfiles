@@ -11,7 +11,7 @@ local lsp_servers = {
   "jsonls",
   "yamlls",
   "pyright",
-  "rnix",
+  "nil_ls",
   "marksman",
   "ltex",
   "terraformls",

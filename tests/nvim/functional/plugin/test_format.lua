@@ -24,9 +24,10 @@ local tests = {
     extra_files = { "stylua.toml" },
   },
   nix = {
-    string = "{}",
-    formatted_string = "{ }",
+    string = "{  }",
+    formatted_string = "{}",
     formatting = true,
+    range_formatting = false,
     on_save = true,
   },
   yaml = {
