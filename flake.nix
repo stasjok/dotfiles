@@ -44,6 +44,7 @@
             sumneko-lua-language-server
             stylua
             marksman
+            python3Packages.mdformat
             ltex-ls
             rnix-lsp
             terraform
