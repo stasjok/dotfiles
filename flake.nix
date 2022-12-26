@@ -38,6 +38,7 @@
             black
             ansible_2_12
             (ansible-lint.override { ansible-core = ansible_2_12; })
+            ansible-language-server
             yamllint
             shellcheck
             shfmt
@@ -55,7 +56,6 @@
             nodePackages.pyright
             nodePackages.bash-language-server
             nodePackages.vscode-langservers-extracted
-            nodePackages."@ansible/ansible-language-server"
             nodePackages.yaml-language-server
             nodePackages.markdownlint-cli
             nodePackages.typescript

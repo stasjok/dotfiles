@@ -14,13 +14,13 @@
   };
   tmux-nvim = buildVimPluginFrom2Nix {
     pname = "tmux.nvim";
-    version = "2022-10-10";
+    version = "2022-12-08";
     src = builtins.fetchTree {
       type = "github";
       owner = "aserowy";
       repo = "tmux.nvim";
-      rev = "1ad660c1c28aa81fd67a56ef60f46121711ed6fb";
-      narHash = "sha256-/4/d0xJpbbqobX9d8WKxA+npEc7eT5SOz54sinwq3NQ=";
+      rev = "3f73843df726e55b92dbb2938edbb3eb6d0746f5";
+      narHash = "sha256-ZC3+zr/uoWfCLgFAJ8EMAXdE1yO40PZa77CTUXs502o=";
     };
   };
   vim-fish-syntax = buildVimPluginFrom2Nix {
