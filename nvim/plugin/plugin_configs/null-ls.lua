@@ -10,6 +10,7 @@ require("null-ls").setup({
     formatting.stylua,
     formatting.black,
     formatting.fish_indent,
+    formatting.mdformat,
     -- Diagnostics
     diagnostics.markdownlint,
   },

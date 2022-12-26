@@ -42,6 +42,10 @@ local settings = {
   fish = {
     on_save = true,
   },
+  markdown = {
+    server = "null-ls",
+    on_save = true,
+  },
 }
 
 ---Returns a function for formatting with specific client id
