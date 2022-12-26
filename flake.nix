@@ -47,7 +47,6 @@
             marksman
             python3Packages.mdformat
             ltex-ls
-            rnix-lsp
             nil
             nixpkgs-fmt
             alejandra
