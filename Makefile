@@ -79,11 +79,7 @@ test_nix tests/nix : tests/nix/test_profile.fish
 
 .PHONY : tests/nix/test_profile.fish
 tests/nix/test_profile.fish : dirs
-ifdef FROM_NIX
 	fish tests/nix/test_profile.fish
-else
-	nix shell .#default -c fish tests/nix/test_profile.fish
-endif
 
 # Cleaning
 .PHONY : clean

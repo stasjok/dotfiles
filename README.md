@@ -1,51 +1,39 @@
 # My dotfiles
 
-## Terminal 
+## Terminal
 
-* True Color support is required.
-* Set up terminal colors to [Catppuccin macchiato](https://github.com/catppuccin/catppuccin).
-* Install one of the [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts).
+- True Color support is required.
+- Set up terminal colors to [Catppuccin macchiato](https://github.com/catppuccin/catppuccin).
+- Install one of the [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts).
 
-I use [Windows Terminal](https://github.com/microsoft/terminal) and `FiraCode NF` font.
-[Settings](wt/settings.json).
+I use [Windows Terminal](https://github.com/microsoft/terminal)
+and `FiraCode NF` font. [Settings](wt/settings.json).
 
 ## Packages
 
-### First time installation
+### First time configuration
 
-Install Nix 2.7 and later (https://nixos.org/manual/nix/stable/installation/installing-binary.html),
+Install Nix 2.7 and later (<https://nixos.org/manual/nix/stable/installation/installing-binary.html>),
 then add to Nix configuration file (`/etc/nix/nix.conf` or `$HOME/.config/nix/nix.conf`):
 
-```
+```ini
 experimental-features = nix-command flakes
 ```
 
-Install packages:
+Activate configuration:
 
 ```bash
-nix registry add mypkgs github:stasjok/dotfiles
-nix profile install mypkgs
+nix registry add dotfiles github:stasjok/dotfiles
+nix run dotfiles#home-manager -- --flake dotfiles switch
 ```
 
 ### Upgrading
 
-In order to upgrade packages:
+In order to upgrade configuration:
 
+```bash
+home-manager --flake dotfiles switch
 ```
-nix profile upgrade packages.x86_64-linux.default
-```
-
-## Installation
-
-Install configs with Ansible:
-
-```
-ansible-playbook install.yml
-```
-
-It will ask if you want to overwrite existing configs. If you answer `yes`, then all existing
-files and directories will be removed. If you answer `no`, then ansible will just fail in case
-you already have some configs in place.
 
 ## Fish
 
