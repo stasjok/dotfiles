@@ -20,26 +20,27 @@
       localSystem = system;
       overlays = [homeManagerOverlay self.overlays.default];
     };
+    lib = pkgs.lib;
 
     # Home configuration template
     makeHomeConfiguration = {
       username ? "stas",
       homeDirectory ? "/home/${username}",
+      stateVersion ? "23.05",
       extraModules ? [],
       extraSpecialArgs ? {},
-    }:
+      isGenericLinux ? true,
+    }: let
+      staticConfig =
+        {home = {inherit username homeDirectory stateVersion;};}
+        // lib.optionalAttrs isGenericLinux {targets.genericLinux.enable = true;};
+    in
       home-manager.lib.homeManagerConfiguration {
         inherit pkgs extraSpecialArgs;
         modules =
           [
             ./home.nix
-            {
-              home = {
-                username = username;
-                homeDirectory = homeDirectory;
-                stateVersion = "23.05";
-              };
-            }
+            staticConfig
           ]
           ++ extraModules;
       };

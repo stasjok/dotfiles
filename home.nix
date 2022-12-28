@@ -83,7 +83,6 @@ with pkgs; let
     paths = [
       glibcLocales
       nix
-      fish
       tmux
       git
       gnupg
@@ -143,6 +142,11 @@ with pkgs; let
     '';
   };
 in {
+  # Imports
+  imports = [
+    ./fish
+  ];
+
   # Packages
   home.packages = [
     nix-profile
@@ -156,10 +160,6 @@ in {
     bat = {
       source = ./bat;
       onChange = "${pkgs.bat}/bin/bat cache --build";
-    };
-    fish = {
-      source = ./fish;
-      recursive = true;
     };
     git = {source = ./git;};
     nvim = {source = ./nvim;};
