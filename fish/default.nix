@@ -53,8 +53,8 @@
       type = "github";
       owner = "catppuccin";
       repo = "fish";
-      rev = "8d0b07ad927f976708a1f875eb9aacaf67876137";
-      narHash = "sha256-/JIKRRHjaO2jC0NNPBiSaLe8pR2ASv24/LFKOJoZPjk=";
+      rev = "b90966686068b5ebc9f80e5b90fdf8c02ee7a0ba";
+      narHash = "sha256-wQlYQyqklU/79K2OXRZXg5LvuIugK7vhHgpahpLFaOw=";
     };
   in {
     source = "${src}/themes";
@@ -62,10 +62,6 @@
     onChange = ''
       ${config.programs.fish.package}/bin/fish <<"EOF"
       echo y | fish_config theme save 'Catppuccin Macchiato'
-      # Override colors
-      set fish_color_comment 8087a2 --italic
-      set fish_color_host_remote 8aadf4
-      set fish_color_status ed8796
       EOF
     '';
   };
