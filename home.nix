@@ -135,12 +135,6 @@ with pkgs; let
       "/share/fish/vendor_conf.d"
       "/share/fish/vendor_functions.d"
     ];
-    buildInputs = [man-db];
-    postBuild = ''
-      mandb --no-straycats $out/share/man
-      whatis --manpath=$out/share/man --wildcard '*' | sort > $out/share/man/whatis
-      rm --dir $out/share/man/index.* $out/share/man/cat*
-    '';
   };
 in {
   # Imports
@@ -155,6 +149,14 @@ in {
 
   # Home Manager
   programs.home-manager.enable = true;
+
+  # Man
+  programs.man = {
+    enable = true;
+    # Build with support of the GNU gdbm database (same as most GNU/Linux distributions)
+    package = pkgs.man.override {db = pkgs.gdbm;};
+    generateCaches = true;
+  };
 
   # Files
   xdg.configFile = {
