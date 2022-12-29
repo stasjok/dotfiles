@@ -5,6 +5,8 @@ nil_ls.on_new_config = function(new_config, root_dir)
 
   if root_dir:find("nixpkgs", 1, true) then
     formatter_command = { "nixpkgs-fmt" }
+  elseif root_dir:find("home-manager", 1, true) then
+    formatter_command = { "nixfmt" }
   else
     formatter_command = { "alejandra", "-" }
   end

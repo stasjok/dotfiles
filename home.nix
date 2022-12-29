@@ -111,6 +111,7 @@ with pkgs; let
       nil
       nixpkgs-fmt
       alejandra
+      nixfmt
       terraform
       terraform-ls
       nodejs
