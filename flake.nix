@@ -54,7 +54,7 @@
       };
     };
 
-    overlays.default = import ./nix/overlay;
+    overlays.default = import ./overlay;
 
     # Provide all upstream packages
     legacyPackages.${system} = pkgs;
