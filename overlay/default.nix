@@ -1,7 +1,6 @@
 final: prev: {
-  fishPlugins = prev.fishPlugins.overrideScope' (self: super: {
-    foreign-env = prev.callPackage ../packages/fish-plugins/foreign-env.nix {inherit (super) buildFishPlugin;};
-  });
+  # Fish plugins
+  fishPlugins = prev.fishPlugins.overrideScope' (prev.callPackage ../packages/fish-plugins {});
 
   vimPlugins = prev.vimPlugins // prev.callPackage ../packages/vim-plugins {inherit (prev) vimPlugins;};
 
