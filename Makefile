@@ -4,6 +4,13 @@ nvim_integration_minitest := $(wildcard tests/nvim/integration/test_*.lua)
 nvim_functional_plenary := $(wildcard tests/nvim/functional/*_spec.lua)
 nvim_functional_minitest := $(wildcard tests/nvim/functional/test_*.lua tests/nvim/functional/*/test_*.lua)
 
+.PHONY : update
+update : update_vim_plugins
+
+.PHONY : update
+update_vim_plugins :
+	packages/vim-plugins/update.sh
+
 .PHONY : test
 test : test_all
 

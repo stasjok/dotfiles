@@ -1,14 +1,13 @@
 {
+  lib,
+  callPackage,
   neovimUtils,
   vimUtils,
-  vimPlugins,
 }: let
-  generated = import ./generated.nix {inherit (vimUtils) buildVimPluginFrom2Nix;};
+  plugins = callPackage ./generated.nix {
+    inherit (vimUtils) buildVimPluginFrom2Nix;
+    inherit (neovimUtils) buildNeovimPluginFrom2Nix;
+  };
+  overrides = callPackage ./overrides.nix {};
 in
-  generated
-  // {
-    luassert = neovimUtils.buildNeovimPluginFrom2Nix {
-      pname = "luassert";
-      version = "1.9.0-1";
-    };
-  }
+  lib.composeExtensions plugins overrides
