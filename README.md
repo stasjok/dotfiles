@@ -11,6 +11,9 @@ and `FiraCode NF` font. [Settings](wt/settings.json).
 
 ## Home configuration
 
+My dotfiles are managed with [Home Manager](https://nix-community.github.io/home-manager/)
+and [Nix package manager](https://nixos.org/manual/nix/stable/introduction.html).
+
 ### First time configuration
 
 Install Nix 2.7 or later (<https://nixos.org/manual/nix/stable/installation/installing-binary.html>).
