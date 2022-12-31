@@ -1,6 +1,7 @@
-{pkgs, ...}:
-with pkgs; let
-  neovimWithPlugins = let
+{pkgs, ...}: let
+  inherit (pkgs) nix;
+
+  neovimWithPlugins = with pkgs; let
     nvim-treesitterWithPlugins = with vimPlugins;
       nvim-treesitter.withPlugins (p:
         nvim-treesitter.allGrammars
@@ -70,7 +71,7 @@ with pkgs; let
   in
     wrapNeovimUnstable neovim-unwrapped (neovimConfig // {inherit wrapperArgs;});
 
-  pythonWithPackages = python3.withPackages (ps:
+  pythonWithPackages = pkgs.python3.withPackages (ps:
     with ps; [
       requests
       pyyaml
@@ -78,10 +79,9 @@ with pkgs; let
       ansible
     ]);
 
-  nix-profile = buildEnv {
-    name = "nix-profile-${self.lastModifiedDate or "1"}";
-    paths = [
-      nix
+  nix-profile = pkgs.buildEnv {
+    name = "nix-profile-1";
+    paths = with pkgs; [
       tmux
       git
       gnupg
@@ -143,11 +143,28 @@ in {
 
   # Packages
   home.packages = [
+    nix
     nix-profile
   ];
 
   # Home Manager
   programs.home-manager.enable = true;
+
+  # Nix
+  nix = {
+    package = nix;
+    settings = {
+      experimental-features = ["nix-command" "flakes"];
+    };
+    registry = {
+      nixpkgs.to = (builtins.fromJSON (builtins.readFile ./flake.lock)).nodes.nixpkgs.locked;
+      dotfiles.to = {
+        type = "github";
+        owner = "stasjok";
+        repo = "dotfiles";
+      };
+    };
+  };
 
   # Man
   programs.man = {

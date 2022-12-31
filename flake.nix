@@ -49,6 +49,10 @@
       stas = makeHomeConfiguration {
         username = "stas";
       };
+      "stas@server2" = makeHomeConfiguration {
+        username = "stas";
+        extraModules = [./server2.nix];
+      };
       admAsunkinSS = makeHomeConfiguration {
         username = "admAsunkinSS";
       };
