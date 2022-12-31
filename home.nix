@@ -81,7 +81,6 @@ with pkgs; let
   nix-profile = buildEnv {
     name = "nix-profile-${self.lastModifiedDate or "1"}";
     paths = [
-      glibcLocales
       nix
       tmux
       git
