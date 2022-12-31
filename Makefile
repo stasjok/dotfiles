@@ -18,23 +18,20 @@ test : test_all
 test_all : test_nvim test_nix
 
 # Directories
-export HOME := $(abspath tests/.home)
-export XDG_CONFIG_HOME := $(abspath .)
-export XDG_DATA_HOME := $(HOME)/.local/share
-export XDG_STATE_HOME := $(HOME)/.local/state
-export XDG_CACHE_HOME := $(HOME)/.cache
-export XDG_CONFIG_DIRS :=
-export XDG_DATA_DIRS :=
-export TMPDIR := $(abspath tests/.tmp)
+test_home_dir := tests/.home
+dirs test% : export HOME = $(abspath $(test_home_dir))
+dirs test% : export XDG_CONFIG_HOME = $(abspath .)
+dirs test% : export XDG_DATA_HOME = $(HOME)/.local/share
+dirs test% : export XDG_STATE_HOME = $(HOME)/.local/state
+dirs test% : export XDG_CACHE_HOME = $(HOME)/.cache
+dirs test% : export XDG_CONFIG_DIRS =
+dirs test% : export XDG_DATA_DIRS =
 
 .PHONY : dirs
-dirs : $(HOME) $(TMPDIR)
+dirs : $(test_home_dir)
 
-$(HOME) :
+$(test_home_dir) :
 	mkdir -p "$(HOME)"
-
-$(TMPDIR) :
-	mkdir -p "$(TMPDIR)"
 
 .PHONY : test_nvim tests/nvim
 test_nvim tests/nvim : test_nvim_unit test_nvim_integration test_nvim_functional
@@ -91,4 +88,4 @@ tests/nix/test_profile.fish : dirs
 # Cleaning
 .PHONY : clean
 clean :
-	rm -rfv tests/.home tests/.tmp
+	rm -rfv tests/.home
