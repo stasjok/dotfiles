@@ -154,7 +154,7 @@ in {
   nix = {
     package = nix;
     settings = {
-      experimental-features = ["nix-command" "flakes"];
+      experimental-features = ["nix-command" "flakes" "repl-flake"];
     };
     registry = {
       nixpkgs.to = (builtins.fromJSON (builtins.readFile ./flake.lock)).nodes.nixpkgs.locked;
