@@ -2,3 +2,6 @@
 if string match -q '*-256color' $TERM
     set --global fish_term24bit 1
 end
+
+# Set EDITOR
+set -g -x EDITOR nvim
