@@ -169,8 +169,6 @@ in {
   # Man
   programs.man = {
     enable = true;
-    # Build with support of the GNU gdbm database (same as most GNU/Linux distributions)
-    package = pkgs.man.override {db = pkgs.gdbm;};
     generateCaches = true;
   };
 

@@ -41,7 +41,7 @@
           funcWithDesc "Find or run ssh-agent"
           (builtins.readFile ./functions/find_ssh_agent.fish);
 
-        # Copy to tmux
+        # Support clipboard copy with tmux
         fish_clipboard_copy = builtins.readFile ./functions/fish_clipboard_copy.fish;
       }
       // saltFunctions;

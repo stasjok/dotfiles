@@ -30,19 +30,16 @@
       extraModules ? [],
       extraSpecialArgs ? {},
       isGenericLinux ? true,
-    }: let
-      staticConfig =
-        {home = {inherit username homeDirectory stateVersion;};}
-        // lib.optionalAttrs isGenericLinux {targets.genericLinux.enable = true;};
-    in
+    }:
       home-manager.lib.homeManagerConfiguration {
         inherit pkgs extraSpecialArgs;
-        modules =
-          [
+        modules = with lib;
+          flatten [
             ./home.nix
-            staticConfig
-          ]
-          ++ extraModules;
+            (optional isGenericLinux ./linux.nix)
+            {home = {inherit username homeDirectory stateVersion;};}
+            extraModules
+          ];
       };
   in {
     homeConfigurations = {
