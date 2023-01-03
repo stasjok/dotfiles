@@ -82,7 +82,6 @@
   nix-profile = pkgs.buildEnv {
     name = "nix-profile-1";
     paths = with pkgs; [
-      tmux
       git
       gnupg
       gnumake
@@ -139,6 +138,7 @@ in {
   # Imports
   imports = [
     ./fish
+    ./tmux
   ];
 
   # Packages
@@ -180,6 +180,5 @@ in {
     };
     git = {source = ./git;};
     nvim = {source = ./nvim;};
-    tmux = {source = ./tmux;};
   };
 }
