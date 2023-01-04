@@ -82,7 +82,6 @@
   nix-profile = pkgs.buildEnv {
     name = "nix-profile-1";
     paths = with pkgs; [
-      git
       gnupg
       gnumake
       go-task
@@ -92,7 +91,6 @@
       fd
       ripgrep
       fzf
-      delta
       pythonWithPackages
       black
       ansible_2_12
@@ -139,6 +137,7 @@ in {
   imports = [
     ./fish
     ./tmux
+    ./git.nix
   ];
 
   # Packages
@@ -178,7 +177,6 @@ in {
       source = ./bat;
       onChange = "${pkgs.bat}/bin/bat cache --build";
     };
-    git = {source = ./git;};
     nvim = {source = ./nvim;};
   };
 }
