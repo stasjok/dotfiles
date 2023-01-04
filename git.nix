@@ -51,6 +51,7 @@
         minus-style = "syntax #48384b";
         minus-emph-style = "syntax #6c4a5b";
         minus-empty-line-marker-style = "minus-style";
+        whitespace-error-style = "reverse red";
         line-numbers-minus-style = "#ed8796";
         line-numbers-plus-style = "#a6da95";
         line-numbers-zero-style = "#494d64";
