@@ -87,7 +87,6 @@
       go-task
       neovimWithPlugins
       exa
-      bat
       fd
       ripgrep
       fzf
@@ -135,6 +134,7 @@
 in {
   # Imports
   imports = [
+    ./programs
     ./fish
     ./tmux
     ./git.nix
@@ -173,10 +173,6 @@ in {
 
   # Files
   xdg.configFile = {
-    bat = {
-      source = ./bat;
-      onChange = "${pkgs.bat}/bin/bat cache --build";
-    };
     nvim = {source = ./nvim;};
   };
 }
