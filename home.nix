@@ -137,7 +137,6 @@ in {
     ./programs
     ./fish
     ./tmux
-    ./git.nix
   ];
 
   # Packages
