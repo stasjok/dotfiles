@@ -154,8 +154,9 @@ in {
     settings = {
       experimental-features = ["nix-command" "flakes" "repl-flake"];
     };
-    registry = {
-      nixpkgs.to = (builtins.fromJSON (builtins.readFile ./flake.lock)).nodes.nixpkgs.locked;
+    registry = with builtins; {
+      nixpkgs.to = (fromJSON (readFile ./flake.lock)).nodes.nixpkgs.locked;
+      home-manager.to = (fromJSON (readFile ./flake.lock)).nodes.home-manager.locked;
       dotfiles.to = {
         type = "github";
         owner = "stasjok";
