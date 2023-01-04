@@ -1,8 +1,12 @@
-{config, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   programs.tmux = {
     enable = true;
 
-    # Options
+    # Options managed by home-manager
     terminal = "tmux-256color";
     prefix = "M-q";
     keyMode = "vi";
@@ -16,6 +20,16 @@
 
     # Store tmux socket in /run/user/<UID>
     secureSocket = true;
+
+    # Plugins
+    plugins = with pkgs.tmuxPlugins; [
+      {
+        plugin = catppuccin;
+        extraConfig = ''
+          set -g @catppuccin_flavour macchiato
+        '';
+      }
+    ];
 
     # My config
     extraConfig = builtins.readFile ./tmux.conf;

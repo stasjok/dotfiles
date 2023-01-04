@@ -2,6 +2,11 @@ final: prev: {
   # Fish plugins
   fishPlugins = prev.fishPlugins.overrideScope' (prev.callPackage ../packages/fish-plugins {});
 
+  # Tmux plugins
+  tmuxPlugins =
+    prev.tmuxPlugins
+    // (prev.callPackage ../packages/tmux-plugins {inherit (final.tmuxPlugins) mkTmuxPlugin;});
+
   # Vim plugins
   vimPlugins = prev.vimPlugins.extend (prev.callPackage ../packages/vim-plugins {});
 
