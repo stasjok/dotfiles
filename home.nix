@@ -81,7 +81,6 @@
     name = "nix-profile-1";
     paths = with pkgs; [
       neovimWithPlugins
-      fzf
       pythonWithPackages
       black
       ansible_2_12
