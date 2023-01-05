@@ -1,6 +1,7 @@
 {
   imports = [
-    ./git.nix
     ./bat.nix
+    ./git.nix
+    ./nix.nix
   ];
 }

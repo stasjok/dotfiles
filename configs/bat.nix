@@ -5,7 +5,7 @@
 }:
 with builtins;
 with lib; let
-  # Catppuccin Themes
+  # Catppuccin theme
   catppuccinThemeSrc = fetchTree {
     type = "github";
     owner = "catppuccin";

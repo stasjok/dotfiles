@@ -1,6 +1,4 @@
 {pkgs, ...}: let
-  inherit (pkgs) nix;
-
   neovimWithPlugins = with pkgs; let
     nvim-treesitterWithPlugins = with vimPlugins;
       nvim-treesitter.withPlugins (p:
@@ -134,36 +132,18 @@
 in {
   # Imports
   imports = [
-    ./programs
+    ./configs
     ./fish
     ./tmux
   ];
 
   # Packages
   home.packages = [
-    nix
     nix-profile
   ];
 
   # Home Manager
   programs.home-manager.enable = true;
-
-  # Nix
-  nix = {
-    package = nix;
-    settings = {
-      experimental-features = ["nix-command" "flakes" "repl-flake"];
-    };
-    registry = with builtins; {
-      nixpkgs.to = (fromJSON (readFile ./flake.lock)).nodes.nixpkgs.locked;
-      home-manager.to = (fromJSON (readFile ./flake.lock)).nodes.home-manager.locked;
-      dotfiles.to = {
-        type = "github";
-        owner = "stasjok";
-        repo = "dotfiles";
-      };
-    };
-  };
 
   # Man
   programs.man = {
