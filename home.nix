@@ -83,7 +83,6 @@
       gnumake
       go-task
       neovimWithPlugins
-      exa
       fd
       ripgrep
       fzf
@@ -149,6 +148,9 @@ in {
     enable = true;
     generateCaches = true;
   };
+
+  # Other programs
+  programs.exa.enable = true;
 
   # Files
   xdg.configFile = {
