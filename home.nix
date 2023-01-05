@@ -80,7 +80,6 @@
   nix-profile = pkgs.buildEnv {
     name = "nix-profile-1";
     paths = with pkgs; [
-      gnupg
       gnumake
       go-task
       neovimWithPlugins
