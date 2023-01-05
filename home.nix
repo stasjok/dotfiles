@@ -80,8 +80,6 @@
   nix-profile = pkgs.buildEnv {
     name = "nix-profile-1";
     paths = with pkgs; [
-      gnumake
-      go-task
       neovimWithPlugins
       fzf
       pythonWithPackages
@@ -135,8 +133,13 @@ in {
 
   # Packages
   home.packages = with pkgs; [
+    # Command-line tools
     fd
     ripgrep
+    # Task runners
+    gnumake
+    go-task
+    # Legacy profile
     nix-profile
   ];
 
