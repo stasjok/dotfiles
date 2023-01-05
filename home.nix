@@ -149,8 +149,11 @@ in {
     generateCaches = true;
   };
 
-  # Other programs
-  programs.exa.enable = true;
+  # Exa, a modern replacement for ls
+  programs.exa = {
+    enable = true;
+    enableAliases = true;
+  };
 
   # Files
   xdg.configFile = {
