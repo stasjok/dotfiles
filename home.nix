@@ -83,8 +83,6 @@
       gnumake
       go-task
       neovimWithPlugins
-      fd
-      ripgrep
       fzf
       pythonWithPackages
       black
@@ -136,7 +134,9 @@ in {
   ];
 
   # Packages
-  home.packages = [
+  home.packages = with pkgs; [
+    fd
+    ripgrep
     nix-profile
   ];
 
