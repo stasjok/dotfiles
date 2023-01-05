@@ -7,11 +7,7 @@ find_ssh_agent
 # Ensure that $NIX_PROFILES is always set, because
 # it's used for setting default search paths for completions and functions.
 # See $__fish_data_dir/config.fish and $__fish_data_dir/__fish_build_paths.fish.
-if set -qg NIX_PROFILES
-    set -U NIX_PROFILES $NIX_PROFILES
-else
-    set -U NIX_PROFILES "/nix/var/nix/profiles/default $HOME/.nix-profile"
-end
+set -qg NIX_PROFILES; and set -U NIX_PROFILES $NIX_PROFILES
 
 # Clear old universal variables, because home-manager sets global variables
 set -q -U LOCALE_ARCHIVE; and set -e -U LOCALE_ARCHIVE
