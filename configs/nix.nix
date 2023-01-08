@@ -11,8 +11,8 @@
     };
 
     registry = with builtins; {
-      nixpkgs.to = (fromJSON (readFile ./flake.lock)).nodes.nixpkgs.locked;
-      home-manager.to = (fromJSON (readFile ./flake.lock)).nodes.home-manager.locked;
+      nixpkgs.to = (fromJSON (readFile ../flake.lock)).nodes.nixpkgs.locked;
+      home-manager.to = (fromJSON (readFile ../flake.lock)).nodes.home-manager.locked;
       dotfiles.to = {
         type = "github";
         owner = "stasjok";
