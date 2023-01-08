@@ -5,24 +5,24 @@
 }:
 with lib;
 with builtins; let
-  # Directory for plugin configurations managed by home-manager
-  pluginConfigsDir = "plugin_configs";
+  # Make attributes for runtime attribute of a plugin
+  mkRuntimeAttrs = dir:
+    pipe dir [
+      filesystem.listFilesRecursive
+      (map (path: removePrefix (toString dir + "/") (toString path)))
+      (flip genAttrs (name: {source = /${dir}/${name};}))
+    ];
 
-  # Automatically read plugin config from ./${pluginConfigsDir}/PLUGIN_NAME.lua
-  # and add all files from ./${pluginConfigsDir}/PLUGIN_NAME/ to runtime
+  # Automatically read plugin config from ./plugins/<PLUGIN_NAME>/config.lua
+  # and add all files from ./plugins/<PLUGIN_NAME>/runtime/ to runtime
   pluginDefaults = plugin: let
     normalizedName = replaceStrings ["."] ["-"] (getName plugin);
-    configPath = "${pluginConfigsDir}/${normalizedName}.lua";
-    runtimeDir = "${pluginConfigsDir}/${normalizedName}";
+    configPath = ./plugins/${normalizedName}/config.lua;
+    runtimeDir = ./plugins/${normalizedName}/runtime;
   in
     {type = "lua";}
-    // optionalAttrs (pathExists ./${configPath}) {config = readFile ./${configPath};}
-    // optionalAttrs (pathExists ./${runtimeDir}) {
-      runtime = flip mapAttrs (readDir ./${runtimeDir}) (name: type: {
-        source = ./${runtimeDir}/${name};
-        recursive = true;
-      });
-    };
+    // optionalAttrs (pathExists configPath) {config = readFile configPath;}
+    // optionalAttrs (pathExists runtimeDir) {runtime = mkRuntimeAttrs runtimeDir;};
 
   # Apply defaults to a list of plugins
   mkPluginList = plugins:
@@ -40,9 +40,9 @@ with builtins; let
     optional = true;
   };
   # Empty plugin with config
-  pluginConfig = config: emptyPlugin // {inherit config;};
+  pluginConfig = config: emptyPlugin // {config = readFile config;};
   # Empty plugin with runtime
-  pluginRuntime = runtime: emptyPlugin // {inherit runtime;};
+  pluginRuntime = runtime: emptyPlugin // {runtime = mkRuntimeAttrs runtime;};
 in {
   programs.neovim = {
     enable = true;
@@ -102,7 +102,7 @@ in {
       mkMerge [
         (mkBefore (mkPluginList [
           # init.lua before plugins
-          (pluginConfig (readFile ./init_before.lua))
+          (pluginConfig ./init_before.lua)
           # impatient.nvim should be first
           impatient-nvim
           # Load colorscheme before other plugins
@@ -121,9 +121,9 @@ in {
           playground
           # LSP
           nvim-lspconfig
-          null-ls-nvim
           lsp_signature-nvim
           neodev-nvim
+          null-ls-nvim
           # Autocompletion
           nvim-cmp
           cmp-buffer
@@ -156,15 +156,9 @@ in {
 
         (mkAfter (mkPluginList [
           # init.lua after plugins
-          (pluginConfig (readFile ./init_after.lua))
+          (pluginConfig ./init_after.lua)
           # Other runtime files
-          (pluginRuntime (pipe (readDir ./.) [
-            (filterAttrs (name: type: type == "directory" && !(elem name [pluginConfigsDir])))
-            (mapAttrs (name: type: {
-              source = ./${name};
-              recursive = true;
-            }))
-          ]))
+          (pluginRuntime ./runtime)
         ]))
       ];
 
