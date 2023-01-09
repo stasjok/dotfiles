@@ -52,6 +52,7 @@
       };
       admAsunkinSS = makeHomeConfiguration {
         username = "admAsunkinSS";
+        extraModules = [./work.nix];
       };
     };
 
