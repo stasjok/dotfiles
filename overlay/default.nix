@@ -10,8 +10,6 @@ final: prev: {
   # Vim plugins
   vimPlugins = prev.vimPlugins.extend (prev.callPackage ../packages/vim-plugins {});
 
-  marksman = prev.callPackage ../packages/marksman {};
-
   tree-sitter = prev.tree-sitter.override {
     extraGrammars = {
       tree-sitter-jinja2 = {

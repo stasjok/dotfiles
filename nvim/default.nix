@@ -52,6 +52,9 @@ in {
     withPython3 = false;
     withRuby = false;
 
+    # Set neovim as the default EDITOR
+    defaultEditor = true;
+
     # Extra packages available to neovim
     extraPackages = with pkgs.nodePackages;
     with pkgs; [

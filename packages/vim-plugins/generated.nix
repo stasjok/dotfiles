@@ -3,18 +3,6 @@
 
 final: prev:
 {
-  luassert = buildNeovimPluginFrom2Nix {
-    pname = "luassert";
-    version = "2022-08-23";
-    src = fetchFromGitHub {
-      owner = "lunarmodules";
-      repo = "luassert";
-      rev = "8d8dc8a54cc468048a128a867f6449a6c3fdd11a";
-      sha256 = "0wlp6qdm9dkwzs8lvnj7zvmid4y12v717ywlhxn2brkbjpvl2dwf";
-    };
-    meta.homepage = "https://github.com/lunarmodules/luassert/";
-  };
-
   mediawiki-vim = buildVimPluginFrom2Nix {
     pname = "mediawiki.vim";
     version = "2015-11-15";
