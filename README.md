@@ -43,12 +43,16 @@ You also may need to edit `/etc/shells`.
 
 ### Try before installing
 
-```bash
-# Run interactive fish shell with all packages available
-nix develop -i -k TERM dotfiles
+Run interactive fish shell with all packages available:
 
-# Run neovim in current directory
+```bash
+nix develop -i -k TERM dotfiles
+```
+
+Run *neovim* in current directory:
+
+```bash
 nix develop -i -k TERM dotfiles -c nvim
 ```
 
-Note that it will use `/tmp/home-configuration-test` as temporary home directory.
+Note that it will use `/tmp/home-configuration-test` as a temporary home directory.
