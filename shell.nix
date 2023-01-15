@@ -2,6 +2,8 @@
   lib,
   homeConfigurations,
   mkShellNoCC,
+  ncurses,
+  procps,
 }: let
   # Library
   inherit (lib) pipe mapAttrsToList;
@@ -25,6 +27,10 @@
   in
     mkShellNoCC {
       inherit name;
+      packages = [
+        ncurses # fzf-tmux
+        procps # find_ssh_agent
+      ];
       shellHook = ''
         # Create home directory in TMPDIR
         tmp_home=$TMPDIR/home
@@ -55,7 +61,7 @@
         # Use fish shell if interactive
         if [[ $- = *i* ]]; then
           cd $HOME
-          exec $HOME/.nix-profile/bin/fish
+          exec $HOME/.nix-profile/bin/fish -l
         fi
       '';
     };
