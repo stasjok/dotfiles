@@ -31,6 +31,8 @@
     nodejs
     go
     nodePackages.typescript
+    # Dependencies
+    ncurses # fzf-tmux
   ];
 
   # Home Manager
