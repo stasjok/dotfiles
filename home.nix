@@ -42,6 +42,9 @@
     generateCaches = true;
   };
 
+  # Less, a more advanced file pager than more
+  programs.less.enable = true;
+
   # Exa, a modern replacement for ls
   programs.exa = {
     enable = true;
