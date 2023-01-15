@@ -12,6 +12,10 @@ build :
 install :
 	home-manager switch --flake .
 
+.PHONY : shell
+shell :
+	nix develop -i -k TERM
+
 .PHONY : update
 update : update_flake update_vim_plugins
 

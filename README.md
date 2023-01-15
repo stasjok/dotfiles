@@ -38,3 +38,17 @@ home-manager switch --flake dotfiles
 
 Change default shell to `/nix/var/nix/profiles/per-user/<USERNAME>/profile/bin/fish`.
 You also may need to edit `/etc/shells`.
+
+## Developing
+
+### Try before installing
+
+```bash
+# Run interactive fish shell with all packages available
+nix develop -i -k TERM dotfiles
+
+# Run neovim in current directory
+nix develop -i -k TERM dotfiles -c nvim
+```
+
+Note that it will use `/tmp/home-configuration-test` as temporary home directory.

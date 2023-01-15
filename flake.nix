@@ -20,7 +20,7 @@
       localSystem = system;
       overlays = [homeManagerOverlay self.overlays.default];
     };
-    lib = pkgs.lib;
+    inherit (pkgs) lib;
 
     # Home configuration template
     makeHomeConfiguration = {
@@ -41,20 +41,25 @@
             extraModules
           ];
       };
+    makeOverridableHomeConfiguration = args: lib.makeOverridable makeHomeConfiguration args;
   in {
     homeConfigurations = {
-      stas = makeHomeConfiguration {
+      stas = makeOverridableHomeConfiguration {
         username = "stas";
       };
-      "stas@server2" = makeHomeConfiguration {
+      "stas@server2" = makeOverridableHomeConfiguration {
         username = "stas";
         extraModules = [./server2.nix];
       };
-      admAsunkinSS = makeHomeConfiguration {
+      admAsunkinSS = makeOverridableHomeConfiguration {
         username = "admAsunkinSS";
         extraModules = [./work.nix];
       };
     };
+
+    devShells.${system} =
+      pkgs.callPackage ./shell.nix {inherit (self) homeConfigurations;}
+      // {default = self.devShells.${system}.stas;};
 
     overlays.default = import ./overlay;
 
