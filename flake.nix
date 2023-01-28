@@ -58,7 +58,7 @@
     };
 
     devShells.${system} =
-      pkgs.callPackage ./shell.nix {inherit (self) homeConfigurations;}
+      pkgs.callPackages ./shell.nix {inherit (self) homeConfigurations;}
       // {default = self.devShells.${system}.stas;};
 
     overlays.default = import ./overlay;
