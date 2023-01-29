@@ -29,12 +29,12 @@ final: prev:
 
   tmux-nvim = buildVimPluginFrom2Nix {
     pname = "tmux.nvim";
-    version = "2022-12-08";
+    version = "2023-01-18";
     src = fetchFromGitHub {
       owner = "aserowy";
       repo = "tmux.nvim";
-      rev = "3f73843df726e55b92dbb2938edbb3eb6d0746f5";
-      sha256 = "0snk75xm34xhxxdgdl5q4gbl8xq11k0jfh015v16g8gfpz7gwbb4";
+      rev = "4e746b3707d4e499acc50d4e64c2fc4f0faf9a44";
+      sha256 = "0ynjvf23hr9lyff08k9l80ipxvk7d4q0xjd6afnprvcans2k69pp";
     };
     meta.homepage = "https://github.com/aserowy/tmux.nvim/";
   };
