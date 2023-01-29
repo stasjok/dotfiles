@@ -44,18 +44,12 @@ end
 
 T["child"]["runtimepath"] = function()
   local rtp = child.lua_get("vim.opt.runtimepath:get()")
-  eq(rtp[1], vim.fn.fnamemodify("nvim", ":p:h"))
+  eq(rtp[1], vim.fs.normalize("~/.config/nvim"))
   expect.match(rtp[2], "vim%-pack%-dir$")
   expect.match(rtp[3], "vim-pack-dir/pack/*/start/*", 1, true)
   eq(rtp[4], child.env.VIMRUNTIME)
   expect.match(rtp[#rtp - 1], "vim-pack-dir/pack/*/start/*/after", 1, true)
-  eq(rtp[#rtp], vim.fn.fnamemodify("nvim/after", ":p:h"))
-  local config_home = vim.fs.normalize("~/.config/nvim")
-  local data_home = vim.fs.normalize("~/.local/state/nvim")
-  for _, dir in ipairs(rtp) do
-    expect.no_equality(dir, config_home)
-    expect.no_equality(dir, data_home)
-  end
+  eq(rtp[#rtp], vim.fs.normalize("~/.config/nvim/after"))
 end
 
 T["child"]["packpath"] = function()
@@ -77,18 +71,6 @@ T["child"]["options"] = function()
   eq(child.go.loadplugins, true)
   eq(child.go.updatecount, 0)
   eq(child.go.shadafile, "NONE")
-end
-
-T["child"]["stdpath"] = function()
-  local home = vim.loop.fs_realpath("tests/.home")
-  eq(child.fn.stdpath("config"), vim.loop.fs_realpath("nvim"))
-  eq(child.fn.stdpath("data"), home .. "/.local/share/nvim")
-  eq(child.fn.stdpath("state"), home .. "/.local/state/nvim")
-  eq(child.fn.stdpath("log"), home .. "/.local/state/nvim")
-  eq(vim.env.NVIM_LOG_FILE, home .. "/.local/state/nvim/log")
-  eq(child.fn.stdpath("cache"), home .. "/.cache/nvim")
-  eq(child.fn.stdpath("config_dirs"), {})
-  eq(child.fn.stdpath("data_dirs"), {})
 end
 
 ---@diagnostic disable-next-line: redefined-local

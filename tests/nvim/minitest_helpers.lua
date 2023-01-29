@@ -39,10 +39,10 @@ helpers.new_child = function(opts)
   if opts.minimal then
     args = { "-u", "tests/nvim/minimal_init.lua", "--noplugin" }
   else
-    args = { "-u", "nvim/init.lua" }
+    args = { "-u", "~/.config/nvim/init.lua" }
   end
-  -- Because MiniTest uses `--clean` arg, we need to add home directory (current) manually
-  vim.list_extend(args, { "--cmd", "set runtimepath^=nvim" })
+  -- Because MiniTest uses `--clean` arg, we need to add home directory manually
+  vim.list_extend(args, { "--cmd", "set runtimepath^=~/.config/nvim" })
 
   child.setup = function()
     child.restart(args, { nvim_executable = vim.env.NVIMPATH or "nvim" })

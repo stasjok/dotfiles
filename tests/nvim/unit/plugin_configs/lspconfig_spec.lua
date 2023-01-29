@@ -9,8 +9,8 @@ describe("sumneko_lua", function()
     ---@diagnostic disable-next-line: undefined-field
     .on_call_with({ "types/stable" }, true, { is_lua = true })
     .returns({ "/test/neodev.nvim/types/stable" })
-    .on_call_with({ "lua/luassert", "lua/plenary" }, true, { is_lua = true })
-    .returns({ "/test/luassert/lua/luassert", "/test/plenary.nvim/lua/plenary" })
+    .on_call_with({ "lua/plenary" }, true, { is_lua = true })
+    .returns({ "/test/plenary.nvim/lua/plenary" })
     .on_call_with({ "lua/mini/test.lua" }, true, { is_lua = true })
     .returns({ "/test/mini.nvim/lua/mini/test.lua" })
 
@@ -59,7 +59,6 @@ describe("sumneko_lua", function()
         "lua/?/init.lua",
       }, new_config.settings.Lua.runtime.path)
       assert.are.same({
-        "/test/luassert",
         "/test/plenary.nvim",
         "${3rd}/busted",
         "${3rd}/luassert",

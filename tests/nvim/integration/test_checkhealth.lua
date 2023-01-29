@@ -23,9 +23,15 @@ T["checkhealth"] = function()
 
   local ignore = {
     "`tree-sitter` executable not found",
+    "`cc` executable not found",
     "No clipboard tool found",
+    -- $MYVIMRC is not set when there is -u arg. https://github.com/neovim/neovim/issues/17602
+    "Missing user config file",
     -- It's expected when running tests inside neovim terminal
     "$TERM differs from the tmux `default-terminal` setting",
+    -- Perl is enabled but doesn't work
+    "No usable perl executable found",
+    '"Neovim::Ext" cpan module is not installed',
   }
   local function filter_errors(s)
     for _, match in ipairs(ignore) do

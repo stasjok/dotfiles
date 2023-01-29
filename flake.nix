@@ -61,6 +61,8 @@
       pkgs.callPackages ./shell.nix {inherit (self) homeConfigurations;}
       // {default = self.devShells.${system}.stas;};
 
+    checks.${system} = pkgs.callPackages ./tests {homeConfiguration = self.homeConfigurations.stas;};
+
     overlays.default = import ./overlay;
 
     # Provide all upstream packages

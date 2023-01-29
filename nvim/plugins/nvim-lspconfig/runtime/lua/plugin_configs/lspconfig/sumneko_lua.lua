@@ -25,7 +25,7 @@ for i = 1, #library do
   library[i] = fs_realpath(library[i])
 end
 library[#library + 1] = vim.env.VIMRUNTIME
-local library_dotfiles = get_runtime({ "lua/luassert", "lua/plenary" }, true, { is_lua = true }) --[=[@as string[]]=]
+local library_dotfiles = get_runtime({ "lua/plenary" }, true, { is_lua = true }) --[=[@as string[]]=]
 for i = 1, #library_dotfiles do
   library_dotfiles[i] =
     fs_realpath(library_dotfiles[i]:sub(1, library_dotfiles[i]:find("/lua/[%w_-]+$") - 1))

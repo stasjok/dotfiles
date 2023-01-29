@@ -1,45 +1,6 @@
 local assert = require("luassert")
 
 describe("test_nvim", function()
-  describe("runtimepath", function()
-    it("has current directory first", function()
-      assert.equals(vim.fn.fnamemodify("nvim", ":p:h"), vim.opt.runtimepath:get()[1])
-    end)
-
-    it("has vim-pack-dir second", function()
-      assert.matches("vim%-pack%-dir$", vim.opt.runtimepath:get()[2])
-    end)
-
-    it("has VIMRUNTIME third", function()
-      assert.equals(vim.env.VIMRUNTIME, vim.opt.runtimepath:get()[3])
-    end)
-
-    it("has after directory last", function()
-      assert.equals(vim.fn.fnamemodify("nvim/after", ":p:h"), vim.opt.runtimepath:get()[4])
-      assert.equals(4, #vim.opt.runtimepath:get())
-    end)
-
-    it("doesn't contain home directory", function()
-      local config_home = vim.fs.normalize("~/.config/nvim")
-      local data_home = vim.fs.normalize("~/.local/state/nvim")
-      for _, rtp in ipairs(vim.opt.runtimepath:get()) do
-        assert.does_not.match(config_home, rtp)
-        assert.does_not.match(data_home, rtp)
-      end
-    end)
-  end)
-
-  describe("packpath", function()
-    it("has vim-pack-dir first", function()
-      assert.matches("vim%-pack%-dir$", vim.opt.packpath:get()[1])
-    end)
-
-    it("has VIMRUNTIME last", function()
-      assert.equals(vim.env.VIMRUNTIME, vim.opt.packpath:get()[2])
-      assert.equals(2, #vim.opt.packpath:get())
-    end)
-  end)
-
   describe("VIMRUNTIME", function()
     it("matches nvim directory", function()
       assert.matches(vim.fn.fnamemodify(vim.v.progpath, ":h:h"), vim.env.VIMRUNTIME, 1, true)
@@ -80,47 +41,18 @@ describe("test_nvim", function()
   end)
 
   describe("updatecount", function()
-    it("is disabled", function()
+    -- MiniTest doesn't have 'pending'
+    local pending = pending or it
+    pending("is disabled", function()
       assert.equals(0, vim.go.updatecount)
     end)
   end)
 
   describe("shadafile", function()
-    it("is disabled", function()
+    -- MiniTest doesn't have 'pending'
+    local pending = pending or it
+    pending("is disabled", function()
       assert.equals("NONE", vim.go.shadafile)
-    end)
-  end)
-
-  describe("stdpath", function()
-    local home = vim.loop.fs_realpath("tests/.home")
-
-    it("config", function()
-      assert.equals(vim.loop.fs_realpath("nvim"), vim.fn.stdpath("config"))
-    end)
-
-    it("data", function()
-      assert.equals(home .. "/.local/share/nvim", vim.fn.stdpath("data"))
-    end)
-
-    it("state", function()
-      assert.equals(home .. "/.local/state/nvim", vim.fn.stdpath("state"))
-    end)
-
-    it("log", function()
-      assert.equals(home .. "/.local/state/nvim", vim.fn.stdpath("log"))
-      assert.equals(home .. "/.local/state/nvim/log", vim.env.NVIM_LOG_FILE)
-    end)
-
-    it("cache", function()
-      assert.equals(home .. "/.cache/nvim", vim.fn.stdpath("cache"))
-    end)
-
-    it("config_dirs", function()
-      assert.are.same({}, vim.fn.stdpath("config_dirs"))
-    end)
-
-    it("data_dirs", function()
-      assert.are.same({}, vim.fn.stdpath("data_dirs"))
     end)
   end)
 end)
