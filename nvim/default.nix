@@ -2,9 +2,12 @@
   lib,
   pkgs,
   ...
-}:
-with lib;
-with builtins; let
+}: let
+  # Library
+  inherit (lib) filesystem flip forEach genAttrs getName optionalAttrs pipe removePrefix;
+  inherit (builtins) pathExists readFile replaceStrings;
+  inherit (lib) mkMerge mkBefore mkAfter;
+
   # Make attributes for runtime attribute of a plugin
   mkRuntimeAttrs = dir:
     pipe dir [
