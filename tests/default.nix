@@ -8,7 +8,7 @@
   wrapNeovimUnstable,
 }: let
   # Library
-  inherit (lib) concatMapStringsSep escapeShellArg;
+  inherit (lib) escapeShellArgs;
 
   # Test environment
   testEnv = name: test: let
@@ -61,7 +61,7 @@
 
   # Run tests with plenary
   plenaryBusted = directory:
-    concatMapStringsSep " " escapeShellArg [
+    escapeShellArgs [
       headlessNeovim
       "-c"
       "lua require('plenary.test_harness').test_directory('${directory}', {minimal_init = 'tests/nvim/minimal_init.lua', nvim_cmd = 'nvim'})"
@@ -69,7 +69,7 @@
 
   # Run tests with MiniTest
   miniTest = directory:
-    concatMapStringsSep " " escapeShellArg [
+    escapeShellArgs [
       headlessNeovim
       "-c"
       "lua MiniTest.run({collect = {find_files = function() return vim.fn.globpath('${directory}', '**/test_*.lua', true, true) end}})"
