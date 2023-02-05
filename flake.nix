@@ -57,11 +57,9 @@
       };
     };
 
-    devShells.${system} =
-      pkgs.callPackages ./shell.nix {inherit (self) homeConfigurations;}
-      // {default = self.devShells.${system}.stas;};
+    devShells.${system} = pkgs.callPackages ./shell {inherit (self) homeConfigurations;};
 
-    checks.${system} = pkgs.callPackages ./tests {homeConfiguration = self.homeConfigurations.stas;};
+    checks.${system}.tests = pkgs.callPackage ./tests {homeConfiguration = self.homeConfigurations.stas;};
 
     overlays.default = import ./overlay;
 

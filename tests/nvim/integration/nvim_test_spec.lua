@@ -1,6 +1,36 @@
 local assert = require("luassert")
 
 describe("test_nvim", function()
+  describe("runtimepath", function()
+    it("has config home directory first", function()
+      assert.equal(vim.fs.normalize("~/.config/nvim"), vim.opt.runtimepath:get()[1])
+    end)
+
+    it("has vim-pack-dir second", function()
+      assert.matches("vim%-pack%-dir$", vim.opt.runtimepath:get()[2])
+    end)
+
+    it("has VIMRUNTIME third", function()
+      assert.equals(vim.env.VIMRUNTIME, vim.opt.runtimepath:get()[3])
+    end)
+
+    it("has after directory last", function()
+      assert.equals(vim.fs.normalize("~/.config/nvim/after"), vim.opt.runtimepath:get()[4])
+      assert.equals(4, #vim.opt.runtimepath:get())
+    end)
+  end)
+
+  describe("packpath", function()
+    it("has vim-pack-dir first", function()
+      assert.matches("vim%-pack%-dir$", vim.opt.packpath:get()[1])
+    end)
+
+    it("has VIMRUNTIME last", function()
+      assert.equals(vim.env.VIMRUNTIME, vim.opt.packpath:get()[2])
+      assert.equals(2, #vim.opt.packpath:get())
+    end)
+  end)
+
   describe("VIMRUNTIME", function()
     it("matches nvim directory", function()
       assert.matches(vim.fn.fnamemodify(vim.v.progpath, ":h:h"), vim.env.VIMRUNTIME, 1, true)
@@ -41,17 +71,13 @@ describe("test_nvim", function()
   end)
 
   describe("updatecount", function()
-    -- MiniTest doesn't have 'pending'
-    local pending = pending or it
-    pending("is disabled", function()
+    it("is disabled", function()
       assert.equals(0, vim.go.updatecount)
     end)
   end)
 
   describe("shadafile", function()
-    -- MiniTest doesn't have 'pending'
-    local pending = pending or it
-    pending("is disabled", function()
+    it("is disabled", function()
       assert.equals("NONE", vim.go.shadafile)
     end)
   end)

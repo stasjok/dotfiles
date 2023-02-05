@@ -55,4 +55,18 @@ Run *neovim* in current directory:
 nix develop -i -k TERM dotfiles -c nvim
 ```
 
+### Running tests
+
+Run tests with nix:
+
+```bash
+nix flake check -L dotfiles
+```
+
+Run tests in temporary directory:
+
+```bash
+make test
+```
+
 Note that it will use `/tmp/home-configuration-test` as a temporary home directory.
