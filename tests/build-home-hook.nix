@@ -2,9 +2,10 @@
   lib,
   homeConfiguration,
   targetDirectory,
+  runOnChangeHooks ? true,
 }: let
   # Library
-  inherit (lib) pipe mapAttrsToList;
+  inherit (lib) pipe mapAttrsToList optionalString;
   inherit (builtins) filter concatStringsSep dirOf;
 
   configuration = homeConfiguration.override {
@@ -14,7 +15,7 @@
   inherit (config.home) username homeDirectory;
   homePath = config.home.path;
   homeFiles = config.home-files;
-  onChangeScripts = pipe config.home.file [
+  onChangeHooks = pipe config.home.file [
     (mapAttrsToList (name: file: file.onChange))
     (filter (s: s != ""))
     (concatStringsSep "\n")
@@ -44,6 +45,5 @@ in ''
   [[ $TERM = dumb ]] && export TERM=xterm-256color
   . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
 
-  # Execute onChange scripts
-  ${onChangeScripts}
+  ${optionalString runOnChangeHooks onChangeHooks}
 ''

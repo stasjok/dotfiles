@@ -15,6 +15,7 @@
     buildHomeHook = import ./build-home-hook.nix {
       inherit lib homeConfiguration;
       targetDirectory = "/tmp/home";
+      runOnChangeHooks = false;
     };
   in
     stdenvNoCC.mkDerivation {
