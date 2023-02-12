@@ -1,5 +1,6 @@
 {
   lib,
+  bashInteractive,
   homeConfigurations,
   mkShellNoCC,
   ncurses,
@@ -16,6 +17,7 @@
     mkShellNoCC {
       inherit name;
       packages = [
+        bashInteractive
         ncurses # fzf-tmux
         procps # find_ssh_agent
       ];

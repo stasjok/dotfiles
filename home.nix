@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   # Imports
   imports = [
+    ./bash
     ./configs
     ./fish
     ./nvim
