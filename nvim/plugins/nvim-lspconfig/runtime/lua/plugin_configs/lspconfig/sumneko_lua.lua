@@ -20,46 +20,29 @@ function sumneko_lua.root_dir(fname)
     or util.find_git_ancestor(fname)
 end
 
-local library = get_runtime({ "types/stable" }, true, { is_lua = true }) --[=[@as string[]]=]
-for i = 1, #library do
-  library[i] = fs_realpath(library[i])
+---Find first pattern in runtime and return realpath of it
+---@param pattern string
+---@return string
+local function runtime(pattern)
+  local found = get_runtime({ pattern }, false, { is_lua = true }) --[=[@as string[]]=]
+  return fs_realpath(found[1])
 end
-library[#library + 1] = vim.env.VIMRUNTIME
-local library_dotfiles = get_runtime({ "lua/plenary" }, true, { is_lua = true }) --[=[@as string[]]=]
-for i = 1, #library_dotfiles do
-  library_dotfiles[i] =
-    fs_realpath(library_dotfiles[i]:sub(1, library_dotfiles[i]:find("/lua/[%w_-]+$") - 1))
-end
-library_dotfiles[#library_dotfiles + 1] = "${3rd}/busted"
-library_dotfiles[#library_dotfiles + 1] = "${3rd}/luassert"
-local minitest = get_runtime({ "lua/mini/test.lua" }, true, { is_lua = true }) --[=[@as string[]]=]
----@diagnostic disable-next-line: missing-parameter
-vim.list_extend(library_dotfiles, minitest)
----@diagnostic disable-next-line: missing-parameter
-vim.list_extend(library_dotfiles, library)
-local path = { "lua/?.lua", "lua/?/init.lua" }
-local path_dotfiles = {
-  -- meta/3rd library from lua-language-server
-  "library/?.lua",
-  "library/?/init.lua",
-  "nvim/lua/?.lua",
-  "nvim/lua/?/init.lua",
-  "lua/?.lua",
-  "lua/?/init.lua",
-}
 
----Search lua files in `nvim/lua` directory when working with dotfiles
----@param new_config table
----@param root_dir string
-function sumneko_lua.on_new_config(new_config, root_dir)
-  if root_dir:sub(-9) == "/dotfiles" then
-    new_config.settings.Lua.workspace.library = library_dotfiles
-    new_config.settings.Lua.runtime.path = path_dotfiles
-  else
-    new_config.settings.Lua.workspace.library = library
-    new_config.settings.Lua.runtime.path = path
-  end
+---Returns plugin directory for require path
+---@param require_path string
+---@return string
+local function plugin_dir(require_path)
+  return require_path:sub(1, require_path:find("/lua/[%w_-]+$") - 1)
 end
+
+local library = {
+  runtime("types/stable"),
+  vim.env.VIMRUNTIME,
+  "${3rd}/busted",
+  "${3rd}/luassert",
+  plugin_dir(runtime("lua/plenary")),
+  runtime("lua/mini/test.lua"),
+}
 
 sumneko_lua.settings = {
   Lua = {
@@ -74,8 +57,7 @@ sumneko_lua.settings = {
     },
     runtime = {
       version = "LuaJIT",
-      path = path,
-      pathStrict = true,
+      path = { "lua/?.lua", "lua/?/init.lua" },
     },
     semantic = {
       enable = false,
