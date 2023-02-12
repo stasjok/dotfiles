@@ -43,6 +43,7 @@ in ''
   unset runtime_dir
 
   [[ $TERM = dumb ]] && export TERM=xterm-256color
+  unset __HM_SESS_VARS_SOURCED
   . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
 
   ${optionalString runOnChangeHooks onChangeHooks}
