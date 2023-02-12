@@ -53,6 +53,11 @@ describe("LuaSnip", function()
       after_each(function()
         luasnip.unlink_current()
         clear()
+
+        -- It's useless, but it fixes a strange error:
+        --    uv__finish_close: Assertion `!(handle->flags & UV_HANDLE_CLOSED)' failed.
+        -- Maybe plenary closes neovim too soon.
+        vim.wait(0, function() end, 1)
       end)
 
       it("can expand from selection", function()
