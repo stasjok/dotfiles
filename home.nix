@@ -51,4 +51,7 @@
     enable = true;
     enableAliases = true;
   };
+
+  # Jq, command-line JSON processor
+  programs.jq.enable = true;
 }
