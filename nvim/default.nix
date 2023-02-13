@@ -39,7 +39,7 @@
 
   # Empty plugin
   emptyPlugin = {
-    plugin = pkgs.runCommandLocal "empty" {} "mkdir $out";
+    plugin = pkgs.emptyDirectory;
     optional = true;
   };
   # Empty plugin with config
