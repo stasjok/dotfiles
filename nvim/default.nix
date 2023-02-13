@@ -7,6 +7,23 @@
   inherit (lib) filesystem flip forEach genAttrs getName optionalAttrs pipe removePrefix;
   inherit (builtins) pathExists readFile replaceStrings;
   inherit (lib) mkMerge mkBefore mkAfter;
+  inherit (pkgs) emptyDirectory fetchurl stdenvNoCC;
+
+  # Packages
+  lemminx = stdenvNoCC.mkDerivation rec {
+    pname = "lemminx";
+    version = "0.24.0";
+    src = fetchurl {
+      url = "https://github.com/redhat-developer/vscode-xml/releases/download/${version}/lemminx-linux.zip";
+      hash = "sha256-j0xWSICAXLbUwHc3ecJ57P41J0kpjq5GpEUMOXbr+Yw=";
+    };
+    nativeBuildInputs = with pkgs; [unzip];
+    sourceRoot = ".";
+    dontFixup = true;
+    installPhase = ''
+      install -D -T lemminx-linux -m 0755 $out/bin/${pname}
+    '';
+  };
 
   # Make attributes for runtime attribute of a plugin
   mkRuntimeAttrs = dir:
@@ -39,7 +56,7 @@
 
   # Empty plugin
   emptyPlugin = {
-    plugin = pkgs.emptyDirectory;
+    plugin = emptyDirectory;
     optional = true;
   };
   # Empty plugin with config
@@ -88,6 +105,8 @@ in {
       ltex-ls
       markdownlint-cli
       python3Packages.mdformat
+      # XML
+      lemminx
       # Terraform
       terraform-ls
       # TypeScript

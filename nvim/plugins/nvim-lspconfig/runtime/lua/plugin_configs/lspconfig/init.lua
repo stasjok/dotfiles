@@ -16,6 +16,7 @@ local lsp_servers = {
   "nil_ls",
   "marksman",
   "ltex",
+  "lemminx",
   "terraformls",
   "tsserver",
   "gopls",
