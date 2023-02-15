@@ -39,11 +39,11 @@
             "font": 
             {
                 "face": "FiraCode NF",
-                "size": 10,
+                "size": 10.0,
                 "weight": "normal"
             },
             "intenseTextStyle": "bold",
-            "padding": "4, 4",
+            "padding": "4, 3",
             "scrollbarState": "hidden",
             "suppressApplicationTitle": true
         },
@@ -52,14 +52,12 @@
             {
                 "cursorShape": "bar",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-                "hidden": false,
                 "name": "Windows PowerShell",
                 "scrollbarState": "visible"
             },
             {
                 "cursorShape": "bar",
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
-                "hidden": false,
                 "name": "Command Prompt",
                 "scrollbarState": "visible"
             },
@@ -91,14 +89,12 @@
             {
                 "commandline": "ssh admAsunkinSS@192.168.176.15",
                 "guid": "{beb369b6-813e-49c7-a489-7489f35e2275}",
-                "hidden": false,
                 "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
                 "name": "vr-jump"
             },
             {
                 "commandline": "ssh admAsunkinSS@192.168.177.15",
                 "guid": "{1ee3fb4e-dce2-47e1-b01d-e9bd52d871bf}",
-                "hidden": false,
                 "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
                 "name": "cb-jump"
             },
@@ -389,5 +385,12 @@
             "yellow": "#808000"
         }
     ],
-    "tabSwitcherMode": "mru"
+    "tabSwitcherMode": "mru",
+    "theme": "system-legacy",
+    "themes": 
+    [
+        {
+            "name": "system-legacy"
+        }
+    ]
 }
