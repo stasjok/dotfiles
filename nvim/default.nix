@@ -102,9 +102,11 @@ in {
       yamllint
       # Markdown
       marksman
-      ltex-ls
       markdownlint-cli
       python3Packages.mdformat
+      # Spelling
+      ltex-ls
+      vale
       # XML
       lemminx
       # Terraform
@@ -192,5 +194,27 @@ in {
       with p; [
         jsregexp
       ];
+  };
+
+  home.file = {
+    # Vale configuration
+    ".vale.ini".text = ''
+      StylesPath = .vale
+      MinAlertLevel = suggestion
+
+      [*]
+      BasedOnStyles = RedHat
+    '';
+
+    # Vale styles
+    ".vale/RedHat".source = let
+      src = fetchTree {
+        type = "github";
+        owner = "redhat-documentation";
+        repo = "vale-at-red-hat";
+        ref = "v267";
+        narHash = "sha256-cjKgoozs6QPLtCvFit5rub9NeGwSrGYklUdE8jXQtLs=";
+      };
+    in "${src}/.vale/styles/RedHat";
   };
 }

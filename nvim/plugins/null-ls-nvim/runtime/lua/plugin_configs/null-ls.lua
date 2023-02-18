@@ -14,6 +14,7 @@ local config = {
     formatting.mdformat,
     -- Diagnostics
     diagnostics.markdownlint,
+    diagnostics.vale,
   },
 }
 
