@@ -12,12 +12,12 @@ local T = new_set({
 })
 
 T["dotfiles"] = function()
-  ---Get a property from child's sumneko_lua client
+  ---Get a property from child's lua_ls client
   ---@param key string A property from child object
   ---@param filter? table<string, any> A filter `vim.lsp.get_active_clients()` function
   ---@return any
   local function lsp_client_get(key, filter)
-    filter = vim.tbl_extend("force", { name = "sumneko_lua" }, filter or {})
+    filter = vim.tbl_extend("force", { name = "lua_ls" }, filter or {})
     return child.lua_get("vim.lsp.get_active_clients(...)[1]." .. key, { filter })
   end
 
@@ -73,7 +73,7 @@ T["dotfiles"] = function()
   -- Make sure globals are recognized
   local diagnostic_namespace =
     child.lua_get("vim.lsp.diagnostic.get_namespace(...)", { lsp_client_get("id") })
-  ---Get diagnostics from sumneko_lua for buffer
+  ---Get diagnostics from lua_ls for buffer
   ---@param bufnr integer A buffer handler
   ---@return table
   local function get_diagnostics(bufnr)

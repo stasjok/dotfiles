@@ -7,7 +7,7 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- List of configured language servers
 local lsp_servers = {
-  "sumneko_lua",
+  "lua_ls",
   "bashls",
   "ansiblels",
   "jsonls",

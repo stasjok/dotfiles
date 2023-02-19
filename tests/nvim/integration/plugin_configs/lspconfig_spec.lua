@@ -1,11 +1,11 @@
-describe("sumneko_lua", function()
-  local sumneko_lua = require("plugin_configs.lspconfig.sumneko_lua")
+describe("lua_ls", function()
+  local lua_ls = require("plugin_configs.lspconfig.lua_ls")
 
   describe("root_dir()", function()
     it("stops at lua directory", function()
       assert.are.equal(
         vim.env.VIMRUNTIME,
-        sumneko_lua.root_dir(vim.env.VIMRUNTIME .. "/lua/vim/shared.lua")
+        lua_ls.root_dir(vim.env.VIMRUNTIME .. "/lua/vim/shared.lua")
       )
     end)
 
@@ -14,7 +14,7 @@ describe("sumneko_lua", function()
       assert.is_not_nil(current_dir)
       assert.are.equal(
         current_dir,
-        sumneko_lua.root_dir(vim.loop.fs_realpath("nvim/runtime/lua/utils.lua"))
+        lua_ls.root_dir(vim.loop.fs_realpath("nvim/runtime/lua/utils.lua"))
       )
     end)
   end)

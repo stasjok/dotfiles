@@ -29,24 +29,24 @@ final: prev:
 
   tmux-nvim = buildVimPluginFrom2Nix {
     pname = "tmux.nvim";
-    version = "2023-01-18";
+    version = "2023-02-03";
     src = fetchFromGitHub {
       owner = "aserowy";
       repo = "tmux.nvim";
-      rev = "4e746b3707d4e499acc50d4e64c2fc4f0faf9a44";
-      sha256 = "0ynjvf23hr9lyff08k9l80ipxvk7d4q0xjd6afnprvcans2k69pp";
+      rev = "feafcf8f48c49c720ee64e745648d69d42cb9c5a";
+      sha256 = "13kbr3sg4kgs65s8nmbc1z1k7k24kalh1wqy1lhrlmqz1jjn50yw";
     };
     meta.homepage = "https://github.com/aserowy/tmux.nvim/";
   };
 
   vim-fish-syntax = buildVimPluginFrom2Nix {
     pname = "vim-fish-syntax";
-    version = "2022-08-05";
+    version = "2023-02-17";
     src = fetchFromGitHub {
       owner = "khaveesh";
       repo = "vim-fish-syntax";
-      rev = "f3744201a10addee5f1bf43146b611c39a1a5e4e";
-      sha256 = "0bf0523pgqpp91pbp7k541c8m7dc2hv0iirv339g7d4v90i78wbd";
+      rev = "e229becbf4bbee21cc78cd2cf24f57112e33c02a";
+      sha256 = "01ffw7k288ghyln79g5fbvyd7kaq36ji0cjm6yb6l5njvnq2kr1i";
     };
     meta.homepage = "https://github.com/khaveesh/vim-fish-syntax/";
   };

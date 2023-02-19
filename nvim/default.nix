@@ -86,7 +86,7 @@ in {
       pyright
       black
       # Lua
-      sumneko-lua-language-server
+      lua-language-server
       stylua
       # Nix
       nil

@@ -45,7 +45,7 @@ helpers.new_child = function(opts)
   vim.list_extend(args, { "--cmd", "set runtimepath^=~/.config/nvim" })
 
   child.setup = function()
-    child.restart(args, { nvim_executable = vim.env.NVIMPATH or "nvim" })
+    child.restart(args, { nvim_executable = "nvim" })
     child.bo.readonly = false
   end
 

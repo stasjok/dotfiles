@@ -2,7 +2,7 @@ local util = require("lspconfig.util")
 local get_runtime = vim.api.nvim__get_runtime
 local fs_realpath = vim.loop.fs_realpath
 
-local sumneko_lua = {}
+local lua_ls = {}
 
 local root_files = {
   ".luarc.json",
@@ -14,7 +14,7 @@ local root_files = {
   "selene.yml",
 }
 
-function sumneko_lua.root_dir(fname)
+function lua_ls.root_dir(fname)
   return util.root_pattern(unpack(root_files))(fname)
     or util.root_pattern("lua")(fname)
     or util.find_git_ancestor(fname)
@@ -38,13 +38,14 @@ end
 local library = {
   runtime("types/stable"),
   vim.env.VIMRUNTIME,
-  "${3rd}/busted",
-  "${3rd}/luassert",
+  "${3rd}/luv/library",
+  "${3rd}/busted/library",
+  "${3rd}/luassert/library",
   plugin_dir(runtime("lua/plenary")),
   runtime("lua/mini/test.lua"),
 }
 
-sumneko_lua.settings = {
+lua_ls.settings = {
   Lua = {
     completion = {
       showWord = "Disable",
@@ -76,4 +77,4 @@ sumneko_lua.settings = {
   },
 }
 
-return sumneko_lua
+return lua_ls
