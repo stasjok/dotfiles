@@ -20,6 +20,7 @@ local lsp_servers = {
   "terraformls",
   "tsserver",
   "gopls",
+  "clangd",
 }
 
 -- Default language server configuration

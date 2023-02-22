@@ -24,6 +24,12 @@
     # Task runners
     gnumake
     go-task
+    # C build tools
+    gcc
+    autoconf
+    automake
+    cmake
+    bear
     # Ansible
     ansible_2_12
     # Languages

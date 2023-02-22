@@ -115,6 +115,8 @@ in {
       typescript-language-server
       # Go
       gopls
+      # C
+      clang-tools
     ];
 
     # Neovim plugins
