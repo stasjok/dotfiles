@@ -277,7 +277,7 @@ local function get_option(var, default)
 end
 
 ---Is `trim_blocks` enabled?
-local get_trim_block = get_option("jinja_trim_blocks", jinja_utils.is_ansible)
+local get_trim_block = get_option("jinja_trim_blocks", is_ansible)
 ---Is `lstrip_blocks` enabled?
 local get_lstrip_blocks = get_option("jinja_lstrip_blocks", false)
 
