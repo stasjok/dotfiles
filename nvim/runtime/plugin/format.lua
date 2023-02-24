@@ -46,6 +46,9 @@ local settings = {
     server = "null-ls",
     on_save = true,
   },
+  go = {
+    on_save = true,
+  },
 }
 
 ---Returns a function for formatting with specific client id
