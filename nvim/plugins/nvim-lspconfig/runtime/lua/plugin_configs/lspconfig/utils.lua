@@ -2,6 +2,14 @@ local map = vim.keymap.set
 
 local utils = {}
 
+local function show_diagnostics()
+  local status, existing_float = pcall(vim.api.nvim_buf_get_var, 0, "lsp_floating_preview")
+  if status and vim.api.nvim_win_is_valid(existing_float) then
+  else
+    vim.diagnostic.open_float()
+  end
+end
+
 ---Callback invoked when LSP client attaches to a buffer
 ---@param client integer LSP client ID
 ---@param bufnr integer Buffer number
@@ -31,11 +39,14 @@ function utils.on_attach(client, bufnr)
   end
 
   -- Show diagnostics automatically
-  vim.cmd([[
-augroup ShowDiagnostics
-  autocmd! * <buffer>
-  autocmd CursorHold,CursorHoldI <buffer> lua require("plugin_configs.lspconfig.utils").show_diagnostics()
-augroup END]])
+  local diagnostics_group = api.nvim_create_augroup("Diagnostics", { clear = false })
+  api.nvim_clear_autocmds({ group = diagnostics_group, buffer = bufnr })
+  api.nvim_create_autocmd("CursorHold", {
+    desc = "Show diagnostics",
+    group = diagnostics_group,
+    buffer = bufnr,
+    callback = show_diagnostics,
+  })
 
   -- Document highlight
   if client.supports_method("textDocument/documentHighlight") then
@@ -54,14 +65,6 @@ augroup END]])
     floating_window_above_first = true,
     hi_parameter = "LspReferenceRead",
   })
-end
-
-function utils.show_diagnostics()
-  local status, existing_float = pcall(vim.api.nvim_buf_get_var, 0, "lsp_floating_preview")
-  if status and vim.api.nvim_win_is_valid(existing_float) then
-  else
-    vim.diagnostic.open_float()
-  end
 end
 
 local completion_kind_icons = {
