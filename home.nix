@@ -36,12 +36,14 @@
     pythonWithPackages
     terraform
     nodejs
-    go
     nodePackages.typescript
   ];
 
   # Home Manager
   programs.home-manager.enable = true;
+
+  # User-specific executable files
+  home.sessionPath = ["$HOME/.local/bin"];
 
   # Man
   programs.man = {
