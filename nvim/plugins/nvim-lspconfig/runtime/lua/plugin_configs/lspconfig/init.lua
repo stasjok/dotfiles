@@ -20,6 +20,7 @@ local lsp_servers = {
   "terraformls",
   "tsserver",
   "gopls",
+  "rust_analyzer",
   "clangd",
 }
 

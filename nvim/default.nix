@@ -115,6 +115,9 @@ in {
       typescript-language-server
       # Go
       gopls
+      # Rust
+      rust-analyzer
+      rustfmt
       # C
       clang-tools
     ];

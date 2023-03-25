@@ -49,6 +49,9 @@ local settings = {
   go = {
     on_save = true,
   },
+  rust = {
+    on_save = true,
+  },
 }
 
 ---Returns a function for formatting with specific client id

@@ -37,6 +37,7 @@
     terraform
     nodejs
     nodePackages.typescript
+    cargo
   ];
 
   # Home Manager
