@@ -1,9 +1,8 @@
-{config, ...}: {
+{
   programs.cargo = {
     enable = true;
-
-    settings = {
-      install.root = "${config.home.homeDirectory}/.local";
-    };
   };
+
+  # Add Cargo's install root directory to PATH
+  home.sessionPath = ["$HOME/.cargo/bin"];
 }
