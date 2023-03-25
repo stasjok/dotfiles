@@ -35,6 +35,7 @@
         inherit pkgs extraSpecialArgs;
         modules = with lib;
           flatten [
+            ./modules
             ./home.nix
             (optional isGenericLinux ./linux.nix)
             {home = {inherit username homeDirectory stateVersion;};}

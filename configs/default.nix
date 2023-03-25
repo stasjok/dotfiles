@@ -6,5 +6,6 @@
     ./go.nix
     ./gpg.nix
     ./nix.nix
+    ./rust.nix
   ];
 }
