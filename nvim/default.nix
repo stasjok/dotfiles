@@ -117,6 +117,7 @@ in {
       gopls
       # Rust
       rust-analyzer
+      rustc
       rustfmt
       # C
       clang-tools
