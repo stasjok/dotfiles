@@ -9,6 +9,7 @@ local buf_get_lines = vim.api.nvim_buf_get_lines
 local command = vim.api.nvim_command
 local create_augroup = vim.api.nvim_create_augroup
 local create_autocmd = vim.api.nvim_create_autocmd
+local exec_autocmds = vim.api.nvim_exec_autocmds
 local get_proc = vim.api.nvim_get_proc
 local get_proc_children = vim.api.nvim_get_proc_children
 local opt_local = vim.opt_local
@@ -100,3 +101,20 @@ map("n", "<Leader>t", terminal_open)
 map("t", "<Esc>", terminal_esc, { expr = true })
 map("t", "<C-\\><Esc>", "<Esc>")
 map("t", "<M-PageUp>", "<C-\\><C-N><PageUp>")
+
+create_autocmd("VimEnter", {
+  desc = "Open terminal automatically on startup",
+  once = true,
+  callback = function()
+    if vim.o.columns >= 200 then
+      vim.cmd.vsplit()
+      vim.cmd.wincmd("l")
+      terminal_open()
+      exec_autocmds("TermOpen", {
+        group = augroup,
+        buffer = 0,
+      })
+      vim.cmd.wincmd("h")
+    end
+  end,
+})
