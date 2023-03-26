@@ -68,7 +68,6 @@ local function terminal_open()
     set_current_buf(_G._my_terminal_buffer)
     vim.fn.termopen("fish", {
       on_exit = on_exit,
-      env = { XDG_DATA_DIRS = vim.env.HOME .. "/.nix-profile/share" },
     })
   else
     set_current_buf(_G._my_terminal_buffer)
