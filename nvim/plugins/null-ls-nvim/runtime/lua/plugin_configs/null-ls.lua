@@ -12,6 +12,7 @@ local config = {
     formatting.black,
     formatting.fish_indent,
     formatting.mdformat,
+    formatting.packer,
     -- Diagnostics
     diagnostics.markdownlint,
     diagnostics.vale,

@@ -111,6 +111,8 @@ in {
       lemminx
       # Terraform
       terraform-ls
+      # Packer
+      packer
       # TypeScript
       typescript-language-server
       # Go

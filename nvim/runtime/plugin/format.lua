@@ -52,6 +52,9 @@ local settings = {
   rust = {
     on_save = true,
   },
+  hcl = {
+    on_save = true,
+  },
 }
 
 ---Returns a function for formatting with specific client id
