@@ -45,6 +45,12 @@
   # User-specific executable files
   home.sessionPath = ["$HOME/.local/bin"];
 
+  # Environment variables
+  home.sessionVariables = {
+    # Disable HashiCorp checkpoint service (terraform, packer etc)
+    CHECKPOINT_DISABLE = 1;
+  };
+
   # Man
   programs.man = {
     enable = true;
