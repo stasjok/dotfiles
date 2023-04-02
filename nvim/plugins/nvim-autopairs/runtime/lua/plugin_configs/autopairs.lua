@@ -154,6 +154,12 @@ local pairs = {
     :with_cr(cond.none())
     :with_del(cond.none())
     :use_key("#"),
+
+  -- Rust
+  Rule("<", ">", "rust")
+    :with_pair(cond.before_regex(":%s*%w+$", 20))
+    :with_move(char_matches_end_pair)
+    :with_cr(cond.none()),
 }
 
 function M.configure()
