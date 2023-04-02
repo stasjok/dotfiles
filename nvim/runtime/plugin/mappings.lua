@@ -35,6 +35,9 @@ map("n", "<Leader>Z", "<Cmd>xall<CR>")
 -- Create new lines in insert mode
 map("i", "<M-n>", "<C-O>o")
 map("i", "<M-p>", "<C-O>O")
+-- Append semicolon to the end of line
+map("i", "<C-_>", "<End>;")
+
 -- Move lines
 map("n", "<M-d>", "<Cmd>move .+1<CR>")
 map("n", "<M-u>", "<Cmd>move .-2<CR>")
