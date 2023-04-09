@@ -44,6 +44,13 @@ function M.on_attach(client, bufnr)
     buf_map("n", lhs, rhs)
   end
 
+  -- Visual mappings
+  for lhs, rhs in pairs({
+    ["<Leader>a"] = lsp.code_action,
+  }) do
+    buf_map("x", lhs, rhs)
+  end
+
   -- Show diagnostics automatically
   api.nvim_create_autocmd("CursorHold", {
     desc = "Show diagnostics",
