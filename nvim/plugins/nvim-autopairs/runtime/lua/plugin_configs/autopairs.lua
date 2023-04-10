@@ -36,7 +36,6 @@ end
 local function is_generic_param(opts)
   local identifier = "[%w_]+"
   local str = opts.line:sub(1, opts.col - 1)
-  vim.pretty_print(str)
   if
     str:find(":%s*" .. identifier .. "%s*$") -- var: Type|
     or str:find("fn%s+" .. identifier .. "%s*$") -- fn func|
