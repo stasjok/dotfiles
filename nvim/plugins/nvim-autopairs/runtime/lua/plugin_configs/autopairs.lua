@@ -32,6 +32,24 @@ local function not_in_comment(comment_char)
   end
 end
 
+---A condition for Rust Generic Parameter <>
+local function is_generic_param(opts)
+  local identifier = "[%w_]+"
+  local str = opts.line:sub(1, opts.col - 1)
+  vim.pretty_print(str)
+  if
+    str:find(":%s*" .. identifier .. "%s*$") -- var: Type|
+    or str:find("fn%s+" .. identifier .. "%s*$") -- fn func|
+    or str:find("struct%s+" .. identifier .. "%s*$") -- struct Name|
+    or str:find("enum%s+" .. identifier .. "%s*$") -- enum Name|
+    or str:find("impl%s*$") -- impl|
+    or str:find("impl%s*%b<>%s*" .. identifier .. "%s*$") -- impl<T> Name|
+  then
+    return true
+  end
+  return false
+end
+
 local jinja_filetypes = { "jinja", "jinja2", "yaml.ansible", "sls" }
 
 -- Extra pairs
@@ -157,7 +175,7 @@ local pairs = {
 
   -- Rust
   Rule("<", ">", "rust")
-    :with_pair(cond.before_regex(":%s*%w+$", 20))
+    :with_pair(is_generic_param)
     :with_move(char_matches_end_pair)
     :with_cr(cond.none()),
 }
