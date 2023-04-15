@@ -50,6 +50,19 @@ local function is_rust_generic_param(opts)
   return false
 end
 
+--- A condition for Rust closure parameters
+local function is_rust_closure(opts)
+  local str = opts.line:sub(1, opts.col - 1)
+  if
+    str:find("=%s*$") -- let statement: = |
+    or str:find("[(,]%s*$") -- function parameters: (| or , |
+  then
+    return true
+  else
+    return false
+  end
+end
+
 local jinja_filetypes = { "jinja", "jinja2", "yaml.ansible", "sls" }
 
 -- Extra pairs
@@ -176,6 +189,10 @@ local pairs = {
   -- Rust
   Rule("<", ">", "rust")
     :with_pair(is_rust_generic_param)
+    :with_move(char_matches_end_pair)
+    :with_cr(cond.none()),
+  Rule("|", "|", "rust")
+    :with_pair(is_rust_closure)
     :with_move(char_matches_end_pair)
     :with_cr(cond.none()),
 }
