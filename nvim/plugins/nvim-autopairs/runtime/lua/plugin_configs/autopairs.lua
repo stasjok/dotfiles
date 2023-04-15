@@ -38,8 +38,10 @@ local function is_rust_generic_param(opts)
   local str = opts.line:sub(1, opts.col - 1)
   if
     str:find(":%s*" .. identifier .. "%s*$") -- var: Type|
-    or str:find("->%s*" .. identifier .. "%s*$") -- -> Type|
-    or str:find("fn%s+" .. identifier .. "%s*$") -- fn func|
+    or str:find(":%s*impl%s+" .. identifier .. "%s*$") -- var: impl Type|
+    or str:find("->%s*" .. identifier .. "%s*$") -- f() -> Type|
+    or str:find("->%s*impl%s+" .. identifier .. "%s*$") -- f() -> impl Type|
+    or str:find("fn%s+" .. identifier .. "%s*$") -- fn fname|
     or str:find("struct%s+" .. identifier .. "%s*$") -- struct Name|
     or str:find("enum%s+" .. identifier .. "%s*$") -- enum Name|
     or str:find("impl%s*$") -- impl|
