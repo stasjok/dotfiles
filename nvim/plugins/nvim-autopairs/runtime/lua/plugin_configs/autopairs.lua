@@ -54,7 +54,8 @@ end
 local function is_rust_closure(opts)
   local str = opts.line:sub(1, opts.col - 1)
   if
-    str:find("=%s*$") -- let statement: = |
+    str:find("move%s+$") -- move |
+    or str:find("=%s*$") -- let statement: = |
     or str:find("[(,]%s*$") -- function parameters: (| or , |
   then
     return true
