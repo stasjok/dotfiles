@@ -33,11 +33,12 @@ local function not_in_comment(comment_char)
 end
 
 ---A condition for Rust Generic Parameter <>
-local function is_generic_param(opts)
+local function is_rust_generic_param(opts)
   local identifier = "[%w_]+"
   local str = opts.line:sub(1, opts.col - 1)
   if
     str:find(":%s*" .. identifier .. "%s*$") -- var: Type|
+    or str:find("->%s*" .. identifier .. "%s*$") -- -> Type|
     or str:find("fn%s+" .. identifier .. "%s*$") -- fn func|
     or str:find("struct%s+" .. identifier .. "%s*$") -- struct Name|
     or str:find("enum%s+" .. identifier .. "%s*$") -- enum Name|
@@ -174,7 +175,7 @@ local pairs = {
 
   -- Rust
   Rule("<", ">", "rust")
-    :with_pair(is_generic_param)
+    :with_pair(is_rust_generic_param)
     :with_move(char_matches_end_pair)
     :with_cr(cond.none()),
 }
