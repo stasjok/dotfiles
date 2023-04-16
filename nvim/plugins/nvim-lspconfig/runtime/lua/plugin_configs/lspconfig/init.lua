@@ -21,6 +21,7 @@ local lsp_servers = {
   "tsserver",
   "gopls",
   "rust_analyzer",
+  "taplo",
   "clangd",
 }
 

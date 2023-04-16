@@ -96,10 +96,11 @@ in {
       # Ansible
       ansible-language-server
       (ansible-lint.override {ansible-core = ansible_2_12;})
-      # Json/YAML
+      # Json/YAML/TOML
       vscode-langservers-extracted
       yaml-language-server
       yamllint
+      taplo
       # Markdown
       marksman
       markdownlint-cli
