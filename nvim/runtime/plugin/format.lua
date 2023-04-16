@@ -39,7 +39,7 @@ local settings = {
     server = "yamlls",
     override_document_formatting = true,
   },
-  taplo = {
+  toml = {
     on_save = true,
   },
   fish = {
