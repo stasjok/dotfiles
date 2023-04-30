@@ -45,6 +45,7 @@ local function is_rust_generic_param(opts)
     or str:find("struct%s+" .. identifier .. "%s*$") -- struct Name|
     or str:find("enum%s+" .. identifier .. "%s*$") -- enum Name|
     or str:find("impl%s*$") -- impl|
+    or str:find("impl%s+" .. identifier .. "%s*$") -- impl Name|
     or str:find("impl%s*%b<>%s*" .. identifier .. "%s*$") -- impl<T> Name|
   then
     return true
