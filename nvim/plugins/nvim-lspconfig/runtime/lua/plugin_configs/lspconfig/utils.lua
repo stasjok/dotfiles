@@ -68,7 +68,7 @@ function M.on_attach(client, bufnr)
       buffer = bufnr,
       callback = lsp.document_highlight,
     })
-    api.nvim_create_autocmd("CursorMoved", {
+    api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
       desc = "Remove document highlights",
       group = hl_augroup,
       buffer = bufnr,
