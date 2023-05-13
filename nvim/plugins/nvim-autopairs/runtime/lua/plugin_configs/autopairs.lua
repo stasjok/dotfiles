@@ -47,6 +47,7 @@ local function is_rust_generic_param(opts)
     or str:find("impl%s*$") -- impl|
     or str:find("impl%s+" .. identifier .. "%s*$") -- impl Name|
     or str:find("impl%s*%b<>%s*" .. identifier .. "%s*$") -- impl<T> Name|
+    or str:find("trait%s+" .. identifier .. "%s*$") -- trait Name|
     or str:find("::%s*$") -- turbofish::|
   then
     return true
