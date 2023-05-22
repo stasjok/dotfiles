@@ -204,7 +204,10 @@ local pairs = {
     :with_cr(cond.none()),
   Rule("=", ";", "rust")
     :with_pair(function(opts)
-      return cond.before_regex("let%s+[^=]+$", 100)(opts) and cond.after_regex("^%s*$", 10)(opts)
+      return (
+        cond.before_regex("let%s+[^=]+$", 100)(opts)
+        or cond.before_regex("type%s+[^=]+$", 100)(opts)
+      ) and cond.after_regex("^%s*$", 10)(opts)
     end)
     :with_move(char_matches_end_pair)
     :with_cr(cond.none()),
