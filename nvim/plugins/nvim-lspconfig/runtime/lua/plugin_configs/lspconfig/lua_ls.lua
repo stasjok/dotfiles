@@ -60,9 +60,6 @@ lua_ls.settings = {
       version = "LuaJIT",
       path = { "lua/?.lua", "lua/?/init.lua" },
     },
-    semantic = {
-      enable = false,
-    },
     telemetry = {
       enable = false,
     },
