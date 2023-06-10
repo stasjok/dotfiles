@@ -38,7 +38,6 @@ end
 local library = {
   runtime("types/stable"),
   vim.env.VIMRUNTIME,
-  "${3rd}/luv/library",
   "${3rd}/busted/library",
   "${3rd}/luassert/library",
   plugin_dir(runtime("lua/plenary")),
