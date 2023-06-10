@@ -32,6 +32,8 @@ T["checkhealth"] = function()
     -- Perl is enabled but doesn't work
     "No usable perl executable found",
     '"Neovim::Ext" cpan module is not installed',
+    -- diffview.nvim
+    "`hg_cmd` is not executable",
   }
   local function filter_errors(s)
     for _, match in ipairs(ignore) do

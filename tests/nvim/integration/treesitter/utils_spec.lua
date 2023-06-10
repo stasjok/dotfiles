@@ -11,7 +11,7 @@ if string.sub("test", 1) then
 end
 ]]
   local lines = vim.split(text, "\n", { plain = true })
-  vim.treesitter.query.set_query(
+  vim.treesitter.query.set(
     "lua",
     "test",
     [[
@@ -21,7 +21,7 @@ end
         consequence: (_) @if_block)
     ]]
   )
-  vim.treesitter.query.set_query("vim", "test", "(set_item option: (option_name) @option)")
+  vim.treesitter.query.set("vim", "test", "(set_item option: (option_name) @option)")
 
   describe("get_captures_at_cursor", function()
     local get_captures_at_cursor = utils.get_captures_at_cursor
@@ -102,8 +102,7 @@ end
 
     describe("source_node", function()
       vim.api.nvim_win_set_cursor(0, { 3, 22 })
-      -- String have three nodes (index from 0): start quote, string, end quote
-      local source_node = get_node_at_cursor():child(1)
+      local source_node = get_node_at_cursor()
       assert.are.equal("setlocal tabstop=8 expandtab", vim.treesitter.get_node_text(source_node, 0))
 
       it("works with source_node", function()

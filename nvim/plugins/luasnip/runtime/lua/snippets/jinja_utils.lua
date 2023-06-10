@@ -50,7 +50,7 @@ end
 ---@param ft "jinja" | "sls" | "ansible" Filetype for `ft_func`
 ---@return fun(): string[]
 function jinja_utils.jinja_ft_func(ft)
-  vim.treesitter.query.set_query(
+  vim.treesitter.query.set(
     "jinja2",
     "ft_func",
     [[
@@ -58,7 +58,7 @@ function jinja_utils.jinja_ft_func(ft)
       (text) @text
     ]]
   )
-  vim.treesitter.query.set_query(
+  vim.treesitter.query.set(
     "yaml",
     "ft_func",
     [[

@@ -15,8 +15,10 @@ describe("treesitter.utils", function()
     [vim.treesitter] = {
       "get_parser",
       "get_string_parser",
-      "get_query",
       "get_node_text",
+    },
+    [vim.treesitter.query] = {
+      "get",
     },
     [_G.package.loaded.utils] = {
       "get_cursor_0",
@@ -207,7 +209,7 @@ describe("treesitter.utils", function()
       assert.stub(parsed[2].root).is.called(1)
       assert.stub(parsed[3].root).is.called(1)
       assert.stub(utils.is_in_node_range).is.called(2)
-      assert.stub(vim.treesitter.get_query).is_not.called()
+      assert.stub(vim.treesitter.query.get).is_not.called()
     end)
 
     utils.is_in_node_range.on_call_with("tree_root2", match._, match._).returns(true)
@@ -218,7 +220,7 @@ describe("treesitter.utils", function()
       assert.stub(parsed[2].root).is.called(1)
       assert.stub(parsed[3].root).is.called(1)
       assert.stub(utils.is_in_node_range).is.called(2)
-      assert.stub(vim.treesitter.get_query).is.called(1)
+      assert.stub(vim.treesitter.query.get).is.called(1)
     end)
 
     utils.is_in_node_range.on_call_with("tree_root1", match._, match._).returns(true)
@@ -229,7 +231,7 @@ describe("treesitter.utils", function()
       assert.stub(parsed[2].root).is_not.called()
       assert.stub(parsed[3].root).is_not.called()
       assert.stub(utils.is_in_node_range).is.called(1)
-      assert.stub(vim.treesitter.get_query).is.called(1)
+      assert.stub(vim.treesitter.query.get).is.called(1)
     end)
 
     local get_cursor_0 = _G.package.loaded.utils.get_cursor_0
@@ -242,7 +244,7 @@ describe("treesitter.utils", function()
         end
       end),
     }
-    vim.treesitter.get_query.returns(query)
+    vim.treesitter.query.get.returns(query)
     -- Current window
     vim.api.nvim_win_get_buf.on_call_with(0).returns(2)
     vim.api.nvim_buf_get_option.on_call_with(2, "filetype").returns("lua")
@@ -250,7 +252,7 @@ describe("treesitter.utils", function()
 
     it("returns empty table if captures are not found", function()
       assert.are.same({}, get_captures_at_cursor("test"))
-      assert.stub(vim.treesitter.get_query).is.called_with("lua", "test")
+      assert.stub(vim.treesitter.query.get).is.called_with("lua", "test")
       assert.stub(query.iter_captures).is.called_with(match._, "tree_root1", 2, 1, 2)
       assert.stub(utils.is_in_node_range).is.called(1)
     end)
@@ -261,7 +263,7 @@ describe("treesitter.utils", function()
 
     it("returns empty table if captures are found, but not on cursor", function()
       assert.are.same({}, get_captures_at_cursor("test1", nil, "lang"))
-      assert.stub(vim.treesitter.get_query).is.called_with("lang", "test1")
+      assert.stub(vim.treesitter.query.get).is.called_with("lang", "test1")
       assert.stub(query.iter_captures).is.called_with(match._, "tree_root1", 2, 1, 2)
       assert.stub(utils.is_in_node_range).is.called(3)
     end)
@@ -270,7 +272,7 @@ describe("treesitter.utils", function()
 
     it("returns matches only in node range", function()
       assert.are.same({ { "capture3", "node3" } }, get_captures_at_cursor("test"))
-      assert.stub(vim.treesitter.get_query).is.called_with("lua", "test")
+      assert.stub(vim.treesitter.query.get).is.called_with("lua", "test")
       assert.stub(query.iter_captures).is.called_with(match._, "tree_root1", 2, 1, 2)
       assert.stub(utils.is_in_node_range).is.called(3)
     end)
@@ -292,7 +294,7 @@ describe("treesitter.utils", function()
         { "capture2", "node2" },
         { "capture3", "node3" },
       }, captures)
-      assert.stub(vim.treesitter.get_query).is.called_with("vim", "test")
+      assert.stub(vim.treesitter.query.get).is.called_with("vim", "test")
       assert.stub(query.iter_captures).is.called_with(match._, "tree_root1", 3, 2, 3)
       assert.stub(utils.is_in_node_range).is.called(4)
     end)
@@ -307,7 +309,7 @@ describe("treesitter.utils", function()
         { "capture2", "node2" },
         { "capture3", "node3" },
       }, captures)
-      assert.stub(vim.treesitter.get_query).is.called_with("type", "query")
+      assert.stub(vim.treesitter.query.get).is.called_with("type", "query")
     end)
 
     describe("source_node", function()

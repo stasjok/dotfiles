@@ -4,7 +4,7 @@ local buf_get_text = vim.api.nvim_buf_get_text
 local buf_get_offset = vim.api.nvim_buf_get_offset
 local get_parser = vim.treesitter.get_parser
 local get_string_parser = vim.treesitter.get_string_parser
-local get_query = vim.treesitter.get_query
+local get_query = vim.treesitter.query.get
 local get_node_text = vim.treesitter.get_node_text
 local get_cursor_0 = require("utils").get_cursor_0
 

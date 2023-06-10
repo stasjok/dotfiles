@@ -31,7 +31,7 @@
     cmake
     bear
     # Ansible
-    ansible_2_12
+    ansible
     # Languages
     pythonWithPackages
     terraform

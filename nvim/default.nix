@@ -95,7 +95,7 @@ in {
       nixfmt
       # Ansible
       ansible-language-server
-      (ansible-lint.override {ansible-core = ansible_2_12;})
+      ansible-lint
       # Json/YAML/TOML
       vscode-langservers-extracted
       yaml-language-server
