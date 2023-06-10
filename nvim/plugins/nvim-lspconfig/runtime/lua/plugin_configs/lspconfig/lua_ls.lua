@@ -25,24 +25,33 @@ end
 ---@return string
 local function runtime(pattern)
   local found = get_runtime({ pattern }, false, { is_lua = true }) --[=[@as string[]]=]
-  return fs_realpath(found[1])
+  return assert(fs_realpath(found[1]))
 end
 
----Returns plugin directory for require path
----@param require_path string
----@return string
-local function plugin_dir(require_path)
-  return require_path:sub(1, require_path:find("/lua/[%w_-]+$") - 1)
+-- TODO: Use vim.iter in neovim 0.10
+local library_for_dotfiles = {}
+local std_config = vim.fn.stdpath("config")
+for _, path in
+  ipairs(get_runtime({ "" }, true, { is_lua = true }) --[=[@as string[]]=])
+do
+  local realpath = fs_realpath(path)
+  if realpath ~= std_config then
+    table.insert(library_for_dotfiles, realpath)
+  end
 end
+table.insert(library_for_dotfiles, "${3rd}/busted/library")
+table.insert(library_for_dotfiles, "${3rd}/luassert/library")
 
-local library = {
-  runtime("types/stable"),
-  vim.env.VIMRUNTIME,
-  "${3rd}/busted/library",
-  "${3rd}/luassert/library",
-  plugin_dir(runtime("lua/plenary")),
-  runtime("lua/mini/test.lua"),
-}
+---Change library
+---@param config table
+---@param root_dir string
+function lua_ls.on_new_config(config, root_dir)
+  if vim.endswith(root_dir, "/dotfiles") then
+    config.settings.Lua.workspace.library = library_for_dotfiles
+  elseif vim.endswith(root_dir, "/neovim") then
+    config.settings.Lua.workspace.library = { runtime("types/stable") }
+  end
+end
 
 lua_ls.settings = {
   Lua = {
@@ -68,7 +77,21 @@ lua_ls.settings = {
     },
     workspace = {
       checkThirdParty = false,
-      library = library,
+      library = {
+        runtime("types/stable"),
+        vim.env.VIMRUNTIME,
+      },
+      ignoreDir = {
+        "/types/nightly/",
+        "/types/override/",
+        "/tests/",
+        "/test/",
+        "/plugin/",
+        "/ftplugin/",
+        "/syntax/",
+        "/colors/",
+        "/indent/",
+      },
     },
   },
 }
