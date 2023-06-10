@@ -179,8 +179,6 @@ in {
           vim-fugitive
           gitsigns-nvim
           diffview-nvim
-          # EditorConfig
-          editorconfig-nvim
           # Languages
           vim-nix
           vim-fish-syntax
