@@ -80,14 +80,14 @@ local pairs = {
   Rule(" ", " ")
     :with_pair(function(opts)
       local pair = opts.line:sub(opts.col - 1, opts.col)
-      return vim.tbl_contains({ "()", "{}", "[]" }, pair)
+      return vim.list_contains({ "()", "{}", "[]" }, pair)
     end, nil)
     :with_move(cond.none())
     :with_cr(cond.none())
     :with_del(function(opts)
       local col = vim.api.nvim_win_get_cursor(0)[2] + 1
       local context = opts.line:sub(col - 2, col + 1)
-      return vim.tbl_contains({ "(  )", "{  }", "[  ]" }, context)
+      return vim.list_contains({ "(  )", "{  }", "[  ]" }, context)
     end),
   Rule("", " )")
     :with_pair(cond.none(), nil)
@@ -152,13 +152,13 @@ local pairs = {
   Rule(" ", " ", jinja_filetypes)
     :with_pair(function(opts)
       local pair = opts.line:sub(opts.col - 2, opts.col + 1)
-      return vim.tbl_contains({ "{%%}", "{##}", "%-%}", "{-}}", "#-#}" }, pair)
+      return vim.list_contains({ "{%%}", "{##}", "%-%}", "{-}}", "#-#}" }, pair)
     end, nil)
     :with_cr(cond.none())
     :with_del(function(opts)
       local col = vim.api.nvim_win_get_cursor(0)[2] + 1
       local context = opts.line:sub(col - 3, col + 2)
-      return vim.tbl_contains({ "{%  %}", "{#  #}", "%-  %}", "{-  }}", "#-  #}" }, context)
+      return vim.list_contains({ "{%  %}", "{#  #}", "%-  %}", "{-  }}", "#-  #}" }, context)
     end),
   Rule("", "%}", jinja_filetypes)
     :with_pair(cond.none(), nil)
