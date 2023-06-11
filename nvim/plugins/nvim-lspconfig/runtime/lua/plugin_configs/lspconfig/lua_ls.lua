@@ -1,4 +1,3 @@
-local util = require("lspconfig.util")
 local get_runtime = vim.api.nvim__get_runtime
 local fs_realpath = vim.loop.fs_realpath
 
@@ -15,9 +14,23 @@ local root_files = {
 }
 
 function lua_ls.root_dir(fname)
-  return util.root_pattern(unpack(root_files))(fname)
-    or util.root_pattern("lua")(fname)
-    or util.find_git_ancestor(fname)
+  local reuse_client
+  if vim.startswith(fname, "/nix/store/") or vim.startswith(fname, vim.env.VIMRUNTIME) then
+    local client = vim.lsp.get_active_clients({ name = "lua_ls" })[1]
+    reuse_client = client and client.config.root_dir
+  end
+  return reuse_client
+    or vim.fs.dirname(vim.fs.find(root_files, {
+      path = fname,
+      upward = true,
+      stop = vim.env.HOME,
+      type = "file",
+    })[1] or vim.fs.find({ "lua", ".git" }, {
+      path = fname,
+      upward = true,
+      stop = vim.env.HOME,
+      type = "directory",
+    })[1])
 end
 
 ---Find first pattern in runtime and return realpath of it
