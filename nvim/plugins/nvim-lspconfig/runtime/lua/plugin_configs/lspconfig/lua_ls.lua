@@ -61,6 +61,13 @@ table.insert(library_for_dotfiles, "${3rd}/luassert/library")
 function lua_ls.on_new_config(config, root_dir)
   if vim.endswith(root_dir, "/dotfiles") then
     config.settings.Lua.workspace.library = library_for_dotfiles
+    config.settings.Lua.runtime.path = {
+      -- meta/3rd library from lua-language-server
+      "library/?.lua",
+      "library/?/init.lua",
+      "lua/?.lua",
+      "lua/?/init.lua",
+    }
   elseif vim.endswith(root_dir, "/neovim") then
     config.settings.Lua.workspace.library = { runtime("types/stable") }
   end
@@ -97,8 +104,10 @@ lua_ls.settings = {
       ignoreDir = {
         "/types/nightly/",
         "/types/override/",
+        "/lua/plenary/busted.lua",
         "/tests/",
         "/test/",
+        "/scripts/",
         "/plugin/",
         "/ftplugin/",
         "/syntax/",
