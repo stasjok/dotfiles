@@ -33,34 +33,31 @@ function lua_ls.root_dir(fname)
     })[1])
 end
 
----Find first pattern in runtime and return realpath of it
----@param pattern string
----@return string
-local function runtime(pattern)
-  local found = get_runtime({ pattern }, false, { is_lua = true }) --[=[@as string[]]=]
-  return assert(fs_realpath(found[1]))
-end
+-- Path to a type annotations
+local types_path =
+  vim.iter(get_runtime({ "types/stable" }, false, { is_lua = true })):map(fs_realpath):next()
 
--- TODO: Use vim.iter in neovim 0.10
-local library_for_dotfiles = {}
-local std_config = vim.fn.stdpath("config")
-for _, path in
-  ipairs(get_runtime({ "" }, true, { is_lua = true }) --[=[@as string[]]=])
-do
-  local realpath = fs_realpath(path)
-  if realpath ~= std_config then
-    table.insert(library_for_dotfiles, realpath)
-  end
-end
-table.insert(library_for_dotfiles, "${3rd}/busted/library")
-table.insert(library_for_dotfiles, "${3rd}/luassert/library")
+-- Lazy library
+local library = vim.defaulttable(function()
+  local std_config = vim.fn.stdpath("config")
+  local library = vim
+    .iter(get_runtime({ "" }, true, { is_lua = true }))
+    :map(fs_realpath)
+    :filter(function(path)
+      return path ~= std_config
+    end)
+    :totable()
+  table.insert(library, "${3rd}/busted/library")
+  table.insert(library, "${3rd}/luassert/library")
+  return library
+end)
 
 ---Change library
 ---@param config table
 ---@param root_dir string
 function lua_ls.on_new_config(config, root_dir)
   if vim.endswith(root_dir, "/dotfiles") then
-    config.settings.Lua.workspace.library = library_for_dotfiles
+    config.settings.Lua.workspace.library = library.dotfiles
     config.settings.Lua.runtime.path = {
       -- meta/3rd library from lua-language-server
       "library/?.lua",
@@ -69,7 +66,7 @@ function lua_ls.on_new_config(config, root_dir)
       "lua/?/init.lua",
     }
   elseif vim.endswith(root_dir, "/neovim") then
-    config.settings.Lua.workspace.library = { runtime("types/stable") }
+    config.settings.Lua.workspace.library = { types_path }
   end
 end
 
@@ -98,7 +95,7 @@ lua_ls.settings = {
     workspace = {
       checkThirdParty = false,
       library = {
-        runtime("types/stable"),
+        types_path,
         vim.env.VIMRUNTIME,
       },
       ignoreDir = {
