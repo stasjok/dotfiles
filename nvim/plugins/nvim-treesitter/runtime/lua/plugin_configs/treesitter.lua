@@ -21,9 +21,6 @@ local config = {
       node_decremental = "<C-Q>",
     },
   },
-  playground = {
-    enable = true,
-  },
 }
 
 function M.configure()
