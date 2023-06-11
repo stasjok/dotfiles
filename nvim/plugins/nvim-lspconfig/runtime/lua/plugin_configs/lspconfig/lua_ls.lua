@@ -16,8 +16,8 @@ local root_files = {
 function lua_ls.root_dir(fname)
   local reuse_client
   if vim.startswith(fname, "/nix/store/") or vim.startswith(fname, vim.env.VIMRUNTIME) then
-    local client = vim.lsp.get_active_clients({ name = "lua_ls" })[1]
-    reuse_client = client and client.config.root_dir
+    reuse_client =
+      vim.tbl_get(vim.lsp.get_active_clients({ name = "lua_ls" }), 1, "config", "root_dir")
   end
   return reuse_client
     or vim.fs.dirname(vim.fs.find(root_files, {
