@@ -10,6 +10,19 @@ final: prev: {
   # Vim plugins
   vimPlugins = prev.vimPlugins.extend (prev.callPackage ../packages/vim-plugins {});
 
+  # Neovim patches
+  neovim-unwrapped = prev.neovim-unwrapped.overrideAttrs (finalAttrs: prevAttrs: {
+    patches =
+      prevAttrs.patches
+      ++ [
+        # fix vim.tbl_get type annotations
+        (prev.fetchpatch {
+          url = "https://github.com/neovim/neovim/commit/d3b9feccb39124cefbe4b0c492fb0bc3f777d0b4.diff";
+          hash = "sha256-nfuRNcmaJn2AKXywZqbE112VbNDTUfHsbgnPwiiDIZ0=";
+        })
+      ];
+  });
+
   tree-sitter = prev.tree-sitter.override {
     extraGrammars = {
       tree-sitter-jinja2 = {
