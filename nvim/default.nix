@@ -139,8 +139,6 @@ in {
         (mkBefore (mkPluginList [
           # init.lua before plugins
           (pluginConfig ./init_before.lua)
-          # impatient.nvim should be first
-          impatient-nvim
           # Load colorscheme before other plugins
           catppuccin-nvim
         ]))
