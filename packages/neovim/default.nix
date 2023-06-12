@@ -68,5 +68,12 @@ neovim-unwrapped.overrideAttrs (prev: {
         url = "https://github.com/neovim/neovim/commit/302d3cfb96d7f0c856262e1a4252d058e3300c8b.diff";
         hash = "sha256-njzF6zcLQZ85STebKCVkfuGE7LptNLd/Es4ZqgbnMbw=";
       })
+
+      # vim.ringbuf
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/7c661207cc4357553ed2b057b6c8f28400024361.diff";
+        hash = "sha256-Lqn6s6XiKq4ek0H9+m4owSmHU0f8dn0eKOqylTm83yA=";
+        excludes = ["runtime/doc/news.txt"];
+      })
     ];
 })
