@@ -27,26 +27,6 @@ final: prev: {
     };
   };
 
-  pythonPackagesExtensions =
-    prev.pythonPackagesExtensions
-    ++ [
-      (
-        python-final: python-prev: {
-          ansible = python-prev.ansible.overridePythonAttrs (oldAttrs: {
-            propagatedBuildInputs = prev.lib.unique (oldAttrs.propagatedBuildInputs
-              ++ (with python-final; [
-                # json_query filter
-                jmespath
-              ]));
-          });
-          ansible-core = python-prev.ansible-core.overridePythonAttrs (oldAttrs: {
-            makeWrapperArgs = [
-              "--suffix ANSIBLE_STRATEGY_PLUGINS : ${python-final.mitogen}/${python-final.python.sitePackages}/ansible_mitogen"
-              "--set-default ANSIBLE_STRATEGY mitogen_linear"
-            ];
-            propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [python-final.mitogen];
-          });
-        }
-      )
-    ];
+  # Python packages
+  pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [(prev.callPackage ../packages/python {})];
 }
