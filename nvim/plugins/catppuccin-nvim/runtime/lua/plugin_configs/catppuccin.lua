@@ -24,6 +24,8 @@ function M.configure()
     custom_highlights = function(_)
       return {
         TermCursor = { bg = "#179299" },
+        -- Don't hide tree-sitter comment highlights
+        ["@lsp.type.comment.lua"] = {},
       }
     end,
   })
