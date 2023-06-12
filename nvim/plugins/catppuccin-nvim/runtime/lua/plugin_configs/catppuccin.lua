@@ -17,7 +17,7 @@ function M.configure()
       nvimtree = false,
       dashboard = false,
       ts_rainbow = false,
-      indent_blankline = false,
+      indent_blankline = { enabled = false },
       -- Enable optional
       mini = true,
     },
