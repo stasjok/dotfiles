@@ -94,6 +94,19 @@ neovim-unwrapped.overrideAttrs (prev: {
         excludes = ["runtime/doc/news.txt"];
       })
 
+      # vim.system
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/c0952e62fd0ee16a3275bb69e0de04c836b39015.diff";
+        includes = [
+          "runtime/doc/lua.txt"
+          "runtime/lua/vim/_system.lua"
+          "scripts/lua2dox.lua"
+          "test/functional/lua/system_spec.lua"
+        ];
+        hash = "sha256-vQDcA+LW/ooQbUj9q4hBi5PTi6IYXvgQSm4ev6669oM=";
+      })
+      ./patches/alias-vim-uv-to-vim-loop-and-add-vim-system.patch
+
       # Enable terminal reflow by default
       (fetchpatch {
         url = "https://github.com/neovim/neovim/commit/c855eee919f2d4edc9b9fa91b277454290fbabfe.diff";
