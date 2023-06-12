@@ -5,14 +5,14 @@
 }:
 buildFishPlugin {
   pname = "foreign-env";
-  version = "unstable-2022-12-30";
+  version = "unstable-2023-01-14";
 
   src = fetchTree {
     type = "github";
-    owner = "stasjok";
-    repo = "fish-plugin-foreign-env";
-    rev = "0cadb087e3c0f7fe935262efd096e9c47ecfbaaf";
-    narHash = "sha256-iLrwZke6ajHHgcejLuMAKGDvt+a2Jw6ZxQiw0hzVoM8=";
+    owner = "oh-my-fish";
+    repo = "plugin-foreign-env";
+    rev = "3ee95536106c11073d6ff466c1681cde31001383";
+    narHash = "sha256-vyW/X2lLjsieMpP9Wi2bZPjReaZBkqUbkh15zOi8T4Y=";
   };
 
   preInstall = ''
