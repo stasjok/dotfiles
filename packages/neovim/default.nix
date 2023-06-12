@@ -120,5 +120,16 @@ neovim-unwrapped.overrideAttrs (prev: {
         excludes = ["runtime/doc/news.txt"];
         hash = "sha256-brlesieg2m4G0PTAfrdrACgKoe4kW5IyBdyp7mL2Jzk=";
       })
+
+      # Support for dynamic capabilities
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/ddd92a70d2aab5247895e89abaaa79c62ba7dbb4.diff";
+        excludes = ["runtime/doc/news.txt"];
+        hash = "sha256-Fgk0pDxkoqfmRJlBvi3J5nZPQJpqmumOVq78l7xODeA=";
+      })
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/dd3fa645735539c75b72dc1b0114278b5fa57f7f.diff";
+        hash = "sha256-FRR65n4CZsVDoz/QfFFDYhvfObJqsfmiD41nNF4a9+Q=";
+      })
     ];
 })
