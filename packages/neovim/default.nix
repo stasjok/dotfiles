@@ -76,6 +76,17 @@ neovim-unwrapped.overrideAttrs (prev: {
         hash = "sha256-njzF6zcLQZ85STebKCVkfuGE7LptNLd/Es4ZqgbnMbw=";
       })
 
+      # vim.fs.joinpath
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/189fb6203262340e7a59e782be970bcd8ae28e61.diff";
+        includes = ["runtime/lua/vim/fs.lua"];
+        hash = "sha256-IyvnIh0lwq4cM8kwID+/HTV61sGFQRuq3g/gqrd2spQ=";
+      })
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/e3e6fadfd82861471c32fdcabe00bbef3de84563.diff";
+        hash = "sha256-HB7AKd/kONlze+7r6nMBAwE2TgLSC59x9g0NOXowjHg=";
+      })
+
       # vim.ringbuf
       (fetchpatch {
         url = "https://github.com/neovim/neovim/commit/7c661207cc4357553ed2b057b6c8f28400024361.diff";
