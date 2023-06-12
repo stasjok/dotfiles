@@ -15,29 +15,29 @@ neovim-unwrapped.overrideAttrs (prev: {
       # vim.list_contains and vim.tbl_contains
       (fetchpatch {
         url = "https://github.com/neovim/neovim/commit/4d04feb6629cb049cb2a13ba35f0c8d3c6b67ff4.diff";
-        hash = "sha256-nY25tMOm/C4xLt75xUShY5JsMvEfLjB4xA1+9QrJS5w=";
         excludes = ["runtime/doc/news.txt" "runtime/lua/provider/health.lua"];
+        hash = "sha256-nY25tMOm/C4xLt75xUShY5JsMvEfLjB4xA1+9QrJS5w=";
       })
 
       # vim.tbl_islist and vim.tbl_isarray
       (fetchpatch {
         url = "https://github.com/neovim/neovim/commit/7caf0eafd83b5a92f2ff219b3a64ffae4174b9af.diff";
-        hash = "sha256-/ByTAbH5jVjNzX+0lIRa6SNkX2xrl1/QOPhmWD2E3ZM=";
         excludes = ["runtime/doc/news.txt"];
+        hash = "sha256-/ByTAbH5jVjNzX+0lIRa6SNkX2xrl1/QOPhmWD2E3ZM=";
       })
 
       # vim.keycode
       (fetchpatch {
         url = "https://github.com/neovim/neovim/commit/7e70ca0b4808bb9d8f19c28c8f93e8f2b9e0d0f0.diff";
-        hash = "sha256-CgtawbfttaYDEC9roXk9YVneafp0MyASDcmHktADnE8=";
         excludes = ["runtime/doc/news.txt"];
+        hash = "sha256-CgtawbfttaYDEC9roXk9YVneafp0MyASDcmHktADnE8=";
       })
 
       # vim.iter
       (fetchpatch {
         url = "https://github.com/neovim/neovim/commit/ab1edecfb7c73c82c2d5886cb8e270b44aca7d01.diff";
-        hash = "sha256-7ScZDAL2+bk1rTA75VfA5LG7MgdonOhsq1pPg7BaDJQ=";
         excludes = ["runtime/doc/news.txt"];
+        hash = "sha256-7ScZDAL2+bk1rTA75VfA5LG7MgdonOhsq1pPg7BaDJQ=";
       })
       (fetchpatch {
         url = "https://github.com/neovim/neovim/commit/6b96122453fda22dc44a581af1d536988c1adf41.diff";
@@ -90,8 +90,8 @@ neovim-unwrapped.overrideAttrs (prev: {
       # vim.ringbuf
       (fetchpatch {
         url = "https://github.com/neovim/neovim/commit/7c661207cc4357553ed2b057b6c8f28400024361.diff";
-        hash = "sha256-Lqn6s6XiKq4ek0H9+m4owSmHU0f8dn0eKOqylTm83yA=";
         excludes = ["runtime/doc/news.txt"];
+        hash = "sha256-Lqn6s6XiKq4ek0H9+m4owSmHU0f8dn0eKOqylTm83yA=";
       })
 
       # vim.system
