@@ -82,5 +82,12 @@ neovim-unwrapped.overrideAttrs (prev: {
         hash = "sha256-Lqn6s6XiKq4ek0H9+m4owSmHU0f8dn0eKOqylTm83yA=";
         excludes = ["runtime/doc/news.txt"];
       })
+
+      # Enable terminal reflow by default
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/c855eee919f2d4edc9b9fa91b277454290fbabfe.diff";
+        excludes = ["runtime/doc/news.txt" "cmake.deps/deps.txt"];
+        hash = "sha256-UPLecKSCSaB5y3sPtx0ekG8+aaXJoUiISo5WAoKpGSo=";
+      })
     ];
 })
