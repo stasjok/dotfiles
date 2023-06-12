@@ -26,6 +26,13 @@ neovim-unwrapped.overrideAttrs (prev: {
         excludes = ["runtime/doc/news.txt"];
       })
 
+      # vim.keycode
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/7e70ca0b4808bb9d8f19c28c8f93e8f2b9e0d0f0.diff";
+        hash = "sha256-CgtawbfttaYDEC9roXk9YVneafp0MyASDcmHktADnE8=";
+        excludes = ["runtime/doc/news.txt"];
+      })
+
       # vim.iter
       (fetchpatch {
         url = "https://github.com/neovim/neovim/commit/ab1edecfb7c73c82c2d5886cb8e270b44aca7d01.diff";
