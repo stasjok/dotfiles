@@ -113,5 +113,12 @@ neovim-unwrapped.overrideAttrs (prev: {
         excludes = ["runtime/doc/news.txt" "cmake.deps/deps.txt"];
         hash = "sha256-UPLecKSCSaB5y3sPtx0ekG8+aaXJoUiISo5WAoKpGSo=";
       })
+
+      # Restore marks after apply_text_edits
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/5282d3299c9b1b07f3e02a9014bc2632cf3b4fed.diff";
+        excludes = ["runtime/doc/news.txt"];
+        hash = "sha256-brlesieg2m4G0PTAfrdrACgKoe4kW5IyBdyp7mL2Jzk=";
+      })
     ];
 })
