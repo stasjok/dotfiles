@@ -8,7 +8,7 @@
   inherit (lib) filesystem flip forEach genAttrs getName optionalAttrs pipe removePrefix hasSuffix;
   inherit (builtins) isPath baseNameOf pathExists readFile replaceStrings concatStringsSep filter;
   inherit (lib) mkMerge mkBefore mkAfter mkForce;
-  inherit (pkgs) emptyDirectory fetchurl stdenvNoCC writeText runCommand;
+  inherit (pkgs) emptyDirectory fetchurl stdenvNoCC writeText runCommandLocal;
 
   cfg = config.programs.neovim;
 
@@ -38,7 +38,7 @@
         then baseNameOf file
         else getName file;
     in
-      runCommand (fileName + "c") {
+      runCommandLocal (fileName + "c") {
         buildInputs = [pkgs.neovim-unwrapped];
       } ''
         nvim -l ${writeText "lua-dump.lua" ''
