@@ -7,7 +7,7 @@
 - Install one of the [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts).
 
 I use [Windows Terminal](https://github.com/microsoft/terminal)
-and `FiraCode NF` font. [Settings](wt/settings.json).
+and `JetBrains Mono` font. [Settings](wt/settings.json).
 
 ## Home configuration
 
