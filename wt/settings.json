@@ -26,8 +26,15 @@
     "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
     "disableAnimations": true,
     "experimental.rendering.software": false,
+    "firstWindowPreference": "persistedWindowLayout",
     "initialRows": 40,
     "launchMode": "maximized",
+    "newTabMenu": 
+    [
+        {
+            "type": "remainingProfiles"
+        }
+    ],
     "profiles": 
     {
         "defaults": 
@@ -38,12 +45,12 @@
             "cursorShape": "filledBox",
             "font": 
             {
-                "face": "FiraCode NF",
+                "face": "JetBrainsMono Nerd Font",
                 "size": 10.0,
                 "weight": "normal"
             },
             "intenseTextStyle": "bold",
-            "padding": "4, 3",
+            "padding": "4, 6",
             "scrollbarState": "hidden",
             "suppressApplicationTitle": true
         },
@@ -386,11 +393,50 @@
         }
     ],
     "tabSwitcherMode": "mru",
-    "theme": "system-legacy",
+    "theme": "legacySystem",
     "themes": 
     [
         {
-            "name": "system-legacy"
+            "name": "legacyDark",
+            "tab": 
+            {
+                "background": null,
+                "showCloseButton": "always",
+                "unfocusedBackground": null
+            },
+            "window": 
+            {
+                "applicationTheme": "dark",
+                "useMica": false
+            }
+        },
+        {
+            "name": "legacyLight",
+            "tab": 
+            {
+                "background": null,
+                "showCloseButton": "always",
+                "unfocusedBackground": null
+            },
+            "window": 
+            {
+                "applicationTheme": "light",
+                "useMica": false
+            }
+        },
+        {
+            "name": "legacySystem",
+            "tab": 
+            {
+                "background": null,
+                "showCloseButton": "always",
+                "unfocusedBackground": null
+            },
+            "window": 
+            {
+                "applicationTheme": "system",
+                "useMica": false
+            }
         }
     ]
 }
