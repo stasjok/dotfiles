@@ -14,23 +14,32 @@ local root_files = {
 }
 
 function lua_ls.root_dir(fname)
-  local reuse_client
+  local root_dir = vim.fs.dirname(vim.fs.find(root_files, {
+    path = fname,
+    upward = true,
+    stop = vim.env.HOME,
+    type = "file",
+  })[1] or vim.fs.find({ "lua", ".git" }, {
+    path = fname,
+    upward = true,
+    stop = vim.env.HOME,
+    type = "directory",
+  })[1])
+  -- Re-use client when we open a plugin in nix store, but only if it's already in a library
   if vim.startswith(fname, "/nix/store/") or vim.startswith(fname, vim.env.VIMRUNTIME) then
-    reuse_client =
-      vim.tbl_get(vim.lsp.get_active_clients({ name = "lua_ls" }), 1, "config", "root_dir")
+    local client = vim.lsp.get_active_clients({ name = "lua_ls" })[1]
+    vim.print(vim.tbl_get(client, "config", "settings", "Lua", "workspace", "library"))
+    if
+      client
+      and vim.list_contains(
+        vim.tbl_get(client, "config", "settings", "Lua", "workspace", "library") or {},
+        root_dir
+      )
+    then
+      root_dir = client.config.root_dir
+    end
   end
-  return reuse_client
-    or vim.fs.dirname(vim.fs.find(root_files, {
-      path = fname,
-      upward = true,
-      stop = vim.env.HOME,
-      type = "file",
-    })[1] or vim.fs.find({ "lua", ".git" }, {
-      path = fname,
-      upward = true,
-      stop = vim.env.HOME,
-      type = "directory",
-    })[1])
+  return root_dir
 end
 
 -- Path to a type annotations
