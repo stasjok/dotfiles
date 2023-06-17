@@ -39,7 +39,7 @@
         else getName file;
     in
       runCommandLocal (fileName + "c") {
-        buildInputs = [pkgs.neovim-unwrapped];
+        nativeBuildInputs = [pkgs.neovim-unwrapped];
       } ''
         nvim -l ${writeText "lua-dump.lua" ''
           local chunk = assert(loadfile(_G.arg[1]))
