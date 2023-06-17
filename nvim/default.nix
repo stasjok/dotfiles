@@ -6,7 +6,7 @@
 }: let
   # Library
   inherit (lib) filesystem flip forEach genAttrs getName optionalAttrs pipe removePrefix hasSuffix;
-  inherit (builtins) isPath baseNameOf pathExists readFile replaceStrings concatStringsSep filter;
+  inherit (builtins) pathExists readFile replaceStrings concatStringsSep filter;
   inherit (lib) mkMerge mkBefore mkAfter mkForce;
   inherit (pkgs) emptyDirectory fetchurl stdenvNoCC writeText runCommandLocal;
 
@@ -28,37 +28,12 @@
     '';
   };
 
-  # Convert lua files to binary representation,
-  # leave other files as they are
-  nvimRuntimeFile = file:
-    if hasSuffix ".lua" file
-    then let
-      fileName =
-        if isPath file
-        then baseNameOf file
-        else getName file;
-    in
-      runCommandLocal (fileName + "c") {
-        nativeBuildInputs = [pkgs.neovim-unwrapped];
-      } ''
-        nvim -l ${writeText "lua-dump.lua" ''
-          local chunk = assert(loadfile(_G.arg[1]))
-          local out = assert(io.open(_G.arg[2], "wb"))
-          if out:write(string.dump(chunk)) then
-            out:close()
-          else
-            error("error writing to file")
-          end
-        ''} ${file} "$out"
-      ''
-    else file;
-
   # Make attributes for runtime attribute of a plugin
   mkRuntimeAttrs = dir:
     pipe dir [
       filesystem.listFilesRecursive
       (map (path: removePrefix (toString dir + "/") (toString path)))
-      (flip genAttrs (name: {source = nvimRuntimeFile /${dir}/${name};}))
+      (flip genAttrs (name: {source = /${dir}/${name};}))
     ];
 
   # Automatically read plugin config from ./plugins/<PLUGIN_NAME>/config.lua
@@ -235,15 +210,30 @@ in {
       ];
   };
 
-  # Convert init.lua to binary representation
-  xdg.configFile."nvim/init.lua" = mkForce {
-    source = nvimRuntimeFile (writeText "init.lua" (
-      concatStringsSep "\n" (filter (s: s != "") [
-        cfg.extraLuaConfig
-        cfg.generatedConfigs.lua
-      ])
-    ));
-  };
+  # Byte-compile init.lua
+  xdg.configFile."nvim/init.lua" = let
+    initLua = writeText "init.lua" ''
+      ${cfg.extraLuaConfig}
+      ${cfg.generatedConfigs.lua}
+    '';
+    initLuaCompiled =
+      runCommandLocal "init.luac" {
+        nativeBuildInputs = [pkgs.neovim-unwrapped];
+      } ''
+        nvim -l ${writeText "lua-dump.lua" ''
+          local chunk = assert(loadfile(_G.arg[1]))
+          local out = assert(io.open(_G.arg[2], "wb"))
+          if out:write(string.dump(chunk)) then
+            out:close()
+          else
+            error("error writing to file")
+          end
+        ''} ${initLua} "$out"
+      '';
+  in
+    mkForce {
+      source = initLuaCompiled;
+    };
 
   home.file = {
     # Vale configuration
