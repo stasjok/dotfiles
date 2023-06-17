@@ -154,6 +154,14 @@ in {
       clang-tools
     ];
 
+    # init.lua before plugins
+    # Read `init.lua` file first, then read all .lua files in `init.lua.d` directory.
+    extraLuaConfig = pipe ([./init.lua] ++ filesystem.listFilesRecursive ./init.lua.d) [
+      (filter (name: hasSuffix ".lua" name))
+      (map readFile)
+      (concatStringsSep "\n")
+    ];
+
     # Neovim plugins
     plugins = with pkgs.vimPlugins; let
       # nvim-treesitter with all tree-sitter parsers + extra parsers
@@ -165,8 +173,6 @@ in {
     in
       mkMerge [
         (mkBefore (mkPluginList [
-          # init.lua before plugins
-          (pluginConfig ./init_before.lua)
           # Load colorscheme before other plugins
           catppuccin-nvim
         ]))
