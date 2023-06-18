@@ -143,7 +143,7 @@ in {
         name = "tree-sitter-parsers";
         paths =
           attrValues nvim-treesitter.grammarPlugins
-          ++ (map nvim-treesitter.grammarToPlugin (with pkgs.tree-sitter-grammars; [
+          ++ (map pkgs.neovimUtils.grammarToPlugin (with pkgs.tree-sitter-grammars; [
             tree-sitter-jinja2
           ]));
       };
