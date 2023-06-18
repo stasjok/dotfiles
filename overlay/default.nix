@@ -13,6 +13,10 @@ final: prev: {
   # Neovim overrides
   neovim-unwrapped = prev.callPackage ../packages/neovim {inherit (prev) neovim-unwrapped;};
 
+  # Python packages
+  pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [(prev.callPackage ../packages/python {})];
+
+  # Tree-sitter grammars
   tree-sitter = prev.tree-sitter.override {
     extraGrammars = {
       tree-sitter-jinja2 = {
@@ -27,6 +31,6 @@ final: prev: {
     };
   };
 
-  # Python packages
-  pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [(prev.callPackage ../packages/python {})];
+  # Do not require unfree license of vscode
+  vscode-langservers-extracted = prev.vscode-langservers-extracted.override {vscode = final.vscodium;};
 }
