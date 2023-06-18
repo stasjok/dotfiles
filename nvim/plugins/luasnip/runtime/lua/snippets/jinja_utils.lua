@@ -1,31 +1,13 @@
-local s = require("luasnip.nodes.snippet").S
-local sn = require("luasnip.nodes.snippet").SN
-local t = require("luasnip.nodes.textNode").T
-local f = require("luasnip.nodes.functionNode").F
-local i = require("luasnip.nodes.insertNode").I
-local d = require("luasnip.nodes.dynamicNode").D
-local r = require("luasnip.nodes.restoreNode").R
-local l = require("luasnip.extras").lambda
-local rep = require("luasnip.extras").rep
-local p = require("luasnip.extras").partial
-local cr = require("snippets.nodes").cr
-local wn = require("snippets.nodes").wrapped_nodes
-local select_dedent = require("snippets.functions").select_dedent
-local expand_conds = require("snippets.expand_conditions")
-local show_conds = require("snippets.show_conditions")
-local get_node_text = vim.treesitter.get_node_text
-local get_captures_at_cursor = require("treesitter.utils").get_captures_at_cursor
-local get_node_text_before_cursor = require("treesitter.utils").get_node_text_before_cursor
-
 local jinja_utils = {}
 
 ---Returns `true` if one of the `strings` are found in current file path
 ---@param strings string|string[]
 ---@return boolean
 local function match_file_path(strings)
-  strings = type(strings) == "table" and strings or { strings }
-  ---@diagnostic disable-next-line: missing-parameter
-  local path = vim.fn.expand("%:p:h") --[[@as string]]
+  if type(strings) == "string" then
+    strings = { strings }
+  end
+  local path = vim.fn.expand("%:p:h")
   for _, str in ipairs(strings) do
     if path:find(str, 1, true) then
       return true
@@ -46,87 +28,109 @@ local function is_ansible()
   return vim.bo.filetype == "yaml.ansible" or match_file_path({ "ansible", "role" })
 end
 
+-- Flags to avoid setting queries twice
+local is_jinja_query_set = false
+local is_yaml_query_set = false
+
+--- Set `ft_func` jinja2 query
+local function set_jinja_query()
+  if not is_jinja_query_set then
+    is_jinja_query_set = true
+
+    vim.treesitter.query.set(
+      "jinja2",
+      "ft_func",
+      [[
+        (jinja_stuff) @jinja
+        (text) @text
+      ]]
+    )
+  end
+end
+
+--- Set `ft_func` yaml query
+local function set_yaml_query()
+  if not is_yaml_query_set then
+    is_yaml_query_set = true
+
+    vim.treesitter.query.set(
+      "yaml",
+      "ft_func",
+      [[
+        (block_mapping_pair
+          key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
+          value: (flow_node [
+            (plain_scalar (string_scalar))
+            (double_quote_scalar)
+            (single_quote_scalar)
+          ] @value))
+
+        (block_mapping_pair
+          key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
+          value: (block_node
+            (block_scalar) @value))
+
+        (block_mapping_pair
+          key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
+          value: (block_node
+            (block_sequence
+              (block_sequence_item
+                (flow_node [
+                  (plain_scalar (string_scalar))
+                  (double_quote_scalar)
+                  (single_quote_scalar)
+                ] @value)))))
+
+        (block_mapping_pair
+          key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
+          value: (block_node
+            (block_sequence
+              (block_sequence_item
+                (block_node
+                  (block_scalar) @value)))))
+
+        (block_mapping_pair
+          key: (flow_node) @key (#any-of? @key "when" "that" "var")
+          value: (flow_node [
+            (plain_scalar (string_scalar))
+            (double_quote_scalar)
+            (single_quote_scalar)
+          ] @jinja))
+
+        (block_mapping_pair
+          key: (flow_node) @key (#any-of? @key "when" "that" "var")
+          value: (block_node
+            (block_scalar) @jinja))
+
+        (block_mapping_pair
+          key: (flow_node) @key (#any-of? @key "when" "that" "var")
+          value: (block_node
+            (block_sequence
+              (block_sequence_item
+                (flow_node [
+                  (plain_scalar (string_scalar))
+                  (double_quote_scalar)
+                  (single_quote_scalar)
+                ] @jinja)))))
+
+        (block_mapping_pair
+          key: (flow_node) @key (#any-of? @key "when" "that" "var")
+          value: (block_node
+            (block_sequence
+              (block_sequence_item
+                (block_node
+                  (block_scalar) @jinja)))))
+      ]]
+    )
+  end
+end
+
 ---Returns LuaSnip `ft_func` for jinja or sls filetypes
 ---@param ft "jinja" | "sls" | "ansible" Filetype for `ft_func`
 ---@return fun(): string[]
 function jinja_utils.jinja_ft_func(ft)
-  vim.treesitter.query.set(
-    "jinja2",
-    "ft_func",
-    [[
-      (jinja_stuff) @jinja
-      (text) @text
-    ]]
-  )
-  vim.treesitter.query.set(
-    "yaml",
-    "ft_func",
-    [[
-      (block_mapping_pair
-        key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
-        value: (flow_node [
-          (plain_scalar (string_scalar))
-          (double_quote_scalar)
-          (single_quote_scalar)
-        ] @value))
-
-      (block_mapping_pair
-        key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
-        value: (block_node
-          (block_scalar) @value))
-
-      (block_mapping_pair
-        key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
-        value: (block_node
-          (block_sequence
-            (block_sequence_item
-              (flow_node [
-                (plain_scalar (string_scalar))
-                (double_quote_scalar)
-                (single_quote_scalar)
-              ] @value)))))
-
-      (block_mapping_pair
-        key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
-        value: (block_node
-          (block_sequence
-            (block_sequence_item
-              (block_node
-                (block_scalar) @value)))))
-
-      (block_mapping_pair
-        key: (flow_node) @key (#any-of? @key "when" "that" "var")
-        value: (flow_node [
-          (plain_scalar (string_scalar))
-          (double_quote_scalar)
-          (single_quote_scalar)
-        ] @jinja))
-
-      (block_mapping_pair
-        key: (flow_node) @key (#any-of? @key "when" "that" "var")
-        value: (block_node
-          (block_scalar) @jinja))
-
-      (block_mapping_pair
-        key: (flow_node) @key (#any-of? @key "when" "that" "var")
-        value: (block_node
-          (block_sequence
-            (block_sequence_item
-              (flow_node [
-                (plain_scalar (string_scalar))
-                (double_quote_scalar)
-                (single_quote_scalar)
-              ] @jinja)))))
-
-      (block_mapping_pair
-        key: (flow_node) @key (#any-of? @key "when" "that" "var")
-        value: (block_node
-          (block_sequence
-            (block_sequence_item
-              (block_node
-                (block_scalar) @jinja)))))
-    ]]
-  )
+  local get_captures_at_cursor = require("treesitter.utils").get_captures_at_cursor
+  local get_node_text_before_cursor = require("treesitter.utils").get_node_text_before_cursor
 
   -- List of jinja filters filetypes
   local filters_filetypes = setmetatable({
@@ -209,6 +213,8 @@ function jinja_utils.jinja_ft_func(ft)
 
   local ft_funcs = {
     jinja = function()
+      set_jinja_query()
+
       local filetypes = {}
       local captures = get_captures_at_cursor("ft_func", 0, "jinja2")
       for _, capture in ipairs(captures) do
@@ -223,11 +229,14 @@ function jinja_utils.jinja_ft_func(ft)
       return filetypes
     end,
     ansible = function()
+      set_yaml_query()
+      set_jinja_query()
+
       local filetypes = {}
       local captures = get_captures_at_cursor("ft_func", 0, "yaml")
       for _, capture in ipairs(captures) do
         if capture[1] == "value" then
-          local node_text = get_node_text(capture[2], 0)
+          local node_text = vim.treesitter.get_node_text(capture[2], 0)
           local jinja_captures = get_captures_at_cursor("ft_func", 0, "jinja2", capture[2])
           for _, jinja_capture in ipairs(jinja_captures) do
             if jinja_capture[1] == "jinja" then
@@ -284,6 +293,9 @@ local get_lstrip_blocks = get_option("jinja_lstrip_blocks", false)
 ---A function for dynamicNode that returns jinja block start
 ---@return table
 function jinja_utils.block_start()
+  local sn = require("luasnip.nodes.snippet").SN
+  local t = require("luasnip.nodes.textNode").T
+  local i = require("luasnip.nodes.insertNode").I
   local trim_blocks, lstrip_blocks = get_trim_block(), get_lstrip_blocks()
   local block = trim_blocks and "{% " or "{%- "
   local nodes = { t(block) }
@@ -314,6 +326,18 @@ local function jinja_statement_generator(block, inline)
   ---@param opts? JinjaGeneratorOpts Options affecting resulting snippet
   ---@return table
   return function(snip_args, nodes, opts)
+    local s = require("luasnip.nodes.snippet").S
+    local t = require("luasnip.nodes.textNode").T
+    local i = require("luasnip.nodes.insertNode").I
+    local r = require("luasnip.nodes.restoreNode").R
+    local f = require("luasnip.nodes.functionNode").F
+    local d = require("luasnip.nodes.dynamicNode").D
+    local rep = require("luasnip.extras").rep
+    local l = require("luasnip.extras").lambda
+    local p = require("luasnip.extras").partial
+    local cr = require("snippets.nodes").cr
+    local wn = require("snippets.nodes").wrapped_nodes
+    local select_dedent = require("snippets.functions").select_dedent
     nodes = nodes or {}
     opts = opts or {}
     local statement = type(snip_args) == "string" and snip_args or snip_args.trig
@@ -402,6 +426,8 @@ jinja_utils.jinja_inline_block = jinja_statement_generator(true, true)
 ---@param statements {dscr?: string, nodes?: table|boolean, block?: boolean, inline?: boolean, no_space?: boolean, end_statement?: string, trim_block?: boolean, append_newline?:boolean} Statement definitions
 ---@return table
 function jinja_utils.jinja_statement_snippets(statements)
+  local expand_conds = require("snippets.expand_conditions")
+  local show_conds = require("snippets.show_conditions")
   local snippets = {}
   for trig, opts in pairs(statements) do
     local snip_fun = opts.block ~= false and jinja_utils.jinja_block or jinja_utils.jinja_statement
@@ -429,6 +455,8 @@ end
 ---@param nodes boolean | table If `false`, returns `name`, if `true` returns `name($1)`, if `table` returns `name($nodes)`
 ---@return table #Nodes
 local function jinja_nodes_for_filter(name, nodes)
+  local t = require("luasnip.nodes.textNode").T
+  local i = require("luasnip.nodes.insertNode").I
   if nodes then
     local filter_start = t(name .. "(")
     if type(nodes) == "table" then
@@ -455,6 +483,7 @@ end
 ---@param filters {dscr?: string, nodes?: table|boolean} Filter or test definitions
 ---@return table
 function jinja_utils.jinja_filter_snippets(filters)
+  local s = require("luasnip.nodes.snippet").S
   local snippets = {}
   for trig, opts in pairs(filters) do
     local dscr = opts.dscr or trig

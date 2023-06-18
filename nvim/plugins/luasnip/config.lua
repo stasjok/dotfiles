@@ -1,13 +1,8 @@
 -- Snippets
 do
   local luasnip = require("luasnip")
-  local s = luasnip.snippet
-  local i = luasnip.insert_node
-  local c = luasnip.choice_node
-  local on_the_fly = require("luasnip.extras.otf").on_the_fly
   local extend_load_ft = require("luasnip.extras.filetype_functions").extend_load_ft
   local jinja_ft_func = require("snippets.jinja_utils").jinja_ft_func
-  local buf_get_name = vim.api.nvim_buf_get_name
   local map = vim.keymap.set
 
   -- Filetypes
@@ -19,7 +14,7 @@ do
     sls = jinja_ft_func("sls"),
     ansible = jinja_ft_func("ansible"),
     lua = function()
-      local buf_name = buf_get_name(0)
+      local buf_name = vim.api.nvim_buf_get_name(0)
       if buf_name:sub(-9, #buf_name) == "_spec.lua" then
         return { "lua", "lua_spec" }
       else
@@ -42,7 +37,7 @@ do
     updateevents = "TextChanged,TextChangedI",
     region_check_events = "InsertEnter",
     store_selection_keys = "<C-H>",
-    snip_env = nil,
+    snip_env = { __snip_env_behaviour = "set" },
     ft_func = ft_func,
     load_ft_func = extend_load_ft({
       jinja = {
@@ -83,6 +78,9 @@ do
       },
     }),
     parser_nested_assembler = function(pos, snip)
+      local s = require("luasnip.nodes.snippet").S
+      local i = require("luasnip.nodes.insertNode").I
+      local c = require("luasnip.nodes.choiceNode").C
       snip.pos = nil
       -- Have to create temporary snippet, see: https://github.com/L3MON4D3/LuaSnip/issues/400
       local snip_text = s("", snip:copy()):get_static_text()
@@ -108,7 +106,7 @@ do
   local function on_the_fly_insert()
     local register = vim.fn.getcharstr()
     if #register == 1 and register:match('[%w"*+-]') then
-      on_the_fly(register)
+      require("luasnip.extras.otf").on_the_fly(register)
     end
   end
 
@@ -131,7 +129,7 @@ do
 
   -- Load snippets
   local opts = {
-    paths = vim.api.nvim_get_runtime_file("snippets", true),
+    paths = vim.fs.joinpath(vim.fn.stdpath("config"), "snippets"),
   }
   require("luasnip.loaders.from_vscode").lazy_load(opts)
   require("luasnip.loaders.from_snipmate").lazy_load(opts)

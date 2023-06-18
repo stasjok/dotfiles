@@ -1,4 +1,4 @@
-local luasnip_expand_conditions = require("luasnip.extras.expand_conditions")
+local luasnip_expand_conditions = require("luasnip.extras.conditions.expand")
 
 local expand_conditions = {}
 
