@@ -6,9 +6,9 @@
 }: let
   # Library
   inherit (lib) filesystem flip forEach genAttrs getName optionalAttrs pipe removePrefix hasSuffix;
-  inherit (builtins) pathExists readFile replaceStrings concatStringsSep filter;
+  inherit (builtins) pathExists readFile replaceStrings concatStringsSep filter attrValues;
   inherit (lib) mkMerge mkBefore mkAfter mkForce;
-  inherit (pkgs) emptyDirectory fetchurl stdenvNoCC writeText runCommandLocal;
+  inherit (pkgs) emptyDirectory fetchurl stdenvNoCC writeText runCommandLocal symlinkJoin;
 
   cfg = config.programs.neovim;
 
@@ -139,12 +139,14 @@ in {
 
     # Neovim plugins
     plugins = with pkgs.vimPlugins; let
-      # nvim-treesitter with all tree-sitter parsers + extra parsers
-      nvim-treesitterWithPlugins = nvim-treesitter.withPlugins (p:
-        nvim-treesitter.allGrammars
-        ++ (with p; [
-          tree-sitter-jinja2
-        ]));
+      tree-sitter-parsers = symlinkJoin {
+        name = "tree-sitter-parsers";
+        paths =
+          attrValues nvim-treesitter.grammarPlugins
+          ++ (map nvim-treesitter.grammarToPlugin (with pkgs.tree-sitter-grammars; [
+            tree-sitter-jinja2
+          ]));
+      };
     in
       mkMerge [
         (mkBefore (mkPluginList [
@@ -160,7 +162,8 @@ in {
           nvim-web-devicons
           tmux-nvim
           # Tree-sitter
-          nvim-treesitterWithPlugins
+          nvim-treesitter
+          tree-sitter-parsers
           playground
           # LSP
           nvim-lspconfig
