@@ -10,14 +10,6 @@
         "path": "./sls.json"
       },
       {
-        "language": "ansible",
-        "path": "./ansible.json"
-      },
-      {
-        "language": "yaml.ansible",
-        "path": "./ansible.json"
-      },
-      {
         "language": "mediawiki",
         "path": "./mediawiki.json"
       },
@@ -30,11 +22,10 @@
         "path": "./sh.json"
       },
       {
-        "language": "snippets",
-        "path": "./snippets.json"
-      },
-      {
-        "language": ["gitcommit", "NeogitCommitMessage"],
+        "language": [
+          "gitcommit",
+          "NeogitCommitMessage"
+        ],
         "path": "./gitcommit.json"
       }
     ]
