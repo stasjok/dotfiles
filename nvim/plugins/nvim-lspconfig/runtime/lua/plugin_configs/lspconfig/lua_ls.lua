@@ -1,6 +1,3 @@
-local get_runtime = vim.api.nvim__get_runtime
-local fs_realpath = vim.loop.fs_realpath
-
 local lua_ls = {}
 
 local root_files = {
@@ -42,19 +39,22 @@ function lua_ls.root_dir(fname)
 end
 
 -- Path to a type annotations
-local types_path =
-  vim.iter(get_runtime({ "types/stable" }, false, { is_lua = true })):map(fs_realpath):next()
+local types_path = vim
+  .iter(vim.api.nvim_get_runtime_file("pack/*/opt/neodev.nvim/types/stable", false))
+  :map(vim.uv.fs_realpath)
+  :next()
 
 -- Lazy library
 local library = vim.defaulttable(function()
   local std_config = vim.fn.stdpath("config")
   local library = vim
-    .iter(get_runtime({ "" }, true, { is_lua = true }))
-    :map(fs_realpath)
+    .iter(vim.api.nvim__get_runtime({ "" }, true, { is_lua = true }))
+    :map(vim.uv.fs_realpath)
     :filter(function(path)
       return path ~= std_config
     end)
     :totable()
+  table.insert(library, types_path)
   table.insert(library, "${3rd}/busted/library")
   table.insert(library, "${3rd}/luassert/library")
   return library

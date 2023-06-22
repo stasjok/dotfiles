@@ -57,11 +57,13 @@
     in
       pluginDefaults pluginNormalized.plugin // pluginNormalized);
 
-  # Empty plugin
-  emptyPlugin = {
-    plugin = emptyDirectory;
+  # Optional plugin
+  optionalPlugin = plugin: {
+    inherit plugin;
     optional = true;
   };
+  # Empty plugin
+  emptyPlugin = optionalPlugin emptyDirectory;
   # Empty plugin with config
   pluginConfig = config: emptyPlugin // {config = readFile config;};
   # Empty plugin with runtime
@@ -168,7 +170,7 @@ in {
           # LSP
           nvim-lspconfig
           lsp_signature-nvim
-          neodev-nvim
+          (optionalPlugin neodev-nvim)
           null-ls-nvim
           # Autocompletion
           nvim-cmp
