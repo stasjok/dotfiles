@@ -30,7 +30,4 @@ final: prev: {
       };
     };
   };
-
-  # Do not require unfree license of vscode
-  vscode-langservers-extracted = prev.vscode-langservers-extracted.override {vscode = final.vscodium;};
 }
