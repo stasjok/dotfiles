@@ -55,7 +55,7 @@ local function term_start_insert()
     end
   end
   if buf_end then
-    command("startinsert")
+    vim.api.nvim_feedkeys("i", "", false)
   end
 end
 
