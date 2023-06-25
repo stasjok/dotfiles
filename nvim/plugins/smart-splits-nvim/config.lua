@@ -21,7 +21,11 @@ do
     map("n", lhs, smart_splits[action])
 
     -- First leave insert/visual/terminal mode, then move
-    map({ "i", "v", "t" }, lhs, function()
+    map({ "i", "t" }, lhs, function()
+      vim.cmd.stopinsert()
+      smart_splits[action]()
+    end)
+    map("v", lhs, function()
       vim.api.nvim_feedkeys(vim.keycode("<C-\\><C-N>"), "nx", false)
       smart_splits[action]()
     end)
