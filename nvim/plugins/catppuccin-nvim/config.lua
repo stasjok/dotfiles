@@ -1,4 +1,3 @@
--- Colorscheme
 require("catppuccin").setup({
   flavour = "macchiato",
   background = {

@@ -1,4 +1,3 @@
--- smart-splits.nvim
 do
   local smart_splits = require("smart-splits")
   local map = vim.keymap.set

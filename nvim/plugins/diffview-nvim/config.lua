@@ -1,4 +1,3 @@
--- diffview.nvim
 do
   local diffview = require("diffview")
 

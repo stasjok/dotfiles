@@ -1,4 +1,3 @@
--- LSP
 do
   local utils = require("plugin_configs.lspconfig.utils")
 

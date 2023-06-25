@@ -1,4 +1,3 @@
--- Null-ls
 do
   local builtins = require("null-ls").builtins
   local formatting = builtins.formatting

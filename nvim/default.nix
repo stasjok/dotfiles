@@ -39,12 +39,13 @@
   # Automatically read plugin config from ./plugins/<PLUGIN_NAME>/config.lua
   # and add all files from ./plugins/<PLUGIN_NAME>/runtime/ to runtime
   pluginDefaults = plugin: let
-    normalizedName = replaceStrings ["."] ["-"] (getName plugin);
+    name = getName plugin;
+    normalizedName = replaceStrings ["."] ["-"] name;
     configPath = ./plugins/${normalizedName}/config.lua;
     runtimeDir = ./plugins/${normalizedName}/runtime;
   in
     {type = "lua";}
-    // optionalAttrs (pathExists configPath) {config = readFile configPath;}
+    // optionalAttrs (pathExists configPath) {config = "-- ${name}\n" + readFile configPath;}
     // optionalAttrs (pathExists runtimeDir) {runtime = mkRuntimeAttrs runtimeDir;};
 
   # Apply defaults to a list of plugins
@@ -219,8 +220,7 @@ in {
   xdg.configFile."nvim/init.lua" = let
     initLua = writeText "init.lua" ''
       ${cfg.extraLuaConfig}
-      ${cfg.generatedConfigs.lua}
-    '';
+      ${cfg.generatedConfigs.lua}'';
     initLuaCompiled =
       runCommandLocal "init.luac" {
         nativeBuildInputs = [pkgs.neovim-unwrapped];

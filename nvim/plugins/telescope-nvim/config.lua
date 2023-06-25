@@ -1,4 +1,3 @@
--- Telescope
 do
   local telescope = require("telescope")
   local builtin = require("telescope.builtin")

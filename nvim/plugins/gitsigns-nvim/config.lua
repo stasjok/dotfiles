@@ -1,4 +1,3 @@
--- gitsigns.nvim
 do
   local gitsigns = require("gitsigns")
 

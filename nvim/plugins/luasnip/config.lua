@@ -1,4 +1,3 @@
--- Snippets
 do
   local luasnip = require("luasnip")
   local extend_load_ft = require("luasnip.extras.filetype_functions").extend_load_ft

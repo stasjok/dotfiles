@@ -1,4 +1,3 @@
--- surround.nvim
 do
   local map = require("map").map
   local del_map = vim.api.nvim_del_keymap

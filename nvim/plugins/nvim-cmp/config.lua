@@ -1,4 +1,3 @@
--- Completion
 do
   local feedkeys = require("map").feedkeys
   local completion_kinds = require("plugin_configs.lspconfig.utils").completion_kinds
