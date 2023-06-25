@@ -106,7 +106,7 @@ create_autocmd("VimEnter", {
   desc = "Open terminal automatically on startup",
   once = true,
   callback = function()
-    if vim.o.columns >= 200 then
+    if vim.o.columns >= 200 and vim.api.nvim_buf_get_name(0) == "" then
       vim.cmd.vsplit()
       vim.cmd.wincmd("l")
       terminal_open()
