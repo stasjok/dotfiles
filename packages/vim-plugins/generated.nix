@@ -27,18 +27,6 @@ final: prev:
     meta.homepage = "https://github.com/ur4ltz/surround.nvim/";
   };
 
-  tmux-nvim = buildVimPluginFrom2Nix {
-    pname = "tmux.nvim";
-    version = "2023-05-29";
-    src = fetchFromGitHub {
-      owner = "aserowy";
-      repo = "tmux.nvim";
-      rev = "03e28fdaa2ef54b975ba1930f1e69b5e231dedc9";
-      sha256 = "0hr8f385mdr9dpf7fzyf4a2swm7pyrwl64pzihqphccsjwijiwj1";
-    };
-    meta.homepage = "https://github.com/aserowy/tmux.nvim/";
-  };
-
   vim-fish-syntax = buildVimPluginFrom2Nix {
     pname = "vim-fish-syntax";
     version = "2023-02-17";

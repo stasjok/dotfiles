@@ -162,7 +162,7 @@ in {
           mini-nvim
           # Interface
           nvim-web-devicons
-          tmux-nvim
+          smart-splits-nvim
           # Tree-sitter
           nvim-treesitter
           tree-sitter-parsers
