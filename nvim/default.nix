@@ -5,9 +5,9 @@
   ...
 }: let
   # Library
-  inherit (lib) filesystem flip forEach genAttrs getName optionalAttrs pipe removePrefix hasSuffix;
-  inherit (builtins) pathExists readFile replaceStrings concatStringsSep filter attrValues;
-  inherit (lib) mkMerge mkBefore mkAfter mkForce;
+  inherit (lib) filesystem flip forEach genAttrs getName optionalAttrs pipe removePrefix hasSuffix remove;
+  inherit (builtins) pathExists readFile replaceStrings concatStringsSep filter attrValues foldl';
+  inherit (lib) mkMerge mkAfter mkForce;
   inherit (pkgs) emptyDirectory fetchurl stdenvNoCC writeText runCommandLocal symlinkJoin;
 
   cfg = config.programs.neovim;
@@ -57,6 +57,68 @@
         else {inherit plugin;};
     in
       pluginDefaults pluginNormalized.plugin // pluginNormalized);
+
+  # Merge multiple plugins into one. Only for start plugins with lua configs.
+  # Doesn't support dependencies.
+  mergePlugins = name: plugins: let
+    inherit (pkgs.vimUtils) vimGenDocHook toVimPlugin;
+
+    plugins' = forEach plugins (plugin:
+      plugin.overrideAttrs (prev: {
+        # Remove help tags from individual plugins
+        nativeBuildInputs = remove vimGenDocHook prev.nativeBuildInputs or [];
+        configurePhase =
+          concatStringsSep "\n"
+          (filter (s: s != ":") [
+            prev.configurePhase or ":"
+            "rm -f doc/tags"
+          ]);
+      }));
+
+    mergedPlugin = toVimPlugin (pkgs.buildEnv {
+      inherit name;
+      paths = plugins';
+      pathsToLink = [
+        # :h rtp
+        "/autoload"
+        "/colors"
+        "/compiler"
+        "/doc"
+        "/ftplugin"
+        "/indent"
+        "/keymap"
+        "/lang"
+        "/lua"
+        "/pack"
+        "/parser"
+        "/plugin"
+        "/queries"
+        "/rplugin"
+        "/spell"
+        "/syntax"
+        "/tutor"
+        "/after"
+        # plenary.nvim
+        "/data"
+        # neodev.nvim
+        "/types/stable"
+        # telescope-fzf-native-nvim
+        "/build"
+      ];
+      # Activate vimGenDocHook manually
+      postBuild = ''
+        . ${vimGenDocHook}/nix-support/setup-hook
+        vimPluginGenTags
+      '';
+    });
+
+    mergedPluginWithConfigs = foldl' (p1: p2: {
+      plugin = mergedPlugin;
+      config = concatStringsSep "\n" (filter (s: s != "") [p1.config or "" p2.config or ""]);
+      runtime = p1.runtime or {} // p2.runtime or {};
+      type = "lua";
+    }) {} (mkPluginList plugins);
+  in [mergedPluginWithConfigs];
 
   # Optional plugin
   optionalPlugin = plugin: {
@@ -152,12 +214,9 @@ in {
       };
     in
       mkMerge [
-        (mkBefore (mkPluginList [
-          # Load colorscheme before other plugins
+        (mergePlugins "plugin-pack" [
+          # Colorscheme
           catppuccin-nvim
-        ]))
-
-        (mkPluginList [
           # Libraries
           plenary-nvim
           mini-nvim
@@ -171,7 +230,6 @@ in {
           # LSP
           nvim-lspconfig
           lsp_signature-nvim
-          (optionalPlugin neodev-nvim)
           null-ls-nvim
           # Autocompletion
           nvim-cmp
@@ -199,6 +257,10 @@ in {
           ansible-vim
           salt-vim
           mediawiki-vim
+        ])
+
+        (mkPluginList [
+          (optionalPlugin neodev-nvim)
         ])
 
         (mkAfter (mkPluginList [
