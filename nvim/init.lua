@@ -16,9 +16,6 @@ for _, dir in ipairs(vim.opt.runtimepath:get()) do
   end
 end
 
--- Enable the experimental Lua module loader
-vim.loader.enable()
-
 -- Set <Leader> to <Space> and <LocalLeader> to `\`
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"

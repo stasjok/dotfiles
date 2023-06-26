@@ -38,34 +38,43 @@ function lua_ls.root_dir(fname)
   return root_dir
 end
 
--- Path to a type annotations
-local types_path = vim
-  .iter(vim.api.nvim_get_runtime_file("pack/*/opt/neodev.nvim/types/stable", false))
-  :map(vim.uv.fs_realpath)
-  :next()
+---Read a contents of a file. Errors in case of errors.
+---@param filename string
+---@return string
+local function read_file(filename)
+  local file = assert(io.open(filename, "r"))
+  local content = assert(file:read("*a"))
+  file:close()
+  return content
+end
 
--- Lazy library
-local library = vim.defaulttable(function()
-  local std_config = vim.fn.stdpath("config")
-  local library = vim
-    .iter(vim.api.nvim__get_runtime({ "" }, true, { is_lua = true }))
-    :map(vim.uv.fs_realpath)
-    :filter(function(path)
-      return path ~= std_config
-    end)
-    :totable()
-  table.insert(library, types_path)
-  table.insert(library, "${3rd}/busted/library")
-  table.insert(library, "${3rd}/luassert/library")
-  return library
-end)
+local plugins = {}
+do
+  local ok, plugins_json =
+    pcall(read_file, vim.api.nvim_get_runtime_file("lua_ls_library.json", false)[1])
+  if ok then
+    plugins = vim.json.decode(plugins_json) --[[@as {[string]: string}]]
+  else
+    vim.notify(plugins_json, vim.log.levels.WARN)
+  end
+end
+
+-- Path to type annotations
+local types_path = plugins["neodev-nvim"]
+-- Path to neovim runtime
+local runtime_path = vim.fs.joinpath(plugins["neovim-unwrapped"], "share/nvim/runtime")
+plugins["neovim-unwrapped"] = runtime_path
+local library_for_dotfiles = vim.list_extend({
+  "${3rd}/busted/library",
+  "${3rd}/luassert/library",
+}, vim.tbl_values(plugins))
 
 ---Change library
 ---@param config table
 ---@param root_dir string
 function lua_ls.on_new_config(config, root_dir)
   if vim.endswith(root_dir, "/dotfiles") then
-    config.settings.Lua.workspace.library = library.dotfiles
+    config.settings.Lua.workspace.library = library_for_dotfiles
     config.settings.Lua.runtime.path = {
       -- meta/3rd library from lua-language-server
       "library/?.lua",
@@ -104,7 +113,7 @@ lua_ls.settings = {
       checkThirdParty = false,
       library = {
         types_path,
-        vim.env.VIMRUNTIME,
+        runtime_path,
       },
       ignoreDir = {
         "/types/nightly/",
