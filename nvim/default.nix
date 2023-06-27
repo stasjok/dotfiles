@@ -230,8 +230,6 @@ in {
           "/after"
           # plenary.nvim
           "/data"
-          # neodev.nvim
-          "/types/stable"
           # telescope-fzf-native-nvim
           "/build"
         ];
