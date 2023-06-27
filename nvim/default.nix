@@ -131,19 +131,15 @@ in {
 
     # Neovim plugins
     plugins = let
+      # All plugins with its dependencies are placed in a start directory.
+      # Python dependencies aren't supported.
       plugins = with pkgs.vimPlugins; let
-        # Remove invalid lua files
-        nvim-treesitter' = nvim-treesitter.overrideAttrs (prev: {
-          postPatch = prev.postPatch + "rm -r tests";
-        });
-        tree-sitter-parsers = pkgs.symlinkJoin {
-          name = "tree-sitter-parsers";
-          paths =
-            builtins.attrValues nvim-treesitter.grammarPlugins
-            ++ (builtins.map pkgs.neovimUtils.grammarToPlugin (with pkgs.tree-sitter-grammars; [
-              tree-sitter-jinja2
-            ]));
-        };
+        # nvim-treesitter with tree-sitter parsers
+        nvim-treesitter' = nvim-treesitter.withPlugins (parsers:
+          nvim-treesitter.allGrammars
+          ++ (with parsers; [
+            tree-sitter-jinja2
+          ]));
       in [
         # Colorscheme
         catppuccin-nvim
@@ -155,7 +151,6 @@ in {
         smart-splits-nvim
         # Tree-sitter
         nvim-treesitter'
-        tree-sitter-parsers
         playground
         # LSP
         nvim-lspconfig
@@ -189,8 +184,14 @@ in {
         mediawiki-vim
       ];
 
+      # Extend plugin list with dependencies
+      allPlugins = let
+        pluginWithDeps = plugin: [plugin] ++ builtins.concatMap pluginWithDeps plugin.dependencies or [];
+      in
+        lib.unique (builtins.concatMap pluginWithDeps plugins);
+
       # Byte-compile all plugins, remove help tags
-      plugins' = lib.forEach plugins (plugin:
+      allPlugins' = lib.forEach allPlugins (plugin:
         plugin.overrideAttrs (prev: {
           nativeBuildInputs =
             lib.remove pkgs.vimUtils.vimGenDocHook prev.nativeBuildInputs or []
@@ -206,7 +207,7 @@ in {
       # Merge all plugins to one pack
       mergedPlugins = pkgs.vimUtils.toVimPlugin (pkgs.buildEnv {
         name = "plugin-pack";
-        paths = plugins';
+        paths = allPlugins';
         pathsToLink = [
           # :h rtp
           "/autoload"
@@ -268,7 +269,7 @@ in {
         lib.optionalAttrs (builtins.pathExists runtimeDir) (mkRuntimeAttrs runtimeDir);
 
       # List of plugin names
-      pluginNames = builtins.map (plugin: lib.getName plugin) plugins;
+      pluginNames = builtins.map lib.getName plugins;
 
       # Merge all plugin configs plus init.lua tail
       config =
@@ -282,7 +283,7 @@ in {
         # List of plugin sources for lua-language-server
         luaLsLibrary = {
           "lua_ls_library.json" = {
-            text = lib.pipe plugins [
+            text = lib.pipe allPlugins [
               (builtins.filter (plugin: builtins.pathExists "${plugin}/lua"))
               # Append types and neovim runtime
               (lib.concat [pkgs.vimPlugins.neodev-nvim pkgs.neovim-unwrapped])
