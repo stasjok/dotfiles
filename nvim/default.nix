@@ -140,6 +140,21 @@ in {
           ++ (with parsers; [
             tree-sitter-jinja2
           ]));
+
+        # Byte-compile catppuccin colorscheme
+        catppuccin-nvim = let
+          neovim = pkgs.neovim.override {
+            configure.packages.catppuccin-nvim.start = [pkgs.vimPlugins.catppuccin-nvim];
+          };
+        in
+          pkgs.runCommandLocal "catppuccin-nvim" {} ''
+            ${neovim}/bin/nvim -l ${./catppuccin-nvim-config.lua}
+            cd $out/colors
+            rm cached
+            for flavor in *; do
+                mv "$flavor" "catppuccin-$flavor.lua"
+            done
+          '';
       in [
         # Colorscheme
         catppuccin-nvim
