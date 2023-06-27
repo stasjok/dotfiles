@@ -34,7 +34,7 @@
     ./lua-byte-compile-hook.sh;
 
   # Byte-compile a single lua file
-  compileLuaFile = file: let
+  byteCompileLuaFile = file: let
     name =
       if builtins.isPath file
       then builtins.baseNameOf file
@@ -257,7 +257,7 @@ in {
           (lib.flip lib.genAttrs (name: {
             source =
               if lib.hasSuffix ".lua" name
-              then compileLuaFile /${dir}/${name}
+              then byteCompileLuaFile /${dir}/${name}
               else /${dir}/${name};
           }))
         ];
@@ -315,7 +315,7 @@ in {
     initLua = pkgs.writeText "init.lua" ''
       ${cfg.extraLuaConfig}
       ${cfg.generatedConfigs.lua}'';
-    initLuaCompiled = compileLuaFile initLua;
+    initLuaCompiled = byteCompileLuaFile initLua;
   in
     lib.mkForce {
       source = initLuaCompiled;
