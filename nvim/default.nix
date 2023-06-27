@@ -236,7 +236,10 @@ in {
           "/build"
         ];
         # Activate vimGenDocHook manually
-        postBuild = "runHook preFixup";
+        postBuild = ''
+          find $out -type d -empty -delete
+          runHook preFixup
+        '';
       });
 
       # Normalized plugin name
