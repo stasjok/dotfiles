@@ -353,8 +353,8 @@ in {
         type = "github";
         owner = "redhat-documentation";
         repo = "vale-at-red-hat";
-        ref = "v267";
-        narHash = "sha256-cjKgoozs6QPLtCvFit5rub9NeGwSrGYklUdE8jXQtLs=";
+        ref = "v340";
+        narHash = "sha256-WpOoUUkDdEVMKGNV3J4aSKnVuqxLpq7il0D0XqnHMcY=";
       };
     in "${src}/.vale/styles/RedHat";
   };
