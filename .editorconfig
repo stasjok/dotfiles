@@ -27,3 +27,7 @@ tab_width = 4
 [Makefile]
 indent_style = tab
 indent_size = tab
+
+[wt/settings.json]
+indent_size = 4
+insert_final_newline = false
