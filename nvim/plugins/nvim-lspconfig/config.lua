@@ -129,6 +129,10 @@ do
     jsonls = {
       settings = {
         json = {
+          -- Need to specify explicitly.
+          -- See: https://github.com/b0o/SchemaStore.nvim/issues/8#issuecomment-1129531174
+          validate = { enable = true },
+          format = { enable = true },
           schemas = {
             {
               fileMatch = {
