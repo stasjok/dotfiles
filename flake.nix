@@ -19,10 +19,6 @@
     pkgs = import "${nixpkgs}/pkgs/top-level" {
       localSystem = system;
       overlays = [homeManagerOverlay self.overlays.default];
-      config.allowUnfreePredicate = pkg:
-        builtins.elem (lib.getName pkg) [
-          "vscode" # vscode-langservers-extracted build dependency
-        ];
     };
     inherit (pkgs) lib;
 
