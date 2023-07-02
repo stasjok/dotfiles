@@ -1,8 +1,50 @@
 do
   local feedkeys = require("map").feedkeys
-  local completion_kinds = require("plugin_configs.lspconfig.utils").completion_kinds
   local cmp = require("cmp")
   local mapping = cmp.mapping
+
+  local completion_kind_icons = {
+    Array = "",
+    Boolean = "",
+    Class = "󰊾",
+    Color = "",
+    Constant = "",
+    Constructor = "",
+    Enum = "󰕘",
+    EnumMember = "󰕚",
+    Event = "",
+    Field = "",
+    File = "󰈙",
+    Folder = "󰝰",
+    Function = "",
+    Interface = "",
+    Key = "󰌋",
+    Keyword = "󰌈",
+    Method = "󰡱",
+    Module = "",
+    Namespace = "",
+    Null = "󰟢",
+    Number = "󰎠",
+    Object = "󰅩",
+    Operator = "",
+    Package = "",
+    Property = "",
+    Reference = "",
+    Snippet = "󰘌",
+    String = "",
+    Struct = "",
+    Text = "",
+    TypeParameter = "󰊄",
+    Unit = "",
+    Value = "󱗽",
+    Variable = "󰯍",
+  }
+
+  local completion_kinds = {}
+  -- Prepend icon to completion kind
+  for kind, icon in pairs(completion_kind_icons) do
+    completion_kinds[kind] = string.format("%s %s", icon, kind)
+  end
 
   local completion_menu_map = {
     luasnip = "[Snip]",
