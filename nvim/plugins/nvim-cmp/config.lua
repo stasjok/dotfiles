@@ -176,17 +176,4 @@ do
       { name = "cmdline" },
     },
   })
-
-  -- Automatically insert brackets for functions and methods
-  local default_handler = require("nvim-autopairs.completion.cmp").filetypes["*"]
-  cmp.event:on(
-    "confirm_done",
-    require("nvim-autopairs.completion.cmp").on_confirm_done({
-      filetypes = {
-        ["*"] = false,
-        lua = default_handler,
-        python = default_handler,
-      },
-    })
-  )
 end
