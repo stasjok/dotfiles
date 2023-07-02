@@ -147,20 +147,7 @@ do
     clangd = {},
   }
 
-  -- Capabilities
-  local capabilities = vim.tbl_deep_extend(
-    "force",
-    vim.lsp.protocol.make_client_capabilities(),
-    require("cmp_nvim_lsp").default_capabilities()
-  )
-
-  -- Default language server configuration
-  local default_config = {
-    capabilities = capabilities,
-  }
-
   for lsp_server, config in pairs(lsp_servers) do
-    local final_config = vim.tbl_deep_extend("force", default_config, config)
-    require("lspconfig")[lsp_server].setup(final_config)
+    require("lspconfig")[lsp_server].setup(config)
   end
 end

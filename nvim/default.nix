@@ -167,18 +167,18 @@ in {
         # Tree-sitter
         nvim-treesitter'
         playground
-        # LSP
-        nvim-lspconfig
-        lsp_signature-nvim
-        null-ls-nvim
         # Autocompletion
         nvim-cmp
         cmp-buffer
         cmp-cmdline
-        cmp-nvim-lsp
+        cmp-nvim-lsp # Must be before nvim-lspconfig
         cmp_luasnip
         # Snippets
         luasnip
+        # LSP
+        nvim-lspconfig
+        lsp_signature-nvim
+        null-ls-nvim
         # Telescope
         telescope-nvim
         telescope-fzf-native-nvim
