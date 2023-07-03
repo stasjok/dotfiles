@@ -10,5 +10,10 @@
   # Remove tests because there are invalid lua files there
   nvim-treesitter = prev.nvim-treesitter.overrideAttrs (prev: {
     postPatch = prev.postPatch + "rm -r tests";
+    # Improve comment queries performance
+    patches = fetchpatch {
+      url = "https://github.com/stasjok/nvim-treesitter/commit/5efc1eb108a30477519afff50042a02137ece77d.diff";
+      hash = "sha256-DrPjTq+aTPurn2ohi0EKx2T0cBNfjiYkbHc6HisNDz0=";
+    };
   });
 }
