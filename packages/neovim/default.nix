@@ -121,6 +121,12 @@ neovim-unwrapped.overrideAttrs (prev: {
         hash = "sha256-brlesieg2m4G0PTAfrdrACgKoe4kW5IyBdyp7mL2Jzk=";
       })
 
+      # Cache treesitter runtime queries
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/4fd852b8cb88ed035203d3f9ae2e6a8258244974.diff";
+        hash = "sha256-sF9BfhvnygZl80daBLUJYARp8lL61oaJhP97BAAwgJI=";
+      })
+
       # Support for dynamic capabilities
       (fetchpatch {
         url = "https://github.com/neovim/neovim/commit/ddd92a70d2aab5247895e89abaaa79c62ba7dbb4.diff";
