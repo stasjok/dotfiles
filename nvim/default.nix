@@ -243,6 +243,8 @@ in {
           "/syntax"
           "/tutor"
           "/after"
+          # ftdetect
+          "/ftdetect"
           # plenary.nvim
           "/data"
           # telescope-fzf-native-nvim
