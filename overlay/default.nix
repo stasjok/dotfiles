@@ -33,4 +33,34 @@ final: prev: {
 
   # Do not require unfree license of vscode
   vscode-langservers-extracted = prev.vscode-langservers-extracted.override {vscode = final.vscodium;};
+
+  # Pin ansible-language-server to v1.0.4 because of variable completion issue
+  # https://github.com/ansible/ansible-language-server/issues/587
+  ansible-language-server = prev.ansible-language-server.overrideAttrs (prevAttrs: rec {
+    version = "1.0.4";
+    src = prevAttrs.src.override {
+      rev = "v${version}";
+      hash = "sha256-IBySScjfF2bIbiOv09uLMt9QH07zegm/W1vmGhdWxGY=";
+    };
+    patches = [
+      # Fix ansible lint config parsing
+      (final.fetchpatch {
+        url = "https://github.com/ansible/ansible-language-server/pull/577/commits/e39e5580e82af40c9f2a279a471d0c29dba1db7a.diff";
+        hash = "sha256-FJW4PLsmJImNJSpD0RwqRX+HOI1kfnEQONBrSWh1irg=";
+      })
+      # Get module route for FQCN with more than 3 elements
+      (final.fetchpatch {
+        url = "https://github.com/ansible/ansible-language-server/pull/538/commits/687760b31202c5318445e6287382136ada636f69.diff";
+        hash = "sha256-dUnY99JMHKPdPNNFdY5bOGGFnOow31NygkAz3T17LUo=";
+      })
+    ];
+
+    npmDepsHash = "sha256-rJ1O2OsrJhTIfywK9/MRubwwcCmMbu61T4zyayg+mAU=";
+    npmDeps = final.fetchNpmDeps {
+      name = "${prevAttrs.pname}-${version}-npm-deps";
+      inherit src patches;
+      hash = npmDepsHash;
+    };
+    passthru = {inherit npmDeps;};
+  });
 }
