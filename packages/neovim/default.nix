@@ -3,6 +3,8 @@
   neovim-unwrapped,
 }:
 neovim-unwrapped.overrideAttrs (prev: {
+  pname = "neovim-patched";
+
   patches =
     prev.patches
     ++ [

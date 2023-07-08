@@ -10,8 +10,8 @@ final: prev: {
   # Vim plugins
   vimPlugins = prev.vimPlugins.extend (prev.callPackage ../packages/vim-plugins {});
 
-  # Neovim overrides
-  neovim-unwrapped = prev.callPackage ../packages/neovim {inherit (prev) neovim-unwrapped;};
+  # Neovim backports and patches
+  neovim-patched = prev.callPackage ../packages/neovim {};
 
   # Python packages
   pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [(prev.callPackage ../packages/python {})];

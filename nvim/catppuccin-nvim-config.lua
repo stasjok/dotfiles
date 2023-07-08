@@ -1,6 +1,6 @@
 require("catppuccin").setup({
   -- Compile colorscheme to $out/colors/
-  compile_path = vim.fs.joinpath(vim.env.out, "colors"),
+  compile_path = vim.env.out .. "/colors",
 
   integrations = {
     -- Disable default

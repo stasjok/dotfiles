@@ -62,7 +62,7 @@ end
 -- Path to type annotations
 local types_path = plugins["neodev-nvim"]
 -- Path to neovim runtime
-local runtime_path = vim.fs.joinpath(plugins["neovim-unwrapped"], "share/nvim/runtime")
+local runtime_path = vim.fs.joinpath(plugins["neovim-patched"], "share/nvim/runtime")
 plugins["neovim-unwrapped"] = runtime_path
 local library_for_dotfiles = vim.list_extend({
   "${3rd}/busted/library",
