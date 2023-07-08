@@ -44,12 +44,12 @@ end
 
 T["child"]["runtimepath"] = function()
   local rtp = child.lua_get("vim.opt.runtimepath:get()")
-  eq(rtp[1], vim.fs.normalize("~/.config/nvim"))
+  eq(rtp[1], vim.uv.fs_realpath(vim.fs.normalize("~/.config/nvim")))
   expect.match(rtp[2], "vim%-pack%-dir$")
   expect.match(rtp[3], "vim-pack-dir/pack/*/start/*", 1, true)
   eq(rtp[4], child.env.VIMRUNTIME)
   expect.match(rtp[#rtp - 1], "vim-pack-dir/pack/*/start/*/after", 1, true)
-  eq(rtp[#rtp], vim.fs.normalize("~/.config/nvim/after"))
+  eq(rtp[#rtp], vim.uv.fs_realpath(vim.fs.normalize("~/.config/nvim/after")))
 end
 
 T["child"]["packpath"] = function()

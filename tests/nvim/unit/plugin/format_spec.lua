@@ -25,7 +25,7 @@ describe("plugin/format", function()
   end)
 
   -- Load locals
-  io.input(vim.api.nvim_get_runtime_file("plugin/format.lua", false)[1])
+  io.input("nvim/runtime/plugin/format.lua")
   local format_chunk = io.read("*a")
   format_chunk = format_chunk
     .. [[

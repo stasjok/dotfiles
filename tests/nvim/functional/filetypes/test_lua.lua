@@ -21,6 +21,10 @@ T["dotfiles"] = function()
     return child.lua_get("vim.lsp.get_active_clients(...)[1]." .. key, { filter })
   end
 
+  -- Without it gitsigns errors not finding git dir
+  -- Probably next :cd command executes in between event loop callbacks
+  vim.uv.sleep(50)
+
   child.cmd("cd tests/data/dotfiles")
 
   -- Set `b:diagnostics` variable to `true` when diagnostics are published
