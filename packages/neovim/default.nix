@@ -137,5 +137,12 @@ neovim-unwrapped.overrideAttrs (prev: {
         url = "https://github.com/neovim/neovim/commit/dd3fa645735539c75b72dc1b0114278b5fa57f7f.diff";
         hash = "sha256-FRR65n4CZsVDoz/QfFFDYhvfObJqsfmiD41nNF4a9+Q=";
       })
+
+      # Allow vim.wo to be double indexed
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/c379d72c490544b3a56eb0e52ce3c8ef740051d8.diff";
+        excludes = ["runtime/doc/news.txt"];
+        hash = "sha256-ALIAMsUK9V4yktatdkhYTcPRIH8LUqxN8/+70jNJHV8=";
+      })
     ];
 })
