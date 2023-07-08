@@ -40,7 +40,7 @@
       then builtins.baseNameOf file
       else lib.getName file;
   in
-    pkgs.runCommandLocal name {
+    pkgs.runCommand name {
       nativeBuildInputs = [luaByteCompileHook];
     } ''
       cp ${file} $out
@@ -156,7 +156,7 @@ in {
             configure.packages.catppuccin-nvim.start = [pkgs.vimPlugins.catppuccin-nvim];
           };
         in
-          pkgs.runCommandLocal "catppuccin-nvim" {} ''
+          pkgs.runCommand "catppuccin-nvim" {} ''
             ${neovim}/bin/nvim -l ${./catppuccin-nvim-config.lua}
             cd $out/colors
             rm cached
