@@ -54,34 +54,6 @@ do
         end
       end,
     })
-
-    -- Document highlight
-    if client.supports_method("textDocument/documentHighlight") then
-      local hl_augroup = utils.create_augroup("document_highlight", { buffer = buf })
-      api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-        desc = "Show document highlights",
-        group = hl_augroup,
-        buffer = buf,
-        callback = function()
-          pcall(buf_lsp.document_highlight)
-        end,
-      })
-      api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-        desc = "Remove document highlights",
-        group = hl_augroup,
-        buffer = buf,
-        callback = buf_lsp.clear_references,
-      })
-    end
-  end
-
-  -- Remove buffer LSP configuration
-  local function on_detach(args)
-    local buf = args.buf
-
-    -- Disable document highlights
-    buf_lsp.clear_references()
-    api.nvim_clear_autocmds({ group = "document_highlight", buffer = buf })
   end
 
   -- Autocommands
@@ -89,10 +61,5 @@ do
     group = augroup,
     desc = "Configure LSP for a buffer",
     callback = on_attach,
-  })
-  api.nvim_create_autocmd("LspDetach", {
-    group = augroup,
-    desc = "Disable LSP configuration for a buffer",
-    callback = on_detach,
   })
 end

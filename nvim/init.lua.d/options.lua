@@ -32,7 +32,7 @@ vim.opt_global.sidescrolloff = 6
 vim.opt_global.scrollback = 80000
 
 -- Fire CursorHold event faster
-vim.opt.updatetime = 250
+vim.opt.updatetime = 300
 
 -- Use bash as default shell (it's faster)
 vim.opt.shell = "bash"
