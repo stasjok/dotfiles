@@ -30,22 +30,4 @@ final: prev: {
       };
     };
   };
-
-  # Update ansible-language-server to fix variable completion issue
-  # https://github.com/ansible/ansible-language-server/issues/587
-  ansible-language-server = prev.ansible-language-server.overrideAttrs (prevAttrs: rec {
-    version = "1.2.0";
-    src = prevAttrs.src.override {
-      rev = "v${version}";
-      hash = "sha256-5QzwDsWjuq/gMWFQEkl4sqvsqfxTOZhaFBMhjiiOZSY=";
-    };
-
-    npmDepsHash = "sha256-bzffCAGn0aYVoG8IDaXd5I3x3AnGl5urX7BaBKf0tVI=";
-    npmDeps = final.fetchNpmDeps {
-      name = "${prevAttrs.pname}-${version}-npm-deps";
-      inherit src;
-      hash = npmDepsHash;
-    };
-    passthru = {inherit npmDeps;};
-  });
 }
