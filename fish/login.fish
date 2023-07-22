@@ -1,9 +1,6 @@
 # Disable greeting
 set -U fish_greeting ''
 
-# Set up ssh-agent
-find_ssh_agent
-
 # Ensure that $NIX_PROFILES is always set, because
 # it's used for setting default search paths for completions and functions.
 # See $__fish_data_dir/config.fish and $__fish_data_dir/__fish_build_paths.fish.

@@ -36,10 +36,6 @@
           bind \eF forward-bigword
           bind \eP __fish_paginate
         '';
-
-        find_ssh_agent =
-          funcWithDesc "Find or run ssh-agent"
-          (builtins.readFile ./functions/find_ssh_agent.fish);
       }
       // saltFunctions;
   };

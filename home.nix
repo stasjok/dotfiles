@@ -51,6 +51,9 @@
     CHECKPOINT_DISABLE = 1;
   };
 
+  # ssh-agent
+  services.ssh-agent.enable = true;
+
   # Man
   programs.man = {
     enable = true;
