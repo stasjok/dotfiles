@@ -16,6 +16,9 @@ final: prev: {
   # Python packages
   pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [(prev.callPackage ../packages/python {})];
 
+  # Node packages
+  nodePackages = prev.nodePackages.extend (prev.callPackage ../packages/node-packages {});
+
   # Tree-sitter grammars
   tree-sitter = prev.tree-sitter.override {
     extraGrammars = {
