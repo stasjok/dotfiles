@@ -48,6 +48,22 @@
       runHook preFixup
     '';
 
+  # Read a lua chunk from file, wrap it in do...end block, and prefix it with `name` comment
+  luaBlock = name: file: let
+    indentedBlock = lib.pipe (lib.fileContents file) [
+      (lib.splitString "\n")
+      (lib.concatMapStringsSep "\n" (line:
+        if line == ""
+        then line
+        else "  " + line))
+    ];
+  in ''
+    -- ${name}
+    do
+    ${lib.removeSuffix "\n" indentedBlock}
+    end
+  '';
+
   concatNonEmptyStringsSep = strings:
     lib.pipe strings [
       (builtins.filter (str: str != ""))
@@ -134,7 +150,7 @@ in {
     # Read `init.lua` file first, then read all .lua files in `init.lua.d` directory.
     extraLuaConfig = lib.pipe ([./init.lua] ++ lib.filesystem.listFilesRecursive ./init.lua.d) [
       (builtins.filter (name: lib.hasSuffix ".lua" name))
-      (builtins.map builtins.readFile)
+      (builtins.map (file: luaBlock (baseNameOf file) file))
       concatNonEmptyStringsSep
     ];
 
@@ -273,8 +289,7 @@ in {
       pluginConfig = name: let
         configPath = ./plugins/${pluginNormalizedName name}/config.lua;
       in
-        lib.optionalString (builtins.pathExists configPath)
-        ("-- ${name}\n" + builtins.readFile configPath);
+        lib.optionalString (builtins.pathExists configPath) (luaBlock name configPath);
 
       # Make attributes for runtime attribute of a plugin
       mkRuntimeAttrs = dir:
@@ -301,7 +316,7 @@ in {
       # Merge all plugin configs plus init.lua tail
       config =
         concatNonEmptyStringsSep (builtins.map pluginConfig pluginNames
-          ++ [(builtins.readFile ./init_after.lua)]);
+          ++ [(luaBlock "init_after.lua" ./init_after.lua)]);
 
       # Merge all runtime files
       runtime = let

@@ -1,15 +1,13 @@
-do
-  local diffview = require("diffview")
+local diffview = require("diffview")
 
-  diffview.setup({
-    enhanced_diff_hl = true,
-    key_bindings = {
-      view = {
-        q = diffview.close,
-      },
-      file_panel = {
-        q = diffview.close,
-      },
+diffview.setup({
+  enhanced_diff_hl = true,
+  key_bindings = {
+    view = {
+      q = diffview.close,
     },
-  })
-end
+    file_panel = {
+      q = diffview.close,
+    },
+  },
+})
