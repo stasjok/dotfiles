@@ -1,7 +1,3 @@
-local map = require("map").map
-local replace_termcodes = require("map").replace_termcodes
-local feedkeys = require("map").feedkeys
-
 -- Russian layout
 vim.opt.langmap = {
   "аf",
@@ -79,7 +75,7 @@ local function toggle_iminsert()
   if #vim.opt_local.keymap:get() == 0 then
     vim.opt_local.keymap = "russian-jcukenwin"
   end
-  feedkeys("<C-^>", "n")
+  vim.api.nvim_feedkeys(vim.keycode("<C-^>"), "n", false)
 end
 
-map({ "!", "s" }, "<M-i>", toggle_iminsert)
+vim.keymap.set({ "!", "s" }, "<M-i>", toggle_iminsert)
