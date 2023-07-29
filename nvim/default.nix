@@ -89,7 +89,7 @@ in {
         name = "neovim-compiled-${neovim.version}";
         paths = [neovim];
         nativeBuildInputs = [luaByteCompileHook];
-        # Activate vimGenDocHook manually
+        # Activate luaByteCompileHook manually
         postBuild = "runHook preFixup";
         # Copy required attributes from original neovim package
         inherit (neovim) lua;
