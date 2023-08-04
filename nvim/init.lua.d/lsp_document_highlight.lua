@@ -112,19 +112,18 @@ local function on_attach(args)
       group = hl_augroup,
       buffer = buf,
       ---@diagnostic disable-next-line: redefined-local
-      callback = function(args)
+      callback = function()
         -- Stop timer
         timers[buf]:stop()
 
-        -- Get the first letter of new and old modes
+        -- Get the first letter of the mode
         local mode = api.nvim_get_mode().mode:sub(1, 1)
-        local old_mode = args.match:sub(1, 1)
 
         -- Clear document highlights when changing TO ignored_modes,
         if vim.list_contains(ignored_modes, mode) then
           buf_lsp.clear_references()
-        -- Refresh document highlights when changing FROM ignored_modes
-        elseif vim.list_contains(ignored_modes, old_mode) then
+        -- Otherwise refresh document highlights if it's not already active
+        elseif not is_in_hl() then
           document_highlight()
         end
       end,
