@@ -129,6 +129,17 @@ local function on_attach(args)
         end
       end,
     })
+    api.nvim_create_autocmd({ "BufLeave" }, {
+      desc = "Clear document highlights",
+      group = hl_augroup,
+      buffer = buf,
+      callback = function()
+        -- Stop timer
+        timers[buf]:stop()
+
+        buf_lsp.clear_references()
+      end,
+    })
   end
 end
 
