@@ -6,13 +6,13 @@ local buf_line_count = vim.api.nvim_buf_line_count
 local win_get_cursor = vim.api.nvim_win_get_cursor
 local buf_get_mark = vim.api.nvim_buf_get_mark
 local buf_get_lines = vim.api.nvim_buf_get_lines
-local command = vim.api.nvim_command
 local create_augroup = vim.api.nvim_create_augroup
 local create_autocmd = vim.api.nvim_create_autocmd
 local exec_autocmds = vim.api.nvim_exec_autocmds
 local get_proc = vim.api.nvim_get_proc
 local get_proc_children = vim.api.nvim_get_proc_children
 local opt_local = vim.opt_local
+local api = vim.api
 local map = vim.keymap.set
 
 local augroup = create_augroup("terminal", {})
@@ -33,7 +33,7 @@ local function on_exit()
   _G._my_terminal_buffer = nil
 end
 
-local function term_start_insert()
+local function term_start_insert(args)
   local buf_end = false
   local line_count = buf_line_count(0)
   local current_line_number = win_get_cursor(0)[1]
@@ -55,7 +55,16 @@ local function term_start_insert()
     end
   end
   if buf_end then
-    vim.api.nvim_feedkeys("i", "", false)
+    -- After switching buffers with telescope,
+    -- first telescope floating window is closed, then BufEnter event is fired
+    -- and after that buffer is immediately switched in current window.
+    -- If we go to insert mode before buffer is changed, we'll get insert mode
+    -- also in a target buffer. As a workaround delay going to insert mode.
+    vim.schedule(function()
+      if api.nvim_get_current_buf() == args.buf then
+        api.nvim_feedkeys("i", "", false)
+      end
+    end)
   end
 end
 
@@ -106,7 +115,7 @@ create_autocmd("VimEnter", {
   desc = "Open terminal automatically on startup",
   once = true,
   callback = function()
-    if vim.o.columns >= 200 and vim.api.nvim_buf_get_name(0) == "" then
+    if vim.o.columns >= 200 and api.nvim_buf_get_name(0) == "" then
       vim.cmd.vsplit()
       vim.cmd.wincmd("l")
       terminal_open()
