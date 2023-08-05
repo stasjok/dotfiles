@@ -3,7 +3,9 @@ local opt_local = vim.opt_local
 local cmd = vim.cmd
 local map = vim.keymap.set
 
+local terminal_buffer = nil
 local augroup = api.nvim_create_augroup("terminal", {})
+
 api.nvim_create_autocmd("TermOpen", {
   group = augroup,
   pattern = "*",
@@ -17,8 +19,8 @@ api.nvim_create_autocmd("TermOpen", {
 })
 
 local function on_exit()
-  api.nvim_buf_delete(_G._my_terminal_buffer, { force = true })
-  _G._my_terminal_buffer = nil
+  api.nvim_buf_delete(terminal_buffer, { force = true })
+  terminal_buffer = nil
 end
 
 local function term_start_insert(args)
@@ -57,18 +59,18 @@ local function term_start_insert(args)
 end
 
 local function terminal_open()
-  if _G._my_terminal_buffer == nil or not api.nvim_buf_is_valid(_G._my_terminal_buffer) then
-    _G._my_terminal_buffer = api.nvim_create_buf(true, false)
+  if terminal_buffer == nil or not api.nvim_buf_is_valid(terminal_buffer) then
+    terminal_buffer = api.nvim_create_buf(true, false)
     api.nvim_create_autocmd("BufEnter", {
-      buffer = _G._my_terminal_buffer,
+      buffer = terminal_buffer,
       callback = term_start_insert,
     })
-    api.nvim_set_current_buf(_G._my_terminal_buffer)
+    api.nvim_set_current_buf(terminal_buffer)
     vim.fn.termopen("fish", {
       on_exit = on_exit,
     })
   else
-    api.nvim_set_current_buf(_G._my_terminal_buffer)
+    api.nvim_set_current_buf(terminal_buffer)
   end
 end
 
