@@ -4,8 +4,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
   callback = function()
     require("lsp_signature").on_attach({
       hint_enable = false,
-      floating_window_above_first = true,
-      hi_parameter = "LspReferenceRead",
+      floating_window_above_cur_line = true,
+      handler_opts = {},
+      zindex = 40,
+      timer_interval = 300,
     })
   end,
 })
