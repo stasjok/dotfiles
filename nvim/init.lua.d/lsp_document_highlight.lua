@@ -49,6 +49,10 @@ local function on_attach(args)
 
     -- Request document highlights
     local document_highlight_callback = vim.schedule_wrap(function()
+      -- Make sure to make requests only in relevant buffer
+      if api.nvim_get_current_buf() ~= buf then
+        return
+      end
       _, cancel_requests = lsp.buf_request(
         buf,
         "textDocument/documentHighlight",
