@@ -146,5 +146,26 @@ neovim-unwrapped.overrideAttrs (prev: {
         excludes = ["runtime/doc/news.txt"];
         hash = "sha256-ALIAMsUK9V4yktatdkhYTcPRIH8LUqxN8/+70jNJHV8=";
       })
+
+      # LSP methods and types
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/5f4895200a49d92e636dea9c5474ab5b0882384d.diff";
+        hash = "sha256-rimjueBsHotVtKVnDae9xRMztHqBA5HfgxBln06x8vw=";
+      })
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/da09f9b551badfb3fd363589009168560ae607f6.diff";
+        includes = ["runtime/lua/vim/lsp/protocol.lua" "runtime/lua/vim/lsp/types/protocol.lua"];
+        hash = "sha256-bn/rfEhUggcL1ZPJbvDVL+4apQy6bYtRUyItm1zaSdk=";
+      })
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/f41496ce74fb30c18bb9a03027a172800b269643.diff";
+        includes = ["runtime/lua/vim/lsp/protocol.lua" "runtime/lua/vim/lsp/types/protocol.lua"];
+        hash = "sha256-7CKSjEz1ApaAj10YINY29cc8Y2riYT+17jEI+vpR25w=";
+      })
+      (fetchpatch {
+        url = "https://github.com/neovim/neovim/commit/214b125132778c5d51d4d7e673d31a9be835e150.diff";
+        includes = ["runtime/lua/vim/lsp/protocol.lua"];
+        hash = "sha256-Lvzfe5+iOHDbP9z/BBRHOVmjtI5/z3tLP5AuF3Cxs48=";
+      })
     ];
 })
