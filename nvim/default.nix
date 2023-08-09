@@ -7,6 +7,8 @@
   cfg = config.programs.neovim;
 
   # Packages
+  neovim = pkgs.neovim-patched;
+
   lemminx = pkgs.stdenvNoCC.mkDerivation rec {
     pname = "lemminx";
     version = "0.24.0";
@@ -82,18 +84,15 @@ in {
     defaultEditor = true;
 
     # Byte-compile lua files in runtime
-    package = let
-      neovim = pkgs.neovim-patched;
-    in
-      pkgs.symlinkJoin {
-        name = "neovim-compiled-${neovim.version}";
-        paths = [neovim];
-        nativeBuildInputs = [luaByteCompileHook];
-        # Activate luaByteCompileHook manually
-        postBuild = "runHook preFixup";
-        # Copy required attributes from original neovim package
-        inherit (neovim) lua;
-      };
+    package = pkgs.symlinkJoin {
+      name = "neovim-compiled-${neovim.version}";
+      paths = [neovim];
+      nativeBuildInputs = [luaByteCompileHook];
+      # Activate luaByteCompileHook manually
+      postBuild = "runHook preFixup";
+      # Copy required attributes from original neovim package
+      inherit (neovim) lua;
+    };
 
     # Extra packages available to neovim
     extraPackages = with pkgs.nodePackages;
@@ -328,7 +327,7 @@ in {
             text = lib.pipe allPlugins [
               (builtins.filter (plugin: builtins.pathExists "${plugin}/lua"))
               # Append types and neovim runtime
-              (lib.concat [pkgs.vimPlugins.neodev-nvim pkgs.neovim-patched])
+              (lib.concat [pkgs.vimPlugins.neodev-nvim neovim])
               (builtins.map (plugin: lib.nameValuePair (pluginNormalizedName (lib.getName plugin)) plugin))
               builtins.listToAttrs
               builtins.toJSON
