@@ -327,7 +327,7 @@ in {
             text = lib.pipe allPlugins [
               (builtins.filter (plugin: builtins.pathExists "${plugin}/lua"))
               # Append types and neovim runtime
-              (lib.concat [pkgs.vimPlugins.neodev-nvim neovim])
+              (lib.concat [neovim])
               (builtins.map (plugin: lib.nameValuePair (pluginNormalizedName (lib.getName plugin)) plugin))
               builtins.listToAttrs
               builtins.toJSON

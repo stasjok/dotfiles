@@ -83,12 +83,11 @@ do
   end
 end
 
--- Path to type annotations
-local types_path = plugins["neodev-nvim"]
 -- Path to neovim runtime
 local runtime_path = vim.fs.joinpath(plugins["neovim-unwrapped"], "share/nvim/runtime")
 plugins["neovim-unwrapped"] = runtime_path
 local library_for_dotfiles = vim.list_extend({
+  "${3rd}/luv/library",
   "${3rd}/busted/library",
   "${3rd}/luassert/library",
 }, vim.tbl_values(plugins))
@@ -120,7 +119,7 @@ function lua_ls.on_new_config(config, root_dir)
   elseif vim.endswith(root_dir, "/dotfiles") then
     config.settings.Lua.workspace.library = library_for_dotfiles
   elseif vim.endswith(root_dir, "/neovim") then
-    config.settings.Lua.workspace.library = { types_path }
+    config.settings.Lua.workspace.library = {}
   end
 end
 
@@ -149,7 +148,6 @@ lua_ls.settings = {
     workspace = {
       checkThirdParty = false,
       library = {
-        types_path,
         runtime_path,
       },
       ignoreDir = {
