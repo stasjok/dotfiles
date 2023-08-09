@@ -1,67 +1,5 @@
 local lua_ls = {}
 
-local root_files = {
-  ".luarc.json",
-  ".luarc.jsonc",
-  ".luacheckrc",
-  ".stylua.toml",
-  "stylua.toml",
-  "selene.toml",
-  "selene.yml",
-}
-
----Read the content of .luarc.json
----@param root_dir string
----@return table|nil
-local function read_luarc(root_dir)
-  local luarc_path = vim.fs.joinpath(root_dir, ".luarc.json")
-  local file = io.open(luarc_path) or io.open(luarc_path .. "c")
-  if file then
-    local result = assert(file:read("*a"))
-    file:close()
-    result = require("plenary.json").json_strip_comments(result, {})
-    return vim.F.npcall(vim.json.decode, result)
-  end
-end
-
-function lua_ls.root_dir(fname)
-  local root_dir = vim.fs.dirname(vim.fs.find(root_files, {
-    path = fname,
-    upward = true,
-    stop = vim.env.HOME,
-    type = "file",
-  })[1] or vim.fs.find({ "lua", ".git" }, {
-    path = fname,
-    upward = true,
-    stop = vim.env.HOME,
-    type = "directory",
-  })[1])
-  -- Re-use client when we open a plugin in nix store, but only if it's already in a library
-  if vim.startswith(fname, "/nix/store/") or vim.startswith(fname, vim.env.VIMRUNTIME) then
-    local client = vim.lsp.get_active_clients({ name = "lua_ls" })[1]
-    if client then
-      local lua_rc = read_luarc(client.config.root_dir) or {}
-      local lib = vim.tbl_get(lua_rc, "workspace", "library")
-        or vim.tbl_get(lua_rc, "workspace.library")
-        or vim.tbl_get(client, "config", "settings", "Lua", "workspace", "library")
-        or {}
-      if
-        vim
-          .iter(lib)
-          :map(function(dir)
-            return dir == "$VIMRUNTIME" and vim.env.VIMRUNTIME or dir
-          end)
-          :any(function(dir)
-            return dir == root_dir
-          end)
-      then
-        root_dir = client.config.root_dir
-      end
-    end
-  end
-  return root_dir
-end
-
 ---Read a contents of a file. Errors in case of errors.
 ---@param filename string
 ---@return string
@@ -70,6 +8,20 @@ local function read_file(filename)
   local content = assert(file:read("*a"))
   file:close()
   return content
+end
+
+---Read the content of .luarc.json
+---@param root_dir string
+---@return table|nil
+local function read_luarc(root_dir)
+  local luarc_path = vim.fs.joinpath(root_dir, ".luarc.json")
+  local luarc_content = vim.F.npcall(read_file, luarc_path)
+    or vim.F.npcall(read_file, luarc_path .. "c")
+    or ""
+  luarc_content = require("plenary.json").json_strip_comments(luarc_content, {})
+  if luarc_content then
+    return vim.F.npcall(vim.json.decode, luarc_content)
+  end
 end
 
 local plugins = {}
@@ -91,6 +43,54 @@ local library_for_dotfiles = vim.list_extend({
   "${3rd}/busted/library",
   "${3rd}/luassert/library",
 }, vim.tbl_values(plugins))
+
+local root_files = {
+  ".luarc.json",
+  ".luarc.jsonc",
+  ".luacheckrc",
+  ".stylua.toml",
+  "stylua.toml",
+  "selene.toml",
+  "selene.yml",
+}
+
+function lua_ls.root_dir(fname)
+  local root_dir = vim.fs.dirname(vim.fs.find(root_files, {
+    path = fname,
+    upward = true,
+    stop = vim.env.HOME,
+    type = "file",
+  })[1] or vim.fs.find({ "lua", ".git" }, {
+    path = fname,
+    upward = true,
+    stop = vim.env.HOME,
+    type = "directory",
+  })[1])
+  -- Re-use client when we open a plugin in nix store, but only if it's already in a library
+  if vim.startswith(fname, "/nix/store/") or vim.startswith(fname, runtime_path) then
+    local client = vim.lsp.get_active_clients({ name = "lua_ls" })[1]
+    if client then
+      local lua_rc = read_luarc(client.config.root_dir) or {}
+      local lib = vim.tbl_get(lua_rc, "workspace", "library")
+        or vim.tbl_get(lua_rc, "workspace.library")
+        or vim.tbl_get(client, "config", "settings", "Lua", "workspace", "library")
+        or {}
+      if
+        vim
+          .iter(lib)
+          :map(function(dir)
+            return dir == "$VIMRUNTIME" and runtime_path or dir
+          end)
+          :any(function(dir)
+            return dir == root_dir
+          end)
+      then
+        root_dir = client.config.root_dir
+      end
+    end
+  end
+  return root_dir
+end
 
 ---Change library
 ---@param config table
@@ -122,6 +122,10 @@ function lua_ls.on_new_config(config, root_dir)
     config.settings.Lua.workspace.library = {}
   end
 end
+
+lua_ls.cmd_env = {
+  VIMRUNTIME = runtime_path,
+}
 
 lua_ls.settings = {
   Lua = {
