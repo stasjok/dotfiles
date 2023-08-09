@@ -88,8 +88,14 @@ in {
       name = "neovim-compiled-${neovim.version}";
       paths = [neovim];
       nativeBuildInputs = [luaByteCompileHook];
-      # Activate luaByteCompileHook manually
-      postBuild = "runHook preFixup";
+      postBuild = ''
+        # Replace symlink with a file, or Nvim
+        # will use wrong runtime directory
+        rm $out/bin/nvim
+        cp ${neovim}/bin/nvim $out/bin/nvim
+        # Activate luaByteCompileHook manually
+        runHook preFixup
+      '';
       # Copy required attributes from original neovim package
       inherit (neovim) lua;
     };
