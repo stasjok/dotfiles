@@ -107,20 +107,40 @@ cmp.setup({
     format = format_vim_item,
   },
   mapping = {
-    ["<C-N>"] = mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      else
-        fallback()
-      end
-    end, { "i", "c" }),
-    ["<C-P>"] = mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      else
-        fallback()
-      end
-    end, { "i", "c" }),
+    ["<C-N>"] = mapping({
+      i = function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        else
+          fallback()
+        end
+      end,
+      c = function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        else
+          vim.schedule(cmp.suspend())
+          fallback()
+        end
+      end,
+    }),
+    ["<C-P>"] = mapping({
+      i = function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item()
+        else
+          fallback()
+        end
+      end,
+      c = function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item()
+        else
+          vim.schedule(cmp.suspend())
+          fallback()
+        end
+      end,
+    }),
     ["<CR>"] = mapping.confirm(),
     ["<M-CR>"] = mapping.confirm({
       behavior = cmp.ConfirmBehavior.Insert,
