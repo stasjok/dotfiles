@@ -1,4 +1,3 @@
-local feedkeys = require("map").feedkeys
 local cmp = require("cmp")
 local mapping = cmp.mapping
 
