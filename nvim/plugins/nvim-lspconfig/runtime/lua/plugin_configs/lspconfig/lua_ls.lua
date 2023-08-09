@@ -10,6 +10,20 @@ local root_files = {
   "selene.yml",
 }
 
+---Read the content of .luarc.json
+---@param root_dir string
+---@return table|nil
+local function read_luarc(root_dir)
+  local luarc_path = vim.fs.joinpath(root_dir, ".luarc.json")
+  local file = io.open(luarc_path) or io.open(luarc_path .. "c")
+  if file then
+    local result = assert(file:read("*a"))
+    file:close()
+    result = require("plenary.json").json_strip_comments(result, {})
+    return vim.F.npcall(vim.json.decode, result)
+  end
+end
+
 function lua_ls.root_dir(fname)
   local root_dir = vim.fs.dirname(vim.fs.find(root_files, {
     path = fname,
@@ -25,14 +39,24 @@ function lua_ls.root_dir(fname)
   -- Re-use client when we open a plugin in nix store, but only if it's already in a library
   if vim.startswith(fname, "/nix/store/") or vim.startswith(fname, vim.env.VIMRUNTIME) then
     local client = vim.lsp.get_active_clients({ name = "lua_ls" })[1]
-    if
-      client
-      and vim.list_contains(
-        vim.tbl_get(client, "config", "settings", "Lua", "workspace", "library") or {},
-        root_dir
-      )
-    then
-      root_dir = client.config.root_dir
+    if client then
+      local lua_rc = read_luarc(client.config.root_dir) or {}
+      local lib = vim.tbl_get(lua_rc, "workspace", "library")
+        or vim.tbl_get(lua_rc, "workspace.library")
+        or vim.tbl_get(client, "config", "settings", "Lua", "workspace", "library")
+        or {}
+      if
+        vim
+          .iter(lib)
+          :map(function(dir)
+            return dir == "$VIMRUNTIME" and vim.env.VIMRUNTIME or dir
+          end)
+          :any(function(dir)
+            return dir == root_dir
+          end)
+      then
+        root_dir = client.config.root_dir
+      end
     end
   end
   return root_dir
@@ -73,8 +97,16 @@ local library_for_dotfiles = vim.list_extend({
 ---@param config table
 ---@param root_dir string
 function lua_ls.on_new_config(config, root_dir)
-  if vim.endswith(root_dir, "/dotfiles") then
-    config.settings.Lua.workspace.library = library_for_dotfiles
+  local lua_rc = read_luarc(root_dir) or {}
+  local lua_rc_has_runtime = vim.iter(lua_rc):any(function(key)
+    return vim.startswith(key, "runtime")
+  end)
+  local lua_rc_has_workspace = vim.iter(lua_rc):any(function(key)
+    return vim.startswith(key, "workspace")
+  end)
+  if lua_rc_has_runtime then
+    config.settings.Lua.runtime = nil
+  elseif vim.endswith(root_dir, "/dotfiles") then
     config.settings.Lua.runtime.path = {
       -- meta/3rd library from lua-language-server
       "library/?.lua",
@@ -82,6 +114,11 @@ function lua_ls.on_new_config(config, root_dir)
       "lua/?.lua",
       "lua/?/init.lua",
     }
+  end
+  if lua_rc_has_workspace then
+    config.settings.Lua.workspace = nil
+  elseif vim.endswith(root_dir, "/dotfiles") then
+    config.settings.Lua.workspace.library = library_for_dotfiles
   elseif vim.endswith(root_dir, "/neovim") then
     config.settings.Lua.workspace.library = { types_path }
   end
