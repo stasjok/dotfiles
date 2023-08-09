@@ -31,6 +31,9 @@ map("n", "<Leader>Q", "<Cmd>quitall<CR>")
 map("n", "<Leader>z", "<Cmd>xit<CR>")
 map("n", "<Leader>Z", "<Cmd>xall<CR>")
 
+-- Decrease indent
+map("i", "<S-Tab>", "<C-D>")
+
 -- Create new lines in insert mode
 map("i", "<M-n>", "<C-O>o")
 map("i", "<M-p>", "<C-O>O")

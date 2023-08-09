@@ -108,6 +108,8 @@ cmp.setup({
   mapping = {
     ["<C-N>"] = mapping(mapping.select_next_item(), { "i", "c" }),
     ["<C-P>"] = mapping(mapping.select_prev_item(), { "i", "c" }),
+    ["<Tab>"] = mapping(mapping.select_next_item(), { "i", "c" }),
+    ["<S-Tab>"] = mapping(mapping.select_prev_item(), { "i", "c" }),
     ["<CR>"] = mapping.confirm(),
     ["<M-CR>"] = mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert }),
     ["<C-Y>"] = mapping(function()
