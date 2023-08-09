@@ -107,32 +107,20 @@ cmp.setup({
     format = format_vim_item,
   },
   mapping = {
-    ["<Tab>"] = mapping(function(fallback)
+    ["<C-N>"] = mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
       else
         fallback()
       end
-    end, {
-      "i",
-      "c",
-    }),
-    ["<S-Tab>"] = mapping({
-      i = function()
-        if cmp.visible() then
-          cmp.select_prev_item()
-        else
-          feedkeys("<C-D>", "n")
-        end
-      end,
-      c = function(fallback)
-        if cmp.visible() then
-          cmp.select_prev_item()
-        else
-          fallback()
-        end
-      end,
-    }),
+    end, { "i", "c" }),
+    ["<C-P>"] = mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      else
+        fallback()
+      end
+    end, { "i", "c" }),
     ["<CR>"] = mapping.confirm(),
     ["<M-CR>"] = mapping.confirm({
       behavior = cmp.ConfirmBehavior.Insert,
@@ -148,22 +136,6 @@ cmp.setup({
       "c",
     }),
     ["<C-E>"] = mapping(mapping.abort(), { "i", "c" }),
-    ["<C-N>"] = mapping({
-      i = mapping.select_next_item(),
-      c = function(fallback)
-        cmp.close()
-        vim.schedule(cmp.suspend())
-        fallback()
-      end,
-    }),
-    ["<C-P>"] = mapping({
-      i = mapping.select_prev_item(),
-      c = function(fallback)
-        cmp.close()
-        vim.schedule(cmp.suspend())
-        fallback()
-      end,
-    }),
     ["<M-d>"] = mapping(mapping.scroll_docs(8), { "i", "c" }),
     ["<M-u>"] = mapping(mapping.scroll_docs(-8), { "i", "c" }),
   },
