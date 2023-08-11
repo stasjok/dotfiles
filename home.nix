@@ -24,6 +24,7 @@
     # Task runners
     gnumake
     go-task
+    lefthook
     # C build tools
     gcc
     autoconf
