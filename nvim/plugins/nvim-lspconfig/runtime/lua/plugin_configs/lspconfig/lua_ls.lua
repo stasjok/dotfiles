@@ -68,7 +68,7 @@ function lua_ls.root_dir(fname)
   })[1])
   -- Re-use client when we open a plugin in nix store, but only if it's already in a library
   if vim.startswith(fname, "/nix/store/") or vim.startswith(fname, runtime_path) then
-    local client = vim.lsp.get_active_clients({ name = "lua_ls" })[1]
+    local client = vim.lsp.get_clients({ name = "lua_ls" })[1]
     if client then
       local lua_rc = read_luarc(client.config.root_dir) or {}
       local lib = vim.tbl_get(lua_rc, "workspace", "library")
@@ -153,6 +153,7 @@ lua_ls.settings = {
       checkThirdParty = false,
       library = {
         runtime_path,
+        "${3rd}/luv/library",
       },
       ignoreDir = {
         "/types/nightly/",
