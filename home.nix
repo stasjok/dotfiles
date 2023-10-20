@@ -33,6 +33,8 @@
     bear
     # Ansible
     ansible
+    # Kubernetes
+    kubectl
     # Languages
     pythonWithPackages
     terraform
