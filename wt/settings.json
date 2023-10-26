@@ -52,7 +52,8 @@
             "intenseTextStyle": "bold",
             "padding": "4, 6",
             "scrollbarState": "hidden",
-            "suppressApplicationTitle": true
+            "suppressApplicationTitle": true,
+            "useAtlasEngine": true
         },
         "list": 
         [
