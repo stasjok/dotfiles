@@ -21,6 +21,7 @@
     # Command-line tools
     fd
     ripgrep
+    yq-go
     # Task runners
     gnumake
     go-task
