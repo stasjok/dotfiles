@@ -33,4 +33,15 @@ final: prev: {
       };
     };
   };
+
+  # Allow changing kubernetes schema URL via settings
+  yaml-language-server = prev.yaml-language-server.overrideAttrs {
+    src = fetchTree {
+      type = "github";
+      owner = "stasjok";
+      repo = "yaml-language-server";
+      rev = "36084f03f936d3a0b59934f4bf3ef70bc40bbf92";
+      narHash = "sha256-9n6SNxY0RQIW9baBKwpQmjEjM4uKquHNcGTo7Jbo0kM=";
+    };
+  };
 }
