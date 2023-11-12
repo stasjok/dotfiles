@@ -38,7 +38,6 @@
     kubectl
     # Languages
     pythonWithPackages
-    terraform
     nodejs
     nodePackages.typescript
   ];
@@ -68,7 +67,7 @@
   programs.less.enable = true;
 
   # Exa, a modern replacement for ls
-  programs.exa = {
+  programs.eza = {
     enable = true;
     enableAliases = true;
   };

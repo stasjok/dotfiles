@@ -12,8 +12,8 @@
     postPatch = prev.postPatch + "rm -r tests";
     # Improve comment queries performance
     patches = fetchpatch {
-      url = "https://github.com/stasjok/nvim-treesitter/commit/5efc1eb108a30477519afff50042a02137ece77d.diff";
-      hash = "sha256-DrPjTq+aTPurn2ohi0EKx2T0cBNfjiYkbHc6HisNDz0=";
+      url = "https://github.com/stasjok/nvim-treesitter/commit/48232ad383346efc9ed7ffec7f4739215f6cb7db.diff";
+      hash = "sha256-1S0MezkC9a7SB+JPEmWm1heR95YwIhapm7LYzE+0mrg=";
     };
   });
 }

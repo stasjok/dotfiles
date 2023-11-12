@@ -1,5 +1,5 @@
 {system}:
-(builtins.getFlake "github:neovim/neovim/72e619ca92b527140e1323f4e281b7f3ad35f380?dir=contrib")
+(builtins.getFlake "github:nix-community/neovim-nightly-overlay/5240f631102f4aba8c498f07b3996355edbe62fa")
 .packages
 .${system}
 .neovim
