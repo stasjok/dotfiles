@@ -1,9 +1,4 @@
 {
-  "include": {
-    "prefix": "include",
-    "body": "include:\n\t- $0",
-    "description": "The include statement"
-  },
   "exclude": {
     "prefix": "exclude",
     "body": "exclude:\n\t- ${1:sls}: ${2:name}",
@@ -16,82 +11,82 @@
   },
   "require": {
     "prefix": "require",
-    "body": "require:\n\t- ${1:${2:file}: ${3:state_id}}",
+    "body": "require:\n\t\t- ${1:${2:file}: ${3:state_id}}",
     "description": "Demands that the required state executes before"
   },
   "require_any": {
     "prefix": "require_any",
-    "body": "require_any:\n\t- ${1:${2:file}: ${3:state_id}}\n\t- ${4:${5:file}: ${6:state_id}}",
+    "body": "require_any:\n\t\t- ${1:${2:file}: ${3:state_id}}\n\t\t- ${4:${5:file}: ${6:state_id}}",
     "description": "Demands that one of the required states executes before the dependent state"
   },
   "require_in": {
     "prefix": "require_in",
-    "body": "require_in:\n\t- ${1:${2:file}: ${3:state_id}}",
+    "body": "require_in:\n\t\t- ${1:${2:file}: ${3:state_id}}",
     "description": "Demands that the required state executes before"
   },
   "watch": {
     "prefix": "watch",
-    "body": "watch:\n\t- ${1:${2:file}: ${3:state_id}}",
+    "body": "watch:\n\t\t- ${1:${2:file}: ${3:state_id}}",
     "description": "Add additional behavior when there are changes"
   },
   "watch_any": {
     "prefix": "watch_any",
-    "body": "watch_any:\n\t- ${1:${2:file}: ${3:state_id}}\n\t- ${4:${5:file}: ${6:state_id}}",
+    "body": "watch_any:\n\t\t- ${1:${2:file}: ${3:state_id}}\n\t\t- ${4:${5:file}: ${6:state_id}}",
     "description": "Add additional behavior when there are changes in any states"
   },
   "watch_in": {
     "prefix": "watch_in",
-    "body": "watch_in:\n\t- ${1:${2:service}: ${3:state_id}}",
+    "body": "watch_in:\n\t\t- ${1:${2:service}: ${3:state_id}}",
     "description": "Add additional behavior when there are changes"
   },
   "prereq": {
     "prefix": "prereq",
-    "body": "prereq:\n\t- ${1:${2:file}: ${3:state_id}}",
+    "body": "prereq:\n\t\t- ${1:${2:file}: ${3:state_id}}",
     "description": "Actions to be taken based on the expected results of a state that has not yet been executed"
   },
   "prereq_in": {
     "prefix": "prereq_in",
-    "body": "prereq_in:\n\t- ${1:${2:file}: ${3:state_id}}",
+    "body": "prereq_in:\n\t\t- ${1:${2:file}: ${3:state_id}}",
     "description": "Actions to be taken based on the expected results of a state that has not yet been executed"
   },
   "use": {
     "prefix": "use",
-    "body": "use:\n\t- ${1:${2:file}: ${3:state_id}}",
+    "body": "use:\n\t\t- ${1:${2:file}: ${3:state_id}}",
     "description": "Inherit the arguments passed in another id declaration"
   },
   "use_in": {
     "prefix": "use_in",
-    "body": "use_in:\n\t- ${1:${2:file}: ${3:state_id}}",
+    "body": "use_in:\n\t\t- ${1:${2:file}: ${3:state_id}}",
     "description": "Inherit the arguments passed in another id declaration"
   },
   "onchanges": {
     "prefix": "onchanges",
-    "body": "onchanges:\n\t- ${1:${2:file}: ${3:state_id}}",
+    "body": "onchanges:\n\t\t- ${1:${2:file}: ${3:state_id}}",
     "description": "Makes a state only apply if the required states generate changes"
   },
   "onchanges_any": {
     "prefix": "onchanges_any",
-    "body": "onchanges_any:\n\t- ${1:${2:file}: ${3:state_id}}\n\t- ${4:${5:file}: ${6:state_id}}",
+    "body": "onchanges_any:\n\t\t- ${1:${2:file}: ${3:state_id}}\n\t\t- ${4:${5:file}: ${6:state_id}}",
     "description": "Makes a state only apply if one of the required states generates changes"
   },
   "onchanges_in": {
     "prefix": "onchanges_in",
-    "body": "onchanges_in:\n\t- ${1:${2:service}: ${3:state_id}}",
+    "body": "onchanges_in:\n\t\t- ${1:${2:service}: ${3:state_id}}",
     "description": "Makes a state only apply if the required states generate changes"
   },
   "onfail": {
     "prefix": "onfail",
-    "body": "onfail:\n\t- ${1:${2:service}: ${3:state_id}}",
+    "body": "onfail:\n\t\t- ${1:${2:service}: ${3:state_id}}",
     "description": "Make a state only apply as a response to the failure of another state"
   },
   "onfail_any": {
     "prefix": "onfail_any",
-    "body": "onfail_any:\n\t- ${1:${2:service}: ${3:state_id}}",
+    "body": "onfail_any:\n\t\t- ${1:${2:service}: ${3:state_id}}",
     "description": "Make a state only apply as a response to the failure of at least one other state"
   },
   "onfail_in": {
     "prefix": "onfail_in",
-    "body": "onfail_in:\n\t- ${1:${2:service}: ${3:state_id}}",
+    "body": "onfail_in:\n\t\t- ${1:${2:service}: ${3:state_id}}",
     "description": "Make a state only apply as a response to the failure of another state"
   },
   "runas": {
@@ -121,22 +116,22 @@
   },
   "unless": {
     "prefix": "unless",
-    "body": "unless:\n\t- ${1:fun: ${2:file.file_exists}}",
+    "body": "unless:\n\t\t- ${1:fun: ${2:file.file_exists}}",
     "description": "State should only run when any of the specified commands return False"
   },
   "onlyif": {
     "prefix": "onlyif",
-    "body": "onlyif:\n\t- ${1:fun: ${2:file.file_exists}}",
+    "body": "onlyif:\n\t\t- ${1:fun: ${2:file.file_exists}}",
     "description": "If each command listed in onlyif returns True, then the state is run"
   },
   "check_cmd": {
     "prefix": "check_cmd",
-    "body": "check_cmd:\n\t- ${1:cmd}",
+    "body": "check_cmd:\n\t\t- ${1:cmd}",
     "description": "Determine that a state did or did not run as expected"
   },
   "retry": {
     "prefix": "retry",
-    "body": "retry:\n\tattempts: ${1:5}\n\tinterval: ${2:30}\n\tsplay: ${3:10}",
+    "body": "retry:\n\t\tattempts: ${1:5}\n\t\tinterval: ${2:30}\n\t\tsplay: ${3:10}",
     "description": "Execute a state multiple times until a desired result is obtained"
   },
   "backup": {
@@ -146,12 +141,12 @@
   },
   "import_map": {
     "prefix": "import_map",
-    "body": "{#- Get the \\`tplroot\\` from \\`tpldir\\` #}\n{%- set tplroot = tpldir.split('/')[0] %}\n{%- from tplroot ~ \"/map.jinja\" import ${1:`!p\ns=re.search('.*(?:salt|[^/]*formula[^/]*)/([^/]+)', path)\nsnip.rv=s.group(1) if s else 'name' `} with context %}",
+    "body": "{#- Get the `tplroot` from `tpldir` #}\n{%- set tplroot = tpldir.split('/')[0] %}\n{%- from tplroot ~ \"/map.jinja\" import ${1:name} with context %}",
     "description": "Import from map.jinja"
   },
   "tplroot": {
     "prefix": "tplroot",
-    "body": "{#- Get the \\`tplroot\\` from \\`tpldir\\` #}\n{%- set tplroot = tpldir.split('/')[0] %}",
+    "body": "{#- Get the `tplroot` from `tpldir` #}\n{%- set tplroot = tpldir.split('/')[0] %}",
     "description": "Get the tplroot from tpldir"
   },
   "import_files_switch": {
@@ -161,7 +156,7 @@
   },
   "files_switch": {
     "prefix": "files_switch",
-    "body": "{{ files_switch(['${1:${2:`!p\ns=re.search('.*(?:salt|[^/]*formula[^/]*)/([^/]+)', path)\nsnip.rv=s.group(1) if s else 'name' `}.conf}'],\n                          lookup='${3:`!p\ns=re.search('.*(?:salt|[^/]*formula[^/]*)/([^/]+)', path)\nsnip.rv=s.group(1)+'-config-file-managed' if s else 'name-config-file-managed' `}'\n             )\n          }}",
+    "body": "{{ files_switch(['${1:${2:name}.conf}'], lookup='${2:name}-config-file-managed') }}",
     "description": "source: files_switch"
   },
   "test.nop": {
@@ -176,17 +171,17 @@
   },
   "service.running": {
     "prefix": "service.running",
-    "body": "service.running:\n\t- name: ${1:service_name}\n\t- enable: ${2:yes}\n\t- reload: ${3:yes}",
+    "body": "service.running:\n\t- name: ${1:service_name}\n\t- enable: ${2:true}\n\t- reload: ${3:true}",
     "description": "Ensure that the service is running"
   },
   "file.managed": {
     "prefix": "file.managed",
-    "body": "file.managed:\n\t- name: ${1:\\{\\{ `!p s=re.search('.*(?:salt|[^/]*formula[^/]*)/([^/]+)', path)\nsnip.rv=s.group(1) if s else '/path/to/file' `.config \\}\\}}\n\t- source: ${2:salt://${3:`!p\ns=re.search('.*(?:salt|[^/]*formula[^/]*)/([^/]+)', path)\nsnip.rv=s.group(1) if s else 'name' `/files/${4:config}}}\n\t- user: ${5:root}\n\t- group: ${6:root}\n\t- mode: ${7:644}\n\t- makedirs: ${8:yes}\n\t- template: ${9:jinja}\n\t- context:\n\t\t\t`!p s=re.search('.*(?:salt|[^/]*formula[^/]*)/([^/]+)', path)\nv=s.group(1) if s else 'name'\nsnip.rv='{}: {{{{ {}|yaml }}}}'.format(v, v) `",
+    "body": "file.managed:\n\t- name: ${1:/path/to/file}\n\t- source: ${2:salt://${3:name}/files/${4:config}}\n\t- user: ${5:root}\n\t- group: ${6:root}\n\t- mode: ${7:644}\n\t- makedirs: ${8:true}\n\t- template: ${9:jinja}\n\t- context:\n\t\t\t$3: {{ $3 | yaml }}",
     "description": "Manage a given file"
   },
   "file.serialize": {
     "prefix": "file.serialize",
-    "body": "file.serialize:\n\t- name: ${1:file_path}\n\t- dataset: ${2:\\{\\{ ${3:data} | yaml \\}\\}}\n\t- formatter: ${4:configparser}\n\t- user: ${5:root}\n\t- group: ${6:root}\n\t- mode: ${7:644}\n\t- makedirs: ${8:yes}",
+    "body": "file.serialize:\n\t- name: ${1:file_path}\n\t- dataset: ${2:{{ ${3:data} | yaml }}}\n\t- formatter: ${4:configparser}\n\t- user: ${5:root}\n\t- group: ${6:root}\n\t- mode: ${7:644}\n\t- makedirs: ${8:true}",
     "description": "Serializes dataset and store it into managed file"
   },
   "pkg.installed": {
