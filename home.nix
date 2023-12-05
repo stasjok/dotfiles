@@ -36,6 +36,7 @@
     ansible
     # Kubernetes
     kubectl
+    kubernetes-helm
     # Languages
     pythonWithPackages
     nodejs
