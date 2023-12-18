@@ -58,6 +58,9 @@ local settings = {
   hcl = {
     on_save = true,
   },
+  terraform = {
+    on_save = true,
+  },
 }
 
 ---Returns a function for formatting with specific client id

@@ -17,6 +17,16 @@
         # ansible-language-server uses python to get sys.path in order to get collections list
         ansible
       ]);
+    terraformAlias = stdenvNoCC.mkDerivation {
+      pname = "opentofu-alias";
+      version = "0.1";
+      src = emptyDirectory;
+      nativeBuildInputs = [makeWrapper];
+      buildPhase = ''
+        mkdir -p $out/bin
+        makeWrapper ${opentofu}/bin/tofu $out/bin/terraform
+      '';
+    };
   in [
     # Command-line tools
     fd
@@ -40,6 +50,7 @@
     # Languages
     pythonWithPackages
     opentofu
+    terraformAlias
     nodejs
     nodePackages.typescript
   ];
