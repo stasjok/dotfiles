@@ -61,6 +61,9 @@ local settings = {
   terraform = {
     on_save = true,
   },
+  ["terraform-vars"] = {
+    on_save = true,
+  },
 }
 
 ---Returns a function for formatting with specific client id

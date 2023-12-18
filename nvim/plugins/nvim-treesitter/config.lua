@@ -19,3 +19,6 @@ require("nvim-treesitter.configs").setup({
     },
   },
 })
+
+-- Filetypes
+vim.treesitter.language.register("terraform", "terraform-vars")
