@@ -39,6 +39,7 @@
     kubernetes-helm
     # Languages
     pythonWithPackages
+    opentofu
     nodejs
     nodePackages.typescript
   ];
