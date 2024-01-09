@@ -11,6 +11,18 @@ telescope.setup({
       },
     },
   },
+  pickers = {
+    buffers = {
+      mappings = {
+        i = {
+          ["<C-E>"] = "delete_buffer",
+        },
+        n = {
+          D = "delete_buffer",
+        },
+      },
+    },
+  },
 })
 telescope.load_extension("fzf")
 
