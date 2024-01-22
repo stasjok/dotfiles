@@ -146,12 +146,12 @@
   },
   "import_map": {
     "prefix": "import_map",
-    "body": "{%- from tplroot ~ \"/map.jinja\" import mapdata as ${1:name} %}",
+    "body": "{%- from tplroot | path_join(\"map.jinja\") import mapdata as ${1:name} %}",
     "description": "Import from map.jinja"
   },
   "import_files_switch": {
     "prefix": "import_files_switch",
-    "body": "{%- from tplroot ~ \"/libtofs.jinja\" import files_switch %}",
+    "body": "{%- from tplroot | path_join(\"libtofs.jinja\") import files_switch %}",
     "description": "Import files_switch"
   },
   "files_switch": {
