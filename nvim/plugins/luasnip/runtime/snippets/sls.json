@@ -139,8 +139,8 @@
     "body": "backup: minion",
     "description": "Backing up files that are replaced by the file.managed and file.recurse states"
   },
-  "set_tplroot": {
-    "prefix": "set_tplroot",
+  "tplroot": {
+    "prefix": "tplroot",
     "body": "{%- set tplroot = tpldir.split('/')[0] %}",
     "description": "Get the tplroot from tpldir"
   },
