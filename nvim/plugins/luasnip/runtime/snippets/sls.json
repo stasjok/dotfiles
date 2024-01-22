@@ -139,24 +139,24 @@
     "body": "backup: minion",
     "description": "Backing up files that are replaced by the file.managed and file.recurse states"
   },
+  "set_tplroot": {
+    "prefix": "set_tplroot",
+    "body": "{%- set tplroot = tpldir.split('/')[0] %}",
+    "description": "Get the tplroot from tpldir"
+  },
   "import_map": {
     "prefix": "import_map",
-    "body": "{#- Get the `tplroot` from `tpldir` #}\n{%- set tplroot = tpldir.split('/')[0] %}\n{%- from tplroot ~ \"/map.jinja\" import ${1:name} with context %}",
+    "body": "{%- from tplroot ~ \"/map.jinja\" import mapdata as ${1:name} %}",
     "description": "Import from map.jinja"
-  },
-  "tplroot": {
-    "prefix": "tplroot",
-    "body": "{#- Get the `tplroot` from `tpldir` #}\n{%- set tplroot = tpldir.split('/')[0] %}",
-    "description": "Get the tplroot from tpldir"
   },
   "import_files_switch": {
     "prefix": "import_files_switch",
-    "body": "{%- from tplroot ~ \"/libtofs.jinja\" import files_switch with context %}",
+    "body": "{%- from tplroot ~ \"/libtofs.jinja\" import files_switch %}",
     "description": "Import files_switch"
   },
   "files_switch": {
     "prefix": "files_switch",
-    "body": "{{ files_switch(['${1:${2:name}.conf}'], lookup='${2:name}-config-file-managed') }}",
+    "body": "{{ files_switch([\"${1:${2:name}.conf}\"], lookup=\"${2:name}-config-file-managed\") }}",
     "description": "source: files_switch"
   },
   "test.nop": {
