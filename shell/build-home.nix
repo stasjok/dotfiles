@@ -47,4 +47,5 @@ in ''
   . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
 
   ${optionalString runOnChangeHooks onChangeHooks}
+  ${optionalString runOnChangeHooks "bat cache --build >/dev/null"}
 ''
