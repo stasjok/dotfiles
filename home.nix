@@ -82,7 +82,6 @@
   # Exa, a modern replacement for ls
   programs.eza = {
     enable = true;
-    enableAliases = true;
   };
 
   # Jq, command-line JSON processor

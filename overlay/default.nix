@@ -44,4 +44,7 @@ final: prev: {
       narHash = "sha256-9n6SNxY0RQIW9baBKwpQmjEjM4uKquHNcGTo7Jbo0kM=";
     };
   };
+
+  # Freeze packer to the letest version with Mozilla Public License 2.0
+  packer = prev.callPackage ../packages/packer {};
 }
