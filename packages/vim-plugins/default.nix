@@ -5,7 +5,7 @@
   vimUtils,
 }: let
   plugins = callPackage ./generated.nix {
-    inherit (vimUtils) buildVimPluginFrom2Nix;
+    inherit (vimUtils) buildVimPlugin;
     inherit (neovimUtils) buildNeovimPlugin;
   };
   overrides = callPackage ./overrides.nix {};

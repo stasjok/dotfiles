@@ -9,6 +9,13 @@ final: prev: {
 
   # Vim plugins
   vimPlugins = prev.vimPlugins.extend (prev.callPackage ../packages/vim-plugins {});
+  # Avoid error when pointing to nixpkgs directory without .git
+  # Use only with --no-commit arg
+  vimPluginsUpdater = prev.vimPluginsUpdater.overrideAttrs {
+    postFixup = ''
+      sed -i 's/self.nixpkgs_repo = git.Repo/# \0/' $out/lib/pluginupdate.py
+    '';
+  };
 
   # Neovim backports and patches
   neovim-patched = prev.callPackage ../packages/neovim {};
