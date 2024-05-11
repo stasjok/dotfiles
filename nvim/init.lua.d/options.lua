@@ -34,8 +34,8 @@ vim.opt_global.scrollback = 80000
 -- Fire CursorHold event faster
 vim.opt.updatetime = 300
 
--- Use bash as default shell (it's faster)
-vim.opt.shell = "bash"
+-- Use system bash as default shell (it's faster)
+vim.opt.shell = vim.uv.fs_stat("/bin/bash") and "/bin/bash" or "bash"
 
 -- Show tabs and trailing spaces
 vim.opt.list = true
