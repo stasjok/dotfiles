@@ -19,7 +19,7 @@ local tests = {
     string = "local a=1",
     formatted_string = "local a = 1",
     formatting = true,
-    range_formatting = false,
+    range_formatting = true,
     on_save = true,
     extra_files = { "stylua.toml" },
   },

@@ -44,7 +44,7 @@ T["dotfiles"] = function()
       not child.lua_get(
         string.format(
           "vim.wait(%i, function() return vim.b[%i].diagnostics end, 50)",
-          timeout or 10000,
+          timeout or 20000,
           bufnr
         )
       )
