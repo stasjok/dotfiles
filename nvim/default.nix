@@ -117,7 +117,7 @@ in {
       nil
       alejandra
       nixpkgs-fmt
-      nixfmt
+      nixfmt-classic
       # Ansible
       ansible-language-server
       ansible-lint
