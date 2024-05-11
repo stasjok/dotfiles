@@ -1,7 +1,6 @@
 local buf_get_option = vim.api.nvim_buf_get_option
 local map = vim.keymap.set
 local buf_format = vim.lsp.buf.format
-local fs_stat = vim.loop.fs_stat
 local create_augroup = vim.api.nvim_create_augroup
 local create_autocmd = vim.api.nvim_create_autocmd
 local clear_autocmds = vim.api.nvim_clear_autocmds
@@ -24,12 +23,12 @@ local settings = {
     ---@param args FormatConditionArgs
     ---@return boolean
     on_save = function(args)
-      return args.client.config.root_dir
-        and (
-          fs_stat(args.client.config.root_dir .. "/stylua.toml") ~= nil
-          or fs_stat(args.client.config.root_dir .. "/.stylua.toml") ~= nil
-          or fs_stat(args.client.config.root_dir .. "/.styluaignore") ~= nil
-        )
+      return #vim.fs.find({ "stylua.toml", ".stylua.toml", ".styluaignore" }, {
+        path = vim.fs.dirname(vim.api.nvim_buf_get_name(args.buf)),
+        upward = true,
+        stop = vim.env.HOME,
+        type = "file",
+      }) > 0
     end,
   },
   nix = {
