@@ -127,7 +127,11 @@ map("s", "<Del>", "<C-O>c")
 
 -- Load snippets
 local opts = {
-  paths = vim.fs.joinpath(vim.fn.stdpath("config"), "snippets"),
+  -- Paths doesn't work correctly with symlinks to nix store
+  -- See: https://github.com/L3MON4D3/LuaSnip/issues/1170
+  -- TODO: maybe need to change to paths when fixed
+  lazy_paths = vim.fs.joinpath(vim.fn.stdpath("config"), "snippets"),
+  fs_event_providers = { libuv = true },
 }
 require("luasnip.loaders.from_vscode").lazy_load(opts)
 require("luasnip.loaders.from_snipmate").lazy_load(opts)
