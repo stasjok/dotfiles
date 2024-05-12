@@ -29,7 +29,6 @@
     };
   in [
     # Command-line tools
-    fd
     ripgrep
     yq-go
     # Task runners
@@ -81,6 +80,11 @@
 
   # Exa, a modern replacement for ls
   programs.eza = {
+    enable = true;
+  };
+
+  # Fd, a simple, fast and user-friendly alternative to find
+  programs.fd = {
     enable = true;
   };
 
