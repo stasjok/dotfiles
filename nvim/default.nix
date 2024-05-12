@@ -103,6 +103,8 @@ in {
     # Extra packages available to neovim
     extraPackages = with pkgs.nodePackages;
     with pkgs; [
+      # File watcher
+      fswatch
       # Bash
       bash-language-server
       shellcheck
