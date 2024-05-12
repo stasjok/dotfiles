@@ -217,7 +217,6 @@ in {
         # Editing
         surround-nvim
         nvim-autopairs
-        kommentary
         # Git
         vim-fugitive
         gitsigns-nvim
