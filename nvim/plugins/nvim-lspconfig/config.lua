@@ -134,6 +134,7 @@ local lsp_servers = {
         ["ui.semanticTokens"] = true,
         ["ui.noSemanticString"] = true,
         ["ui.noSemanticNumber"] = true,
+        ["ui.diagnostic.staticcheck"] = true,
       },
     },
   },
