@@ -43,7 +43,7 @@
         true-color = "always";
 
         # Catppuccin Macchiato theme
-        syntax-theme = "Catppuccin-macchiato";
+        syntax-theme = "Catppuccin Macchiato";
         map-styles = "bold purple => syntax #302d40, bold blue => syntax #3c3345, bold cyan => syntax #2c323f, bold yellow => syntax #343C45";
         plus-style = "syntax #3b474a";
         plus-emph-style = "syntax #53675b";
