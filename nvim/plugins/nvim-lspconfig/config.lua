@@ -128,7 +128,15 @@ local lsp_servers = {
   },
 
   -- Go
-  gopls = {},
+  gopls = {
+    settings = {
+      gopls = {
+        ["ui.semanticTokens"] = true,
+        ["ui.noSemanticString"] = true,
+        ["ui.noSemanticNumber"] = true,
+      },
+    },
+  },
 
   -- Rust
   rust_analyzer = {
