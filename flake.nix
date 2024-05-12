@@ -7,12 +7,19 @@
       url = "home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Other inputs
+    neovim = {
+      url = "github:neovim/neovim?dir=contrib";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = {
+  outputs = inputs @ {
     self,
     nixpkgs,
     home-manager,
+    ...
   }: let
     system = "x86_64-linux";
     homeManagerOverlay = import "${home-manager}/overlay.nix";
@@ -62,7 +69,7 @@
 
     checks.${system}.tests = pkgs.callPackage ./tests {homeConfiguration = self.homeConfigurations.stas;};
 
-    overlays.default = import ./overlay;
+    overlays.default = import ./overlay inputs;
 
     # Provide all upstream packages
     legacyPackages.${system} = pkgs;

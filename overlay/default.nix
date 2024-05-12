@@ -1,4 +1,4 @@
-final: prev: {
+inputs: final: prev: {
   # Fish plugins
   fishPlugins = prev.fishPlugins.overrideScope' (prev.callPackage ../packages/fish-plugins {});
 
@@ -18,7 +18,7 @@ final: prev: {
   };
 
   # Neovim backports and patches
-  neovim-patched = prev.callPackage ../packages/neovim {};
+  neovim-patched = prev.callPackage ../packages/neovim {inherit inputs;};
 
   # Python packages
   pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [(prev.callPackage ../packages/python {})];
