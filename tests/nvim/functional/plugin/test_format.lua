@@ -7,6 +7,15 @@ local child = new_child()
 local T = new_set({
   hooks = {
     pre_case = child.setup,
+    post_case = function()
+      -- Workaround to ensure that all fswatch processes are closed
+      child.lua_func(function()
+        vim.iter(vim.lsp.get_clients()):each(function(client)
+          ---@cast client vim.lsp.Client
+          vim.lsp._watchfiles.cancel(client.id)
+        end)
+      end)
+    end,
     post_once = child.stop,
   },
 })
