@@ -7,6 +7,14 @@
     };
   });
 
+  # Fix symlinked vscode snippets
+  luasnip = prev.luasnip.overrideAttrs {
+    patches = fetchpatch {
+      url = "https://github.com/L3MON4D3/LuaSnip/commit/2b7395217ec97ac020395f5850ba7e18a64d2eba.diff";
+      hash = "sha256-WqeoxCJuc50Fl6A19qSErgTz4dnpccPlKOgJndmG5qo=";
+    };
+  };
+
   # Remove tests because there are invalid lua files there
   nvim-treesitter = prev.nvim-treesitter.overrideAttrs (prev: {
     postPatch = prev.postPatch + "rm -r tests";
