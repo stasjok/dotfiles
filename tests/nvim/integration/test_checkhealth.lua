@@ -32,6 +32,8 @@ T["checkhealth"] = function()
     -- Perl is enabled but doesn't work
     "No usable perl executable found",
     '"Neovim::Ext" cpan module is not installed',
+    -- I'm testing internal watcher
+    "libuv-watchdirs has known performance issues",
     -- diffview.nvim
     "`hg_cmd` is not executable",
   }
