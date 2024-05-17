@@ -22,24 +22,20 @@ in {
 
   # Neovim backports and patches
   neovim-patched = callPackage ../packages/neovim {};
-  # LuaJIT version matching neovim 0.10.0
+  # LuaJIT and luv versions matching neovim 0.10.0
   luaInterpreters = let
     packageOverrides = finalLua: prevLua: {
-      luv = prevLua.luv.override (prevArgs: {
-        buildLuarocksPackage = args:
-          prevArgs.buildLuarocksPackage (args
-            // {
-              version = "1.48.0-2";
-              knownRockspec = prev.fetchurl {
-                url = "mirror://luarocks/luv-1.48.0-2.rockspec";
-                sha256 = "sha256-JPnLAlsAOrBcyF21vWAYrS2XWnZNz3waDAqkn6xcoww=";
-              };
-              src = prev.fetchurl {
-                url = "https://github.com/luvit/luv/releases/download/1.48.0-2/luv-1.48.0-2.tar.gz";
-                sha256 = "sha256-LDod3+u09lUCk6QO54n3Ei6XZH7t5RUR9XID3kjAO3o=";
-              };
-            });
-      });
+      luv = prevLua.luaLib.overrideLuarocks prevLua.luv {
+        version = "1.48.0-2";
+        knownRockspec = prev.fetchurl {
+          url = "mirror://luarocks/luv-1.48.0-2.rockspec";
+          sha256 = "sha256-JPnLAlsAOrBcyF21vWAYrS2XWnZNz3waDAqkn6xcoww=";
+        };
+        src = prev.fetchurl {
+          url = "https://github.com/luvit/luv/releases/download/1.48.0-2/luv-1.48.0-2.tar.gz";
+          sha256 = "sha256-LDod3+u09lUCk6QO54n3Ei6XZH7t5RUR9XID3kjAO3o=";
+        };
+      };
       libluv = prevLua.libluv.overrideAttrs {
         inherit (finalLua.luv) version src;
       };
