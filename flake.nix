@@ -13,6 +13,22 @@
       url = "github:neovim/neovim?ref=release-0.10";
       flake = false;
     };
+    tree-sitter-jinja2 = {
+      url = "github:theHamsta/tree-sitter-jinja2";
+      flake = false;
+    };
+    yaml-language-server = {
+      url = "github:stasjok/yaml-language-server?rev=36084f03f936d3a0b59934f4bf3ef70bc40bbf92";
+      flake = false;
+    };
+    fish-catppuccin = {
+      url = "github:catppuccin/fish";
+      flake = false;
+    };
+    vale-at-red-hat = {
+      url = "github:redhat-documentation/vale-at-red-hat";
+      flake = false;
+    };
   };
 
   outputs = inputs @ {
@@ -39,7 +55,8 @@
       isGenericLinux ? true,
     }:
       home-manager.lib.homeManagerConfiguration {
-        inherit pkgs extraSpecialArgs;
+        inherit pkgs;
+        extraSpecialArgs = extraSpecialArgs // {inherit inputs;};
         modules = with lib;
           flatten [
             ./modules

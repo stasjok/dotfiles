@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   ...
 }: {
@@ -42,13 +43,7 @@
 
   # Catppuccin Macchiato theme
   xdg.configFile."fish/themes" = let
-    src = fetchTree {
-      type = "github";
-      owner = "catppuccin";
-      repo = "fish";
-      rev = "b90966686068b5ebc9f80e5b90fdf8c02ee7a0ba";
-      narHash = "sha256-wQlYQyqklU/79K2OXRZXg5LvuIugK7vhHgpahpLFaOw=";
-    };
+    src = inputs.fish-catppuccin;
   in {
     source = "${src}/themes";
     recursive = true;

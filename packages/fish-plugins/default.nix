@@ -1,3 +1,8 @@
-{callPackage}: final: prev: {
-  foreign-env = callPackage ./foreign-env.nix {inherit (final) buildFishPlugin;};
+{
+  lib,
+  pkgs,
+}: final: prev: let
+  callPackage = lib.callPackageWith (pkgs // {inherit (final) buildFishPlugin;});
+in {
+  foreign-env = callPackage ./foreign-env.nix {};
 }

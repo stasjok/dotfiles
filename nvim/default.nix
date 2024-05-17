@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -379,13 +380,7 @@ in {
 
     # Vale styles
     ".vale/RedHat".source = let
-      src = fetchTree {
-        type = "github";
-        owner = "redhat-documentation";
-        repo = "vale-at-red-hat";
-        ref = "v340";
-        narHash = "sha256-WpOoUUkDdEVMKGNV3J4aSKnVuqxLpq7il0D0XqnHMcY=";
-      };
+      src = inputs.vale-at-red-hat;
     in "${src}/.vale/styles/RedHat";
   };
 }
