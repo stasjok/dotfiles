@@ -22,6 +22,23 @@ in {
 
   # Neovim backports and patches
   neovim-patched = callPackage ../packages/neovim {};
+  # LuaJIT version matching neovim 0.10.0
+  luaInterpreters = let
+    luajit_2_1 = prev.luaInterpreters.luajit_2_1.overrideAttrs {
+      version = "2.1.1713484068";
+      src = fetchTree {
+        type = "github";
+        owner = "LuaJIT";
+        repo = "LuaJIT";
+        rev = "75e92777988017fe47c5eb290998021bbf972d1f";
+        narHash = "sha256-UnrsrXqAybmZve/Y86Q34Yn1TupNKm12wkJsfRpHoWw=";
+      };
+    };
+  in
+    prev.luaInterpreters
+    // {
+      luajit_2_1 = luajit_2_1.override {self = luajit_2_1;};
+    };
 
   # Python packages
   pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [(callPackage ../packages/python {})];
