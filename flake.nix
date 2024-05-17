@@ -10,8 +10,8 @@
 
     # Other inputs
     neovim = {
-      url = "github:neovim/neovim?dir=contrib";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:neovim/neovim?ref=release-0.10";
+      flake = false;
     };
   };
 
@@ -69,7 +69,7 @@
 
     checks.${system}.tests = pkgs.callPackage ./tests {homeConfiguration = self.homeConfigurations.stas;};
 
-    overlays.default = import ./overlay inputs;
+    overlays.default = import ./overlay {inherit inputs;};
 
     # Provide all upstream packages
     legacyPackages.${system} = pkgs;

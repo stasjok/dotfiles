@@ -1,5 +1,8 @@
 {
   inputs,
-  system,
+  neovim-unwrapped,
 }:
-inputs.neovim.packages.${system}.neovim
+neovim-unwrapped.overrideAttrs {
+  pname = "neovim-patched";
+  src = inputs.neovim;
+}

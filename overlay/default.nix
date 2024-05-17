@@ -1,4 +1,7 @@
-inputs: final: prev: {
+{inputs}: final: prev: let
+  # Add flake inputs to autoArgs
+  callPackage = prev.lib.callPackageWith (final // {inherit inputs;});
+in {
   # Fish plugins
   fishPlugins = prev.fishPlugins.overrideScope' (prev.callPackage ../packages/fish-plugins {});
 
@@ -18,7 +21,7 @@ inputs: final: prev: {
   };
 
   # Neovim backports and patches
-  neovim-patched = prev.callPackage ../packages/neovim {inherit inputs;};
+  neovim-patched = callPackage ../packages/neovim {};
 
   # Python packages
   pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [(prev.callPackage ../packages/python {})];
