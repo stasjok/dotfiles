@@ -10,21 +10,6 @@
   # Packages
   neovim = pkgs.neovim-patched;
 
-  lemminx = pkgs.stdenvNoCC.mkDerivation rec {
-    pname = "lemminx";
-    version = "0.24.0";
-    src = pkgs.fetchurl {
-      url = "https://github.com/redhat-developer/vscode-xml/releases/download/${version}/lemminx-linux.zip";
-      hash = "sha256-j0xWSICAXLbUwHc3ecJ57P41J0kpjq5GpEUMOXbr+Yw=";
-    };
-    nativeBuildInputs = with pkgs; [unzip];
-    sourceRoot = ".";
-    dontFixup = true;
-    installPhase = ''
-      install -D -T lemminx-linux -m 0755 $out/bin/${pname}
-    '';
-  };
-
   # A hook to byte-compile all lua files in `$out`
   luaByteCompileHook =
     pkgs.makeSetupHook {
