@@ -3,11 +3,11 @@
     "fish-catppuccin": {
       "flake": false,
       "locked": {
-        "lastModified": 1672320165,
-        "narHash": "sha256-wQlYQyqklU/79K2OXRZXg5LvuIugK7vhHgpahpLFaOw=",
+        "lastModified": 1715687686,
+        "narHash": "sha256-shQxlyoauXJACoZWtRUbRMxmm10R8vOigXwjxBhG8ng=",
         "owner": "catppuccin",
         "repo": "fish",
-        "rev": "b90966686068b5ebc9f80e5b90fdf8c02ee7a0ba",
+        "rev": "a3b9eb5eaf2171ba1359fe98f20d226c016568cf",
         "type": "github"
       },
       "original": {
@@ -96,11 +96,11 @@
     "vale-at-red-hat": {
       "flake": false,
       "locked": {
-        "lastModified": 1687534864,
-        "narHash": "sha256-WpOoUUkDdEVMKGNV3J4aSKnVuqxLpq7il0D0XqnHMcY=",
+        "lastModified": 1715692753,
+        "narHash": "sha256-c1SBOyfhY+QHGPbKUGA5vhcQsz3l5r9xdjA9ezxZfq4=",
         "owner": "redhat-documentation",
         "repo": "vale-at-red-hat",
-        "rev": "30f7202ecf4f87192aa6accb70d5c7e34f50a33a",
+        "rev": "534dfe72a307c5cd31ef2434c63a524009475685",
         "type": "github"
       },
       "original": {
