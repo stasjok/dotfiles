@@ -25,11 +25,11 @@ in {
   neovim-patched = callPackage ../packages/neovim {};
 
   # Python packages
-  pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [(callPackage ../packages/python {})];
+  pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [(callPackage ../packages/python/packages.nix {})];
 
   # Lua interpreters and packages
   luaInterpreters = lib.fix (
-    lib.extends (callPackage ../packages/lua-interpreters {}) (_: prev.luaInterpreters)
+    lib.extends (callPackage ../packages/lua/interpreters.nix {}) (_: prev.luaInterpreters)
   );
 
   # Node packages
