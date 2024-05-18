@@ -3,7 +3,7 @@
   lib,
 }: final: prev: let
   # Lua packages
-  packageOverrides = callPackage ./packages.nix {};
+  packageOverrides = callPackage ../lua-packages {};
 
   # Lua interpreter overrides
   interpreterOverrides = {
