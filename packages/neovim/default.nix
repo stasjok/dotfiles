@@ -18,6 +18,11 @@
       url = "https://github.com/neovim/neovim/commit/4b029163345333a2c6975cd0dace6613b036ae47.diff";
       hash = "sha256-X/nnIDAalYPZvMVCfMtZhouQ9Xw3knSGOiMR6xHBOYY=";
     })
+    # fix(vim.iter): enable optimizations for arrays (lists with holes)
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/4c0d18c19773327dcd771d1da7805690e3e41255.diff";
+      hash = "sha256-WKxMbXuK6hWzU2o5hT7VjG9GpfuKg24AwsJ10TkzGE8=";
+    })
   ];
 
   # Neovim source
