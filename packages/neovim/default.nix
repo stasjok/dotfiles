@@ -135,9 +135,44 @@
       sha256 = deps.LIBVTERM_SHA256;
     };
   };
+
+  # Tree-sitter
+  tree-sitter = pkgs.tree-sitter.overrideAttrs (prev: rec {
+    version = versionFromURL deps.TREESITTER_URL;
+    src = fetchurl {
+      url = deps.TREESITTER_URL;
+      sha256 = deps.TREESITTER_SHA256;
+    };
+    # Need to update cargo hash every time
+    cargoHash = "sha256-U2YXpNwtaSSEftswI0p0+npDJqOq5GqxEUlOPRlJGmQ=";
+    cargoDeps = prev.cargoDeps.overrideAttrs {
+      inherit src;
+      hash = cargoHash;
+      outputHash = cargoHash;
+    };
+  });
+
+  # Tree-sitter parsers
+  treesitter-parsers = lib.pipe deps [
+    builtins.attrNames
+    (builtins.filter (n: lib.hasPrefix "TREESITTER" n && lib.hasSuffix "URL" n && n != "TREESITTER_URL"))
+    (map (n:
+      lib.pipe n [
+        (lib.removePrefix "TREESITTER_")
+        (lib.removeSuffix "_URL")
+        lib.toLower
+      ]))
+    (lib.flip lib.genAttrs (n: {
+      src = fetchurl {
+        url = builtins.getAttr "TREESITTER_${lib.toUpper n}_URL" deps;
+        sha256 = builtins.getAttr "TREESITTER_${lib.toUpper n}_SHA256" deps;
+      };
+    }))
+  ];
 in
   (neovim-unwrapped.override {
-    inherit libuv lua msgpack-c unibilium libvterm-neovim;
+    inherit libuv lua msgpack-c unibilium libvterm-neovim tree-sitter;
+    inherit treesitter-parsers;
     # not needed dependencies
     libtermkey = null;
     gperf = null;
