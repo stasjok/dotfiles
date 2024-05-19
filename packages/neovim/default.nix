@@ -2,6 +2,7 @@
   inputs,
   lib,
   pkgs,
+  autoreconfHook,
   fetchurl,
   luajit,
   neovim-unwrapped,
@@ -26,7 +27,20 @@
     lib.pipe url [
       (lib.flip lib.nameFromURL ".tar")
       (lib.removePrefix "v")
+      (builtins.substring 0 12)
     ];
+
+  # Update version in rockspec file
+  rockspecUpdateVersion = orig: name: version: let
+    # Revision is required after version
+    v =
+      if lib.hasInfix "-" version
+      then version
+      else "${version}-1";
+  in
+    runCommand "${name}-${v}.rockspec" {} ''
+      sed -E "s/(version[[:blank:]]*=[[:blank:]]*[\"'])(.*)([\"'])/\1${v}\3/" ${orig} >$out
+    '';
 
   # Remove original and append overriden derivation to a list
   replaceInput = prev: drv: builtins.filter (i: lib.getName i != lib.getName drv) prev ++ [drv];
@@ -50,9 +64,7 @@
           sha256 = deps.LUV_SHA256;
         };
         # Update version in rockspec file
-        knownRockspec = runCommand "luv-${version}.rockspec" {} ''
-          sed 's/\(version = \)"\(.*\)"/\1"${version}"/' ${prev.luv.knownRockspec} >$out
-        '';
+        knownRockspec = rockspecUpdateVersion prev.luv.knownRockspec "luv" version;
       })
       .overrideAttrs (prevAttrs: {
         buildInputs = replaceInput prevAttrs.buildInputs libuv;
@@ -61,6 +73,14 @@
       inherit (final.luv) version src;
       buildInputs = replaceInput prevAttrs.buildInputs libuv;
     });
+    lpeg = prev.luaLib.overrideLuarocks prev.lpeg rec {
+      version = lib.removePrefix "lpeg-" (versionFromURL deps.LPEG_URL);
+      src = fetchurl {
+        url = deps.LPEG_URL;
+        sha256 = deps.LPEG_SHA256;
+      };
+      knownRockspec = rockspecUpdateVersion prev.lpeg.knownRockspec "lpeg" version;
+    };
   };
 
   # LuaJIT
@@ -82,11 +102,48 @@
     packageOverrides = luaPackageOverrides;
     self = lua;
   };
+
+  # MessagePack for C
+  msgpack-c = pkgs.msgpack-c.overrideAttrs {
+    version = lib.pipe deps.MSGPACK_URL [
+      versionFromURL
+      (lib.removePrefix "msgpack-")
+      (lib.removePrefix "c-")
+    ];
+    src = fetchurl {
+      url = deps.MSGPACK_URL;
+      sha256 = deps.MSGPACK_SHA256;
+    };
+  };
+
+  # Unibilium
+  unibilium = pkgs.unibilium.overrideAttrs (prev: {
+    version = versionFromURL deps.UNIBILIUM_URL;
+    src = fetchurl {
+      url = deps.UNIBILIUM_URL;
+      sha256 = deps.UNIBILIUM_SHA256;
+    };
+    # autoreconf is needed for newer versions to generate Makefile
+    nativeBuildInputs = lib.unique (prev.nativeBuildInputs ++ [autoreconfHook]);
+  });
+
+  # libvterm neovim fork
+  libvterm-neovim = pkgs.libvterm-neovim.overrideAttrs {
+    version = versionFromURL deps.LIBVTERM_URL;
+    src = fetchurl {
+      url = deps.LIBVTERM_URL;
+      sha256 = deps.LIBVTERM_SHA256;
+    };
+  };
 in
   (neovim-unwrapped.override {
-    inherit lua libuv;
+    inherit libuv lua msgpack-c unibilium libvterm-neovim;
+    # not needed dependencies
+    libtermkey = null;
+    gperf = null;
+    ncurses = null;
   })
-  .overrideAttrs {
+  .overrideAttrs (prev: {
     pname = "neovim-patched";
     src = inputs.neovim;
-  }
+  })
