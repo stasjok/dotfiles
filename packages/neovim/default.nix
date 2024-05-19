@@ -173,12 +173,11 @@ in
   (neovim-unwrapped.override {
     inherit libuv lua msgpack-c unibilium libvterm-neovim tree-sitter;
     inherit treesitter-parsers;
-    # not needed dependencies
-    libtermkey = null;
-    gperf = null;
-    ncurses = null;
   })
   .overrideAttrs (prev: {
     pname = "neovim-patched";
     src = inputs.neovim;
+
+    # not needed dependencies
+    buildInputs = with pkgs; lib.subtractLists [libtermkey gperf ncurses] prev.buildInputs;
   })
