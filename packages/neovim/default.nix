@@ -2,13 +2,32 @@
   inputs,
   lib,
   pkgs,
+  applyPatches,
   autoreconfHook,
+  fetchpatch,
   fetchurl,
   luajit,
   neovim-unwrapped,
   runCommand,
   stdenvNoCC,
 }: let
+  # Neovim patches
+  patches = [
+    # perf(treesitter): use child_containing_descendant() in has-ancestor?
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/4b029163345333a2c6975cd0dace6613b036ae47.diff";
+      hash = "sha256-X/nnIDAalYPZvMVCfMtZhouQ9Xw3knSGOiMR6xHBOYY=";
+    })
+  ];
+
+  # Neovim source
+  src = applyPatches {
+    name = "neovim-source";
+    src = inputs.neovim;
+    inherit patches;
+    patchFlags = ["-p1" "--no-backup-if-mismatch"];
+  };
+
   # Convert neovim's deps.txt to attrset
   deps = lib.pipe "${inputs.neovim}/cmake.deps/deps.txt" [
     builtins.readFile
@@ -176,7 +195,7 @@ in
   })
   .overrideAttrs (prev: {
     pname = "neovim-patched";
-    src = inputs.neovim;
+    inherit src;
 
     # not needed dependencies
     buildInputs = with pkgs; lib.subtractLists [libtermkey gperf ncurses] prev.buildInputs;
