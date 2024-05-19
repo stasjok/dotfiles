@@ -200,6 +200,14 @@ in
   })
   .overrideAttrs (prev: {
     pname = "neovim-patched";
+    version = let
+      cmakeLists = builtins.readFile "${src}/CMakeLists.txt";
+      getValue = name: builtins.head (builtins.match ''.*\(${name} "?([^)"]*)"?\).*'' cmakeLists);
+      major = getValue "NVIM_VERSION_MAJOR";
+      minor = getValue "NVIM_VERSION_MINOR";
+      patch = getValue "NVIM_VERSION_PATCH";
+      prerelease = getValue "NVIM_VERSION_PRERELEASE";
+    in "${major}.${minor}.${patch}${prerelease}";
     inherit src;
 
     # not needed dependencies
