@@ -1,6 +1,7 @@
 {
   imports = [
     ./bat.nix
+    ./catppuccin.nix
     ./fzf.nix
     ./git.nix
     ./go.nix

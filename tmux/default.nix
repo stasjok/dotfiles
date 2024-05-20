@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{config, ...}: {
   programs.tmux = {
     enable = true;
 
@@ -20,16 +16,6 @@
 
     # Store tmux socket in /run/user/<UID>
     secureSocket = true;
-
-    # Plugins
-    plugins = with pkgs.tmuxPlugins; [
-      {
-        plugin = catppuccin;
-        extraConfig = ''
-          set -g @catppuccin_flavour macchiato
-        '';
-      }
-    ];
 
     # My config
     extraConfig = builtins.readFile ./tmux.conf;

@@ -40,17 +40,4 @@
       }
       // saltFunctions;
   };
-
-  # Catppuccin Macchiato theme
-  xdg.configFile."fish/themes" = let
-    src = inputs.fish-catppuccin;
-  in {
-    source = "${src}/themes";
-    recursive = true;
-    onChange = ''
-      ${config.programs.fish.package}/bin/fish <<"EOF"
-      echo y | fish_config theme save 'Catppuccin Macchiato'
-      EOF
-    '';
-  };
 }

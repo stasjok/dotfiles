@@ -7,6 +7,7 @@
       url = "home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    catppuccin.url = "github:catppuccin/nix";
 
     # Other inputs
     neovim = {
@@ -21,10 +22,6 @@
       url = "github:stasjok/yaml-language-server?rev=36084f03f936d3a0b59934f4bf3ef70bc40bbf92";
       flake = false;
     };
-    fish-catppuccin = {
-      url = "github:catppuccin/fish";
-      flake = false;
-    };
     vale-at-red-hat = {
       url = "github:redhat-documentation/vale-at-red-hat";
       flake = false;
@@ -35,6 +32,7 @@
     self,
     nixpkgs,
     home-manager,
+    catppuccin,
     ...
   }: let
     system = "x86_64-linux";
@@ -57,14 +55,14 @@
       home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         extraSpecialArgs = extraSpecialArgs // {inherit inputs;};
-        modules = with lib;
-          flatten [
-            ./modules
-            ./home.nix
-            (optional isGenericLinux ./linux.nix)
-            {home = {inherit username homeDirectory stateVersion;};}
-            extraModules
-          ];
+        modules = lib.flatten [
+          catppuccin.homeManagerModules.catppuccin
+          ./modules
+          ./home.nix
+          (lib.optional isGenericLinux ./linux.nix)
+          {home = {inherit username homeDirectory stateVersion;};}
+          extraModules
+        ];
       };
     makeOverridableHomeConfiguration = args: lib.makeOverridable makeHomeConfiguration args;
   in {
