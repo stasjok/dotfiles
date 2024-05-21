@@ -114,6 +114,7 @@ local lsp_servers = {
       "markdown",
       "rst",
     },
+    autostart = false,
   },
 
   -- XML
