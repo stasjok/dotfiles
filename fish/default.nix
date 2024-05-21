@@ -1,9 +1,4 @@
-{
-  config,
-  inputs,
-  lib,
-  ...
-}: {
+{lib, ...}: {
   programs.fish = {
     enable = true;
 
