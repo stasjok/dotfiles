@@ -66,9 +66,6 @@
     CHECKPOINT_DISABLE = 1;
   };
 
-  # XDG base directories environment variables
-  xdg.enable = true;
-
   # ssh-agent
   services.ssh-agent.enable = true;
 
