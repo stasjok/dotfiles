@@ -50,6 +50,7 @@ local tests = {
     string = "a=1",
     formatted_string = "a = 1",
     formatting = true,
+    range_formatting = true,
   },
   sh = {
     lsp_name = "null-ls",

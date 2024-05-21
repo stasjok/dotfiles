@@ -194,7 +194,7 @@ in {
         # LSP
         nvim-lspconfig
         lsp_signature-nvim
-        null-ls-nvim
+        none-ls-nvim
         # Telescope
         telescope-nvim
         telescope-fzf-native-nvim
