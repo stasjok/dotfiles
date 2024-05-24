@@ -2,11 +2,11 @@
   "nodes": {
     "catppuccin": {
       "locked": {
-        "lastModified": 1716266082,
-        "narHash": "sha256-v7Sdw8XaSYGZ4fkuF1VxlP1DmtjYOvVpdUvj9J+cnXc=",
+        "lastModified": 1716337435,
+        "narHash": "sha256-eZqH1vLI9eKL/N5toXxOrQO80G0y4pWZrYCp472YBVQ=",
         "owner": "catppuccin",
         "repo": "nix",
-        "rev": "aef567291242b03e141ba68375c2ff75ea8ff676",
+        "rev": "fea5242c0eacc5efa81be0e36206a62e889dbd82",
         "type": "github"
       },
       "original": {
@@ -95,11 +95,11 @@
     "vale-at-red-hat": {
       "flake": false,
       "locked": {
-        "lastModified": 1715692753,
-        "narHash": "sha256-c1SBOyfhY+QHGPbKUGA5vhcQsz3l5r9xdjA9ezxZfq4=",
+        "lastModified": 1716305277,
+        "narHash": "sha256-HQGC/lKfWoRXIzUsUhzsRuLE2ARezgHqLD/1gQv9PW0=",
         "owner": "redhat-documentation",
         "repo": "vale-at-red-hat",
-        "rev": "534dfe72a307c5cd31ef2434c63a524009475685",
+        "rev": "98c0f246051f5d5364773772cc8974326966bb75",
         "type": "github"
       },
       "original": {

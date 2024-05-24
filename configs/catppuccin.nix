@@ -1,7 +1,7 @@
 {
   catppuccin = {
     enable = true;
-    flavour = "macchiato";
+    flavor = "macchiato";
   };
 
   # Don't configure neovim
