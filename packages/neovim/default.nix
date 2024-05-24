@@ -177,7 +177,4 @@ in
       prerelease = getValue "NVIM_VERSION_PRERELEASE";
     in "${major}.${minor}.${patch}${prerelease}";
     inherit src;
-
-    # not needed dependencies
-    buildInputs = with pkgs; lib.subtractLists [libtermkey gperf ncurses] prev.buildInputs;
   })
