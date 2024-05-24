@@ -90,6 +90,16 @@ local lsp_servers = {
 
   -- Nix
   nil_ls = {
+    --- @param filename string
+    --- @return string?
+    root_dir = function(filename)
+      local root_dir = vim.fs.root(filename, { "flake.nix", ".git" })
+      -- 'lib' directory inside nixpkgs repository also contains flake.nix, ignore it
+      if root_dir and vim.fs.basename(root_dir) == "lib" then
+        root_dir = vim.fs.root(vim.fs.dirname(root_dir), { "flake.nix", ".git" }) or root_dir
+      end
+      return root_dir
+    end,
     on_new_config = function(new_config, root_dir)
       local formatter_command
 
