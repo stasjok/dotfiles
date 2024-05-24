@@ -47,7 +47,7 @@
     makeHomeConfiguration = {
       username ? "stas",
       homeDirectory ? "/home/${username}",
-      stateVersion ? "24.05",
+      stateVersion ? "24.11",
       extraModules ? [],
       extraSpecialArgs ? {},
       isGenericLinux ? true,
