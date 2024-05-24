@@ -33,24 +33,32 @@
     patchFlags = ["-p1" "--no-backup-if-mismatch"];
   };
 
-  # Convert neovim's deps.txt to attrset
+  # Convert neovim's deps.txt to attrset of sources
   deps = lib.pipe "${inputs.neovim}/cmake.deps/deps.txt" [
     builtins.readFile
     (lib.splitString "\n")
-    (builtins.filter (s: s != ""))
-    (map (s: lib.splitString " " s))
-    (map (list: {
-      name = builtins.elemAt list 0;
-      value = builtins.elemAt list 1;
-    }))
-    builtins.listToAttrs
+    (map (builtins.match "([[:alnum:]_]+)_(URL|SHA256)[[:blank:]]+([^[:blank:]]+)[[:blank:]]*"))
+    (lib.remove null)
+    (builtins.foldl' (acc: elem: let
+      name = lib.toLower (builtins.elemAt elem 0);
+      key = lib.toLower (builtins.elemAt elem 1);
+      value = builtins.elemAt elem 2;
+    in
+      lib.recursiveUpdate acc {${name}.${key} = value;}) {})
+    (builtins.mapAttrs (_: attrs: fetchurl attrs))
   ];
 
-  # Get filename from URL without .tar extension and 'v' prefix
-  versionFromURL = url:
-    lib.pipe url [
-      (lib.flip lib.nameFromURL ".tar")
-      (lib.removePrefix "v")
+  # Get src version or 12 characters from filename without 'v' prefix
+  versionFromSrc = src:
+    lib.pipe src.name [
+      # Remove .tar.* extension
+      (lib.splitString ".tar.")
+      builtins.head
+      builtins.parseDrvName
+      (parsed:
+        if parsed.version != ""
+        then parsed.version
+        else lib.removePrefix "v" parsed.name)
       (builtins.substring 0 12)
     ];
 
@@ -71,22 +79,16 @@
 
   # libuv
   libuv = pkgs.libuv.overrideAttrs {
-    version = versionFromURL deps.LIBUV_URL;
-    src = fetchurl {
-      url = deps.LIBUV_URL;
-      sha256 = deps.LIBUV_SHA256;
-    };
+    version = versionFromSrc deps.libuv;
+    src = deps.libuv;
   };
 
   # luv
   luaPackageOverrides = final: prev: {
     luv =
       (prev.luaLib.overrideLuarocks prev.luv rec {
-        version = lib.removePrefix "luv-" (versionFromURL deps.LUV_URL);
-        src = fetchurl {
-          url = deps.LUV_URL;
-          sha256 = deps.LUV_SHA256;
-        };
+        version = versionFromSrc deps.luv;
+        src = deps.luv;
         # Update version in rockspec file
         knownRockspec = rockspecUpdateVersion prev.luv.knownRockspec "luv" version;
       })
@@ -98,11 +100,8 @@
       buildInputs = replaceInput prevAttrs.buildInputs libuv;
     });
     lpeg = prev.luaLib.overrideLuarocks prev.lpeg rec {
-      version = lib.removePrefix "lpeg-" (versionFromURL deps.LPEG_URL);
-      src = fetchurl {
-        url = deps.LPEG_URL;
-        sha256 = deps.LPEG_SHA256;
-      };
+      version = versionFromSrc deps.lpeg;
+      src = deps.lpeg;
       knownRockspec = rockspecUpdateVersion prev.lpeg.knownRockspec "lpeg" version;
     };
   };
@@ -119,54 +118,35 @@
       relver = lib.fileContents relverFile;
     in
       "2.1." + relver;
-    src = fetchurl {
-      url = deps.LUAJIT_URL;
-      sha256 = deps.LUAJIT_SHA256;
-    };
+    src = deps.luajit;
     packageOverrides = luaPackageOverrides;
     self = lua;
   };
 
   # MessagePack for C
   msgpack-c = pkgs.msgpack-c.overrideAttrs {
-    version = lib.pipe deps.MSGPACK_URL [
-      versionFromURL
-      (lib.removePrefix "msgpack-")
-      (lib.removePrefix "c-")
-    ];
-    src = fetchurl {
-      url = deps.MSGPACK_URL;
-      sha256 = deps.MSGPACK_SHA256;
-    };
+    version = versionFromSrc deps.msgpack;
+    src = deps.msgpack;
   };
 
   # Unibilium
   unibilium = pkgs.unibilium.overrideAttrs (prev: {
-    version = versionFromURL deps.UNIBILIUM_URL;
-    src = fetchurl {
-      url = deps.UNIBILIUM_URL;
-      sha256 = deps.UNIBILIUM_SHA256;
-    };
+    version = versionFromSrc deps.unibilium;
+    src = deps.unibilium;
     # autoreconf is needed for newer versions to generate Makefile
     nativeBuildInputs = lib.unique (prev.nativeBuildInputs ++ [autoreconfHook]);
   });
 
   # libvterm neovim fork
   libvterm-neovim = pkgs.libvterm-neovim.overrideAttrs {
-    version = versionFromURL deps.LIBVTERM_URL;
-    src = fetchurl {
-      url = deps.LIBVTERM_URL;
-      sha256 = deps.LIBVTERM_SHA256;
-    };
+    version = versionFromSrc deps.libvterm;
+    src = deps.libvterm;
   };
 
   # Tree-sitter
   tree-sitter = pkgs.tree-sitter.overrideAttrs (prev: rec {
-    version = versionFromURL deps.TREESITTER_URL;
-    src = fetchurl {
-      url = deps.TREESITTER_URL;
-      sha256 = deps.TREESITTER_SHA256;
-    };
+    version = versionFromSrc deps.treesitter;
+    src = deps.treesitter;
     # Need to update cargo hash every time
     cargoHash = "sha256-U2YXpNwtaSSEftswI0p0+npDJqOq5GqxEUlOPRlJGmQ=";
     cargoDeps = prev.cargoDeps.overrideAttrs {
@@ -178,20 +158,8 @@
 
   # Tree-sitter parsers
   treesitter-parsers = lib.pipe deps [
-    builtins.attrNames
-    (builtins.filter (n: lib.hasPrefix "TREESITTER" n && lib.hasSuffix "URL" n && n != "TREESITTER_URL"))
-    (map (n:
-      lib.pipe n [
-        (lib.removePrefix "TREESITTER_")
-        (lib.removeSuffix "_URL")
-        lib.toLower
-      ]))
-    (lib.flip lib.genAttrs (n: {
-      src = fetchurl {
-        url = builtins.getAttr "TREESITTER_${lib.toUpper n}_URL" deps;
-        sha256 = builtins.getAttr "TREESITTER_${lib.toUpper n}_SHA256" deps;
-      };
-    }))
+    (lib.filterAttrs (key: _: lib.hasPrefix "treesitter_" key))
+    (lib.mapAttrs' (name: src: lib.nameValuePair (lib.removePrefix "treesitter_" name) {src = src;}))
   ];
 in
   (neovim-unwrapped.override {
