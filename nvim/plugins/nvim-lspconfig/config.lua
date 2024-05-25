@@ -6,6 +6,17 @@ local function kubernetes_schema_url()
   return vim.fn.filereadable(schema_path) == 1 and schema_path or nil
 end
 
+---@param filename string
+---@return string?
+local function nix_root_dir(filename)
+  local root_dir = vim.fs.root(filename, { "flake.nix", ".git" })
+  -- 'lib' directory inside nixpkgs repository also contains flake.nix, ignore it
+  if root_dir and vim.fs.basename(root_dir) == "lib" then
+    root_dir = vim.fs.root(vim.fs.dirname(root_dir), { "flake.nix", ".git" }) or root_dir
+  end
+  return root_dir
+end
+
 -- List of configured language servers
 local lsp_servers = {
   -- Lua
@@ -90,16 +101,7 @@ local lsp_servers = {
 
   -- Nix
   nil_ls = {
-    --- @param filename string
-    --- @return string?
-    root_dir = function(filename)
-      local root_dir = vim.fs.root(filename, { "flake.nix", ".git" })
-      -- 'lib' directory inside nixpkgs repository also contains flake.nix, ignore it
-      if root_dir and vim.fs.basename(root_dir) == "lib" then
-        root_dir = vim.fs.root(vim.fs.dirname(root_dir), { "flake.nix", ".git" }) or root_dir
-      end
-      return root_dir
-    end,
+    root_dir = nix_root_dir,
     on_new_config = function(new_config, root_dir)
       local formatter_command
 
@@ -115,6 +117,10 @@ local lsp_servers = {
         ["nil"] = { formatting = { command = formatter_command } },
       })
     end,
+  },
+
+  nixd = {
+    root_dir = nix_root_dir,
   },
 
   -- Markdown
