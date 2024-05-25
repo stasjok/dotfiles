@@ -1,3 +1,4 @@
+---@diagnostic disable-next-line: missing-fields
 require("nvim-treesitter.configs").setup({
   highlight = {
     enable = true,
@@ -11,6 +12,10 @@ require("nvim-treesitter.configs").setup({
   },
   incremental_selection = {
     enable = true,
+    -- Disable <CR> mapping in cmdwin
+    disable = function()
+      return vim.fn.win_gettype() == "command"
+    end,
     keymaps = {
       init_selection = "<CR>",
       node_incremental = "<CR>",
