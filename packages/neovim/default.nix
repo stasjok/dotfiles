@@ -50,6 +50,11 @@
       url = "https://github.com/neovim/neovim/pull/29097.diff";
       hash = "sha256-bB069BwRQs81qW5eVgFYtEsNUBAho62f0j56i8TM/wo=";
     })
+    # refactor(lsp): use predefined types in util function signatures
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/6566a59b3a6c8dabfa40f8debd0de96d875825e9.diff";
+      hash = "sha256-6lTGsIkwO5vL0/3UiZGsXmo7TOJGu9l7BLoj3SIQlLc=";
+    })
   ];
 
   # Neovim source
