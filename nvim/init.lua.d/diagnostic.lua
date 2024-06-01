@@ -6,6 +6,9 @@ vim.diagnostic.config({
   float = {
     focusable = false,
   },
+  jump = {
+    float = true,
+  },
 })
 
 -- Diagnostic icons

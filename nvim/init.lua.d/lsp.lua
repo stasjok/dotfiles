@@ -36,8 +36,6 @@ local function on_attach(args)
     telescope_builtin.diagnostics({ bufnr = 0 })
   end)
   map("n", "<Leader>D", telescope_builtin.diagnostics)
-  map("n", "]d", diagnostic.goto_next)
-  map("n", "[d", diagnostic.goto_prev)
 
   -- Show diagnostics automatically
   api.nvim_create_autocmd("CursorHold", {

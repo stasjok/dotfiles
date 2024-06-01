@@ -28,6 +28,28 @@
       url = "https://github.com/neovim/neovim/commit/48251134ee59a3e2f0aeb89608fa820c21b25d4f.diff";
       hash = "sha256-jnw949BJr1Krqs21wlwBxnEJnSIrD5lq9kTTHlsSRM0=";
     })
+    # feat(diagnostic): add vim.diagnostic.jump()
+    (fetchpatch {
+      url = "https://github.com/stasjok/neovim/commit/c1288f6ba879d2582f7b7238273baedb4e4736f5.diff";
+      hash = "sha256-PeNNz9qNiLNAqKTHymmeHqc3c1IP6hhyX3e6eUhei2c=";
+    })
+    # feat(defaults): use vim.diagnostic.jump() for default mappings
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/1c6d9200521acb2329be55ab8bec3056deade66a.diff";
+      excludes = ["runtime/doc/news.txt"];
+      hash = "sha256-qWon6eXq26jrWEaUgr9vviGsseFinyrnu2aDAl4pL+g=";
+    })
+    # feat: add "jump" options to vim.diagnostic.config()
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/efa45832ea02e777ce3f5556ef3cd959c164ec24.diff";
+      excludes = ["runtime/doc/news.txt"];
+      hash = "sha256-TxuNC4Bl42QPS9bRGBSySgV0MXPFPYPrIRkxk1WXjT8=";
+    })
+    # docs: add defaults for vim.diagnostic.config() "jump" opts
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/pull/29097.diff";
+      hash = "sha256-bB069BwRQs81qW5eVgFYtEsNUBAho62f0j56i8TM/wo=";
+    })
   ];
 
   # Neovim source
