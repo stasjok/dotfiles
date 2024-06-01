@@ -171,6 +171,11 @@ in {
                 mv "$flavor" "catppuccin-$flavor.lua"
             done
           '';
+
+        # ':Git' doc tag is clashing with vim-fugitive
+        mini-nvim = pkgs.vimPlugins.mini-nvim.overrideAttrs {
+          postPatch = "rm doc/mini-git.txt";
+        };
       in [
         # Colorscheme
         catppuccin-nvim
