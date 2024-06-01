@@ -23,6 +23,11 @@
       url = "https://github.com/neovim/neovim/commit/4c0d18c19773327dcd771d1da7805690e3e41255.diff";
       hash = "sha256-WKxMbXuK6hWzU2o5hT7VjG9GpfuKg24AwsJ10TkzGE8=";
     })
+    # perf: add fast path to vim.validate
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/48251134ee59a3e2f0aeb89608fa820c21b25d4f.diff";
+      hash = "sha256-jnw949BJr1Krqs21wlwBxnEJnSIrD5lq9kTTHlsSRM0=";
+    })
   ];
 
   # Neovim source
