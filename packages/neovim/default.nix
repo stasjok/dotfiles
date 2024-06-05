@@ -55,6 +55,22 @@
       url = "https://github.com/neovim/neovim/commit/6566a59b3a6c8dabfa40f8debd0de96d875825e9.diff";
       hash = "sha256-6lTGsIkwO5vL0/3UiZGsXmo7TOJGu9l7BLoj3SIQlLc=";
     })
+    # feat: change 'commentstring' to // %s for C/C++
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/054a287dbe6fe4308d26ec593da2057641f2bb9b.diff";
+      hash = "sha256-YN8/WynvQzUsoblVSr6G7tg0oqXLOoCCiv+IyZ80SBc=";
+    })
+    # vim-patch:9.1.0464: no whitespace padding in commentstring option in ftplugins
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/2f5b8a009280eba995aecf67d1e8d99b7c72c51c.diff";
+      excludes = ["runtime/ftplugin/arduino.vim"];
+      hash = "sha256-4m2Lh7Cbpei/ecCTR5CKG6kGKv1kcUsOiUXjQRDl3kQ=";
+    })
+    # fix(runtime): remove obsolete ftplugin/calender.lua
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/8369590eb21535ecf69932998fc86cdee1661238.diff";
+      hash = "sha256-S8VjDnQOcHHFn/rCicWRQtwBiJC79k7TW+pR4eb4Mhg=";
+    })
   ];
 
   # Neovim source
