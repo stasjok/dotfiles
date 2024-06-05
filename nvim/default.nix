@@ -212,7 +212,6 @@ in {
         diffview-nvim
         # Languages
         vim-nix
-        vim-fish-syntax
         vim-jinja2-syntax
         ansible-vim
         salt-vim

@@ -27,18 +27,6 @@ final: prev:
     meta.homepage = "https://github.com/ur4ltz/surround.nvim/";
   };
 
-  vim-fish-syntax = buildVimPlugin {
-    pname = "vim-fish-syntax";
-    version = "2023-02-17";
-    src = fetchFromGitHub {
-      owner = "khaveesh";
-      repo = "vim-fish-syntax";
-      rev = "e229becbf4bbee21cc78cd2cf24f57112e33c02a";
-      sha256 = "01ffw7k288ghyln79g5fbvyd7kaq36ji0cjm6yb6l5njvnq2kr1i";
-    };
-    meta.homepage = "https://github.com/khaveesh/vim-fish-syntax/";
-  };
-
   vim-jinja2-syntax = buildVimPlugin {
     pname = "vim-jinja2-syntax";
     version = "2021-06-22";
