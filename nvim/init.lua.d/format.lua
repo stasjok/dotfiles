@@ -32,7 +32,7 @@ local settings = {
     end,
   },
   nix = {
-    server = "nil_ls",
+    server = "nixd",
     on_save = true,
   },
   yaml = {
