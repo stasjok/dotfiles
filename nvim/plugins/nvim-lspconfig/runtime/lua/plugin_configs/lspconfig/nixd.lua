@@ -1,12 +1,16 @@
+local vim = vim
+local fs = vim.fs
+local uv = vim.uv
+
 local nixd = {}
 
 ---@param filename string
 ---@return string?
 function nixd.root_dir(filename)
-  local root_dir = vim.fs.root(filename, { "flake.nix", ".git" })
+  local root_dir = fs.root(filename, { "flake.nix", ".git" })
   -- 'lib' directory inside nixpkgs repository also contains flake.nix, ignore it
-  if root_dir and vim.fs.basename(root_dir) == "lib" then
-    root_dir = vim.fs.root(vim.fs.dirname(root_dir), { "flake.nix", ".git" }) or root_dir
+  if root_dir and fs.basename(root_dir) == "lib" then
+    root_dir = fs.root(fs.dirname(root_dir), { "flake.nix", ".git" }) or root_dir
   end
   return root_dir
 end
@@ -16,7 +20,7 @@ end
 nixd.on_new_config = function(config, root_dir)
   local settings = vim.defaulttable()
 
-  local dirname = vim.fs.basename(root_dir)
+  local dirname = fs.basename(root_dir)
   local flake = string.format('(builtins.getFlake "git+file:%s")', root_dir)
 
   -- Default nixpkgs
@@ -27,20 +31,26 @@ nixd.on_new_config = function(config, root_dir)
     settings.nixpkgs.expr = flake .. ".legacyPackages.${builtins.currentSystem}"
     settings.options["home-manager"].expr = flake .. ".homeConfigurations.stas.options"
   -- Nixpkgs
-  elseif dirname == "nixpkgs" then
+  elseif
+    dirname == "nixpkgs"
+    or vim.endswith(dirname, "-source") and uv.fs_stat(fs.joinpath(root_dir, "pkgs/top-level"))
+  then
     settings.nixpkgs.expr = string.format(
       "import %s {localSystem = builtins.currentSystem;}",
-      vim.fs.joinpath(root_dir, "pkgs/top-level")
+      fs.joinpath(root_dir, "pkgs/top-level")
     )
     settings.options.nixos.expr = string.format(
       "(import %s {modules = [];}).options",
-      vim.fs.joinpath(root_dir, "nixos/lib/eval-config.nix")
+      fs.joinpath(root_dir, "nixos/lib/eval-config.nix")
     )
   -- Home-manager
-  elseif dirname == "home-manager" then
+  elseif
+    dirname == "home-manager"
+    or vim.endswith(dirname, "-source") and uv.fs_stat(fs.joinpath(root_dir, "home-manager"))
+  then
     settings.options["home-manager"].expr = string.format(
       '(import %s {configuration = {home = {stateVersion = "24.05"; username = "nixd"; homeDirectory = "/home/nixd";};}; pkgs = %s;}).options',
-      vim.fs.joinpath(root_dir, "modules"),
+      fs.joinpath(root_dir, "modules"),
       settings.nixpkgs.expr
     )
   end
