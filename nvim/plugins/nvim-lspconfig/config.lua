@@ -143,6 +143,10 @@ local lsp_servers = {
       local dirname = vim.fs.basename(root_dir)
       local flake = string.format('(builtins.getFlake "git+file:%s")', root_dir)
 
+      -- Default nixpkgs
+      settings.nixpkgs.expr =
+        '(builtins.getFlake "nixpkgs").legacyPackages.${builtins.currentSystem}'
+
       -- My dotfiles
       if dirname == "dotfiles" then
         settings.nixpkgs.expr = flake .. ".legacyPackages.${builtins.currentSystem}"
@@ -156,6 +160,12 @@ local lsp_servers = {
         settings.options.nixos.expr = string.format(
           "(import %s {modules = [];}).options",
           vim.fs.joinpath(root_dir, "nixos/lib/eval-config.nix")
+        )
+      elseif dirname == "home-manager" then
+        settings.options["home-manager"].expr = string.format(
+          '(import %s {configuration = {home = {stateVersion = "24.05"; username = "nixd"; homeDirectory = "/home/nixd";};}; pkgs = %s;}).options',
+          vim.fs.joinpath(root_dir, "modules"),
+          settings.nixpkgs.expr
         )
       end
 
