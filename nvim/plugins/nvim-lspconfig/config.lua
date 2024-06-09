@@ -118,6 +118,18 @@ local lsp_servers = {
         ["nil"] = { formatting = { command = formatter_command } },
       })
     end,
+
+    ---@param client vim.lsp.Client
+    on_init = function(client)
+      ---@type lsp.ServerCapabilities
+      local overrrides = {
+        definitionProvider = false,
+        referencesProvider = false,
+      }
+      -- Override server_capabilities
+      client.server_capabilities =
+        vim.tbl_deep_extend("force", client.server_capabilities, overrrides)
+    end,
   },
 
   nixd = {
@@ -135,6 +147,21 @@ local lsp_servers = {
       end
 
       config.settings = vim.tbl_deep_extend("force", config.settings or {}, { nixd = settings })
+    end,
+
+    ---@param client vim.lsp.Client
+    on_init = function(client)
+      ---@type lsp.ServerCapabilities
+      local overrrides = {
+        documentHighlightProvider = false,
+        documentSymbolProvider = false,
+        hoverProvider = false,
+      }
+      -- Override server capabilities
+      client.server_capabilities =
+        vim.tbl_deep_extend("force", client.server_capabilities, overrrides)
+      -- Disable semantic tokens
+      client.server_capabilities.semanticTokensProvider = nil
     end,
   },
 
