@@ -139,11 +139,24 @@ local lsp_servers = {
     ---@param root_dir string
     on_new_config = function(config, root_dir)
       local settings = vim.defaulttable()
+
+      local dirname = vim.fs.basename(root_dir)
       local flake = string.format('(builtins.getFlake "git+file:%s")', root_dir)
 
-      if vim.fs.basename(root_dir) == "dotfiles" then
+      -- My dotfiles
+      if dirname == "dotfiles" then
         settings.nixpkgs.expr = flake .. ".legacyPackages.${builtins.currentSystem}"
         settings.options["home-manager"].expr = flake .. ".homeConfigurations.stas.options"
+      -- Nixpkgs
+      elseif dirname == "nixpkgs" then
+        settings.nixpkgs.expr = string.format(
+          "import %s {localSystem = builtins.currentSystem;}",
+          vim.fs.joinpath(root_dir, "pkgs/top-level")
+        )
+        settings.options.nixos.expr = string.format(
+          "(import %s {modules = [];}).options",
+          vim.fs.joinpath(root_dir, "nixos/lib/eval-config.nix")
+        )
       end
 
       config.settings = vim.tbl_deep_extend("force", config.settings or {}, { nixd = settings })
