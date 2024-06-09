@@ -20,16 +20,15 @@ end
 nixd.on_new_config = function(config, root_dir)
   local settings = vim.defaulttable()
 
-  local dirname = fs.basename(root_dir)
-  local flake = string.format('(builtins.getFlake "git+file:%s")', root_dir)
-
   -- Default nixpkgs
   settings.nixpkgs.expr = '(builtins.getFlake "nixpkgs").legacyPackages.${builtins.currentSystem}'
   -- Default formatter
   settings.formatting.command = { "alejandra", "-" }
 
   -- My dotfiles
+  local dirname = fs.basename(root_dir)
   if dirname == "dotfiles" then
+    local flake = string.format('(builtins.getFlake "git+file:%s")', root_dir)
     settings.nixpkgs.expr = flake .. ".legacyPackages.${builtins.currentSystem}"
     settings.options["home-manager"].expr = flake .. ".homeConfigurations.stas.options"
   -- Nixpkgs
