@@ -102,6 +102,7 @@ local lsp_servers = {
   -- Nix
   nil_ls = {
     root_dir = nix_root_dir,
+    settings = { ["nil"] = { nix = { flake = { nixpkgsInputName = vim.NIL } } } },
     on_new_config = function(new_config, root_dir)
       local formatter_command
 
@@ -121,6 +122,20 @@ local lsp_servers = {
 
   nixd = {
     root_dir = nix_root_dir,
+
+    ---@param config lspconfig.Config
+    ---@param root_dir string
+    on_new_config = function(config, root_dir)
+      local settings = vim.defaulttable()
+      local flake = string.format('(builtins.getFlake "git+file:%s")', root_dir)
+
+      if vim.fs.basename(root_dir) == "dotfiles" then
+        settings.nixpkgs.expr = flake .. ".legacyPackages.${builtins.currentSystem}"
+        settings.options["home-manager"].expr = flake .. ".homeConfigurations.stas.options"
+      end
+
+      config.settings = vim.tbl_deep_extend("force", config.settings or {}, { nixd = settings })
+    end,
   },
 
   -- Markdown
