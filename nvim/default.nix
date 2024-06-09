@@ -101,6 +101,7 @@ in {
       stylua
       # Nix
       nil
+      nixd
       alejandra
       nixpkgs-fmt
       nixfmt-classic

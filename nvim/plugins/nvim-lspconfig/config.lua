@@ -90,32 +90,23 @@ local lsp_servers = {
 
   -- Nix
   nil_ls = {
-    --- @param filename string
-    --- @return string?
-    root_dir = function(filename)
-      local root_dir = vim.fs.root(filename, { "flake.nix", ".git" })
-      -- 'lib' directory inside nixpkgs repository also contains flake.nix, ignore it
-      if root_dir and vim.fs.basename(root_dir) == "lib" then
-        root_dir = vim.fs.root(vim.fs.dirname(root_dir), { "flake.nix", ".git" }) or root_dir
-      end
-      return root_dir
-    end,
-    on_new_config = function(new_config, root_dir)
-      local formatter_command
+    root_dir = require("plugin_configs.lspconfig.nixd").root_dir,
+    settings = { ["nil"] = { nix = { flake = { nixpkgsInputName = vim.NIL } } } },
 
-      if root_dir:find("nixpkgs", 1, true) then
-        formatter_command = { "nixpkgs-fmt" }
-      elseif root_dir:find("home-manager", 1, true) then
-        formatter_command = { "nixfmt" }
-      else
-        formatter_command = { "alejandra", "-" }
-      end
-
-      new_config.settings = vim.tbl_deep_extend("keep", new_config.settings or {}, {
-        ["nil"] = { formatting = { command = formatter_command } },
-      })
+    ---@param client vim.lsp.Client
+    on_init = function(client)
+      ---@type lsp.ServerCapabilities
+      local overrrides = {
+        definitionProvider = false,
+        referencesProvider = false,
+      }
+      -- Override server_capabilities
+      client.server_capabilities =
+        vim.tbl_deep_extend("force", client.server_capabilities, overrrides)
     end,
   },
+
+  nixd = require("plugin_configs.lspconfig.nixd"),
 
   -- Markdown
   marksman = {},

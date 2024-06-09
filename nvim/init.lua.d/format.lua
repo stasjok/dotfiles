@@ -32,6 +32,7 @@ local settings = {
     end,
   },
   nix = {
+    server = "nixd",
     on_save = true,
   },
   yaml = {
