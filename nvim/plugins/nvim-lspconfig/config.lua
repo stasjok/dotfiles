@@ -92,32 +92,28 @@ local lsp_servers = {
   nil_ls = {
     root_dir = require("plugin_configs.lspconfig.nixd").root_dir,
     settings = { ["nil"] = { nix = { flake = { nixpkgsInputName = vim.NIL } } } },
+
+    ---@param new_config lspconfig.Config
+    ---@param root_dir string
     on_new_config = function(new_config, root_dir)
       local formatter_command
 
-      if root_dir:find("nixpkgs", 1, true) then
+      local dirname = vim.fs.basename(root_dir)
+      if dirname == "nixpkgs" then
         formatter_command = { "nixpkgs-fmt" }
-      elseif root_dir:find("home-manager", 1, true) then
+      elseif dirname == "home-manager" then
         formatter_command = { "nixfmt" }
       else
         formatter_command = { "alejandra", "-" }
       end
 
-      new_config.settings = vim.tbl_deep_extend("keep", new_config.settings or {}, {
-        ["nil"] = { formatting = { command = formatter_command } },
-      })
+      new_config.settings["nil"].formatting = { command = formatter_command }
     end,
 
     ---@param client vim.lsp.Client
     on_init = function(client)
-      ---@type lsp.ServerCapabilities
-      local overrrides = {
-        definitionProvider = false,
-        referencesProvider = false,
-      }
-      -- Override server_capabilities
-      client.server_capabilities =
-        vim.tbl_deep_extend("force", client.server_capabilities, overrrides)
+      client.server_capabilities.definitionProvider = false
+      client.server_capabilities.referencesProvider = false
     end,
   },
 
