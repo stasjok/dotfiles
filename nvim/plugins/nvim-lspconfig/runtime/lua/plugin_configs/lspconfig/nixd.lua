@@ -22,8 +22,6 @@ M.on_new_config = function(config, root_dir)
 
   -- Default nixpkgs
   settings.nixpkgs.expr = '(builtins.getFlake "nixpkgs").legacyPackages.${builtins.currentSystem}'
-  -- Default formatter
-  settings.formatting.command = { "alejandra", "-" }
 
   local dirname = fs.basename(root_dir)
   if dirname == "dotfiles" then
@@ -44,7 +42,6 @@ M.on_new_config = function(config, root_dir)
       "(import %s {modules = [];}).options",
       fs.joinpath(root_dir, "nixos/lib/eval-config.nix")
     )
-    settings.formatting.command = { "nixpkgs-fmt" }
   elseif
     dirname == "home-manager"
     or vim.endswith(dirname, "-source") and uv.fs_stat(fs.joinpath(root_dir, "home-manager"))
@@ -55,7 +52,6 @@ M.on_new_config = function(config, root_dir)
       fs.joinpath(root_dir, "modules"),
       settings.nixpkgs.expr
     )
-    settings.formatting.command = { "nixfmt" }
   end
 
   config.settings = vim.tbl_deep_extend("force", config.settings or {}, { nixd = settings })
