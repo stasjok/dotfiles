@@ -77,6 +77,11 @@
       excludes = ["runtime/doc/news.txt"];
       hash = "sha256-sOo0mMYJHJDkGhNfJWH1okfwHTigaQ3/VJY59BB/qtI=";
     })
+    # fix(glob): handle overlapping {} condition elements
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/4bd86120d41e3b01433004bf761beccb7f3a0167.diff";
+      hash = "sha256-h/iuVWUXnd6IVda/JsWi9Ltgx4v9Q9bJuF9jutx53v4=";
+    })
   ];
 
   # Neovim source
