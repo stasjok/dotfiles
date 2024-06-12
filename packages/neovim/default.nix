@@ -71,6 +71,12 @@
       url = "https://github.com/neovim/neovim/commit/8369590eb21535ecf69932998fc86cdee1661238.diff";
       hash = "sha256-S8VjDnQOcHHFn/rCicWRQtwBiJC79k7TW+pR4eb4Mhg=";
     })
+    # feat(terminal): add support for copying with OSC 52 in embedded terminal
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/3ad977f01d97e84b576e6965c5c9e4f75c10cb35.diff";
+      excludes = ["runtime/doc/news.txt"];
+      hash = "sha256-sOo0mMYJHJDkGhNfJWH1okfwHTigaQ3/VJY59BB/qtI=";
+    })
   ];
 
   # Neovim source
