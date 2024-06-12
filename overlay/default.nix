@@ -49,6 +49,18 @@ in {
     src = inputs.yaml-language-server;
   };
 
+  # Nix language server
+  nixd = prev.nixd.overrideAttrs {
+    patches = [
+      # Don't return invalid ranges when going to package definition
+      (prev.fetchpatch {
+        url = "https://github.com/nix-community/nixd/commit/6811dcf03ac055752a3f28cbabf90bd0b0cee417.diff";
+        stripLen = 1;
+        hash = "sha256-DARLPMR+hFlcrJ5nXBDrONhgr+0JTXQQv25atA6C980=";
+      })
+    ];
+  };
+
   # Freeze packer to the letest version with Mozilla Public License 2.0
   packer = callPackage ../packages/packer {};
 }
