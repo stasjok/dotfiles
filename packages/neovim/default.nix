@@ -82,6 +82,11 @@
       url = "https://github.com/neovim/neovim/commit/4bd86120d41e3b01433004bf761beccb7f3a0167.diff";
       hash = "sha256-h/iuVWUXnd6IVda/JsWi9Ltgx4v9Q9bJuF9jutx53v4=";
     })
+    # fix(types): use vararg return type annotation for Iter:map()
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/e947f226bebef1310af39ce3d93d7bb87e85d757.diff";
+      hash = "sha256-OUBLmXRTHJNJ3arnVRuh0A1an9p6lyCv+XTA8gne594=";
+    })
   ];
 
   # Neovim source
