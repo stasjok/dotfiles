@@ -56,3 +56,20 @@ api.nvim_create_autocmd("InsertLeave", {
   group = augroup,
   command = "setlocal listchars+=trail:⋅",
 })
+
+-- Find out when something is changing `scrolloff` to 0
+-- TODO: remove this autocmd when the culprit is found
+api.nvim_create_autocmd("OptionSet", {
+  pattern = "scrolloff",
+  callback = function(args)
+    vim.notify(
+      string.format(
+        "Option '%s' changed from %s to %s using %s command.",
+        args.match,
+        vim.v.option_old,
+        vim.v.option_new,
+        vim.v.option_command
+      )
+    )
+  end,
+})
