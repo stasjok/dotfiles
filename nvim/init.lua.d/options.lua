@@ -4,7 +4,6 @@ vim.opt.softtabstop = -1
 vim.opt.expandtab = true
 
 -- Options
-vim.opt.termguicolors = true
 vim.opt.mouse = "a"
 
 -- Make <Esc> faster
