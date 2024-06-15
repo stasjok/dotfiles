@@ -1,49 +1,58 @@
+local vim = vim
+local api = vim.api
+local o = vim.o
+
 -- Default indentation settings
-vim.opt.shiftwidth = 4
-vim.opt.softtabstop = -1
-vim.opt.expandtab = true
+o.shiftwidth = 4
+o.softtabstop = -1
+o.expandtab = true
 
 -- Options
-vim.opt.mouse = "a"
+o.mouse = "a"
 
 -- Make <Esc> faster
-vim.opt.ttimeoutlen = 5
-vim.opt.timeoutlen = 700
+o.ttimeoutlen = 5
+o.timeoutlen = 700
 
 -- Don't redraw the screen while executing macros
-vim.opt.lazyredraw = true
+o.lazyredraw = true
 
 -- Search settings
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
+o.ignorecase = true
+o.smartcase = true
 
 -- Gutter settings
-vim.opt.cursorline = true
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.signcolumn = "yes"
+o.cursorline = true
+o.number = true
+o.relativenumber = true
+o.signcolumn = "yes"
 
 -- Make some context visible
-vim.opt_global.scrolloff = 6
-vim.opt_global.sidescrolloff = 6
+o.scrolloff = 6
+o.sidescrolloff = 6
 
 -- Terminal buffer limit
-vim.opt_global.scrollback = 80000
+o.scrollback = 80000
 
 -- Fire CursorHold event faster
-vim.opt.updatetime = 300
+o.updatetime = 300
 
 -- Use system bash as default shell (it's faster)
-vim.opt.shell = vim.uv.fs_stat("/bin/bash") and "/bin/bash" or "bash"
+o.shell = vim.uv.fs_stat("/bin/bash") and "/bin/bash" or "bash"
 
 -- Show tabs and trailing spaces
-vim.opt.list = true
-vim.opt_global.listchars = "tab:→ ,trail:⋅,extends:❯,precedes:❮"
+o.list = true
+o.listchars = "tab:→ ,trail:⋅,extends:❯,precedes:❮"
+
 -- Don't show trailing spaces during insert mode
-vim.cmd([[
-augroup listchars_update
-  autocmd!
-  autocmd InsertEnter * setlocal listchars=tab:→\ ,extends:❯,precedes:❮
-  autocmd InsertLeave * setlocal listchars=tab:→\ ,trail:⋅,extends:❯,precedes:❮
-augroup END
-]])
+local augroup = api.nvim_create_augroup("listchars_update", {})
+api.nvim_create_autocmd("InsertEnter", {
+  desc = "Set 'listchars' to not show trailing spaces",
+  group = augroup,
+  command = "setlocal listchars-=trail:⋅",
+})
+api.nvim_create_autocmd("InsertLeave", {
+  desc = "Set 'listchars' to show trailing spaces",
+  group = augroup,
+  command = "setlocal listchars+=trail:⋅",
+})
