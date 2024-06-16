@@ -1,5 +1,6 @@
+local vim = vim
 local api = vim.api
-local opt_local = vim.opt_local
+local wo = vim.wo
 local cmd = vim.cmd
 local map = vim.keymap.set
 
@@ -11,15 +12,17 @@ api.nvim_create_autocmd("TermOpen", {
   pattern = "*",
   desc = "Set options for terminal window",
   callback = function()
-    opt_local.number = false
-    opt_local.relativenumber = false
-    opt_local.signcolumn = "auto"
-    opt_local.sidescrolloff = 0
+    wo[0][0].number = false
+    wo[0][0].relativenumber = false
+    wo[0][0].signcolumn = "auto"
+    wo.sidescrolloff = 0
   end,
 })
 
 local function on_exit()
-  api.nvim_buf_delete(terminal_buffer, { force = true })
+  if terminal_buffer then
+    api.nvim_buf_delete(terminal_buffer, { force = true })
+  end
   terminal_buffer = nil
 end
 
