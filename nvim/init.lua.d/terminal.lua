@@ -15,6 +15,7 @@ api.nvim_create_autocmd("TermOpen", {
     wo[0][0].number = false
     wo[0][0].relativenumber = false
     wo[0][0].signcolumn = "auto"
+    wo.scrolloff = 0
     wo.sidescrolloff = 0
   end,
 })
