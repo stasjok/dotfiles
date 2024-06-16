@@ -1,7 +1,10 @@
 local utils = require("utils")
+local vim = vim
+local keymap_set = vim.keymap.set
 local api = vim.api
 local lsp = vim.lsp
 local buf_lsp = lsp.buf
+local inlay_hint = lsp.inlay_hint
 local diagnostic = vim.diagnostic
 
 local augroup = api.nvim_create_augroup("buf_lsp_configuration", {})
@@ -10,6 +13,9 @@ local augroup = api.nvim_create_augroup("buf_lsp_configuration", {})
 local function on_attach(args)
   local buf = args.buf
   local client = lsp.get_client_by_id(args.data.client_id)
+  if not client then
+    return
+  end
 
   -- Do nothing for null-ls
   if client.name == "null-ls" then
@@ -17,7 +23,6 @@ local function on_attach(args)
   end
 
   -- Mappings
-  local keymap_set = vim.keymap.set
   local function map(mode, lhs, rhs)
     keymap_set(mode, lhs, rhs, { buffer = buf })
   end
@@ -58,3 +63,12 @@ api.nvim_create_autocmd("LspAttach", {
   desc = "Configure LSP for a buffer",
   callback = on_attach,
 })
+
+-- Inlay hints
+inlay_hint.enable()
+vim.keymap.set("n", "<Leader>I", function()
+  inlay_hint.enable(not inlay_hint.is_enabled())
+end)
+vim.keymap.set({ "n", "x" }, "<Leader>bi", function()
+  inlay_hint.enable(not inlay_hint.is_enabled({ bufnr = 0 }), { bufnr = 0 })
+end)
