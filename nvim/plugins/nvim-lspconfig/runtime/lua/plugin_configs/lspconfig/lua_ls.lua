@@ -136,7 +136,8 @@ lua_ls.settings = {
       enable = false,
     },
     hint = {
-      enable = false,
+      enable = true,
+      setType = true,
     },
     runtime = {
       version = "LuaJIT",
