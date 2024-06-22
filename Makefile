@@ -21,6 +21,10 @@ update_flake :
 update_vim_plugins :
 	packages/vim-plugins/update.sh
 
+.PHONY : update_neovim
+update_neovim :
+	nix flake lock --update-input neovim
+
 # Tests
 .PHONY : test
 test : test_all
