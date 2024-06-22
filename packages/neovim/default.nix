@@ -87,6 +87,11 @@
       url = "https://github.com/neovim/neovim/commit/e947f226bebef1310af39ce3d93d7bb87e85d757.diff";
       hash = "sha256-OUBLmXRTHJNJ3arnVRuh0A1an9p6lyCv+XTA8gne594=";
     })
+    # fix(man.vim): signcolumn causes broken wrap
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/b60030b7bf3e638ba134550091131fc5229b69a1.diff";
+      hash = "sha256-LlCpaT7bjSIB8AvqcpQVWy5rVvhxDqIGoBJPnM5Mcdw=";
+    })
   ];
 
   # Neovim source
