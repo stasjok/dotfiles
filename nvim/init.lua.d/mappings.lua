@@ -74,3 +74,6 @@ map("n", "k", [[(v:count1 > 5 ? "m'"..v:count : '') .. 'k']], { expr = true })
 
 -- Clear search highlighting by pressing Esc
 map("n", "<Esc>", "<Cmd>nohlsearch<CR>")
+
+-- Jump to tag forward (inverse of Ctrl-t)
+map("n", "<C-P>", "<Cmd>:tag<CR>")
