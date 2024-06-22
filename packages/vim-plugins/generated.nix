@@ -3,6 +3,18 @@
 
 final: prev:
 {
+  fix-auto-scroll-nvim = buildVimPlugin {
+    pname = "fix-auto-scroll.nvim";
+    version = "2023-11-22";
+    src = fetchFromGitHub {
+      owner = "BranimirE";
+      repo = "fix-auto-scroll.nvim";
+      rev = "c211a42f4030c9ed03a1456919917cdf1a193bd9";
+      sha256 = "0qm22d4g2qbr65q9zzvb1h8ayqk634yvikwfwx8gybzx0cdn95ww";
+    };
+    meta.homepage = "https://github.com/BranimirE/fix-auto-scroll.nvim/";
+  };
+
   mediawiki-vim = buildVimPlugin {
     pname = "mediawiki.vim";
     version = "2015-11-15";

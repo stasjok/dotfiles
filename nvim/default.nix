@@ -186,6 +186,7 @@ in {
         # Interface
         nvim-web-devicons
         smart-splits-nvim
+        fix-auto-scroll-nvim
         # Tree-sitter
         nvim-treesitter'
         playground
