@@ -44,6 +44,9 @@ o.shell = vim.uv.fs_stat("/bin/bash") and "/bin/bash" or "bash"
 o.list = true
 o.listchars = "tab:→ ,trail:⋅,extends:❯,precedes:❮"
 
+-- Diff options
+o.diffopt = o.diffopt .. ",linematch:60"
+
 -- Don't show trailing spaces during insert mode
 local augroup = api.nvim_create_augroup("listchars_update", {})
 api.nvim_create_autocmd("InsertEnter", {
