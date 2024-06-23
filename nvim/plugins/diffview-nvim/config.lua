@@ -5,13 +5,13 @@ diffview.setup({
   enhanced_diff_hl = true,
   key_bindings = {
     view = {
-      q = diffview.close,
+      gq = diffview.close,
     },
     file_panel = {
-      q = diffview.close,
+      gq = diffview.close,
     },
     file_history_panel = {
-      q = diffview.close,
+      gq = diffview.close,
     },
   },
 })
