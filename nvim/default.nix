@@ -189,7 +189,6 @@ in {
         fix-auto-scroll-nvim
         # Tree-sitter
         nvim-treesitter'
-        playground
         # Autocompletion
         nvim-cmp
         cmp-buffer
