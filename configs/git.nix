@@ -25,6 +25,10 @@
       # A style for conflicted hunks
       merge.conflictStyle = "zdiff3";
 
+      # Enable autostash
+      rebase.autoStash = true;
+      merge.autoStash = true;
+
       # Git status
       status.showUntrackedFiles = "all";
 
