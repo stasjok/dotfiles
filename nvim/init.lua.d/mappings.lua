@@ -52,10 +52,6 @@ map("n", "<Leader>v", "<C-W>s")
 map("n", "<Leader>|", "<C-W>|")
 map("n", "<Leader>_", "<C-W>_")
 map("n", "<Leader>=", "<C-W>=")
-map("n", "<Leader>H", "<C-W>H")
-map("n", "<Leader>J", "<C-W>J")
-map("n", "<Leader>K", "<C-W>K")
-map("n", "<Leader>L", "<C-W>L")
 
 -- Mouse mappings
 -- automatic yanking after mouse selection
