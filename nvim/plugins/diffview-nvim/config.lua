@@ -6,9 +6,21 @@ diffview.setup({
   key_bindings = {
     view = {
       gq = diffview.close,
+      ["c<CR>"] = "<Cmd>tab Git commit<CR>",
+      ["cv<CR>"] = "<Cmd>tab Git commit -v<CR>",
+      ca = "<Cmd>tab Git commit --amend<CR>",
+      cva = "<Cmd>tab Git commit -v --amend<CR>",
+      cvc = "<Cmd>tab Git commit -v <CR>",
     },
     file_panel = {
       gq = diffview.close,
+      ["c<CR>"] = "<Cmd>tab Git commit<CR>",
+      ["cv<CR>"] = "<Cmd>tab Git commit -v<CR>",
+      ca = "<Cmd>tab Git commit --amend<CR>",
+      cc = "<Cmd>tab Git commit<CR>",
+      ce = "<Cmd>tab Git commit --amend --no-edit<CR>",
+      cva = "<Cmd>tab Git commit -v --amend<CR>",
+      cvc = "<Cmd>tab Git commit -v <CR>",
     },
     file_history_panel = {
       gq = diffview.close,
