@@ -1,6 +1,6 @@
 local telescope = require("telescope")
 local builtin = require("telescope.builtin")
-local map = require("map").map
+local map = vim.keymap.set
 
 telescope.setup({
   defaults = {
