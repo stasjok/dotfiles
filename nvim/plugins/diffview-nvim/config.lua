@@ -9,5 +9,8 @@ diffview.setup({
     file_panel = {
       q = diffview.close,
     },
+    file_history_panel = {
+      q = diffview.close,
+    },
   },
 })
