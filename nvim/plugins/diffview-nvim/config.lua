@@ -1,4 +1,5 @@
 local diffview = require("diffview")
+local map = vim.keymap.set
 
 diffview.setup({
   enhanced_diff_hl = true,
@@ -14,3 +15,7 @@ diffview.setup({
     },
   },
 })
+
+map("n", "<Leader>G", "<Cmd>DiffviewOpen<CR>")
+map("n", "<Leader>l", "<Cmd>DiffviewFileHistory<CR>")
+map("n", "<Leader>L", "<Cmd>DiffviewFileHistory %<CR>")
