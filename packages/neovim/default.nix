@@ -217,8 +217,9 @@
     version = versionFromSrc deps.treesitter;
     src = deps.treesitter;
     # Need to update cargo hash every time
-    cargoHash = "sha256-U2YXpNwtaSSEftswI0p0+npDJqOq5GqxEUlOPRlJGmQ=";
+    cargoHash = "sha256-44FIO0kPso6NxjLwmggsheILba3r9GEhDld2ddt601g=";
     cargoDeps = prev.cargoDeps.overrideAttrs {
+      name = "${prev.pname}-${version}-vendor.tar.gz";
       inherit src;
       hash = cargoHash;
       outputHash = cargoHash;
