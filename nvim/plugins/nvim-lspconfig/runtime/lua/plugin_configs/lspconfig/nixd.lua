@@ -64,6 +64,7 @@ M.on_init = function(client)
     documentHighlightProvider = false,
     documentSymbolProvider = false,
     hoverProvider = false,
+    renameProvider = false,
   }
   -- Override server capabilities
   client.server_capabilities = vim.tbl_deep_extend("force", client.server_capabilities, overrrides)
