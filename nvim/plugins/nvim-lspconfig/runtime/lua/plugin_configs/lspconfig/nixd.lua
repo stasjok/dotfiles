@@ -52,6 +52,16 @@ M.on_new_config = function(config, root_dir)
       fs.joinpath(root_dir, "modules"),
       settings.nixpkgs.expr
     )
+  elseif
+    dirname == "nixvim"
+    or vim.endswith(dirname, "-source")
+      and uv.fs_stat(fs.joinpath(root_dir, "lib/autocmd-helpers.nix"))
+  then
+    -- Get only suboptions from programs.nixvim
+    settings.options.nixos.expr = string.format(
+      "with import %s; (inputs.nixpkgs.legacyPackages.${builtins.currentSystem}.nixos nixosModules.nixvim).options.programs.nixvim.type.getSubOptions {}",
+      root_dir
+    )
   end
 
   config.settings = vim.tbl_deep_extend("force", config.settings or {}, { nixd = settings })
