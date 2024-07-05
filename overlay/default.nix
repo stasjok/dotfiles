@@ -44,6 +44,12 @@ in {
     };
   };
 
+  # Avoid binary clashing with nixfmt-rfc-style
+  nixfmt-classic = prev.runCommand "nixfmt-classic" {} ''
+    mkdir -p $out/bin
+    ln -s ${lib.getBin prev.nixfmt-classic}/bin/nixfmt $out/bin/nixfmt-classic
+  '';
+
   # Allow changing kubernetes schema URL via settings
   yaml-language-server = prev.yaml-language-server.overrideAttrs {
     src = inputs.yaml-language-server;

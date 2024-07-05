@@ -102,6 +102,7 @@ in {
       # Nix
       nil
       nixd
+      nixfmt-rfc-style
       alejandra
       nixpkgs-fmt
       nixfmt-classic

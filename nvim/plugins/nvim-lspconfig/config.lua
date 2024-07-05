@@ -102,6 +102,8 @@ local lsp_servers = {
       if dirname == "nixpkgs" then
         formatter_command = { "nixpkgs-fmt" }
       elseif dirname == "home-manager" then
+        formatter_command = { "nixfmt-classic" }
+      elseif dirname == "nixvim" then
         formatter_command = { "nixfmt" }
       else
         formatter_command = { "alejandra", "-" }
