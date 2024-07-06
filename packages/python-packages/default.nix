@@ -1,4 +1,7 @@
-{lib}: final: prev: {
+{
+  lib,
+  fetchurl,
+}: final: prev: {
   # Ansible 2.12 (last support for python 2.6)
   ansible-core = prev.ansible-core.overridePythonAttrs (prevAttrs: rec {
     version = "2.12.10";
@@ -31,4 +34,10 @@
         jmespath
       ]));
   });
+
+  # Ansible-compat version supporting ansible 2.12
+  ansible-compat = final.callPackage (fetchurl {
+    url = "https://github.com/NixOS/nixpkgs/raw/59b1aef59071cae6e87859dc65de973d2cc595c0/pkgs/development/python-modules/ansible-compat/default.nix";
+    hash = "sha256-5hksuIc4miCVYmVNeQYfA1EDoA4wrOAJWT3iblvx8Jk=";
+  }) {};
 }
