@@ -7,6 +7,20 @@
       url = "home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        # Remove optional dependencies
+        devshell.follows = "";
+        flake-compat.follows = "";
+        git-hooks.follows = "";
+        home-manager.follows = "";
+        nix-darwin.follows = "";
+        treefmt-nix.follows = "";
+        nuschtosSearch.follows = "";
+      };
+    };
     catppuccin.url = "github:catppuccin/nix";
 
     # Neovim package
@@ -34,6 +48,7 @@
     self,
     nixpkgs,
     home-manager,
+    nixvim,
     catppuccin,
     ...
   }: let
@@ -58,6 +73,7 @@
         inherit pkgs;
         extraSpecialArgs = extraSpecialArgs // {inherit inputs;};
         modules = lib.flatten [
+          nixvim.homeManagerModules.nixvim
           catppuccin.homeManagerModules.catppuccin
           ./modules
           ./home.nix
