@@ -44,6 +44,22 @@ in {
     };
   };
 
+  # Don't copy upstream queries from tree-sitter parsers
+  # This reverts https://github.com/NixOS/nixpkgs/pull/321550
+  neovimUtils =
+    prev.neovimUtils
+    // {
+      grammarToPlugin = grammar: let
+        prevPlugin = prev.neovimUtils.grammarToPlugin grammar;
+      in
+        prevPlugin.overrideAttrs (prevAttrs: {
+          buildCommand = ''
+            mkdir -p $out/parser
+            ln -s ${grammar}/parser $out/parser/${lib.removePrefix "vimplugin-treesitter-grammar-" prevAttrs.name}.so
+          '';
+        });
+    };
+
   # Avoid binary clashing with nixfmt-rfc-style
   nixfmt-classic = prev.runCommand "nixfmt-classic" {} ''
     mkdir -p $out/bin
@@ -53,18 +69,6 @@ in {
   # Allow changing kubernetes schema URL via settings
   yaml-language-server = prev.yaml-language-server.overrideAttrs {
     src = inputs.yaml-language-server;
-  };
-
-  # Nix language server
-  nixd = prev.nixd.overrideAttrs {
-    patches = [
-      # Don't return invalid ranges when going to package definition
-      (prev.fetchpatch {
-        url = "https://github.com/nix-community/nixd/commit/6811dcf03ac055752a3f28cbabf90bd0b0cee417.diff";
-        stripLen = 1;
-        hash = "sha256-DARLPMR+hFlcrJ5nXBDrONhgr+0JTXQQv25atA6C980=";
-      })
-    ];
   };
 
   # Freeze packer to the letest version with Mozilla Public License 2.0
