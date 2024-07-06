@@ -7,6 +7,13 @@
       url = "home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
+      };
+    };
     catppuccin.url = "github:catppuccin/nix";
 
     # Other inputs
@@ -32,6 +39,7 @@
     self,
     nixpkgs,
     home-manager,
+    nixvim,
     catppuccin,
     ...
   }: let
@@ -56,6 +64,7 @@
         inherit pkgs;
         extraSpecialArgs = extraSpecialArgs // {inherit inputs;};
         modules = lib.flatten [
+          nixvim.homeManagerModules.nixvim
           catppuccin.homeManagerModules.catppuccin
           ./modules
           ./home.nix
