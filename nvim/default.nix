@@ -5,36 +5,10 @@
   pkgs,
   ...
 }: let
-  cfg = config.programs.neovim;
+  cfg = config.programs.nixvim;
 
   # Packages
   neovim = pkgs.neovim-patched;
-
-  # A hook to byte-compile all lua files in `$out`
-  luaByteCompileHook =
-    pkgs.makeSetupHook {
-      name = "lua-byte-compile-hook";
-      substitutions = {
-        nvimBin = "${pkgs.neovim-unwrapped}/bin/nvim";
-        luaByteCompileScript = ./lua-byte-compile.lua;
-      };
-    }
-    ./lua-byte-compile-hook.sh;
-
-  # Byte-compile a single lua file
-  byteCompileLuaFile = file: let
-    name =
-      if builtins.isPath file
-      then builtins.baseNameOf file
-      else lib.getName file;
-  in
-    pkgs.runCommand name {
-      nativeBuildInputs = [luaByteCompileHook];
-    } ''
-      cp ${file} $out
-      chmod u+w $out
-      runHook preFixup
-    '';
 
   # Read a lua chunk from file, wrap it in do...end block, and prefix it with `name` comment
   luaBlock = name: file: let
@@ -58,33 +32,18 @@
       (builtins.concatStringsSep "\n")
     ];
 in {
-  programs.neovim = {
+  programs.nixvim = {
     enable = true;
 
     # Disable all providers
     withNodeJs = false;
-    withPython3 = false;
     withRuby = false;
 
     # Set neovim as the default EDITOR
     defaultEditor = true;
 
     # Byte-compile lua files in runtime
-    package = pkgs.symlinkJoin {
-      name = "neovim-compiled-${neovim.version}";
-      paths = [neovim];
-      nativeBuildInputs = [luaByteCompileHook];
-      postBuild = ''
-        # Replace symlink with a file, or Nvim
-        # will use wrong runtime directory
-        rm $out/bin/nvim
-        cp ${neovim}/bin/nvim $out/bin/nvim
-        # Activate luaByteCompileHook manually
-        runHook preFixup
-      '';
-      # Copy required attributes from original neovim package
-      inherit (neovim) lua;
-    };
+    package = neovim;
 
     # Extra packages available to neovim
     extraPackages = with pkgs.nodePackages;
@@ -141,142 +100,82 @@ in {
 
     # init.lua before plugins
     # Read `init.lua` file first, then read all .lua files in `init.lua.d` directory.
-    extraLuaConfig = lib.pipe ([./init.lua] ++ lib.filesystem.listFilesRecursive ./init.lua.d) [
+    extraConfigLuaPre = lib.pipe ([./init.lua] ++ lib.filesystem.listFilesRecursive ./init.lua.d) [
       (builtins.filter (name: lib.hasSuffix ".lua" name))
       (builtins.map (file: luaBlock (baseNameOf file) file))
       concatNonEmptyStringsSep
     ];
 
-    # Neovim plugins
-    plugins = let
-      # All plugins with its dependencies are placed in a start directory.
-      # Python dependencies aren't supported.
-      plugins = with pkgs.vimPlugins; let
-        # nvim-treesitter with tree-sitter parsers
-        nvim-treesitter' = nvim-treesitter.withPlugins (parsers:
-          nvim-treesitter.allGrammars
-          ++ (with parsers; [
-            tree-sitter-jinja2
-          ]));
+    extraPlugins = with pkgs.vimPlugins; let
+      # nvim-treesitter with tree-sitter parsers
+      nvim-treesitter' = nvim-treesitter.withPlugins (parsers:
+        nvim-treesitter.allGrammars
+        ++ (with parsers; [
+          tree-sitter-jinja2
+        ]));
 
-        # Byte-compile catppuccin colorscheme
-        catppuccin-nvim = let
-          neovim = pkgs.neovim.override {
-            configure.packages.catppuccin-nvim.start = [pkgs.vimPlugins.catppuccin-nvim];
-          };
-        in
-          pkgs.runCommand "catppuccin-nvim" {} ''
-            ${neovim}/bin/nvim -l ${./catppuccin-nvim-config.lua}
-            cd $out/colors
-            rm cached
-            for flavor in *; do
-                mv "$flavor" "catppuccin-$flavor.lua"
-            done
-          '';
-
-        # ':Git' doc tag is clashing with vim-fugitive
-        mini-nvim = pkgs.vimPlugins.mini-nvim.overrideAttrs {
-          postPatch = "rm doc/mini-git.txt";
+      # Byte-compile catppuccin colorscheme
+      catppuccin-nvim = let
+        neovim = pkgs.neovim.override {
+          configure.packages.catppuccin-nvim.start = [pkgs.vimPlugins.catppuccin-nvim];
         };
-      in [
-        # Colorscheme
-        catppuccin-nvim
-        # Libraries
-        plenary-nvim
-        mini-nvim
-        # Interface
-        nvim-web-devicons
-        smart-splits-nvim
-        fix-auto-scroll-nvim
-        # Tree-sitter
-        nvim-treesitter'
-        # Autocompletion
-        nvim-cmp
-        cmp-buffer
-        cmp-cmdline
-        cmp-nvim-lsp # Must be before nvim-lspconfig
-        cmp_luasnip
-        # Snippets
-        luasnip
-        # LSP
-        nvim-lspconfig
-        lsp_signature-nvim
-        none-ls-nvim
-        # Telescope
-        telescope-nvim
-        telescope-fzf-native-nvim
-        # Editing
-        surround-nvim
-        nvim-autopairs
-        # Git
-        vim-fugitive
-        gitsigns-nvim
-        diffview-nvim
-        # Languages
-        vim-nix
-        vim-jinja2-syntax
-        ansible-vim
-        salt-vim
-        mediawiki-vim
-      ];
-
-      # Extend plugin list with dependencies
-      allPlugins = let
-        pluginWithDeps = plugin: [plugin] ++ builtins.concatMap pluginWithDeps plugin.dependencies or [];
       in
-        lib.unique (builtins.concatMap pluginWithDeps plugins);
-
-      # Byte-compile all plugins, remove help tags
-      allPlugins' = lib.forEach allPlugins (plugin:
-        plugin.overrideAttrs (prev: {
-          nativeBuildInputs =
-            lib.remove pkgs.vimUtils.vimGenDocHook prev.nativeBuildInputs or []
-            ++ [luaByteCompileHook];
-          configurePhase =
-            concatNonEmptyStringsSep
-            (builtins.filter (s: s != ":") [
-              prev.configurePhase or ":"
-              "rm -f doc/tags"
-            ]);
-        }));
-
-      # Merge all plugins to one pack
-      mergedPlugins = pkgs.vimUtils.toVimPlugin (pkgs.buildEnv {
-        name = "plugin-pack";
-        paths = allPlugins';
-        pathsToLink = [
-          # :h rtp
-          "/autoload"
-          "/colors"
-          "/compiler"
-          "/doc"
-          "/ftplugin"
-          "/indent"
-          "/keymap"
-          "/lang"
-          "/lua"
-          "/pack"
-          "/parser"
-          "/plugin"
-          "/queries"
-          "/rplugin"
-          "/spell"
-          "/syntax"
-          "/tutor"
-          "/after"
-          # ftdetect
-          "/ftdetect"
-          # plenary.nvim
-          "/data"
-          # telescope-fzf-native-nvim
-          "/build"
-        ];
-        # Activate vimGenDocHook manually
-        postBuild = ''
-          find $out -type d -empty -delete
-          runHook preFixup
+        pkgs.runCommand "catppuccin-nvim" {} ''
+          ${neovim}/bin/nvim -l ${./catppuccin-nvim-config.lua}
+          cd $out/colors
+          rm cached
+          for flavor in *; do
+              mv "$flavor" "catppuccin-$flavor.lua"
+          done
         '';
-      });
+    in [
+      # Colorscheme
+      catppuccin-nvim
+      # Libraries
+      plenary-nvim
+      mini-nvim
+      # Interface
+      nvim-web-devicons
+      smart-splits-nvim
+      fix-auto-scroll-nvim
+      # Tree-sitter
+      nvim-treesitter'
+      # Autocompletion
+      nvim-cmp
+      cmp-buffer
+      cmp-cmdline
+      cmp-nvim-lsp # Must be before nvim-lspconfig
+      cmp_luasnip
+      # Snippets
+      luasnip
+      # LSP
+      nvim-lspconfig
+      lsp_signature-nvim
+      none-ls-nvim
+      # Telescope
+      telescope-nvim
+      telescope-fzf-native-nvim
+      # Editing
+      surround-nvim
+      nvim-autopairs
+      # Git
+      vim-fugitive
+      gitsigns-nvim
+      diffview-nvim
+      # Languages
+      vim-nix
+      vim-jinja2-syntax
+      ansible-vim
+      salt-vim
+      mediawiki-vim
+    ];
+
+    extraConfigLua = let
+      # List of plugins
+      plugins = cfg.extraPlugins;
+
+      # List of plugin names
+      pluginNames = builtins.map lib.getName plugins;
 
       # Normalized plugin name
       pluginNormalizedName = name: builtins.replaceStrings ["."] ["-"] name;
@@ -287,17 +186,35 @@ in {
       in
         lib.optionalString (builtins.pathExists configPath) (luaBlock name configPath);
 
+      # Merge all plugin configs
+      config = concatNonEmptyStringsSep (builtins.map pluginConfig pluginNames);
+    in
+      config;
+
+    extraConfigLuaPost = luaBlock "init_after.lua" ./init_after.lua;
+
+    extraFiles = let
+      # List of plugins
+      plugins = cfg.extraPlugins;
+
+      # Extend plugin list with dependencies
+      allPlugins = let
+        pluginWithDeps = plugin: [plugin] ++ builtins.concatMap pluginWithDeps plugin.dependencies or [];
+      in
+        lib.unique (builtins.concatMap pluginWithDeps plugins);
+
+      # List of plugin names
+      pluginNames = builtins.map lib.getName plugins;
+
+      # Normalized plugin name
+      pluginNormalizedName = name: builtins.replaceStrings ["."] ["-"] name;
+
       # Make attributes for runtime attribute of a plugin
       mkRuntimeAttrs = dir:
         lib.pipe dir [
           lib.filesystem.listFilesRecursive
           (builtins.map (path: lib.removePrefix (builtins.toString dir + "/") (builtins.toString path)))
-          (lib.flip lib.genAttrs (name: {
-            source =
-              if lib.hasSuffix ".lua" name
-              then byteCompileLuaFile /${dir}/${name}
-              else /${dir}/${name};
-          }))
+          (lib.flip lib.genAttrs (name: builtins.readFile /${dir}/${name}))
         ];
 
       # Get plugin runtime
@@ -306,40 +223,25 @@ in {
       in
         lib.optionalAttrs (builtins.pathExists runtimeDir) (mkRuntimeAttrs runtimeDir);
 
-      # List of plugin names
-      pluginNames = builtins.map lib.getName plugins;
-
-      # Merge all plugin configs plus init.lua tail
-      config =
-        concatNonEmptyStringsSep (builtins.map pluginConfig pluginNames
-          ++ [(luaBlock "init_after.lua" ./init_after.lua)]);
-
       # Merge all runtime files
       runtime = let
         pluginRuntimes = builtins.map pluginRuntime pluginNames;
 
         # List of plugin sources for lua-language-server
         luaLsLibrary = {
-          "lua_ls_library.json" = {
-            text = lib.pipe allPlugins [
-              (builtins.filter (plugin: builtins.pathExists "${plugin}/lua"))
-              # Append types and neovim runtime
-              (lib.concat [neovim])
-              (builtins.map (plugin: lib.nameValuePair (pluginNormalizedName (lib.getName plugin)) plugin))
-              builtins.listToAttrs
-              builtins.toJSON
-            ];
-          };
+          "lua_ls_library.json" = lib.pipe allPlugins [
+            (builtins.filter (plugin: builtins.pathExists "${plugin}/lua"))
+            # Append types and neovim runtime
+            (lib.concat [neovim])
+            (builtins.map (plugin: lib.nameValuePair (pluginNormalizedName (lib.getName plugin)) plugin))
+            builtins.listToAttrs
+            builtins.toJSON
+          ];
         };
       in
         builtins.foldl' (r1: r2: r1 // r2) (mkRuntimeAttrs ./runtime // luaLsLibrary) pluginRuntimes;
-    in [
-      {
-        plugin = mergedPlugins;
-        inherit config runtime;
-        type = "lua";
-      }
-    ];
+    in
+      runtime;
 
     # Lua libraries
     extraLuaPackages = p:
@@ -347,17 +249,6 @@ in {
         jsregexp
       ];
   };
-
-  # Byte-compile init.lua
-  xdg.configFile."nvim/init.lua" = let
-    initLua = pkgs.writeText "init.lua" ''
-      ${cfg.extraLuaConfig}
-      ${cfg.generatedConfigs.lua}'';
-    initLuaCompiled = byteCompileLuaFile initLua;
-  in
-    lib.mkForce {
-      source = initLuaCompiled;
-    };
 
   home.file = {
     # Vale configuration
