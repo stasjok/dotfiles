@@ -34,6 +34,7 @@
 in {
   programs.nixvim = {
     enable = true;
+    package = neovim;
 
     # Disable all providers
     withNodeJs = false;
@@ -41,9 +42,6 @@ in {
 
     # Set neovim as the default EDITOR
     defaultEditor = true;
-
-    # Byte-compile lua files in runtime
-    package = neovim;
 
     # Extra packages available to neovim
     extraPackages = with pkgs.nodePackages;
@@ -106,6 +104,7 @@ in {
       concatNonEmptyStringsSep
     ];
 
+    # Neovim plugins
     extraPlugins = with pkgs.vimPlugins; let
       # nvim-treesitter with tree-sitter parsers
       nvim-treesitter' = nvim-treesitter.withPlugins (parsers:
@@ -170,6 +169,7 @@ in {
       mediawiki-vim
     ];
 
+    # init.lua plugin configurations
     extraConfigLua = let
       # List of plugins
       plugins = cfg.extraPlugins;
@@ -191,8 +191,10 @@ in {
     in
       config;
 
+    # init.lua after plugins
     extraConfigLuaPost = luaBlock "init_after.lua" ./init_after.lua;
 
+    # Runtime files, both plugin's and separate
     extraFiles = let
       # List of plugins
       plugins = cfg.extraPlugins;
