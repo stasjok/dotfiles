@@ -36,6 +36,25 @@ in {
     enable = true;
     package = neovim;
 
+    # Custom performance settings from my fork
+    performance = {
+      # Byte compile everything
+      byteCompileLua = {
+        enable = true;
+        plugins = true;
+        nvimRuntime = true;
+      };
+
+      # Reduce the number of runtime paths
+      combinePlugins = {
+        enable = true;
+        pathsToLink = [
+          # telescope-fzf-native-nvim
+          "/build"
+        ];
+      };
+    };
+
     # Disable all providers
     withNodeJs = false;
     withRuby = false;
@@ -127,6 +146,11 @@ in {
               mv "$flavor" "catppuccin-$flavor.lua"
           done
         '';
+
+      # ':Git' doc tag is clashing with vim-fugitive
+      mini-nvim = pkgs.vimPlugins.mini-nvim.overrideAttrs {
+        postPatch = "rm doc/mini-git.txt";
+      };
     in [
       # Colorscheme
       catppuccin-nvim
