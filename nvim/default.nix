@@ -232,7 +232,7 @@ in {
         lib.pipe dir [
           lib.filesystem.listFilesRecursive
           (builtins.map (path: lib.removePrefix (builtins.toString dir + "/") (builtins.toString path)))
-          (lib.flip lib.genAttrs (name: builtins.readFile /${dir}/${name}))
+          (lib.flip lib.genAttrs (name: {text = builtins.readFile /${dir}/${name};}))
         ];
 
       # Get plugin runtime
@@ -247,7 +247,7 @@ in {
 
         # List of plugin sources for lua-language-server
         luaLsLibrary = {
-          "lua_ls_library.json" = lib.pipe allPlugins [
+          "lua_ls_library.json".text = lib.pipe allPlugins [
             (builtins.filter (plugin: builtins.pathExists "${plugin}/lua"))
             # Append types and neovim runtime
             (lib.concat [neovim])
