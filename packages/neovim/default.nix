@@ -33,6 +33,11 @@
       url = "https://github.com/stasjok/neovim/commit/c1288f6ba879d2582f7b7238273baedb4e4736f5.diff";
       hash = "sha256-PeNNz9qNiLNAqKTHymmeHqc3c1IP6hhyX3e6eUhei2c=";
     })
+    # fix(diagnostic): fix backwards compatibility for goto_next and goto_prev
+    (fetchpatch {
+      url = "https://github.com/stasjok/neovim/commit/78faebc1a8232504ea2ae8ae1ad874a2b82365d9.diff";
+      hash = "sha256-sB5Dixl+yk/+dG6bh9mUF79gV8UB/KHhC4r0okbjZwA=";
+    })
     # feat(defaults): use vim.diagnostic.jump() for default mappings
     (fetchpatch {
       url = "https://github.com/neovim/neovim/commit/1c6d9200521acb2329be55ab8bec3056deade66a.diff";
