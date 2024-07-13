@@ -11,7 +11,13 @@
       url = "github:stasjok/nixvim/fork";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        home-manager.follows = "home-manager";
+        # Remove optional dependencies
+        devshell.follows = "";
+        flake-compat.follows = "";
+        git-hooks.follows = "";
+        home-manager.follows = "";
+        nix-darwin.follows = "";
+        treefmt-nix.follows = "";
       };
     };
     catppuccin.url = "github:catppuccin/nix";
