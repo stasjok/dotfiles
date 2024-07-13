@@ -51,22 +51,6 @@
         "url": "https://flakehub.com/f/edolstra/flake-compat/1.tar.gz"
       }
     },
-    "flake-compat_2": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1696426674,
-        "narHash": "sha256-kvjfFW7WAETZlt09AgDn1MrtKzP7t90Vf7vypd3OL1U=",
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "rev": "0f9255e01c2351cc7d116c072cb317785dd33b33",
-        "type": "github"
-      },
-      "original": {
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "type": "github"
-      }
-    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -108,7 +92,10 @@
     },
     "git-hooks": {
       "inputs": {
-        "flake-compat": "flake-compat_2",
+        "flake-compat": [
+          "nixvim",
+          "flake-compat"
+        ],
         "gitignore": "gitignore",
         "nixpkgs": [
           "nixvim",
@@ -242,11 +229,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1720372959,
-        "narHash": "sha256-+nS+I5wLu5miU2b90NqQVlCBqvDrfR9ND/Prd/tZgds=",
+        "lastModified": 1720874030,
+        "narHash": "sha256-5ZULcEngSsqoqjv19J2fpwYSD8nt5PLV+us29+xt7ME=",
         "owner": "stasjok",
         "repo": "nixvim",
-        "rev": "327c818b75877d9a9140fac0c94e1c390ea7bfb6",
+        "rev": "b52ada8635f7ea9bad86fe9760d8345f49852bfa",
         "type": "github"
       },
       "original": {
