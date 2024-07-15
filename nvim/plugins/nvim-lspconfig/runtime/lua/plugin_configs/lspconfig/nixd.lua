@@ -59,8 +59,9 @@ M.on_new_config = function(config, root_dir)
   then
     -- Get only suboptions from programs.nixvim
     settings.options.nixos.expr = string.format(
-      "with import %s; (inputs.nixpkgs.legacyPackages.${builtins.currentSystem}.nixos nixosModules.nixvim).options.programs.nixvim.type.getSubOptions {}",
-      root_dir
+      "(import %s/wrappers/standalone.nix %s {} {module = {};}).options",
+      root_dir,
+      settings.nixpkgs.expr
     )
   end
 
