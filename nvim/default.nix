@@ -37,14 +37,22 @@ in {
     package = neovim;
 
     # Custom performance settings from my fork
-    performance.combinePlugins = {
-      enable = true;
-      pathsToLink = [
-        # plenary.nvim
-        "/data"
-        # telescope-fzf-native-nvim
-        "/build"
-      ];
+    performance = {
+      # Byte compile everything
+      byteCompileLua = {
+        enable = true;
+        plugins = true;
+        nvimRuntime = true;
+      };
+
+      # Reduce the number of runtime paths
+      combinePlugins = {
+        enable = true;
+        pathsToLink = [
+          # telescope-fzf-native-nvim
+          "/build"
+        ];
+      };
     };
 
     # Disable all providers
