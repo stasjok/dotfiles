@@ -23,6 +23,7 @@
       # Pinned inputs
       nixpkgs.to = flakeLock.nixpkgs.locked;
       home-manager.to = flakeLock.home-manager.locked;
+      neovim.to = flakeLock.neovim.locked;
     };
   };
 
