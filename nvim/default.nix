@@ -322,7 +322,16 @@ in {
         luaLsLibrary = {
           "lua_ls_library.json" = {
             text = lib.pipe allPlugins [
-              (builtins.filter (plugin: builtins.pathExists "${plugin}/lua"))
+              # Filter out non-lua plugins
+              (builtins.filter (p: let
+                name = lib.getName p;
+              in
+                !lib.hasPrefix "vim-" name
+                && !lib.hasSuffix "-vim" name
+                && !lib.hasSuffix ".vim" name
+                && !lib.hasInfix "-grammar-" name
+                # Catppuccin is byte compiled
+                && name != "catppuccin-nvim"))
               # Append types and neovim runtime
               (lib.concat [neovim])
               (builtins.map (plugin: lib.nameValuePair (pluginNormalizedName (lib.getName plugin)) plugin))
