@@ -181,11 +181,11 @@
   };
 
   # LuaJIT
-  lua = luajit.override rec {
+  lua = luajit.override (prev: {
     version = let
       relverFile = stdenvNoCC.mkDerivation {
         name = "luajit-relver";
-        inherit src;
+        src = deps.luajit;
         phases = ["unpackPhase" "installPhase"];
         installPhase = "cp .relver $out";
       };
@@ -195,7 +195,21 @@
     src = deps.luajit;
     packageOverrides = luaPackageOverrides;
     self = lua;
-  };
+
+    # Fix luarocks_bootstrap building
+    # Lua interpreters have passthru.luaOnBuild attribute
+    # referring to the overriden version from pkgsBuildHost.
+    # Due to a possible bug in nixpkgs src attribute isn't overriden, see file
+    #   pkgs/development/interpreters/luajit/default.nix
+    # When overriding lua all derivation parameters are skipped with
+    #   inputs' = lib.filterAttrs (n: v: ! lib.isDerivation v && n != "passthruFun") inputs;
+    # And src is a derivation, thus it's skipped. Override src manually to fix.
+    pkgsBuildHost =
+      prev.pkgsBuildHost
+      // {
+        ${luajit.luaAttr} = prev.pkgsBuildHost.${luajit.luaAttr}.override {src = deps.luajit;};
+      };
+  });
 
   # MessagePack for C
   msgpack-c = pkgs.msgpack-c.overrideAttrs {
@@ -252,4 +266,5 @@ in
       prerelease = getValue "NVIM_VERSION_PRERELEASE";
     in "${major}.${minor}.${patch}${prerelease}";
     inherit src;
+    inherit lua;
   })
