@@ -9,11 +9,13 @@
     };
     catppuccin.url = "github:catppuccin/nix";
 
-    # Other inputs
+    # Neovim package
     neovim = {
-      url = "github:neovim/neovim?ref=release-0.10";
-      flake = false;
+      url = "github:stasjok/neovim?ref=release-0.10-patched";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Other inputs
     tree-sitter-jinja2 = {
       url = "github:theHamsta/tree-sitter-jinja2";
       flake = false;

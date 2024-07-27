@@ -21,9 +21,6 @@ in {
     '';
   };
 
-  # Neovim backports and patches
-  neovim-patched = callPackage ../packages/neovim {};
-
   # Python packages
   pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [(callPackage ../packages/python-packages {})];
 

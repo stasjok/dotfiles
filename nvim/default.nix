@@ -7,8 +7,8 @@
 }: let
   cfg = config.programs.neovim;
 
-  # Packages
-  neovim = pkgs.neovim-patched;
+  # Neovim package
+  neovim = inputs.neovim.packages.${pkgs.system}.neovim-unwrapped;
 
   # A hook to byte-compile all lua files in `$out`
   luaByteCompileHook =
