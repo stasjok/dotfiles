@@ -10,14 +10,20 @@
       experimental-features = ["nix-command" "flakes" "repl-flake"];
     };
 
-    registry = with builtins; {
-      nixpkgs.to = (fromJSON (readFile ../flake.lock)).nodes.nixpkgs.locked;
-      home-manager.to = (fromJSON (readFile ../flake.lock)).nodes.home-manager.locked;
+    registry = let
+      flakeLock = (builtins.fromJSON (builtins.readFile ../flake.lock)).nodes;
+    in {
+      # My dotfiles
       dotfiles.to = {
         type = "github";
         owner = "stasjok";
         repo = "dotfiles";
       };
+
+      # Pinned inputs
+      nixpkgs.to = flakeLock.nixpkgs.locked;
+      home-manager.to = flakeLock.home-manager.locked;
+      neovim.to = flakeLock.neovim.locked;
     };
   };
 
