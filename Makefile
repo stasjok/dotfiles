@@ -26,13 +26,13 @@ update_neovim :
 test : test_all
 
 # List of tests
-nvim_unit_tests ::= $(wildcard tests/nvim/unit/*_spec.lua tests/nvim/unit/*/*_spec.lua)
-nvim_integration_tests ::= $(wildcard tests/nvim/integration/test_*.lua) \
-	$(wildcard tests/nvim/integration/*_spec.lua tests/nvim/integration/*/*_spec.lua)
-nvim_functional_tests ::= $(wildcard tests/nvim/functional/*_spec.lua) \
+nvim_tests ::= $(wildcard tests/nvim/unit/*_spec.lua tests/nvim/unit/*/*_spec.lua) \
+	$(wildcard tests/nvim/integration/test_*.lua) \
+	$(wildcard tests/nvim/integration/*_spec.lua tests/nvim/integration/*/*_spec.lua) \
+	$(wildcard tests/nvim/functional/*_spec.lua) \
 	$(wildcard tests/nvim/functional/test_*.lua tests/nvim/functional/*/test_*.lua)
 nvim_all_tests ::= test_nvim tests/nvim \
-	test_nvim_unit tests/nvim/unit $(nvim_unit_tests) \
+	test_nvim_unit tests/nvim/unit $(nvim_tests) \
 	test_nvim_integration tests/nvim/integration $(nvim_integration_tests) \
 	test_nvim_functional tests/nvim/functional $(nvim_functional_tests)
 all_tests ::= test_all $(nvim_all_tests)
@@ -46,16 +46,17 @@ $(all_tests) :
 else
 test_all : test_nvim
 
-# Neovim
-nvim_args ::= --headless -u tests/nvim/minimal_init.lua --noplugin -n -i NONE
-
-test_nvim tests/nvim : test_nvim_unit test_nvim_integration test_nvim_functional
-test_nvim_unit tests/nvim/unit : $(nvim_unit_tests)
-test_nvim_integration tests/nvim/integration : $(nvim_integration_tests)
-test_nvim_functional tests/nvim/functional : $(nvim_functional_tests)
-
-$(nvim_unit_tests) $(nvim_integration_tests) $(nvim_functional_tests) :
-	@nvim $(nvim_args) -c "lua require('mini.test').setup(); MiniTest.run_file('$@')"
+test_nvim tests/nvim :
+	@nvim -l tests/nvim/run.lua tests/nvim
+test_nvim_unit tests/nvim/unit :
+	@nvim -l tests/nvim/run.lua tests/nvim/unit
+test_nvim_integration tests/nvim/integration :
+	@nvim -l tests/nvim/run.lua tests/nvim/integration
+test_nvim_functional tests/nvim/functional :
+	@nvim -l tests/nvim/run.lua tests/nvim/functional
+# Separate tests
+$(nvim_tests) :
+	@nvim -l tests/nvim/run.lua "$(@)"
 endif
 
 # Cleaning

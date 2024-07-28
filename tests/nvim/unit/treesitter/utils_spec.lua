@@ -29,6 +29,8 @@ describe("treesitter.utils", function()
   }
 
   setup(function()
+    _G.package.loaded["treesitter.utils"] = nil
+
     -- Create stubs
     for module, keys in pairs(stubs) do
       for _, key in ipairs(keys) do
