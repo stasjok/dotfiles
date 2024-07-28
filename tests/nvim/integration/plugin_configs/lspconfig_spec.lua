@@ -1,3 +1,5 @@
+local assert = require("luassert")
+
 describe("lua_ls", function()
   local lua_ls = require("plugin_configs.lspconfig.lua_ls")
 

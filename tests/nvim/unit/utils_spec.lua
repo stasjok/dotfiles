@@ -1,3 +1,5 @@
+local assert = require("luassert")
+
 describe("helpers", function()
   local helpers = require("utils")
 

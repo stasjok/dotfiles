@@ -26,14 +26,11 @@ update_neovim :
 test : test_all
 
 # List of tests
-nvim_unit_plenary ::= $(wildcard tests/nvim/unit/*_spec.lua tests/nvim/unit/*/*_spec.lua)
-nvim_unit_tests ::= $(nvim_unit_plenary)
-nvim_integration_plenary ::= $(wildcard tests/nvim/integration/*_spec.lua tests/nvim/integration/*/*_spec.lua)
-nvim_integration_minitest ::= $(wildcard tests/nvim/integration/test_*.lua)
-nvim_integration_tests ::= $(nvim_integration_plenary) $(nvim_integration_minitest)
-nvim_functional_plenary ::= $(wildcard tests/nvim/functional/*_spec.lua)
-nvim_functional_minitest ::= $(wildcard tests/nvim/functional/test_*.lua tests/nvim/functional/*/test_*.lua)
-nvim_functional_tests ::= $(nvim_functional_plenary) $(nvim_functional_minitest)
+nvim_unit_tests ::= $(wildcard tests/nvim/unit/*_spec.lua tests/nvim/unit/*/*_spec.lua)
+nvim_integration_tests ::= $(wildcard tests/nvim/integration/test_*.lua) \
+	$(wildcard tests/nvim/integration/*_spec.lua tests/nvim/integration/*/*_spec.lua)
+nvim_functional_tests ::= $(wildcard tests/nvim/functional/*_spec.lua) \
+	$(wildcard tests/nvim/functional/test_*.lua tests/nvim/functional/*/test_*.lua)
 nvim_all_tests ::= test_nvim tests/nvim \
 	test_nvim_unit tests/nvim/unit $(nvim_unit_tests) \
 	test_nvim_integration tests/nvim/integration $(nvim_integration_tests) \
@@ -57,14 +54,8 @@ test_nvim_unit tests/nvim/unit : $(nvim_unit_tests)
 test_nvim_integration tests/nvim/integration : $(nvim_integration_tests)
 test_nvim_functional tests/nvim/functional : $(nvim_functional_tests)
 
-$(nvim_unit_plenary) $(nvim_integration_plenary) :
-	@nvim $(nvim_args) -c "lua require('plenary.busted').run('$@')"
-
-$(nvim_integration_minitest) $(nvim_functional_minitest) :
+$(nvim_unit_tests) $(nvim_integration_tests) $(nvim_functional_tests) :
 	@nvim $(nvim_args) -c "lua require('mini.test').setup(); MiniTest.run_file('$@')"
-
-$(nvim_functional_plenary) :
-	@nvim --headless -n -i NONE -c "lua require('plenary.busted').run('$@')"
 endif
 
 # Cleaning

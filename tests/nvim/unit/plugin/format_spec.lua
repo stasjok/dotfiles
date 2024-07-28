@@ -1,40 +1,67 @@
-local helpers = dofile("tests/nvim/helpers.lua")
+local assert = require("luassert")
 local match = require("luassert.match")
 local stub = require("luassert.stub")
 
 describe("plugin/format", function()
+  local plugin
+
   -- Stubs
-  local revert_stubs = helpers.stubs({
+  local stubs = {
     [vim.api] = {
       "nvim_buf_get_option",
       "nvim_create_augroup",
       "nvim_clear_autocmds",
       "nvim_create_autocmd",
     },
-    [vim.keymap] = "set",
-    [vim.lsp] = "get_client_by_id",
-    [vim.lsp.buf] = "format",
-  })
+    [vim.keymap] = { "set" },
+    [vim.lsp] = { "get_client_by_id" },
+    [vim.lsp.buf] = { "format" },
+  }
+
   local true_stub = stub.new(nil, nil, true)
   local false_stub = stub.new(nil, nil, false)
   local nil_stub = stub.new()
-  after_each(function()
-    true_stub:clear()
-    false_stub:clear()
-    nil_stub:clear()
-  end)
 
-  -- Load locals
-  io.input("nvim/init.lua.d/format.lua")
-  local format_chunk = io.read("*a")
-  format_chunk = format_chunk
-    .. [[
+  setup(function()
+    for module, keys in pairs(stubs) do
+      for _, key in ipairs(keys) do
+        stub.new(module, key)
+      end
+    end
+
+    -- Load locals
+    io.input("nvim/init.lua.d/format.lua")
+    local format_chunk = io.read("*a")
+    format_chunk = format_chunk
+      .. [[
 return {
   settings = settings,
   format_with_client_id = format_with_client_id,
   configure_format = configure_format,
 }]]
-  local plugin = assert(loadstring(format_chunk, "Format plugin"))()
+    -- Load plugin after setting up stubs
+    plugin = assert(loadstring(format_chunk, "Format plugin"))()
+  end)
+
+  after_each(function()
+    true_stub:clear()
+    false_stub:clear()
+    nil_stub:clear()
+
+    for module, keys in pairs(stubs) do
+      for _, key in ipairs(keys) do
+        module[key]:clear()
+      end
+    end
+  end)
+
+  teardown(function()
+    for module, keys in pairs(stubs) do
+      for _, key in ipairs(keys) do
+        module[key]:revert()
+      end
+    end
+  end)
 
   describe("format_with_client_id", function()
     it("returns correct format function", function()
@@ -58,9 +85,12 @@ return {
       },
     }
     local augroup = 3
-    vim.api.nvim_buf_get_option.on_call_with(buf, "filetype").returns(ft)
-    vim.lsp.get_client_by_id.on_call_with(client_id).returns(client)
-    vim.api.nvim_create_augroup.returns(augroup)
+
+    setup(function()
+      vim.api.nvim_buf_get_option.on_call_with(buf, "filetype").returns(ft)
+      vim.lsp.get_client_by_id.on_call_with(client_id).returns(client)
+      vim.api.nvim_create_augroup.returns(augroup)
+    end)
 
     -- Matcher for on_save nvim_create_autocmd opts
     local function on_save_autocmd_opts()
@@ -336,7 +366,4 @@ return {
       end)
     end
   end)
-
-  -- Revert stubs
-  revert_stubs()
 end)
