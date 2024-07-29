@@ -43,6 +43,8 @@
     bear
     # Ansible
     ansible
+    # Containers
+    podman
     # Kubernetes
     kubectl
     kubernetes-helm
