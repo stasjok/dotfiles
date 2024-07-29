@@ -1,9 +1,7 @@
-vim.g.did_load_filetypes = 1
-vim.cmd.syntax("off")
+-- Load minimal_init.lua
+dofile("tests/nvim/minimal_init.lua")
 
-require("utils").set_rtp()
-
--- Configure MiniTest colletion stage
+-- Configure MiniTest
 require("mini.test").setup({
   collect = {
     find_files = function()

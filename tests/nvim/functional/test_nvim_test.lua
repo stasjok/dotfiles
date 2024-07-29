@@ -1,5 +1,5 @@
 local new_set = MiniTest.new_set
-local helpers = dofile("tests/nvim/minitest_helpers.lua")
+local helpers = require("test.helpers")
 local expect, eq = helpers.expect, MiniTest.expect.equality
 
 local child = helpers.new_child()

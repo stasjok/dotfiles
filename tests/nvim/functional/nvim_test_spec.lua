@@ -2,21 +2,25 @@ local assert = require("luassert")
 
 describe("test_nvim", function()
   describe("runtimepath", function()
-    it("has config home directory first", function()
-      assert.equal(vim.fs.normalize("~/.config/nvim"), vim.opt.runtimepath:get()[1])
+    it("has test library first", function()
+      assert.equal("tests/nvim", vim.opt.runtimepath:get()[1])
     end)
 
-    it("has vim-pack-dir second", function()
-      assert.matches("vim%-pack%-dir$", vim.opt.runtimepath:get()[2])
+    it("has home config directory second", function()
+      assert.equal(vim.fn.stdpath("config"), vim.opt.runtimepath:get()[2])
     end)
 
-    it("has VIMRUNTIME third", function()
-      assert.equals(vim.env.VIMRUNTIME, vim.opt.runtimepath:get()[3])
+    it("has vim-pack-dir third", function()
+      assert.matches("vim%-pack%-dir$", vim.opt.runtimepath:get()[3])
+    end)
+
+    it("has VIMRUNTIME fourth", function()
+      assert.equals(vim.env.VIMRUNTIME, vim.opt.runtimepath:get()[4])
     end)
 
     it("has after directory last", function()
-      assert.equals(vim.fs.normalize("~/.config/nvim/after"), vim.opt.runtimepath:get()[4])
-      assert.equals(4, #vim.opt.runtimepath:get())
+      assert.equals(vim.fn.stdpath("config") .. "/after", vim.opt.runtimepath:get()[5])
+      assert.equals(5, #vim.opt.runtimepath:get())
     end)
   end)
 
