@@ -90,7 +90,7 @@ T["minimal_child"]["test_nvim_test.lua tests"] = function()
   -- Make sure tests never run before
   eq(child.lua_get("MiniTest.current.all_cases"), vim.NIL)
   -- Run tests
-  child.lua([[MiniTest.run_file(...)]], { "tests/nvim/integration/test_nvim_test.lua" })
+  child.lua([[MiniTest.run_file(...)]], { "tests/nvim/functional/nvim_test_spec.lua" })
   -- Make sure tests are finished
   eq(child.lua_get("MiniTest.is_executing()"), false)
   -- Remove functions from list of cases

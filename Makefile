@@ -26,15 +26,18 @@ update_neovim :
 test : test_all
 
 # List of tests
-nvim_tests ::= $(wildcard tests/nvim/unit/*_spec.lua tests/nvim/unit/*/*_spec.lua) \
-	$(wildcard tests/nvim/integration/test_*.lua) \
-	$(wildcard tests/nvim/integration/*_spec.lua tests/nvim/integration/*/*_spec.lua) \
-	$(wildcard tests/nvim/functional/*_spec.lua) \
-	$(wildcard tests/nvim/functional/test_*.lua tests/nvim/functional/*/test_*.lua)
+nvim_tests ::= $(wildcard \
+	tests/nvim/*/test_*.lua \
+	tests/nvim/*/*_spec.lua \
+	tests/nvim/*/*/test_*.lua \
+	tests/nvim/*/*/*_spec.lua \
+	tests/nvim/*/*/*/test_*.lua \
+	tests/nvim/*/*/*/*_spec.lua \
+	)
 nvim_all_tests ::= test_nvim tests/nvim \
-	test_nvim_unit tests/nvim/unit $(nvim_tests) \
-	test_nvim_integration tests/nvim/integration $(nvim_integration_tests) \
-	test_nvim_functional tests/nvim/functional $(nvim_functional_tests)
+	test_nvim_unit tests/nvim/unit  \
+	test_nvim_functional tests/nvim/functional \
+	$(nvim_tests)
 all_tests ::= test_all $(nvim_all_tests)
 
 .PHONY : $(all_tests)
@@ -50,11 +53,9 @@ test_nvim tests/nvim :
 	@nvim -l tests/nvim/run.lua tests/nvim
 test_nvim_unit tests/nvim/unit :
 	@nvim -l tests/nvim/run.lua tests/nvim/unit
-test_nvim_integration tests/nvim/integration :
-	@nvim -l tests/nvim/run.lua tests/nvim/integration
 test_nvim_functional tests/nvim/functional :
 	@nvim -l tests/nvim/run.lua tests/nvim/functional
-# Separate tests
+# Separated tests
 $(nvim_tests) :
 	@nvim -l tests/nvim/run.lua "$(@)"
 endif
