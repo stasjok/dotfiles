@@ -1,34 +1,11 @@
-local new_set = MiniTest.new_set
+local expect = require("test.expect")
+local eq = expect.equality
 local helpers = require("test.helpers")
-local expect, eq = helpers.expect, MiniTest.expect.equality
+local new_set = MiniTest.new_set
 
 local child = helpers.new_child()
 
 local T = new_set()
-
-T["helpers"] = new_set()
-
-T["helpers"]["expect.match()"] = function()
-  local function error_pattern(s)
-    return vim.pesc(string.format("Pattern: %s\n", s))
-  end
-  -- Works
-  eq(expect.match("test", "test"), true)
-  expect.error(expect.match, error_pattern("no_match"), "test", "no_match")
-  -- Works with plain pattern
-  expect.error(expect.match, error_pattern("test-test"), "test-test", "test-test")
-  eq(expect.match("test-test", "test-test", 1, true), true)
-  -- Pattern text
-  expect.error(expect.match, error_pattern("test, 2"), "test", "test", 2)
-  expect.error(expect.match, error_pattern("test, 2, true"), "test", "test", 2, true)
-  expect.error(expect.match, error_pattern("test, 2, false"), "test", "test", 2, false)
-  expect.error(expect.match, error_pattern("no_match, nil, true"), "test", "no_match", nil, true)
-  expect.error(expect.match, error_pattern("no_match"), "test", "no_match", nil, nil)
-  -- no_match()
-  eq(expect.no_match("test", "no_match"), true)
-  expect.error(expect.no_match, error_pattern("test"), "test", "test")
-  eq(expect.no_match("test-test", "test%-test", nil, true), true)
-end
 
 T["child"] = new_set({
   hooks = {

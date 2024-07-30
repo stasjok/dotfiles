@@ -1,36 +1,10 @@
-local helpers = {}
+local M = {}
 
--- Add extra expectations
-helpers.expect = vim.deepcopy(MiniTest.expect)
-
-local function match_fail_context(str, pattern, init, plain)
-  if plain ~= nil then
-    init = init or "nil"
-    pattern = string.format("%s, %s, %s", pattern, init, plain)
-  elseif init then
-    pattern = string.format("%s, %s", pattern, init)
-  end
-  return string.format("Pattern: %s\nObserved string: %s", pattern, str)
-end
-
-helpers.expect.match = MiniTest.new_expectation(
-  "string matching",
-  function(str, pattern, init, plain)
-    return str:find(pattern, init, plain) ~= nil
-  end,
-  match_fail_context
-)
-
-helpers.expect.no_match = MiniTest.new_expectation(
-  "no string matching",
-  function(str, pattern, init, plain)
-    return str:find(pattern, init, plain) == nil
-  end,
-  match_fail_context
-)
+-- For backward compatibility
+M.expect = require("test.expect")
 
 -- Modified new_child_neovim()
-helpers.new_child = function(opts)
+M.new_child = function(opts)
   opts = vim.tbl_extend("keep", opts or {}, { minimal = false }) --[[@as table]]
 
   local child = MiniTest.new_child_neovim()
@@ -144,4 +118,4 @@ helpers.new_child = function(opts)
   return child
 end
 
-return helpers
+return M
