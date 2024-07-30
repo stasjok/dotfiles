@@ -27,6 +27,8 @@ test : test_all
 
 # List of tests
 nvim_tests ::= $(wildcard \
+	tests/nvim/test_*.lua \
+	tests/nvim/*_spec.lua \
 	tests/nvim/*/test_*.lua \
 	tests/nvim/*/*_spec.lua \
 	tests/nvim/*/*/test_*.lua \
@@ -34,10 +36,7 @@ nvim_tests ::= $(wildcard \
 	tests/nvim/*/*/*/test_*.lua \
 	tests/nvim/*/*/*/*_spec.lua \
 	)
-nvim_all_tests ::= test_nvim tests/nvim \
-	test_nvim_unit tests/nvim/unit  \
-	test_nvim_functional tests/nvim/functional \
-	$(nvim_tests)
+nvim_all_tests ::= test_nvim tests/nvim $(nvim_tests)
 all_tests ::= test_all $(nvim_all_tests)
 
 .PHONY : $(all_tests)
@@ -51,10 +50,6 @@ test_all : test_nvim
 
 test_nvim tests/nvim :
 	@nvim -l tests/nvim/runner.lua tests/nvim
-test_nvim_unit tests/nvim/unit :
-	@nvim -l tests/nvim/runner.lua tests/nvim/unit
-test_nvim_functional tests/nvim/functional :
-	@nvim -l tests/nvim/runner.lua tests/nvim/functional
 # Separated tests
 $(nvim_tests) :
 	@nvim -l tests/nvim/runner.lua "$(@)"

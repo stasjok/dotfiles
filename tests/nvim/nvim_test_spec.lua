@@ -3,7 +3,7 @@ local assert = require("luassert")
 describe("test_nvim", function()
   describe("runtimepath", function()
     it("has test library first", function()
-      assert.equal("tests/nvim", vim.opt.runtimepath:get()[1])
+      assert.equal("tests/nvim/runtime", vim.opt.runtimepath:get()[1])
     end)
 
     it("has home config directory second", function()

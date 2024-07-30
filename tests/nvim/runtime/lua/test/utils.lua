@@ -6,7 +6,7 @@ function M.set_rtp()
     if vim.endswith(dir, "vim-pack-dir") then
       local config_home = vim.fn.stdpath("config")
       vim.opt.runtimepath = {
-        "tests/nvim",
+        "tests/nvim/runtime",
         config_home,
         dir,
         vim.env.VIMRUNTIME,

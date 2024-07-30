@@ -167,10 +167,16 @@ end
 
   describe("get_node_text_before_cursor", function()
     local get_node_text_before_cursor = utils.get_node_text_before_cursor
+
     setup(function()
       vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
       vim.opt_local.filetype = "lua"
       vim.treesitter.get_parser():parse()
+    end)
+
+    teardown(function()
+      vim.opt_local.filetype = ""
+      vim.api.nvim_buf_set_lines(0, 0, -1, true, {})
     end)
 
     it("works for oneline nodes", function()

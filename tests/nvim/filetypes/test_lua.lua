@@ -25,7 +25,7 @@ T["dotfiles"] = function()
   -- Probably next :cd command executes in between event loop callbacks
   vim.uv.sleep(50)
 
-  child.cmd("cd tests/data/dotfiles")
+  child.cmd("cd tests/fixtures/dotfiles")
 
   -- Set `b:diagnostics` variable to `true` when diagnostics are published
   child.lua('vim.lsp.handlers["textDocument/publishDiagnostics"] = loadstring(...)', {
@@ -72,7 +72,7 @@ T["dotfiles"] = function()
   eq(lsp_client_get("id", { bufnr = init_buf }), lsp_client_get("id", { bufnr = utils_buf }))
   eq(lsp_client_get("id", { bufnr = init_buf }), lsp_client_get("id", { bufnr = spec_buf }))
   eq(lsp_client_get("id", { bufnr = init_buf }), lsp_client_get("id", { bufnr = test_buf }))
-  eq(lsp_client_get("config.root_dir"), vim.loop.fs_realpath("tests/data/dotfiles"))
+  eq(lsp_client_get("config.root_dir"), vim.loop.fs_realpath("tests/fixtures/dotfiles"))
 
   -- Make sure globals are recognized
   local diagnostic_namespace =
