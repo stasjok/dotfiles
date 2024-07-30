@@ -10,7 +10,7 @@ require("mini.test").setup({
       if vim.endswith(tests, ".lua") then
         return { tests }
       else
-        return vim.fn.globpath(tests, "**/{test_*,*_spec}.lua", true, true)
+        return vim.fn.globpath(tests, "**/*_test.lua", true, true)
       end
     end,
   },

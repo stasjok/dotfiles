@@ -27,14 +27,10 @@ test : test_all
 
 # List of tests
 nvim_tests ::= $(wildcard \
-	tests/nvim/test_*.lua \
-	tests/nvim/*_spec.lua \
-	tests/nvim/*/test_*.lua \
-	tests/nvim/*/*_spec.lua \
-	tests/nvim/*/*/test_*.lua \
-	tests/nvim/*/*/*_spec.lua \
-	tests/nvim/*/*/*/test_*.lua \
-	tests/nvim/*/*/*/*_spec.lua \
+	tests/nvim/*_test.lua \
+	tests/nvim/*/*_test.lua \
+	tests/nvim/*/*/*_test.lua \
+	tests/nvim/*/*/*/*_test.lua \
 	)
 nvim_all_tests ::= test_nvim tests/nvim $(nvim_tests)
 all_tests ::= test_all $(nvim_all_tests)
