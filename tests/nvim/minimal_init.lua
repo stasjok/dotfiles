@@ -1,5 +1,5 @@
 -- Reduce the number of scripts loaded
-vim.g.did_load_filetypes = 1
+vim.cmd.filetype("off")
 vim.cmd.syntax("off")
 
 -- Add test helpers to runtime

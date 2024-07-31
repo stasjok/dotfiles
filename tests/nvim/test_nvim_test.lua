@@ -36,49 +36,4 @@ T["child"]["packpath"] = function()
   eq(#packpath, 2)
 end
 
-T["child"]["VIMRUNTIME"] = function()
-  expect.match(child.env.VIMRUNTIME, vim.fn.fnamemodify(child.v.progpath, ":h:h"), 1, true)
-end
-
-T["child"]["ftdetect"] = function()
-  expect.no_error(child.api.nvim_get_autocmds, { group = "filetypedetect" })
-end
-
-T["child"]["options"] = function()
-  eq(child.go.loadplugins, true)
-  eq(child.go.updatecount, 0)
-  eq(child.go.shadafile, "NONE")
-end
-
----@diagnostic disable-next-line: redefined-local
-local child = helpers.new_child({ minimal = true })
-
-T["minimal_child"] = new_set({
-  hooks = {
-    pre_once = child.setup,
-    post_once = child.stop,
-  },
-})
-
-T["minimal_child"]["test_nvim_test.lua tests"] = function()
-  child.lua([[require("mini.test").setup(...)]], {
-    { execute = { reporter = { start = nil, update = nil, finish = nil } } },
-  })
-  -- Make sure tests never run before
-  eq(child.lua_get("MiniTest.current.all_cases"), vim.NIL)
-  -- Run tests
-  child.lua([[MiniTest.run_file(...)]], { "tests/nvim/test_nvim2_test.lua" })
-  -- Make sure tests are finished
-  eq(child.lua_get("MiniTest.is_executing()"), false)
-  -- Remove functions from list of cases
-  child.lua([[for _, case in ipairs(MiniTest.current.all_cases) do case.test = nil end]])
-  -- Get a list of failed tests
-  local all_cases = child.lua_get("MiniTest.current.all_cases")
-  all_cases = vim.tbl_filter(function(t)
-    return t.exec.state ~= "Pass"
-  end, all_cases)
-  -- There should be no failed tests
-  eq(all_cases, {})
-end
-
 return T

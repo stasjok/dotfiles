@@ -10,14 +10,19 @@ function Child.new(opts)
 
   local args
   if opts.minimal then
-    args = { "-u", "tests/nvim/minimal_init.lua", "--noplugin" }
+    args = {
+      "-u",
+      "tests/nvim/minimal_init.lua",
+      "--noplugin",
+      "--cmd",
+      "let g:did_load_ftplugin = 1 | let g:did_indent_on = 1",
+    }
   else
     args = { "-u", "~/.config/nvim/init.lua" }
   end
 
   child.setup = function()
     child.restart(args, { nvim_executable = "nvim" })
-    child.bo.readonly = false
   end
 
   local prevent_hanging = function(method)
