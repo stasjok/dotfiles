@@ -40,7 +40,8 @@ T["expect.truthy()"] = function()
   expect.error(expect.truthy, "Observed value: false", false)
   expect.error(expect.truthy, "Observed value: nil", nil)
   -- Message
-  expect.error(expect.truthy, "Error message: Want truthy.", false, "Want truthy.")
+  expect.error(expect.truthy, "Failed expectation for truthy value%.", false)
+  expect.error(expect.truthy, "Error message: Want truthy%.", false, "Want truthy.")
   -- No message if not provided
   local ok, err = pcall(expect.truthy, nil)
   eq(ok, false)
@@ -60,7 +61,8 @@ T["expect.falsy()"] = function()
   expect.error(expect.falsy, [=[Observed value: ['"]a['"]]=], "a")
   expect.error(expect.falsy, "Observed value: { ?1 ?}", { 1 })
   -- Message
-  expect.error(expect.falsy, "Error message: Want falsy.", true, "Want falsy.")
+  expect.error(expect.falsy, "Failed expectation for falsy value%.", true)
+  expect.error(expect.falsy, "Error message: Want falsy%.", true, "Want falsy.")
   -- No message if not provided
   local ok, err = pcall(expect.falsy, true)
   eq(ok, false)
@@ -80,7 +82,8 @@ T["expect.is_true()"] = function()
   expect.error(expect.is_true, [=[Observed value: ['"]a['"]]=], "a")
   expect.error(expect.is_true, "Observed value: { ?1 ?}", { 1 })
   -- Message
-  expect.error(expect.is_true, "Error message: Want true.", false, "Want true.")
+  expect.error(expect.is_true, "Failed expectation for true value%.", false)
+  expect.error(expect.is_true, "Error message: Want true%.", false, "Want true.")
   -- No message if not provided
   local ok, err = pcall(expect.is_true, false)
   eq(ok, false)
@@ -100,7 +103,8 @@ T["expect.is_false()"] = function()
   expect.error(expect.is_false, [=[Observed value: ['"]a['"]]=], "a")
   expect.error(expect.is_false, "Observed value: { ?}", {})
   -- Message
-  expect.error(expect.is_false, "Error message: Want false.", true, "Want false.")
+  expect.error(expect.is_false, "Failed expectation for false value%.", true)
+  expect.error(expect.is_false, "Error message: Want false%.", true, "Want false.")
   -- No message if not provided
   local ok, err = pcall(expect.is_false, true)
   eq(ok, false)
@@ -108,6 +112,28 @@ T["expect.is_false()"] = function()
   ---@cast err string
   expect.match(err, "Observed value: true")
   expect.no_match(err, "Error message:")
+end
+
+T["expect.assert()"] = function()
+  -- Truthy
+  eq(expect.assert(true), true)
+  eq(expect.assert(0), true)
+  eq(expect.assert(""), true)
+  eq(expect.assert({}), true)
+  eq(expect.assert(function() end), true)
+  -- Falsy
+  expect.error(expect.assert, "Observed value: false", false)
+  expect.error(expect.assert, "Observed value: nil", nil)
+  -- Assertion message
+  expect.error(expect.assert, "Failed expectation for an assertion%.", 2 < 1)
+  expect.error(expect.assert, "Assertion: 2 < 1", 2 < 1, "2 < 1")
+  -- No message if not provided
+  local ok, err = pcall(expect.assert, nil)
+  eq(ok, false)
+  ---@diagnostic disable-next-line: cast-type-mismatch
+  ---@cast err string
+  expect.match(err, "Observed value: nil")
+  expect.no_match(err, "Assertion:")
 end
 
 return T

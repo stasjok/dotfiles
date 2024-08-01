@@ -117,4 +117,25 @@ function expect.is_false(value, message)
   return is_false_expectation(value, message)
 end
 
+--
+-- Assertion
+--
+
+local assert_expectation = minitest.new_expectation("an assertion", function(assertion)
+  return assertion
+end, function(value, message)
+  return vim
+    .iter({ message and "Assertion: " .. message, "Observed value: " .. vim.inspect(value) })
+    :join("\n")
+end)
+
+--- Expect value to be truthy. Similar to `assert()`.
+---
+---@param value any Value to be asserted
+---@param message? string Optional assertion message
+---@return true
+function expect.assert(value, message)
+  return assert_expectation(value, message)
+end
+
 return expect
