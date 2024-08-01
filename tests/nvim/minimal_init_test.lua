@@ -55,9 +55,9 @@ T["minimal"] = function(type)
   eq(#target.api.nvim_get_autocmds({ group = "syntaxset" }), 0)
   expect.error(target.api.nvim_get_autocmds, "Invalid 'group'", { group = "Syntax" })
   expect.error(target.api.nvim_get_autocmds, "Invalid 'group'", { group = "filetypedetect" })
-  eq(target.go.loadplugins, false)
+  expect.is_false(target.go.loadplugins, "loadplugins option is enabled")
 
-  -- No spap file, no shada
+  -- No swap file, no shada
   eq(target.go.updatecount, 0)
   eq(target.go.shadafile, "NONE")
 end

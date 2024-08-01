@@ -39,18 +39,18 @@ T["child"] = new_set({
     expect.match(child.env.VIMRUNTIME, vim.fn.fnamemodify(child.v.progpath, ":h:h"), 1, true)
 
     -- Default buffer is not readonly
-    eq(child.bo.readonly, false)
+    expect.is_false(child.bo.readonly, "buffer is not expected to be read-only")
   end,
 })
 
 T["child { minimal = true }"] = function()
   -- Minimal child is using minimal_init.lua
   local init_lua_info = child.fn.getscriptinfo({ name = "minimal_init.lua" })[1]
-  assert(init_lua_info, "\nminimal_init.lua is not sourced.")
+  expect.truthy(init_lua_info, "minimal_init.lua is not sourced")
 
   -- Minimal number of scripts are sourced
   local scriptinfo = child.fn.getscriptinfo()
-  assert(#scriptinfo < 8, "\nToo many scripts are sourced for minimal Nvim.")
+  expect.is_true(#scriptinfo < 8, "Too many scripts are sourced for minimal Nvim")
 
   -- Other tests are in minimal_init_test.lua
 end
@@ -64,20 +64,20 @@ T["child { minimal = false }"] = function()
 
   -- Full child is using init.lua from XDG_CONFIG_HOME
   local init_lua_info = child.fn.getscriptinfo({ name = "nvim/init.lua" })[1]
-  assert(init_lua_info, "\ninit.lua from XDG_CONFIG_HOME is not sourced.")
+  expect.truthy(init_lua_info, "init.lua from XDG_CONFIG_HOME is not sourced")
 
   -- Make sure nothing is disabled in full child Nvim
   expect.no_error(child.api.nvim_get_autocmds, { group = "filetypeplugin" })
   expect.no_error(child.api.nvim_get_autocmds, { group = "filetypeindent" })
-  eq(#child.api.nvim_get_autocmds({ group = "syntaxset" }) >= 1, true)
+  expect.is_true(#child.api.nvim_get_autocmds({ group = "syntaxset" }) >= 1)
   expect.no_error(child.api.nvim_get_autocmds, { group = "filetypedetect" })
 
   -- Plugins are enabled
-  eq(child.go.loadplugins, true)
+  expect.is_true(child.go.loadplugins, "loadplugins is not enabled")
 
   -- It's expected that there are many scripts sourced
   local scriptinfo = child.fn.getscriptinfo()
-  assert(#scriptinfo > 25, "\nToo few scripts are sourced for full Nvim.")
+  expect.is_true(#scriptinfo > 25, "too few scripts are sourced for full Nvim")
 
   -- Even in full child Nvim swap files and shada files are disabled
   eq(child.go.updatecount, 0)
