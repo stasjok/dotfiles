@@ -227,4 +227,9 @@ T["child.set_size()"] = function()
   eq({ child.o.columns, child.o.lines }, { 30, 20 })
 end
 
+T["child.uv"] = function()
+  -- To test that `uv` is working, test that child's parent PID is the same as our PID
+  eq(child.uv.os_getppid(), vim.uv.os_getpid())
+end
+
 return T
