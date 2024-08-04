@@ -1,7 +1,12 @@
 local expect = require("test.expect")
 local Child = require("test.Child")
 local new_set = MiniTest.new_set
+
 local eq = expect.equality
+local ok = expect.assertion
+local matches = expect.matching
+local errors = expect.error
+local not_errors = expect.no_error
 
 local child = Child.new({ minimal = true })
 
@@ -36,7 +41,7 @@ T["child"] = new_set({
     MiniTest.finally(child.stop)
 
     -- VIMRUNTIME matches Nvim directory
-    expect.match(child.env.VIMRUNTIME, vim.fn.fnamemodify(child.v.progpath, ":h:h"), 1, true)
+    matches(child.env.VIMRUNTIME, vim.fn.fnamemodify(child.v.progpath, ":h:h"), 1, true)
 
     -- Default buffer is not readonly
     expect.is_false(child.bo.readonly, "buffer is not expected to be read-only")
@@ -46,11 +51,11 @@ T["child"] = new_set({
 T["child { minimal = true }"] = function()
   -- Minimal child is using minimal_init.lua
   local init_lua_info = child.fn.getscriptinfo({ name = "minimal_init.lua" })[1]
-  expect.truthy(init_lua_info, "minimal_init.lua is not sourced")
+  ok(init_lua_info, "expected minimal_init.lua to be sourced")
 
   -- Minimal number of scripts are sourced
   local scriptinfo = child.fn.getscriptinfo()
-  expect.is_true(#scriptinfo < 8, "Too many scripts are sourced for minimal Nvim")
+  ok(#scriptinfo < 8, "expected less than 8 scripts sourced")
 
   -- Other tests are in minimal_init_test.lua
 end
@@ -64,20 +69,20 @@ T["child { minimal = false }"] = function()
 
   -- Full child is using init.lua from XDG_CONFIG_HOME
   local init_lua_info = child.fn.getscriptinfo({ name = "nvim/init.lua" })[1]
-  expect.truthy(init_lua_info, "init.lua from XDG_CONFIG_HOME is not sourced")
+  ok(init_lua_info, "expected init.lua from XDG_CONFIG_HOME to be sourced")
 
   -- Make sure nothing is disabled in full child Nvim
-  expect.no_error(child.api.nvim_get_autocmds, { group = "filetypeplugin" })
-  expect.no_error(child.api.nvim_get_autocmds, { group = "filetypeindent" })
-  expect.is_true(#child.api.nvim_get_autocmds({ group = "syntaxset" }) >= 1)
-  expect.no_error(child.api.nvim_get_autocmds, { group = "filetypedetect" })
+  not_errors(child.api.nvim_get_autocmds, { group = "filetypeplugin" })
+  not_errors(child.api.nvim_get_autocmds, { group = "filetypeindent" })
+  ok(#child.api.nvim_get_autocmds({ group = "syntaxset" }) >= 1)
+  not_errors(child.api.nvim_get_autocmds, { group = "filetypedetect" })
 
   -- Plugins are enabled
-  expect.is_true(child.go.loadplugins, "loadplugins is not enabled")
+  ok(child.go.loadplugins, "loadplugins is not enabled")
 
   -- It's expected that there are many scripts sourced
   local scriptinfo = child.fn.getscriptinfo()
-  expect.is_true(#scriptinfo > 25, "too few scripts are sourced for full Nvim")
+  ok(#scriptinfo > 25, "too few scripts are sourced for full Nvim")
 
   -- Even in full child Nvim swap files and shada files are disabled
   eq(child.go.updatecount, 0)
@@ -114,7 +119,7 @@ T["child.get_lines()"]["works"] = new_set({
 })
 
 T["child.get_lines()"]["strict"] = function()
-  expect.error(child.get_lines, "Index out of bounds", { finish = 10 })
+  errors(child.get_lines, "Index out of bounds", { finish = 10 })
 end
 
 T["child.get_lines()"]["buffer"] = function()
@@ -152,7 +157,7 @@ T["child.set_lines()"]["works"] = new_set({
 })
 
 T["child.set_lines()"]["strict"] = function()
-  expect.error(child.set_lines, "Index out of bounds", "line", { finish = 10 })
+  errors(child.set_lines, "Index out of bounds", "line", { finish = 10 })
 end
 
 T["child.set_lines()"]["buffer"] = function()
