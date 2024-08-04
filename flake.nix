@@ -15,6 +15,29 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Neovim plugins
+    vim-jinja2-syntax = {
+      url = "github:Glench/Vim-Jinja2-Syntax";
+      flake = false;
+    };
+    fix-auto-scroll-nvim = {
+      url = "github:BranimirE/fix-auto-scroll.nvim";
+      flake = false;
+    };
+    mediawiki-vim = {
+      url = "github:chikamichi/mediawiki.vim";
+      flake = false;
+    };
+    surround-nvim = {
+      url = "github:ur4ltz/surround.nvim?rev=549045828bbd9de0746b411a762fa8c382fb10ff";
+      flake = false;
+    };
+    smart-splits-nvim = {
+      # Pin smart-splits.nvim to the version that doesn't run tmux commands on startup
+      url = "github:mrjones2014/smart-splits.nvim?rev=159c4823e3a11c79bb65fc4b8560320c49f738f4";
+      flake = false;
+    };
+
     # Other inputs
     tree-sitter-jinja2 = {
       url = "github:theHamsta/tree-sitter-jinja2";

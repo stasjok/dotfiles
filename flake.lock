@@ -15,6 +15,22 @@
         "type": "github"
       }
     },
+    "fix-auto-scroll-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1700694779,
+        "narHash": "sha256-nJdkGwP9L/9Q547PuD0ZZmKvEAxr/59wMXlh8UgTomI=",
+        "owner": "BranimirE",
+        "repo": "fix-auto-scroll.nvim",
+        "rev": "c211a42f4030c9ed03a1456919917cdf1a193bd9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "BranimirE",
+        "repo": "fix-auto-scroll.nvim",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -32,6 +48,22 @@
       "original": {
         "id": "home-manager",
         "type": "indirect"
+      }
+    },
+    "mediawiki-vim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1447582816,
+        "narHash": "sha256-Tgza7QAzNu0D5cuDyH/jR3rvTuoV2DRA2MBCKjiPUdE=",
+        "owner": "chikamichi",
+        "repo": "mediawiki.vim",
+        "rev": "26e5737264354be41cb11d16d48132779795e168",
+        "type": "github"
+      },
+      "original": {
+        "owner": "chikamichi",
+        "repo": "mediawiki.vim",
+        "type": "github"
       }
     },
     "neovim": {
@@ -74,12 +106,51 @@
     "root": {
       "inputs": {
         "catppuccin": "catppuccin",
+        "fix-auto-scroll-nvim": "fix-auto-scroll-nvim",
         "home-manager": "home-manager",
+        "mediawiki-vim": "mediawiki-vim",
         "neovim": "neovim",
         "nixpkgs": "nixpkgs",
+        "smart-splits-nvim": "smart-splits-nvim",
+        "surround-nvim": "surround-nvim",
         "tree-sitter-jinja2": "tree-sitter-jinja2",
         "vale-at-red-hat": "vale-at-red-hat",
+        "vim-jinja2-syntax": "vim-jinja2-syntax",
         "yaml-language-server": "yaml-language-server"
+      }
+    },
+    "smart-splits-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1708205259,
+        "narHash": "sha256-S5I9nQcNGmjqZFn5jQkoG5Oh/mu8oSJpDZpAG07GytA=",
+        "owner": "mrjones2014",
+        "repo": "smart-splits.nvim",
+        "rev": "159c4823e3a11c79bb65fc4b8560320c49f738f4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mrjones2014",
+        "repo": "smart-splits.nvim",
+        "rev": "159c4823e3a11c79bb65fc4b8560320c49f738f4",
+        "type": "github"
+      }
+    },
+    "surround-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1643684895,
+        "narHash": "sha256-XXR/48pbeGwKifYrhtEyMsOCUxejuIla60q0fSYFgTc=",
+        "owner": "ur4ltz",
+        "repo": "surround.nvim",
+        "rev": "549045828bbd9de0746b411a762fa8c382fb10ff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ur4ltz",
+        "repo": "surround.nvim",
+        "rev": "549045828bbd9de0746b411a762fa8c382fb10ff",
+        "type": "github"
       }
     },
     "systems": {
@@ -144,6 +215,22 @@
       "original": {
         "owner": "redhat-documentation",
         "repo": "vale-at-red-hat",
+        "type": "github"
+      }
+    },
+    "vim-jinja2-syntax": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1624372005,
+        "narHash": "sha256-57kZn10XBpCRRXsFSSEIUngdIJSj3cmNQHnkObj+ro4=",
+        "owner": "Glench",
+        "repo": "Vim-Jinja2-Syntax",
+        "rev": "2c17843b074b06a835f88587e1023ceff7e2c7d1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Glench",
+        "repo": "Vim-Jinja2-Syntax",
         "type": "github"
       }
     },

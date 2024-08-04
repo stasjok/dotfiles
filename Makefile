@@ -11,15 +11,11 @@ shell :
 	nix develop -i -k TERM
 
 .PHONY : update
-update : update_flake update_vim_plugins
+update : update_flake
 
 .PHONY : update_flake
 update_flake :
 	nix flake update
-
-.PHONY : update_vim_plugins
-update_vim_plugins :
-	packages/vim-plugins/update.sh
 
 .PHONY : update_neovim
 update_neovim :
