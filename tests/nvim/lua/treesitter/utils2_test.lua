@@ -1,3 +1,5 @@
+local assert = require("luassert")
+
 -- TODO: Replace with upstreamed version from neovim 0.8
 local get_node_at_cursor = require("nvim-treesitter.ts_utils").get_node_at_cursor
 local feedkeys = require("map").feedkeys
@@ -31,14 +33,14 @@ end
       assert.are.same({}, get_captures_at_cursor())
     end)
 
-    -- Create a new window in order to check that function can work for inactive windows
-    local win = vim.api.nvim_get_current_win()
-    vim.cmd("new")
-    local second_win = vim.api.nvim_get_current_win()
-    vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
-    vim.api.nvim_set_current_win(win)
-
     it("works with all args for inactive windows", function()
+      -- Create a new window in order to check that function can work for inactive windows
+      local win = vim.api.nvim_get_current_win()
+      vim.cmd("new")
+      local second_win = vim.api.nvim_get_current_win()
+      vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
+      vim.api.nvim_set_current_win(win)
+
       vim.api.nvim_win_set_cursor(second_win, { 1, 1 })
       assert.are_not.equal(vim.api.nvim_get_current_win(), second_win)
       assert.are_not.equal("lua", vim.bo.filetype)
@@ -46,12 +48,12 @@ end
       assert.are.equal(1, #captures)
       assert.are.equal("comment", captures[1][1])
       assert.are.equal("comment", captures[1][2]:type())
-    end)
 
-    -- Destroy second window, other tests will be run in main window
-    vim.api.nvim_buf_delete(vim.api.nvim_win_get_buf(second_win), { force = true })
-    vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
-    vim.opt_local.filetype = "lua"
+      -- Destroy second window, other tests will be run in main window
+      vim.api.nvim_buf_delete(vim.api.nvim_win_get_buf(second_win), { force = true })
+      vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
+      vim.opt_local.filetype = "lua"
+    end)
 
     it("works without optional args", function()
       vim.api.nvim_win_set_cursor(0, { 1, 1 })
@@ -101,9 +103,16 @@ end
     end)
 
     describe("source_node", function()
-      vim.api.nvim_win_set_cursor(0, { 3, 22 })
-      local source_node = get_node_at_cursor()
-      assert.are.equal("setlocal tabstop=8 expandtab", vim.treesitter.get_node_text(source_node, 0))
+      local source_node
+
+      setup(function()
+        vim.api.nvim_win_set_cursor(0, { 3, 22 })
+        source_node = get_node_at_cursor()
+        assert.are.equal(
+          "setlocal tabstop=8 expandtab",
+          vim.treesitter.get_node_text(source_node, 0)
+        )
+      end)
 
       it("works with source_node", function()
         vim.api.nvim_win_set_cursor(0, { 3, 22 })
@@ -150,15 +159,25 @@ end
         assert.are.same({}, captures)
       end)
 
-      clear()
+      teardown(function()
+        vim.api.nvim_buf_set_lines(0, 0, -1, false, {})
+      end)
     end)
   end)
 
   describe("get_node_text_before_cursor", function()
     local get_node_text_before_cursor = utils.get_node_text_before_cursor
-    vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
-    vim.opt_local.filetype = "lua"
-    vim.treesitter.get_parser():parse()
+
+    setup(function()
+      vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
+      vim.opt_local.filetype = "lua"
+      vim.treesitter.get_parser():parse()
+    end)
+
+    teardown(function()
+      vim.opt_local.filetype = ""
+      vim.api.nvim_buf_set_lines(0, 0, -1, true, {})
+    end)
 
     it("works for oneline nodes", function()
       vim.api.nvim_win_set_cursor(0, { 1, 0 })

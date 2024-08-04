@@ -15,6 +15,7 @@
   mkPlugin = name: mkPlugin' name {};
 in {
   # Flake input plugins
+  mini-nvim = mkPlugin "mini.nvim";
   smart-splits-nvim = mkPlugin "smart-splits.nvim";
   vim-jinja2-syntax = mkPlugin "vim-jinja2-syntax";
   fix-auto-scroll-nvim = mkPlugin "fix-auto-scroll.nvim";

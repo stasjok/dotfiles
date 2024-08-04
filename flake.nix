@@ -16,6 +16,10 @@
     };
 
     # Neovim plugins
+    mini-nvim = {
+      url = "github:stasjok/mini.nvim";
+      flake = false;
+    };
     vim-jinja2-syntax = {
       url = "github:Glench/Vim-Jinja2-Syntax";
       flake = false;
