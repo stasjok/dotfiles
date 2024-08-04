@@ -15,17 +15,26 @@
       flakeLock = (builtins.fromJSON (builtins.readFile ../flake.lock)).nodes;
     in {
       # My dotfiles
-      dotfiles.to = {
-        type = "github";
-        owner = "stasjok";
-        repo = "dotfiles";
+      dotfiles = {
+        to = {
+          type = "github";
+          owner = "stasjok";
+          repo = "dotfiles";
+        };
+        exact = false;
       };
 
       # Pinned inputs
       nixpkgs.to = flakeLock.nixpkgs.locked;
       home-manager.to = flakeLock.home-manager.locked;
-      nixvim.to = flakeLock.nixvim.locked;
-      neovim.to = flakeLock.neovim.locked;
+      nixvim = {
+        to = flakeLock.nixvim.locked;
+        exact = false;
+      };
+      neovim = {
+        to = flakeLock.neovim.locked;
+        exact = false;
+      };
     };
   };
 
