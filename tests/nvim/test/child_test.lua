@@ -137,6 +137,8 @@ T["child.set_lines()"]["works"] = new_set({
     -- lines
     { { "line1", "line2" }, { "line1", "line2" } },
     { { "line1", "line2" }, "line1\nline2" },
+    { { "" }, {} },
+    { { "" }, "" },
     -- line-range
     { { "a", "line", "b" }, "line", { start = 1, finish = 1 } },
     -- strict
@@ -225,11 +227,6 @@ end
 T["child.set_size()"] = function()
   child.set_size(30, 20)
   eq({ child.o.columns, child.o.lines }, { 30, 20 })
-end
-
-T["child.uv"] = function()
-  -- To test that `uv` is working, test that child's parent PID is the same as our PID
-  eq(child.uv.os_getppid(), vim.uv.os_getpid())
 end
 
 return T

@@ -66,6 +66,22 @@
         "type": "github"
       }
     },
+    "mini-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1722764043,
+        "narHash": "sha256-dlwVpEUUaXKNWiiShiF/rSSVe99jbTyi9Hf5bhxlBus=",
+        "owner": "stasjok",
+        "repo": "mini.nvim",
+        "rev": "9e30c54298f482da065d949bf25ec5f17f6c26db",
+        "type": "github"
+      },
+      "original": {
+        "owner": "stasjok",
+        "repo": "mini.nvim",
+        "type": "github"
+      }
+    },
     "neovim": {
       "inputs": {
         "nixpkgs": [
@@ -109,6 +125,7 @@
         "fix-auto-scroll-nvim": "fix-auto-scroll-nvim",
         "home-manager": "home-manager",
         "mediawiki-vim": "mediawiki-vim",
+        "mini-nvim": "mini-nvim",
         "neovim": "neovim",
         "nixpkgs": "nixpkgs",
         "smart-splits-nvim": "smart-splits-nvim",
