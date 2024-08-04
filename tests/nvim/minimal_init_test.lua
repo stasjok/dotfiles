@@ -1,5 +1,5 @@
 local expect = require("test.expect")
-local Child = require("test.child")
+local Child = require("test.Child")
 local new_set = MiniTest.new_set
 local eq = expect.equality
 
