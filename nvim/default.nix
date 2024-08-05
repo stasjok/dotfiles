@@ -36,7 +36,14 @@ in {
     enable = true;
     package = neovim;
 
-    # Custom performance settings from my fork
+    # Disable all providers
+    withNodeJs = false;
+    withRuby = false;
+
+    # Set neovim as the default EDITOR
+    defaultEditor = true;
+
+    # Performance optimizations
     performance = {
       # Byte compile everything
       byteCompileLua = {
@@ -54,13 +61,6 @@ in {
         ];
       };
     };
-
-    # Disable all providers
-    withNodeJs = false;
-    withRuby = false;
-
-    # Set neovim as the default EDITOR
-    defaultEditor = true;
 
     # Extra packages available to neovim
     extraPackages = with pkgs.nodePackages;
