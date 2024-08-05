@@ -3,9 +3,11 @@ local Child = require("test.Child")
 local new_set = MiniTest.new_set
 
 local eq = expect.equality
+local ok = expect.assertion
 
 local child = Child.new()
 local cmd = child.cmd
+local cmd_capture = child.cmd_capture
 local lua = child.lua
 local lua_get = child.lua_get
 
@@ -15,6 +17,12 @@ local T = new_set({
     post_once = child.stop,
   },
 })
+
+-- Ensure there are no any messages
+T["messages"] = function()
+  local messages = cmd_capture("messages")
+  ok(messages == "", messages)
+end
 
 T["checkhealth"] = function()
   -- List of ignored messages

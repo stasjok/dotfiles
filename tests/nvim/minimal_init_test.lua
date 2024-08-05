@@ -3,6 +3,7 @@ local Child = require("test.Child")
 local new_set = MiniTest.new_set
 
 local eq = expect.equality
+local ok = expect.assertion
 local matches = expect.matching
 local errors = expect.error
 
@@ -27,6 +28,14 @@ T = new_set({
     post_once = child.stop,
   },
 })
+
+-- Ensure there are no any messages
+T["messages"] = function(type)
+  local target = targets[type]
+
+  local messages = target.api.nvim_exec2("messages", { output = true }).output
+  ok(messages == "", messages)
+end
 
 T["runtime paths"] = function(type)
   local target = targets[type]
