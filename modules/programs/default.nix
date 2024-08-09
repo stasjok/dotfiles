@@ -1,0 +1,6 @@
+{
+  imports = [
+    ./cargo.nix
+    ./nixvim
+  ];
+}

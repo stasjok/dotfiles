@@ -43,6 +43,9 @@ in {
     # Set neovim as the default EDITOR
     defaultEditor = true;
 
+    # Optimize runtimepath
+    runtime.enable = true;
+
     # Performance optimizations
     performance = {
       # Byte compile everything
