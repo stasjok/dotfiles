@@ -9,6 +9,7 @@ local errors = expect.error
 local not_errors = expect.no_error
 
 local child = Child.new({ minimal = true })
+local sleep = vim.uv.sleep
 
 T = new_set({
   hooks = {
@@ -233,5 +234,54 @@ T["child.set_size()"] = function()
   child.set_size(30, 20)
   eq({ child.o.columns, child.o.lines }, { 30, 20 })
 end
+
+T["child.disable_lsp_autostart()"] = new_set({
+  parametrize = {
+    { "test.nix" },
+    { "test.lua" },
+    { "test.sh" },
+    { "test.py" },
+  },
+}, {
+  test = function(filename)
+    -- Setup child Nvim
+    ---@diagnostic disable-next-line: redefined-local
+    local child = child_variants["{ minimal = false }"]
+    child.setup()
+    MiniTest.finally(child.stop)
+
+    child.disable_lsp_autostart()
+
+    -- Edit filename
+    child.cmd.edit(filename)
+    ok(child.bo.filetype ~= "", "Expected non-empty filetype.")
+
+    -- Wait a bit to make sure lsp client objects are created
+    sleep(50)
+
+    -- Get lsp client names
+    local client_names = child.lua_func(function()
+      -- Using get_client_by_id() because it returns even non-active clients
+      return vim
+        .iter({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 })
+        :map(vim.lsp.get_client_by_id)
+        :map(
+          ---@param client vim.lsp.Client
+          function(client)
+            return client.name
+          end
+        )
+        :totable()
+    end)
+
+    ok(
+      #client_names == 0,
+      string.format(
+        "Expected zero lsp clients running, but the following clients are running: %s.",
+        vim.inspect(client_names)
+      )
+    )
+  end,
+})
 
 return T

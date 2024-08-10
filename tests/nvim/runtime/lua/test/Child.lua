@@ -124,6 +124,22 @@ function Child.new(opts)
     return child.o.columns, child.o.lines
   end
 
+  --- Disable LSP servers autostart
+  child.disable_lsp_autostart = function()
+    child.prevent_hanging("disable_lsp_autostart")
+
+    -- nvim-lspconfig
+    child.api.nvim_clear_autocmds({ group = "lspconfig" })
+    child.lua_func(function()
+      for _, server in ipairs(require("lspconfig.util").available_servers()) do
+        require("lspconfig")[server].autostart = false
+      end
+    end)
+
+    -- none-ls.nvim
+    child.lua([[require("null-ls").disable({})]])
+  end
+
   return child
 end
 
