@@ -94,6 +94,51 @@ end
 -- Child methods
 --
 
+T["child.clear()"] = new_set({
+  parametrize = {
+    {
+      function()
+        child.api.nvim_buf_set_lines(0, 0, -1, true, { "a", "b", "c" })
+      end,
+      "single buffer text",
+    },
+    {
+      function()
+        child.api.nvim_buf_set_lines(0, 0, -1, true, { "a", "b" })
+        child.cmd.split("test1")
+        child.api.nvim_buf_set_lines(0, 0, -1, true, { "1", "2" })
+        child.cmd.split("test2")
+        child.api.nvim_buf_set_lines(0, 0, -1, true, { "abc" })
+      end,
+      "multiple buffers and windows",
+    },
+    {
+      function()
+        child.type_keys("i", "abc")
+      end,
+      "normal mode",
+    },
+    { function() end, "already empty" },
+  },
+}, {
+  test = function(pre_case)
+    pre_case()
+
+    child.clear()
+
+    -- Only one buffer
+    eq(#child.api.nvim_list_bufs(), 1)
+    -- Only on window
+    eq(#child.api.nvim_list_wins(), 1)
+    -- Buffer is empty
+    eq(child.api.nvim_buf_get_lines(0, 0, -1, true), { "" })
+    -- No messages
+    eq(child.cmd_capture("messages"), "")
+    -- Normal mode
+    eq(child.api.nvim_get_mode().mode, "n")
+  end,
+})
+
 T["child.get_lines()"] = new_set({
   hooks = {
     pre_case = function()

@@ -34,6 +34,15 @@ function Child.new(opts)
     child.restart(args, { nvim_executable = "nvim" })
   end
 
+  --- Reset Nvim. This essentially wipes all buffers and windows.
+  child.clear = function()
+    child.prevent_hanging("clear")
+
+    child.cmd("%bwipeout!")
+    child.ensure_normal_mode()
+    child.cmd.messages("clear")
+  end
+
   ---@class test.Child.set_lines.opts
   ---@field buf? integer Buffer handle, or 0 for current buffer
   ---@field start? integer First line index
