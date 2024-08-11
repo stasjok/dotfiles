@@ -139,6 +139,45 @@ T["child.clear()"] = new_set({
   end,
 })
 
+T["child.feed_keys()"] = new_set()
+
+T["child.feed_keys()"]["works"] = function()
+  child.v.errmsg = "Test"
+  child.feed_keys("iabc")
+  eq(child.api.nvim_buf_get_lines(0, 0, -1, true), { "abc" })
+  -- Doesn't change mode by itself
+  eq(child.api.nvim_get_mode().mode, "i")
+  -- Restores v:errmsg
+  eq(child.v.errmsg, "Test")
+end
+
+T["child.feed_keys()"]["allows strings and arrays of strings"] = function()
+  child.feed_keys("i", { "H", "e", "l", "l", "o" }, " ", { "World" })
+  eq(child.api.nvim_buf_get_lines(0, 0, -1, true), { "Hello World" })
+end
+
+T["child.feed_keys()"]["remap"] = function()
+  child.api.nvim_set_keymap("n", "t", "itest<Esc>", { nowait = true, noremap = true })
+  child.feed_keys("t")
+  eq(child.api.nvim_buf_get_lines(0, 0, -1, true), { "test" })
+end
+
+T["child.feed_keys()"]["prevents hanging"] = function()
+  child.type_keys("di")
+  errors(child.feed_keys, "feed_keys.*child process is blocked", "iabc")
+  child.type_keys("<Esc>")
+end
+
+T["child.feed_keys()"]["doesn't hang"] = function()
+  -- Typing "<C-\>" or "di" by itself is blocking Nvim
+  child.feed_keys("ia", "<C-\\>", "<C-N>", "o", "b", "<Esc>", { "di", "w" })
+  eq(child.api.nvim_buf_get_lines(0, 0, -1, true), { "a", "" })
+end
+
+T["child.feed_keys()"]["throws error"] = function()
+  errors(child.feed_keys, "Not an editor command: test", ":test<CR>")
+end
+
 T["child.get_lines()"] = new_set({
   hooks = {
     pre_case = function()

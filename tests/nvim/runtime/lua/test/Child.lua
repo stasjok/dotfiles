@@ -43,6 +43,28 @@ function Child.new(opts)
     child.cmd.messages("clear")
   end
 
+  ---A wrapper for `nvim_feedkeys()`.
+  ---This is a blocking code, unlike `child.type_keys()`
+  ---@param ... string | string[]
+  child.feed_keys = function(...)
+    child.prevent_hanging("feed_keys")
+
+    local keys = vim.iter({ ... }):flatten():map(vim.keycode):join("")
+
+    local prev_errmsg = child.v.errmsg
+    child.v.errmsg = ""
+
+    child.api.nvim_feedkeys(keys, "L", false)
+
+    if not child.is_blocked() then
+      if child.v.errmsg ~= "" then
+        error(child.v.errmsg, 2)
+      else
+        child.v.errmsg = prev_errmsg
+      end
+    end
+  end
+
   ---@class test.Child.set_lines.opts
   ---@field buf? integer Buffer handle, or 0 for current buffer
   ---@field start? integer First line index
