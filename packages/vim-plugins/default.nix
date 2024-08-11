@@ -19,7 +19,6 @@ in {
   smart-splits-nvim = mkPlugin "smart-splits.nvim";
   vim-jinja2-syntax = mkPlugin "vim-jinja2-syntax";
   fix-auto-scroll-nvim = mkPlugin "fix-auto-scroll.nvim";
-  mediawiki-vim = mkPlugin "mediawiki.vim";
   surround-nvim = mkPlugin "surround.nvim";
 
   # Remove tests because there are invalid lua files there

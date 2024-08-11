@@ -32,6 +32,10 @@
       (builtins.concatStringsSep "\n")
     ];
 in {
+  imports = [
+    ./ftplugin
+  ];
+
   programs.nixvim = {
     enable = true;
     package = neovim;
@@ -193,7 +197,6 @@ in {
       vim-jinja2-syntax
       ansible-vim
       salt-vim
-      mediawiki-vim
     ];
 
     # init.lua plugin configurations

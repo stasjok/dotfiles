@@ -1,0 +1,35 @@
+== Heading ==
+
+''Italic'', '''bold''' and '''''bold italic'''''.
+
+HTML: <em>italic</em>, <strong>bold</strong> and <u>underlined</u>.
+
+=== Syntax ===
+
+<syntaxhighlight lang="bash">
+echo "test"
+</syntaxhighlight>
+
+Inline syntax: <syntaxhighlight lang="bash" inline="1">echo "test"</syntaxhighlight>.
+
+=== Heading 2 ===
+
+Links: [[Article#Heading|internal]] and [https://example.net external].
+
+{{Template|argument}}
+
+=== Table ===
+
+{| class="wikitable"
+|+ Caption text
+|-
+! Header text !! Header text !! Header text
+|-
+| Example || Example || Example
+|-
+| Example || Example || Example
+|-
+| Example || Example || Example
+|}
+
+[[Category:Examples]]

@@ -71,22 +71,6 @@
         "type": "indirect"
       }
     },
-    "mediawiki-vim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1447582816,
-        "narHash": "sha256-Tgza7QAzNu0D5cuDyH/jR3rvTuoV2DRA2MBCKjiPUdE=",
-        "owner": "chikamichi",
-        "repo": "mediawiki.vim",
-        "rev": "26e5737264354be41cb11d16d48132779795e168",
-        "type": "github"
-      },
-      "original": {
-        "owner": "chikamichi",
-        "repo": "mediawiki.vim",
-        "type": "github"
-      }
-    },
     "mini-nvim": {
       "flake": false,
       "locked": {
@@ -173,7 +157,6 @@
         "catppuccin": "catppuccin",
         "fix-auto-scroll-nvim": "fix-auto-scroll-nvim",
         "home-manager": "home-manager",
-        "mediawiki-vim": "mediawiki-vim",
         "mini-nvim": "mini-nvim",
         "neovim": "neovim",
         "nixpkgs": "nixpkgs",
@@ -183,6 +166,7 @@
         "tree-sitter-jinja2": "tree-sitter-jinja2",
         "vale-at-red-hat": "vale-at-red-hat",
         "vim-jinja2-syntax": "vim-jinja2-syntax",
+        "vim-mediawiki": "vim-mediawiki",
         "yaml-language-server": "yaml-language-server"
       }
     },
@@ -298,6 +282,22 @@
       "original": {
         "owner": "Glench",
         "repo": "Vim-Jinja2-Syntax",
+        "type": "github"
+      }
+    },
+    "vim-mediawiki": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1715838217,
+        "narHash": "sha256-UQgSF+HvEE0ZdseqRt5zz+wi9tsbJSrxYB4aaiB/GuY=",
+        "owner": "m-pilia",
+        "repo": "vim-mediawiki",
+        "rev": "a49f18d5f9676bd9064de25bfd3a1bfba898f177",
+        "type": "github"
+      },
+      "original": {
+        "owner": "m-pilia",
+        "repo": "vim-mediawiki",
         "type": "github"
       }
     },

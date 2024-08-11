@@ -42,8 +42,8 @@
       url = "github:BranimirE/fix-auto-scroll.nvim";
       flake = false;
     };
-    mediawiki-vim = {
-      url = "github:chikamichi/mediawiki.vim";
+    vim-mediawiki = {
+      url = "github:m-pilia/vim-mediawiki";
       flake = false;
     };
     surround-nvim = {
