@@ -33,6 +33,7 @@
     ];
 in {
   imports = [
+    ./options.nix
     ./ftplugin
   ];
 
