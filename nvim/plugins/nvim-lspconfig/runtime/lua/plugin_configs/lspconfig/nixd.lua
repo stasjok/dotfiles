@@ -29,6 +29,9 @@ M.on_new_config = function(config, root_dir)
     local flake = string.format('(builtins.getFlake "git+file:%s")', root_dir)
     settings.nixpkgs.expr = flake .. ".legacyPackages.${builtins.currentSystem}"
     settings.options["home-manager"].expr = flake .. ".homeConfigurations.stas.options"
+    -- Add NixVim-scoped options in place of nixos options
+    settings.options.nixos.expr = flake
+      .. ".homeConfigurations.stas.options.programs.nixvim.type.getSubOptions []"
   elseif
     dirname == "nixpkgs"
     or vim.endswith(dirname, "-source") and uv.fs_stat(fs.joinpath(root_dir, "pkgs/top-level"))
