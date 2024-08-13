@@ -33,8 +33,21 @@
     ];
 in {
   imports = [
-    ./options.nix
-    ./ftplugin
+    # NixVim-scoped imports
+    {
+      options.programs.nixvim = lib.mkOption {
+        type = lib.types.submoduleWith {
+          modules = lib.toList {
+            imports = [
+              ./options.nix
+              ./ftplugin
+            ];
+          };
+          specialArgs = {inherit inputs;};
+          shorthandOnlyDefinesConfig = null;
+        };
+      };
+    }
   ];
 
   programs.nixvim = {

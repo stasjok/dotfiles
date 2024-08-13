@@ -1,5 +1,5 @@
 {
-  programs.nixvim.opts = {
+  opts = {
     # Open all folds by default
     foldlevelstart = 99;
   };
