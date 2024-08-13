@@ -6,7 +6,6 @@ local diagnostics = builtins.diagnostics
 null_ls.setup({
   sources = {
     -- Formatting
-    formatting.shfmt,
     formatting.stylua,
     formatting.black,
     formatting.fish_indent,

@@ -53,12 +53,12 @@ local tests = {
     range_formatting = true,
   },
   sh = {
-    lsp_name = "null-ls",
+    lsp_name = "bashls",
     string = "echo  1",
     formatted_string = "echo 1",
     formatting = true,
     range_formatting = false,
-    on_save = false,
+    on_save = true,
   },
   fish = {
     lsp_name = "null-ls",
