@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  inputs,
   ...
 }: {
   nix = {
@@ -36,6 +37,9 @@
         exact = false;
       };
     };
+
+    channels = {inherit (inputs) nixpkgs home-manager nixvim;};
+    keepOldNixPath = false;
   };
 
   # Home-manager doesn't install nix package, so do it manually
