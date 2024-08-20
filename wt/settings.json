@@ -12,12 +12,12 @@
             "keys": "ctrl+c"
         },
         {
-            "command": "find",
-            "keys": "ctrl+shift+f"
-        },
-        {
             "command": "unbound",
             "keys": "alt+enter"
+        },
+        {
+            "command": "find",
+            "keys": "ctrl+shift+f"
         }
     ],
     "alwaysShowTabs": true,
@@ -52,8 +52,7 @@
             "intenseTextStyle": "bold",
             "padding": "4, 6",
             "scrollbarState": "hidden",
-            "suppressApplicationTitle": true,
-            "useAtlasEngine": true
+            "suppressApplicationTitle": true
         },
         "list": 
         [
@@ -174,7 +173,7 @@
             "brightRed": "#ED8796",
             "brightWhite": "#A5ADCB",
             "brightYellow": "#EED49F",
-            "cursorColor": "#179299",
+            "cursorColor": "#F4DBD6",
             "cyan": "#8BD5CA",
             "foreground": "#CAD3F5",
             "green": "#A6DA95",
@@ -184,52 +183,6 @@
             "selectionBackground": "#5B6078",
             "white": "#B8C0E0",
             "yellow": "#EED49F"
-        },
-        {
-            "background": "#1F1F28",
-            "black": "#090618",
-            "blue": "#7E9CD8",
-            "brightBlack": "#727169",
-            "brightBlue": "#7FB4CA",
-            "brightCyan": "#7AA89F",
-            "brightGreen": "#98BB6C",
-            "brightPurple": "#938AA9",
-            "brightRed": "#E82424",
-            "brightWhite": "#DCD7BA",
-            "brightYellow": "#E6C384",
-            "cursorColor": "#54546D",
-            "cyan": "#6A9589",
-            "foreground": "#DCD7BA",
-            "green": "#76946A",
-            "name": "Kanagawa",
-            "purple": "#957FB8",
-            "red": "#C34043",
-            "selectionBackground": "#2D4F67",
-            "white": "#C8C093",
-            "yellow": "#C0A36E"
-        },
-        {
-            "background": "#282C34",
-            "black": "#20232A",
-            "blue": "#61AFEF",
-            "brightBlack": "#21252B",
-            "brightBlue": "#61AFEF",
-            "brightCyan": "#56B6C2",
-            "brightGreen": "#98C379",
-            "brightPurple": "#C678DD",
-            "brightRed": "#E86671",
-            "brightWhite": "#ABB2BF",
-            "brightYellow": "#E0AF68",
-            "cursorColor": "#006680",
-            "cyan": "#56B6C2",
-            "foreground": "#ABB2BF",
-            "green": "#98C379",
-            "name": "One Dark",
-            "purple": "#C678DD",
-            "red": "#E86671",
-            "selectionBackground": "#E6E6E6",
-            "white": "#798294",
-            "yellow": "#E0AF68"
         },
         {
             "background": "#282C34",
@@ -319,7 +272,7 @@
             "name": "Solarized Light",
             "purple": "#D33682",
             "red": "#DC322F",
-            "selectionBackground": "#FFFFFF",
+            "selectionBackground": "#073642",
             "white": "#EEE8D5",
             "yellow": "#B58900"
         },
@@ -395,5 +348,30 @@
     ],
     "tabSwitcherMode": "mru",
     "theme": "legacySystem",
-    "themes": []
+    "themes": 
+    [
+        {
+            "name": "Catppuccin Macchiato",
+            "tab": 
+            {
+                "background": "#24273AFF",
+                "iconStyle": "default",
+                "showCloseButton": "always",
+                "unfocusedBackground": null
+            },
+            "tabRow": 
+            {
+                "background": "#1E2030FF",
+                "unfocusedBackground": "#181926FF"
+            },
+            "window": 
+            {
+                "applicationTheme": "dark",
+                "experimental.rainbowFrame": false,
+                "frame": null,
+                "unfocusedFrame": null,
+                "useMica": false
+            }
+        }
+    ]
 }
