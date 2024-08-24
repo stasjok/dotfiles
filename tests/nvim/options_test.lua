@@ -26,9 +26,13 @@ local function test(scope)
   end
 end
 
-T["o"] = new_set({ parametrize = {
-  { "foldlevelstart", 99 },
-} }, { test = test("o") })
+T["o"] = new_set({
+  parametrize = {
+    { "termguicolors", true },
+    { "background", "dark" },
+    { "foldlevelstart", 99 },
+  },
+}, { test = test("o") })
 
 T["go"] = new_set({ parametrize = {} }, { test = test("go") })
 

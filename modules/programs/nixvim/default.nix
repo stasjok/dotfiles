@@ -3,6 +3,7 @@
     type = lib.types.submodule {
       imports = [
         ./runtime.nix
+        ./plugins
       ];
     };
   };

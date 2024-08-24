@@ -39,6 +39,7 @@ in {
         type = lib.types.submoduleWith {
           modules = lib.toList {
             imports = [
+              ./colorscheme.nix
               ./options.nix
               ./ftplugin
             ];
@@ -153,28 +154,11 @@ in {
           tree-sitter-jinja2
         ]));
 
-      # Byte-compile catppuccin colorscheme
-      catppuccin-nvim = let
-        neovim = pkgs.neovim.override {
-          configure.packages.catppuccin-nvim.start = [pkgs.vimPlugins.catppuccin-nvim];
-        };
-      in
-        pkgs.runCommand "catppuccin-nvim" {} ''
-          ${neovim}/bin/nvim -l ${./catppuccin-nvim-config.lua}
-          cd $out/colors
-          rm cached
-          for flavor in *; do
-              mv "$flavor" "catppuccin-$flavor.lua"
-          done
-        '';
-
       # ':Git' doc tag is clashing with vim-fugitive
       mini-nvim = pkgs.vimPlugins.mini-nvim.overrideAttrs {
         postPatch = "rm doc/mini-git.txt";
       };
     in [
-      # Colorscheme
-      catppuccin-nvim
       # Libraries
       plenary-nvim
       mini-nvim
@@ -285,7 +269,7 @@ in {
               && !lib.hasSuffix ".vim" name
               && !lib.hasInfix "-grammar-" name
               # Catppuccin is byte compiled
-              && name != "catppuccin-nvim"))
+              && name != "catppuccin-nvim-compiled"))
             # Append types and neovim runtime
             (lib.concat [neovim])
             (builtins.map (plugin: lib.nameValuePair (pluginNormalizedName (lib.getName plugin)) plugin))
