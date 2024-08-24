@@ -59,7 +59,19 @@ end
 -- Test enabled integrations
 T["integrations"] = new_set({
   parametrize = {
+    { "cmp", "CmpItemKind", { fg = "blue" } },
+    { "diffview", "DiffviewPrimary", { fg = "blue" } },
+    { "gitsigns", "GitSignsAdd", { fg = "green" } },
+    { "markdown", "markdownCode", { fg = "flamingo" } },
     { "mini", "MiniSurround", { bg = "pink", fg = "surface1" } },
+    {
+      "native_lsp",
+      "DiagnosticUnderlineError",
+      { sp = "red", underline = true, cterm = { underline = true } },
+    },
+    { "semantic_tokens", "@lsp.type.interface", { fg = "flamingo" } },
+    { "telescope", "TelescopeMatching", { fg = "blue" } },
+    { "treesitter", "@constructor", { fg = "sapphire" } },
   },
   hooks = {
     pre_once = function()

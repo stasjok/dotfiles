@@ -4,14 +4,39 @@
 
     settings = {
       flavour = "macchiato";
+
+      # Integrations
+      default_integrations = false;
       integrations = {
-        # Disable default
-        nvimtree = false;
-        dashboard = false;
-        ts_rainbow = false;
-        indent_blankline = {enabled = false;};
-        # Enable optional
-        mini = true;
+        cmp = true;
+        diffview = true;
+        gitsigns = true;
+        markdown = true;
+        mini = {
+          enabled = true;
+          indentscope_color = "text";
+        };
+        native_lsp = {
+          enabled = true;
+          virtual_text = {
+            errors = ["italic"];
+            hints = ["italic"];
+            warnings = ["italic"];
+            information = ["italic"];
+            ok = ["italic"];
+          };
+          underlines = {
+            errors = ["underline"];
+            hints = ["underline"];
+            warnings = ["underline"];
+            information = ["underline"];
+            ok = ["underline"];
+          };
+          inlay_hints = {background = true;};
+        };
+        semantic_tokens = true;
+        telescope = {enabled = true;};
+        treesitter = true;
       };
 
       custom_highlights = {
