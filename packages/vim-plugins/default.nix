@@ -20,6 +20,7 @@ in {
   vim-jinja2-syntax = mkPlugin "vim-jinja2-syntax";
   fix-auto-scroll-nvim = mkPlugin "fix-auto-scroll.nvim";
   surround-nvim = mkPlugin "surround.nvim";
+  catppuccin-nvim = mkPlugin "catppuccin-nvim";
 
   # Remove tests because there are invalid lua files there
   nvim-treesitter = prev.nvim-treesitter.overrideAttrs (prev: {

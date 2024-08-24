@@ -15,7 +15,6 @@
       };
 
       custom_highlights = {
-        TermCursor = {bg = "#179299";};
         # Don't hide tree-sitter comment highlights
         "@lsp.type.comment.lua" = {};
       };

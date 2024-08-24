@@ -15,6 +15,22 @@
         "type": "github"
       }
     },
+    "catppuccin-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1724122410,
+        "narHash": "sha256-aNmnn7Ym3+OnuvSgpke6rw4AkoVfNCpbjV71JF1c9rs=",
+        "owner": "catppuccin",
+        "repo": "nvim",
+        "rev": "4fd72a9ab64b393c2c22b168508fd244877fec96",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "nvim",
+        "type": "github"
+      }
+    },
     "fix-auto-scroll-nvim": {
       "flake": false,
       "locked": {
@@ -155,6 +171,7 @@
     "root": {
       "inputs": {
         "catppuccin": "catppuccin",
+        "catppuccin-nvim": "catppuccin-nvim",
         "fix-auto-scroll-nvim": "fix-auto-scroll-nvim",
         "home-manager": "home-manager",
         "mini-nvim": "mini-nvim",
