@@ -17,6 +17,7 @@
       custom_highlights = {
         # Don't hide tree-sitter comment highlights
         "@lsp.type.comment.lua" = {};
+        "@lsp.type.comment.nix" = {};
       };
     };
   };
