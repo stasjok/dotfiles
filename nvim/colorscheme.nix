@@ -40,6 +40,11 @@
       };
 
       custom_highlights = {
+        # Invisible cursor in inactive terminal
+        TermCursorNC = {
+          fg = "";
+          bg = "";
+        };
         # Don't hide tree-sitter comment highlights
         "@lsp.type.comment.lua" = {};
         "@lsp.type.comment.nix" = {};
