@@ -6,6 +6,14 @@
         {
             "command": 
             {
+                "action": "splitPane",
+                "split": "down"
+            },
+            "keys": "ctrl+alt+shift+minus"
+        },
+        {
+            "command": 
+            {
                 "action": "copy",
                 "singleLine": false
             },
@@ -16,8 +24,24 @@
             "keys": "alt+enter"
         },
         {
+            "command": "unbound",
+            "keys": "alt+shift+minus"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+shift+plus"
+        },
+        {
             "command": "find",
             "keys": "ctrl+shift+f"
+        },
+        {
+            "command": 
+            {
+                "action": "splitPane",
+                "split": "right"
+            },
+            "keys": "ctrl+alt+shift+plus"
         }
     ],
     "alwaysShowTabs": true,
