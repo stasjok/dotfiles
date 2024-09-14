@@ -2,7 +2,7 @@
   description = "Home Manager configuration of Stas";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/5de1564aed415bf9d0f281461babc2d101dd49ff";
+    nixpkgs.url = "nixpkgs/673d99f1406cb09b8eb6feab4743ebdf70046557";
     home-manager = {
       url = "home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
