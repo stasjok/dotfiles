@@ -23,15 +23,36 @@ M.on_new_config = function(config, root_dir)
   -- Default nixpkgs
   settings.nixpkgs.expr = '(builtins.getFlake "nixpkgs").legacyPackages.${builtins.currentSystem}'
 
+  ---@param path string
+  ---@param pkgs string
+  ---@param extra_config? string
+  ---@return string
+  local function home_manager_options(path, pkgs, extra_config)
+    return string.format(
+      '(import %s {configuration = {home = {stateVersion = "24.05"; username = "nixd"; homeDirectory = "/home/nixd";};%s}; pkgs = %s;}).options',
+      path,
+      extra_config or "",
+      pkgs
+    )
+  end
+
   local dirname = fs.basename(root_dir)
   if dirname == "dotfiles" then
     -- My dotfiles
     local flake = string.format('(builtins.getFlake "git+file:%s")', root_dir)
     settings.nixpkgs.expr = flake .. ".legacyPackages.${builtins.currentSystem}"
-    settings.options["home-manager"].expr = flake .. ".homeConfigurations.stas.options"
+    settings.options["home-manager"].expr = string.format("with %s.inputs; ", flake)
+      .. home_manager_options(
+        '"${home-manager}/modules"',
+        settings.nixpkgs.expr,
+        string.format(
+          " imports = [nixvim.homeManagerModules.nixvim catppuccin.homeManagerModules.catppuccin %s];",
+          fs.joinpath(root_dir, "modules")
+        )
+      )
     -- Add NixVim-scoped options in place of nixos options
-    settings.options.nixos.expr = flake
-      .. ".homeConfigurations.stas.options.programs.nixvim.type.getSubOptions []"
+    settings.options.nixos.expr = settings.options["home-manager"].expr
+      .. ".programs.nixvim.type.getSubOptions []"
   elseif
     dirname == "nixpkgs"
     or vim.endswith(dirname, "-source") and uv.fs_stat(fs.joinpath(root_dir, "pkgs/top-level"))
@@ -50,11 +71,8 @@ M.on_new_config = function(config, root_dir)
     or vim.endswith(dirname, "-source") and uv.fs_stat(fs.joinpath(root_dir, "home-manager"))
   then
     -- Home-manager
-    settings.options["home-manager"].expr = string.format(
-      '(import %s {configuration = {home = {stateVersion = "24.05"; username = "nixd"; homeDirectory = "/home/nixd";};}; pkgs = %s;}).options',
-      fs.joinpath(root_dir, "modules"),
-      settings.nixpkgs.expr
-    )
+    settings.options["home-manager"].expr =
+      home_manager_options(fs.joinpath(root_dir, "modules"), settings.nixpkgs.expr)
   elseif
     dirname == "nixvim"
     or vim.endswith(dirname, "-source")
