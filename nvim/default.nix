@@ -42,6 +42,7 @@ in {
               ./colorscheme.nix
               ./options.nix
               ./ftplugin
+              ./indent
             ];
           };
           specialArgs = {inherit inputs;};
