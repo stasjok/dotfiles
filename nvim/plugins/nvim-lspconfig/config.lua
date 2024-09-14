@@ -138,7 +138,7 @@ local lsp_servers = {
   terraformls = {},
 
   -- Typescript
-  tsserver = {
+  ts_ls = {
     cmd = { "typescript-language-server", "--stdio", "--tsserver-path", "tsserver" },
   },
 
