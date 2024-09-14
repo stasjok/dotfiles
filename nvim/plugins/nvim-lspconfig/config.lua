@@ -116,6 +116,7 @@ local lsp_servers = {
     on_init = function(client)
       client.server_capabilities.definitionProvider = false
       client.server_capabilities.referencesProvider = false
+      client.server_capabilities.hoverProvider = false
     end,
   },
 

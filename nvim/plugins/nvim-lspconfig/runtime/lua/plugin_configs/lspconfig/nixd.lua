@@ -95,7 +95,6 @@ M.on_init = function(client)
   local overrrides = {
     documentHighlightProvider = false,
     documentSymbolProvider = false,
-    hoverProvider = false,
     renameProvider = false,
   }
   -- Override server capabilities
