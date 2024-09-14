@@ -55,11 +55,6 @@
       url = "github:mrjones2014/smart-splits.nvim?rev=159c4823e3a11c79bb65fc4b8560320c49f738f4";
       flake = false;
     };
-    # TODO: Remove when catppuccin-nvim is updated to 2024-08-10 in nixpkgs
-    catppuccin-nvim = {
-      url = "github:catppuccin/nvim";
-      flake = false;
-    };
 
     # Other inputs
     tree-sitter-jinja2 = {
