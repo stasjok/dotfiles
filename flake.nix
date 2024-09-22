@@ -34,10 +34,6 @@
       url = "github:stasjok/mini.nvim";
       flake = false;
     };
-    vim-jinja2-syntax = {
-      url = "github:Glench/Vim-Jinja2-Syntax";
-      flake = false;
-    };
     fix-auto-scroll-nvim = {
       url = "github:BranimirE/fix-auto-scroll.nvim";
       flake = false;
