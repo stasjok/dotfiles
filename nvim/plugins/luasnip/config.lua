@@ -4,12 +4,12 @@ local jinja_ft_func = require("snippets.jinja_utils").jinja_ft_func
 local map = vim.keymap.set
 
 -- Filetypes
-luasnip.filetype_set("sls", { "sls", "jinja" })
+luasnip.filetype_set("salt", { "salt", "jinja" })
 
 ---@type fun(): string[] Returns a list of snippet filetypes for current cursor position
 local ft_func = setmetatable({
   jinja = jinja_ft_func("jinja"),
-  sls = jinja_ft_func("sls"),
+  salt = jinja_ft_func("salt"),
   ansible = jinja_ft_func("ansible"),
   lua = function()
     local buf_name = vim.api.nvim_buf_get_name(0)
@@ -51,7 +51,7 @@ local config = {
       "ansible_filters",
       "ansible_tests",
     },
-    sls = {
+    salt = {
       "jinja_statements",
       "jinja_stuff",
       "jinja_filters",

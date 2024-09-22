@@ -6,8 +6,8 @@
         "path": "./ansible_filters.json"
       },
       {
-        "language": "sls",
-        "path": "./sls.json"
+        "language": "salt",
+        "path": "./salt.json"
       },
       {
         "language": "mediawiki",
