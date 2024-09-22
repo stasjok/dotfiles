@@ -157,11 +157,17 @@ lua_ls.settings = {
         "${3rd}/luv/library",
       },
       ignoreDir = {
-        "/types/nightly/",
-        "/types/override/",
         "/lua/plenary/busted.lua",
-        "/tests/",
         "/test/",
+        "/tests/fixtures/",
+        "/tests/*.lua",
+        "**/test_*.lua",
+        "**/*_spec.lua",
+        "**/*_test.lua",
+        "/tests/dir-*", -- mini.test
+        "/tests/endwise", -- nvim-autopairs
+        "/lua/tests/", -- telescope-nvim
+        "/lua/diffview/tests/", -- diffview.nvim
         "/scripts/",
         "/plugin/",
         "/ftplugin/",

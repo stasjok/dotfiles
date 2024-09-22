@@ -193,9 +193,7 @@ in {
       diffview-nvim
       # Languages
       vim-nix
-      vim-jinja2-syntax
       ansible-vim
-      salt-vim
     ];
 
     # init.lua plugin configurations

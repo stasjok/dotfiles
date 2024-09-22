@@ -29,7 +29,7 @@
   # Fenced languages settings
   globals = {
     vim_mediawiki_wikilang_map = {
-      sls = "sls";
+      sls = "salt";
     };
     vim_mediawiki_preloaded_wikilangs = ["bash"];
     vim_mediawiki_ignored_wikilangs = helpers.emptyTable;

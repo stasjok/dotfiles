@@ -19,7 +19,7 @@ end
 ---Returns `true` if current jinja file is for SaltStack
 ---@return boolean
 local function is_salt()
-  return vim.bo.filetype == "sls" or match_file_path({ "salt", "formula" })
+  return vim.bo.filetype == "salt" or match_file_path({ "salt", "formula" })
 end
 
 ---Returns `true` if current jinja file is for Ansible
@@ -125,8 +125,8 @@ local function set_yaml_query()
   end
 end
 
----Returns LuaSnip `ft_func` for jinja or sls filetypes
----@param ft "jinja" | "sls" | "ansible" Filetype for `ft_func`
+---Returns LuaSnip `ft_func` for jinja or salt filetypes
+---@param ft "jinja" | "salt" | "ansible" Filetype for `ft_func`
 ---@return fun(): string[]
 function jinja_utils.jinja_ft_func(ft)
   local get_captures_at_cursor = require("treesitter.utils").get_captures_at_cursor
@@ -134,12 +134,12 @@ function jinja_utils.jinja_ft_func(ft)
 
   -- List of jinja filters filetypes
   local filters_filetypes = setmetatable({
-    sls = { "jinja_filters", "salt_filters" },
+    salt = { "jinja_filters", "salt_filters" },
     ansible = { "jinja_filters", "ansible_filters" },
   }, {
     __index = function(tbl)
       if is_salt() then
-        return rawget(tbl, "sls")
+        return rawget(tbl, "salt")
       elseif is_ansible() then
         return rawget(tbl, "ansible")
       else
@@ -150,12 +150,12 @@ function jinja_utils.jinja_ft_func(ft)
 
   -- List of jinja tests filetypes
   local tests_filetypes = setmetatable({
-    sls = { "jinja_tests", "salt_tests" },
+    salt = { "jinja_tests", "salt_tests" },
     ansible = { "jinja_tests", "ansible_tests" },
   }, {
     __index = function(tbl)
       if is_salt() then
-        return rawget(tbl, "sls")
+        return rawget(tbl, "salt")
       elseif is_ansible() then
         return rawget(tbl, "ansible")
       else
@@ -166,12 +166,12 @@ function jinja_utils.jinja_ft_func(ft)
 
   -- List of jinja statements filetypes
   local statements_filetypes = setmetatable({
-    sls = { "jinja_statements", "salt_statements" },
+    salt = { "jinja_statements", "salt_statements" },
     ansible = { "jinja_statements" },
   }, {
     __index = function(tbl)
       if is_salt() then
-        return rawget(tbl, "sls")
+        return rawget(tbl, "salt")
       elseif is_ansible() then
         return rawget(tbl, "ansible")
       else
@@ -182,12 +182,12 @@ function jinja_utils.jinja_ft_func(ft)
 
   -- List of jinja stuff filetypes
   local jinja_stuff_filetypes = setmetatable({
-    sls = { "jinja_stuff", "salt_jinja_stuff" },
+    salt = { "jinja_stuff", "salt_jinja_stuff" },
     ansible = { "jinja_stuff", "ansible_jinja_stuff" },
   }, {
     __index = function(tbl)
       if is_salt() then
-        return rawget(tbl, "sls")
+        return rawget(tbl, "salt")
       elseif is_ansible() then
         return rawget(tbl, "ansible")
       else
@@ -257,7 +257,7 @@ function jinja_utils.jinja_ft_func(ft)
       return filetypes
     end,
   }
-  ft_funcs.sls = ft_funcs.jinja
+  ft_funcs.salt = ft_funcs.jinja
 
   return ft_funcs[ft]
 end
