@@ -2,7 +2,7 @@
   description = "Home Manager configuration of Stas";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/673d99f1406cb09b8eb6feab4743ebdf70046557";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
       url = "home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
