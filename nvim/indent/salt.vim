@@ -1,16 +1,20 @@
+if exists('b:did_indent')
+  finish
+endif
+
 " Load original YAML indent
 runtime indent/yaml.vim
 
 " Use extended indentexpr function
-setlocal indentexpr=GetSLSIndent(v:lnum)
+setlocal indentexpr=GetSaltIndent(v:lnum)
 
 " Only define the function once.
-if exists('*GetSLSIndent')
+if exists('*GetSaltIndent')
     finish
 endif
 
 " Extend GetYAMLIndent to reset indent after empty line
-function GetSLSIndent(lnum)
+function GetSaltIndent(lnum)
     let prevlnum = prevnonblank(a:lnum-1)
     let prevline = getline(prevlnum)
     let previndent = indent(prevlnum)
