@@ -46,7 +46,6 @@ in {
             ];
           };
           specialArgs = {inherit inputs;};
-          shorthandOnlyDefinesConfig = null;
         };
       };
     }
