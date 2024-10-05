@@ -1,10 +1,12 @@
 {lib, ...}: {
   options.programs.nixvim = lib.mkOption {
-    type = lib.types.submodule {
-      imports = [
-        ./runtime.nix
-        ./plugins
-      ];
+    type = lib.types.submoduleWith {
+      modules = lib.toList {
+        imports = [
+          ./runtime.nix
+          ./plugins
+        ];
+      };
     };
   };
 }
