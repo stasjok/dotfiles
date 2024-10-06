@@ -36,8 +36,8 @@ in {
       # Plugin pack and Nvim runtime
       (let
         paths = builtins.concatStringsSep "," [
-          "${pkgs.vimUtils.packDir config.finalPackage.packpathDirs}"
-          "${config.finalPackage.unwrapped}/share/nvim/runtime"
+          "${pkgs.vimUtils.packDir config.build.package.packpathDirs}"
+          "${config.build.package.unwrapped}/share/nvim/runtime"
         ];
       in {
         runtimePaths = lib.mkOrder 1200 paths;
