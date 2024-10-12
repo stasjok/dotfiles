@@ -103,10 +103,8 @@ local lsp_servers = {
         formatter_command = { "nixpkgs-fmt" }
       elseif dirname == "home-manager" then
         formatter_command = { "nixfmt-classic" }
-      elseif dirname == "nixvim" then
-        formatter_command = { "nixfmt" }
       else
-        formatter_command = { "alejandra", "-" }
+        formatter_command = { "nixfmt" }
       end
 
       new_config.settings["nil"].formatting = { command = formatter_command }

@@ -34,7 +34,7 @@ local tests = {
   },
   nix = {
     string = "{  }",
-    formatted_string = "{}",
+    formatted_string = "{ }",
     formatting = true,
     range_formatting = false,
     on_save = true,
