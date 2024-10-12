@@ -99,9 +99,7 @@ local lsp_servers = {
       local formatter_command
 
       local dirname = vim.fs.basename(root_dir)
-      if dirname == "nixpkgs" then
-        formatter_command = { "nixpkgs-fmt" }
-      elseif dirname == "home-manager" then
+      if dirname == "home-manager" then
         formatter_command = { "nixfmt-classic" }
       else
         formatter_command = { "nixfmt" }

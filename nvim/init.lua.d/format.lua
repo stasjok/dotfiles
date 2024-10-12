@@ -33,7 +33,9 @@ local settings = {
   },
   nix = {
     server = "nil_ls",
-    on_save = true,
+    on_save = function(args)
+      return not vim.api.nvim_buf_get_name(args.buf):find("nixpkgs", 8, true)
+    end,
   },
   yaml = {
     server = "yamlls",
