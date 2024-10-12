@@ -123,6 +123,8 @@
 
     devShells.${system} = pkgs.callPackages ./shell {inherit (self) homeConfigurations;};
 
+    formatter.${system} = pkgs.treefmt;
+
     checks.${system}.tests = pkgs.callPackage ./tests {homeConfiguration = self.homeConfigurations.stas;};
 
     overlays.default = import ./overlay {inherit inputs;};

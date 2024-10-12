@@ -21,6 +21,11 @@ update_flake :
 update_neovim :
 	nix flake lock --update-input neovim
 
+# Formatting
+.PHONY : format
+format :
+	nix --no-warn-dirty fmt -- --on-unmatched=info
+
 # Tests
 .PHONY : test
 test : test_all

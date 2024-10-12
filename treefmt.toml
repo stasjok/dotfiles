@@ -1,0 +1,11 @@
+[formatter.alejandra]
+command = "alejandra"
+includes = ["*.nix"]
+excludes = [
+    # Directly from nixpkgs
+    "packages/packer/default.nix",
+]
+
+[formatter.stylua]
+command = "stylua"
+includes = ["*.lua"]
