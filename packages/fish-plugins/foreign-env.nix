@@ -22,7 +22,7 @@ buildFishPlugin {
   meta = with lib; {
     description = "A foreign environment interface for Fish shell";
     license = licenses.mit;
-    maintainers = with maintainers; [stasjok];
+    maintainers = with maintainers; [ stasjok ];
     platforms = with platforms; unix;
   };
 }

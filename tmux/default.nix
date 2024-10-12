@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   programs.tmux = {
     enable = true;
 
@@ -22,11 +23,13 @@
   };
 
   # Source config file automatically when it's changed
-  xdg.configFile."tmux/tmux.conf".onChange = let
-    tmux = "${config.programs.tmux.package}/bin/tmux";
-  in ''
-    if ${tmux} has-session &>/dev/null; then
-      ${tmux} source-file ${config.xdg.configHome}/tmux/tmux.conf
-    fi
-  '';
+  xdg.configFile."tmux/tmux.conf".onChange =
+    let
+      tmux = "${config.programs.tmux.package}/bin/tmux";
+    in
+    ''
+      if ${tmux} has-session &>/dev/null; then
+        ${tmux} source-file ${config.xdg.configHome}/tmux/tmux.conf
+      fi
+    '';
 }

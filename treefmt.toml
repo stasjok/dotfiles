@@ -1,5 +1,5 @@
-[formatter.alejandra]
-command = "alejandra"
+[formatter.nixfmt]
+command = "nixfmt"
 includes = ["*.nix"]
 excludes = [
     # Directly from nixpkgs

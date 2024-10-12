@@ -67,69 +67,84 @@
     };
   };
 
-  outputs = inputs @ {
-    self,
-    nixpkgs,
-    home-manager,
-    nixvim,
-    catppuccin,
-    ...
-  }: let
-    system = "x86_64-linux";
-    homeManagerOverlay = import "${home-manager}/overlay.nix";
-    pkgs = import "${nixpkgs}/pkgs/top-level" {
-      localSystem = system;
-      overlays = [homeManagerOverlay self.overlays.default];
-    };
-    inherit (pkgs) lib;
-
-    # Home configuration template
-    makeHomeConfiguration = {
-      username ? "stas",
-      homeDirectory ? "/home/${username}",
-      stateVersion ? "24.11",
-      extraModules ? [],
-      extraSpecialArgs ? {},
-      isGenericLinux ? true,
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      home-manager,
+      nixvim,
+      catppuccin,
+      ...
     }:
-      home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs = extraSpecialArgs // {inherit inputs;};
-        modules = lib.flatten [
-          nixvim.homeManagerModules.nixvim
-          catppuccin.homeManagerModules.catppuccin
-          ./modules
-          ./home.nix
-          (lib.optional isGenericLinux ./linux.nix)
-          {home = {inherit username homeDirectory stateVersion;};}
-          extraModules
+    let
+      system = "x86_64-linux";
+      homeManagerOverlay = import "${home-manager}/overlay.nix";
+      pkgs = import "${nixpkgs}/pkgs/top-level" {
+        localSystem = system;
+        overlays = [
+          homeManagerOverlay
+          self.overlays.default
         ];
       };
-    makeOverridableHomeConfiguration = args: lib.makeOverridable makeHomeConfiguration args;
-  in {
-    homeConfigurations = {
-      stas = makeOverridableHomeConfiguration {
-        username = "stas";
+      inherit (pkgs) lib;
+
+      # Home configuration template
+      makeHomeConfiguration =
+        {
+          username ? "stas",
+          homeDirectory ? "/home/${username}",
+          stateVersion ? "24.11",
+          extraModules ? [ ],
+          extraSpecialArgs ? { },
+          isGenericLinux ? true,
+        }:
+        home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = extraSpecialArgs // {
+            inherit inputs;
+          };
+          modules = lib.flatten [
+            nixvim.homeManagerModules.nixvim
+            catppuccin.homeManagerModules.catppuccin
+            ./modules
+            ./home.nix
+            (lib.optional isGenericLinux ./linux.nix)
+            {
+              home = {
+                inherit username homeDirectory stateVersion;
+              };
+            }
+            extraModules
+          ];
+        };
+      makeOverridableHomeConfiguration = args: lib.makeOverridable makeHomeConfiguration args;
+    in
+    {
+      homeConfigurations = {
+        stas = makeOverridableHomeConfiguration {
+          username = "stas";
+        };
+        "stas@server2" = makeOverridableHomeConfiguration {
+          username = "stas";
+          extraModules = [ ./server2.nix ];
+        };
+        admAsunkinSS = makeOverridableHomeConfiguration {
+          username = "admAsunkinSS";
+          extraModules = [ ./work.nix ];
+        };
       };
-      "stas@server2" = makeOverridableHomeConfiguration {
-        username = "stas";
-        extraModules = [./server2.nix];
+
+      devShells.${system} = pkgs.callPackages ./shell { inherit (self) homeConfigurations; };
+
+      formatter.${system} = pkgs.treefmt;
+
+      checks.${system}.tests = pkgs.callPackage ./tests {
+        homeConfiguration = self.homeConfigurations.stas;
       };
-      admAsunkinSS = makeOverridableHomeConfiguration {
-        username = "admAsunkinSS";
-        extraModules = [./work.nix];
-      };
+
+      overlays.default = import ./overlay { inherit inputs; };
+
+      # Provide all upstream packages
+      legacyPackages.${system} = pkgs;
     };
-
-    devShells.${system} = pkgs.callPackages ./shell {inherit (self) homeConfigurations;};
-
-    formatter.${system} = pkgs.treefmt;
-
-    checks.${system}.tests = pkgs.callPackage ./tests {homeConfiguration = self.homeConfigurations.stas;};
-
-    overlays.default = import ./overlay {inherit inputs;};
-
-    # Provide all upstream packages
-    legacyPackages.${system} = pkgs;
-  };
 }

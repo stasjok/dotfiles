@@ -3,42 +3,51 @@
   pkgs,
   inputs,
   ...
-}: {
+}:
+{
   nix = {
     package = pkgs.nix;
 
     settings = {
-      experimental-features = ["nix-command" "flakes" "repl-flake"];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+        "repl-flake"
+      ];
       allow-import-from-derivation = false;
     };
 
-    registry = let
-      flakeLock = (builtins.fromJSON (builtins.readFile ../flake.lock)).nodes;
-    in {
-      # My dotfiles
-      dotfiles = {
-        to = {
-          type = "github";
-          owner = "stasjok";
-          repo = "dotfiles";
+    registry =
+      let
+        flakeLock = (builtins.fromJSON (builtins.readFile ../flake.lock)).nodes;
+      in
+      {
+        # My dotfiles
+        dotfiles = {
+          to = {
+            type = "github";
+            owner = "stasjok";
+            repo = "dotfiles";
+          };
+          exact = false;
         };
-        exact = false;
+
+        # Pinned inputs
+        nixpkgs.to = flakeLock.nixpkgs.locked;
+        home-manager.to = flakeLock.home-manager.locked;
+        nixvim = {
+          to = flakeLock.nixvim.locked;
+          exact = false;
+        };
+        neovim = {
+          to = flakeLock.neovim.locked;
+          exact = false;
+        };
       };
 
-      # Pinned inputs
-      nixpkgs.to = flakeLock.nixpkgs.locked;
-      home-manager.to = flakeLock.home-manager.locked;
-      nixvim = {
-        to = flakeLock.nixvim.locked;
-        exact = false;
-      };
-      neovim = {
-        to = flakeLock.neovim.locked;
-        exact = false;
-      };
+    channels = {
+      inherit (inputs) nixpkgs home-manager nixvim;
     };
-
-    channels = {inherit (inputs) nixpkgs home-manager nixvim;};
     keepOldNixPath = false;
   };
 

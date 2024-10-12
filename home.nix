@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   # Imports
   imports = [
     ./bash
@@ -9,58 +10,62 @@
   ];
 
   # Packages
-  home.packages = with pkgs; let
-    pythonWithPackages = python3.withPackages (p:
-      with p; [
-        requests
-        pyyaml
-        # ansible-language-server uses python to get sys.path in order to get collections list
-        ansible
-      ]);
-    terraformAlias = stdenvNoCC.mkDerivation {
-      pname = "opentofu-alias";
-      version = "0.1";
-      src = emptyDirectory;
-      nativeBuildInputs = [makeWrapper];
-      buildPhase = ''
-        mkdir -p $out/bin
-        makeWrapper ${opentofu}/bin/tofu $out/bin/terraform
-      '';
-    };
-  in [
-    # Command-line tools
-    ripgrep
-    yq-go
-    # Task runners
-    gnumake
-    go-task
-    lefthook
-    # C build tools
-    gcc
-    autoconf
-    automake
-    cmake
-    bear
-    # Ansible
-    ansible
-    # Containers
-    podman
-    # Kubernetes
-    kubectl
-    kubernetes-helm
-    # Languages
-    pythonWithPackages
-    opentofu
-    terraformAlias
-    nodejs
-    nodePackages.typescript
-  ];
+  home.packages =
+    with pkgs;
+    let
+      pythonWithPackages = python3.withPackages (
+        p: with p; [
+          requests
+          pyyaml
+          # ansible-language-server uses python to get sys.path in order to get collections list
+          ansible
+        ]
+      );
+      terraformAlias = stdenvNoCC.mkDerivation {
+        pname = "opentofu-alias";
+        version = "0.1";
+        src = emptyDirectory;
+        nativeBuildInputs = [ makeWrapper ];
+        buildPhase = ''
+          mkdir -p $out/bin
+          makeWrapper ${opentofu}/bin/tofu $out/bin/terraform
+        '';
+      };
+    in
+    [
+      # Command-line tools
+      ripgrep
+      yq-go
+      # Task runners
+      gnumake
+      go-task
+      lefthook
+      # C build tools
+      gcc
+      autoconf
+      automake
+      cmake
+      bear
+      # Ansible
+      ansible
+      # Containers
+      podman
+      # Kubernetes
+      kubectl
+      kubernetes-helm
+      # Languages
+      pythonWithPackages
+      opentofu
+      terraformAlias
+      nodejs
+      nodePackages.typescript
+    ];
 
   # Home Manager
   programs.home-manager.enable = true;
 
   # User-specific executable files
-  home.sessionPath = ["$HOME/.local/bin"];
+  home.sessionPath = [ "$HOME/.local/bin" ];
 
   # Environment variables
   home.sessionVariables = {

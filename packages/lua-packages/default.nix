@@ -1,2 +1,4 @@
-{fetchurl}: final: prev: {
+{ fetchurl }:
+final: prev:
+{
 }

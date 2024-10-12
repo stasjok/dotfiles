@@ -2,7 +2,8 @@
   helpers,
   inputs,
   ...
-}: {
+}:
+{
   # Filetype detection
   filetype.extension.mediawiki = "mediawiki";
 
@@ -31,7 +32,7 @@
     vim_mediawiki_wikilang_map = {
       sls = "salt";
     };
-    vim_mediawiki_preloaded_wikilangs = ["bash"];
+    vim_mediawiki_preloaded_wikilangs = [ "bash" ];
     vim_mediawiki_ignored_wikilangs = helpers.emptyTable;
   };
 

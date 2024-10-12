@@ -3,11 +3,18 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.programs.cargo;
-  tomlFormat = pkgs.formats.toml {};
-  inherit (lib) mkEnableOption mkOption types mkIf;
-in {
+  tomlFormat = pkgs.formats.toml { };
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    types
+    mkIf
+    ;
+in
+{
   options.programs.cargo = {
     enable = mkEnableOption "Rust package manager";
 
@@ -19,15 +26,15 @@ in {
 
     settings = mkOption {
       type = tomlFormat.type;
-      default = {};
+      default = { };
       description = "Cargo’s configuration";
     };
   };
 
   config = mkIf cfg.enable {
-    home.packages = [pkgs.cargo];
+    home.packages = [ pkgs.cargo ];
 
-    home.file.".cargo/config.toml" = mkIf (cfg.settings != {}) {
+    home.file.".cargo/config.toml" = mkIf (cfg.settings != { }) {
       source = tomlFormat.generate "cargo-config" cfg.settings;
     };
   };

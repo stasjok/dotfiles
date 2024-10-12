@@ -2,18 +2,25 @@
   inputs,
   fetchpatch,
   vimUtils,
-}: final: prev: let
+}:
+final: prev:
+let
   # Convert flake input to vim plugin
-  mkPlugin' = pname: attrs: let
-    src = inputs.${builtins.replaceStrings ["."] ["-"] pname};
-  in
-    vimUtils.buildVimPlugin ({
+  mkPlugin' =
+    pname: attrs:
+    let
+      src = inputs.${builtins.replaceStrings [ "." ] [ "-" ] pname};
+    in
+    vimUtils.buildVimPlugin (
+      {
         inherit pname src;
         version = src.lastModifiedDate;
       }
-      // attrs);
-  mkPlugin = name: mkPlugin' name {};
-in {
+      // attrs
+    );
+  mkPlugin = name: mkPlugin' name { };
+in
+{
   # Flake input plugins
   mini-nvim = mkPlugin "mini.nvim";
   smart-splits-nvim = mkPlugin "smart-splits.nvim";

@@ -7,7 +7,7 @@
     # Tmux integration
     tmux = {
       enableShellIntegration = true;
-      shellIntegrationOptions = ["-p"];
+      shellIntegrationOptions = [ "-p" ];
     };
   };
 }

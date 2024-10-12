@@ -1,4 +1,5 @@
-{callPackage}: let
-  overrides = callPackage ./overrides.nix {};
+{ callPackage }:
+let
+  overrides = callPackage ./overrides.nix { };
 in
-  overrides
+overrides

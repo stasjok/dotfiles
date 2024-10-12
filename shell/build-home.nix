@@ -3,7 +3,8 @@
   homeConfiguration,
   targetDirectory,
   runOnChangeHooks ? true,
-}: let
+}:
+let
   # Library
   inherit (lib) pipe mapAttrsToList optionalString;
   inherit (builtins) filter concatStringsSep dirOf;
@@ -20,7 +21,8 @@
     (filter (s: s != ""))
     (concatStringsSep "\n")
   ];
-in ''
+in
+''
   # Create home directory in TMPDIR
   tmp_home=$(mktemp -d)/home
   cp -rsT --no-preserve=all ${homeFiles}/ $tmp_home

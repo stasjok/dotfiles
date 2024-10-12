@@ -5,15 +5,18 @@
   mkShellNoCC,
   ncurses,
   procps,
-}: let
+}:
+let
   # Convert homeConfiguration to devShell (for use in mapAttrs function)
-  homeConfigurationToDevShell = name: prevConfiguration: let
-    buildHome = import ./build-home.nix {
-      inherit lib;
-      homeConfiguration = prevConfiguration;
-      targetDirectory = "/tmp/home-configuration-test/${name}/home";
-    };
-  in
+  homeConfigurationToDevShell =
+    name: prevConfiguration:
+    let
+      buildHome = import ./build-home.nix {
+        inherit lib;
+        homeConfiguration = prevConfiguration;
+        targetDirectory = "/tmp/home-configuration-test/${name}/home";
+      };
+    in
     mkShellNoCC {
       inherit name;
       packages = [
@@ -37,15 +40,16 @@
     # Default shell
     default = shells.stas;
     # Shell for tests
-    tests = let
-      name = "tests";
-      buildHome = import ./build-home.nix {
-        inherit lib;
-        homeConfiguration = homeConfigurations.stas;
-        targetDirectory = "/tmp/home-configuration-test/${name}/home";
-        runOnChangeHooks = false;
-      };
-    in
+    tests =
+      let
+        name = "tests";
+        buildHome = import ./build-home.nix {
+          inherit lib;
+          homeConfiguration = homeConfigurations.stas;
+          targetDirectory = "/tmp/home-configuration-test/${name}/home";
+          runOnChangeHooks = false;
+        };
+      in
       mkShellNoCC {
         inherit name;
 
@@ -58,4 +62,4 @@
       };
   };
 in
-  shells // extraShells
+shells // extraShells

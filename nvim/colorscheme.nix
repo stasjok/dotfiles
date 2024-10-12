@@ -19,23 +19,27 @@
         native_lsp = {
           enabled = true;
           virtual_text = {
-            errors = ["italic"];
-            hints = ["italic"];
-            warnings = ["italic"];
-            information = ["italic"];
-            ok = ["italic"];
+            errors = [ "italic" ];
+            hints = [ "italic" ];
+            warnings = [ "italic" ];
+            information = [ "italic" ];
+            ok = [ "italic" ];
           };
           underlines = {
-            errors = ["underline"];
-            hints = ["underline"];
-            warnings = ["underline"];
-            information = ["underline"];
-            ok = ["underline"];
+            errors = [ "underline" ];
+            hints = [ "underline" ];
+            warnings = [ "underline" ];
+            information = [ "underline" ];
+            ok = [ "underline" ];
           };
-          inlay_hints = {background = true;};
+          inlay_hints = {
+            background = true;
+          };
         };
         semantic_tokens = true;
-        telescope = {enabled = true;};
+        telescope = {
+          enabled = true;
+        };
         treesitter = true;
       };
 
@@ -46,8 +50,8 @@
           bg = "";
         };
         # Don't hide tree-sitter comment highlights
-        "@lsp.type.comment.lua" = {};
-        "@lsp.type.comment.nix" = {};
+        "@lsp.type.comment.lua" = { };
+        "@lsp.type.comment.nix" = { };
       };
     };
   };
