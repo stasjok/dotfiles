@@ -43,9 +43,10 @@ in
           modules = lib.toList {
             imports = [
               ./colorscheme.nix
-              ./options.nix
               ./ftplugin
               ./indent
+              ./options.nix
+              ./skeletons.nix
             ];
           };
           specialArgs = {
