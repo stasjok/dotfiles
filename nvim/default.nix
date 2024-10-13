@@ -44,6 +44,7 @@ in
             imports = [
               ./colorscheme.nix
               ./ftplugin
+              ./icons.nix
               ./indent
               ./options.nix
               ./skeletons.nix
@@ -176,7 +177,6 @@ in
         plenary-nvim
         mini-nvim
         # Interface
-        nvim-web-devicons
         smart-splits-nvim
         fix-auto-scroll-nvim
         # Tree-sitter
