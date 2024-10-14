@@ -26,6 +26,8 @@ T["dedent"] = new_set({
     { { "\t\ta\n\tb" }, "\ta\nb" },
     -- Ignore less-indented spaces
     { { "    a\n  \n    b" }, "a\n\nb" },
+    -- Doesn't ignore more-indented whitespace-only lines
+    { { "  a\n    \n  b" }, "a\n  \nb" },
     -- Trims last newline
     { { "a\nb\n" }, "a\nb" },
     -- Trims only one newline

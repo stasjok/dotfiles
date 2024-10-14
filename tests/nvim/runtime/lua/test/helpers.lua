@@ -18,27 +18,34 @@ function M.dedent(str, opts)
   opts = opts or {}
   local trim = vim.F.if_nil(opts.trim, true)
 
+  -- Split input string
+  local lines = vim.split(str, "\n", { plain = true })
+
+  -- Trim last line
+  if trim and lines[#lines]:find("^%s*$") then
+    lines[#lines] = nil
+  end
+
   -- Find minimal indent
   local minimal_indent = math.huge
-  for s in vim.gsplit(str, "\n", { plain = true, trimempty = true }) do
-    if s ~= "" then
-      local _, indent = s:find("^%s*")
+  for _, s in ipairs(lines) do
+    local _, indent = s:find("^%s*") --[[@as integer Always matches]]
+    if indent ~= #s then
       if indent == 0 then
         -- No indent, return early
-        return str:sub(-1) == "\n" and trim and str:sub(1, -2) or str
-      elseif indent and indent < minimal_indent and indent ~= #s then
+        return trim and table.concat(lines, "\n") or str
+      elseif indent < minimal_indent then
         minimal_indent = indent
       end
     end
   end
 
-  local out = vim
-    .iter(vim.gsplit(str, "\n", { plain = true }))
+  return vim
+    .iter(lines)
     :map(function(s)
       return s:sub(minimal_indent + 1)
     end)
     :join("\n")
-  return out:sub(-1) == "\n" and trim and out:sub(1, -2) or out
 end
 
 --- Wrap every value in the table into another table,
