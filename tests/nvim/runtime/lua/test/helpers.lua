@@ -30,4 +30,17 @@ function M.dedent(str)
     :join("\n")
 end
 
+--- Wrap every value in the table into another table,
+--- e.g. `{1, 2}` -> `{{1}, {2}}`.
+---@param t table
+---@return table
+function M.wrap_values(t)
+  return vim
+    .iter(t)
+    :map(function(...)
+      return { ... }
+    end)
+    :totable()
+end
+
 return M

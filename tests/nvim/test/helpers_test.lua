@@ -31,4 +31,21 @@ T["dedent"] = new_set({
   end,
 })
 
+T["wrap_values"] = new_set({
+  parametrize = {
+    -- Empty input
+    { {}, {} },
+    -- One element
+    { { 1 }, { { 1 } } },
+    -- Two elements
+    { { "a", "b" }, { { "a" }, { "b" } } },
+    -- Bonus: dictionary
+    { { a = 1 }, { { "a", 1 } } },
+  },
+}, {
+  test = function(input, expectation)
+    eq(helpers.wrap_values(input), expectation)
+  end,
+})
+
 return T
