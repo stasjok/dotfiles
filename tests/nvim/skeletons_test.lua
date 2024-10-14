@@ -40,7 +40,8 @@ local skeletons = {
 
 
 
-      return T]]),
+      return T
+    ]]),
     cursor_line = 17,
   },
 }

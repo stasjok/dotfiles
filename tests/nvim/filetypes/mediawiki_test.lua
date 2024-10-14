@@ -166,18 +166,20 @@ T["fenced languages"]["refreshed after buffer reloading"] = function()
 
   -- Set initial buffer contents
   set_lines(dedent([[
-        <!-- vim: set ft=mediawiki: -->
-        == Heading ==
-        ]]))
+    <!-- vim: set ft=mediawiki: -->
+    == Heading ==
+
+  ]]))
   cmd.write(f)
   cmd.edit()
 
   -- Add new syntaxhighlight region
   set_lines(
     dedent([[
-          <syntaxhighlight lang="yaml">
-          key: 123
-          </syntaxhighlight>]]),
+      <syntaxhighlight lang="yaml">
+      key: 123
+      </syntaxhighlight>
+    ]]),
     { start = -1 }
   )
   cmd.write()
