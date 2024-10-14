@@ -47,6 +47,7 @@ in
               ./icons.nix
               ./indent
               ./options.nix
+              ./plugins
               ./skeletons.nix
             ];
           };
@@ -166,16 +167,10 @@ in
             tree-sitter-jinja2
           ])
         );
-
-        # ':Git' doc tag is clashing with vim-fugitive
-        mini-nvim = pkgs.vimPlugins.mini-nvim.overrideAttrs {
-          postPatch = "rm doc/mini-git.txt";
-        };
       in
       [
         # Libraries
         plenary-nvim
-        mini-nvim
         # Interface
         smart-splits-nvim
         fix-auto-scroll-nvim

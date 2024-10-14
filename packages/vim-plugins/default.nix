@@ -22,7 +22,13 @@ let
 in
 {
   # Flake input plugins
-  mini-nvim = mkPlugin "mini.nvim";
+  mini-nvim = mkPlugin' "mini.nvim" {
+    patches = fetchpatch {
+      # Remove ':Git' doc tag to avoid clashing with vim-fugitive
+      url = "https://github.com/stasjok/mini.nvim/commit/e19c76e0c4cca9aab9f6b45a32cbccff09974c69.diff";
+      hash = "sha256-p94f+DbPgKY3heB+T+oE33HGCdiyTJMKm5n418XKt1A=";
+    };
+  };
   smart-splits-nvim = mkPlugin "smart-splits.nvim";
   fix-auto-scroll-nvim = mkPlugin "fix-auto-scroll.nvim";
   surround-nvim = mkPlugin "surround.nvim";
