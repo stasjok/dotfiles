@@ -45,6 +45,13 @@ T["active"] = new_set({
 T["inactive"] = new_set({
   parametrize = wrap_values({
     -- Jinja blocks isn't highlighted with treesitter
+    "conf.jinja",
+    "conf.jinja2",
+    "nginx.jinja",
+    "nginx.jinja2",
+    "salt",
+    "sshconfig.jinja",
+    "sshconfig.jinja2",
     "yaml.ansible",
   }),
 }, {

@@ -11,7 +11,8 @@ in
         enable = true;
         disable = mkRaw ''
           function()
-            return vim.bo.filetype == "yaml.ansible"
+            local ft = vim.bo.filetype
+            return ft == "yaml.ansible" or ft:find("%.jinja2?$")
           end
         '';
       };
