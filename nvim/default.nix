@@ -49,6 +49,7 @@ in
               ./options.nix
               ./plugins
               ./skeletons.nix
+              ./treesitter
             ];
           };
           specialArgs = {
@@ -156,52 +157,38 @@ in
     ];
 
     # Neovim plugins
-    extraPlugins =
-      with pkgs.vimPlugins;
-      let
-        # nvim-treesitter with tree-sitter parsers
-        nvim-treesitter' = nvim-treesitter.withPlugins (
-          parsers:
-          nvim-treesitter.allGrammars
-          ++ (with parsers; [
-            tree-sitter-jinja2
-          ])
-        );
-      in
-      [
-        # Libraries
-        plenary-nvim
-        # Interface
-        smart-splits-nvim
-        fix-auto-scroll-nvim
-        # Tree-sitter
-        nvim-treesitter'
-        # Autocompletion
-        nvim-cmp
-        cmp-buffer
-        cmp-cmdline
-        cmp-nvim-lsp # Must be before nvim-lspconfig
-        cmp_luasnip
-        # Snippets
-        luasnip
-        # LSP
-        nvim-lspconfig
-        lsp_signature-nvim
-        none-ls-nvim
-        # Telescope
-        telescope-nvim
-        telescope-fzf-native-nvim
-        # Editing
-        surround-nvim
-        nvim-autopairs
-        # Git
-        vim-fugitive
-        gitsigns-nvim
-        diffview-nvim
-        # Languages
-        vim-nix
-        ansible-vim
-      ];
+    extraPlugins = with pkgs.vimPlugins; [
+      # Libraries
+      plenary-nvim
+      # Interface
+      smart-splits-nvim
+      fix-auto-scroll-nvim
+      # Autocompletion
+      nvim-cmp
+      cmp-buffer
+      cmp-cmdline
+      cmp-nvim-lsp # Must be before nvim-lspconfig
+      cmp_luasnip
+      # Snippets
+      luasnip
+      # LSP
+      nvim-lspconfig
+      lsp_signature-nvim
+      none-ls-nvim
+      # Telescope
+      telescope-nvim
+      telescope-fzf-native-nvim
+      # Editing
+      surround-nvim
+      nvim-autopairs
+      # Git
+      vim-fugitive
+      gitsigns-nvim
+      diffview-nvim
+      # Languages
+      vim-nix
+      ansible-vim
+    ];
 
     # init.lua plugin configurations
     extraConfigLua =
