@@ -8,6 +8,8 @@ local ok = expect.assertion
 local child = Child.new()
 local bo = child.bo
 local cmd = child.cmd
+local inspect_pos = child.inspect_pos
+local set_lines = child.set_lines
 
 local T = new_set({ hooks = {
   pre_case = child.setup,
@@ -44,6 +46,19 @@ T["ftplugin"]["options"] = function()
 
   -- Validate commentstring
   eq(bo.commentstring, "{#- %s #}")
+end
+
+T["syntax"] = new_set()
+
+T["syntax"]["compound filetypes"] = function()
+  bo.filetype = "conf.jinja"
+  set_lines({
+    "# Comment",
+    "{{ variable }}",
+  })
+
+  eq(inspect_pos(0, 0, 4).syntax[1].hl_group, "confComment")
+  eq(vim.iter(inspect_pos(0, 1, 6).syntax):rpeek().hl_group, "jinjaVariable")
 end
 
 return T
