@@ -161,7 +161,6 @@ in
       # Libraries
       plenary-nvim
       # Interface
-      smart-splits-nvim
       fix-auto-scroll-nvim
       # Autocompletion
       nvim-cmp
