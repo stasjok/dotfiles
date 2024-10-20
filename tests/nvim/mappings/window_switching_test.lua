@@ -61,6 +61,22 @@ local function get_win_dimensions()
   }
 end
 
+--- Validate window resize
+---@param resize_key string Keys for resizing
+---@param expected_resize {width: integer, height: integer} Expected resize amounts
+---@param mode string Expected mode
+local function validate_resize(resize_key, expected_resize, mode)
+  eq(get_mode(), mode)
+  local initial_dimensions = get_win_dimensions()
+  type_keys(resize_key)
+  local new_dimensions = get_win_dimensions()
+  eq(new_dimensions, {
+    width = initial_dimensions.width + expected_resize.width,
+    height = initial_dimensions.height + expected_resize.height,
+  })
+  eq(get_mode(), mode)
+end
+
 --- Validate mapping
 ---@param pre_command string Vimscript command to execute before typing keys
 ---@param initial_mode string Expected initial mode before switching windows
@@ -84,14 +100,7 @@ local function validate_mapping(
   eq(get_mode(), initial_mode)
 
   for resize_key, expected_resize in pairs(resize_keys) do
-    local initial_dimensions = get_win_dimensions()
-    type_keys(resize_key)
-    local new_dimensions = get_win_dimensions()
-    eq(new_dimensions, {
-      width = initial_dimensions.width + expected_resize.width,
-      height = initial_dimensions.height + expected_resize.height,
-    })
-    eq(get_mode(), initial_mode)
+    validate_resize(resize_key, expected_resize, initial_mode)
   end
 
   type_keys(switch_key)
@@ -191,38 +200,24 @@ end
 
 T["single window"] = new_set()
 
-T["single window"]["does nothing"] = function(mode, pre_command)
+T["single window"]["switching"] = function(mode, pre_command)
   local initial_win = get_current_win_number()
 
   -- TODO: Current mappings are always returning to normal mode
-  validate_mapping(pre_command, mode, {
-    [keys.resize_left] = { width = 0, height = 0 },
-    [keys.resize_right] = { width = 0, height = 0 },
-    -- TODO: Nvim is increasing cmdheight by resizing a single window up
-    -- [keys.resize_up] = { width = 0, height = 0 },
-    -- [keys.resize_down] = { width = 0, height = 0 },
-  }, keys.switch_left, initial_win, "n")
-  validate_mapping(pre_command, mode, {
-    [keys.resize_left] = { width = 0, height = 0 },
-    [keys.resize_right] = { width = 0, height = 0 },
-    -- TODO: Nvim is increasing cmdheight by resizing a single window up
-    -- [keys.resize_up] = { width = 0, height = 0 },
-    -- [keys.resize_down] = { width = 0, height = 0 },
-  }, keys.switch_down, initial_win, "n")
-  validate_mapping(pre_command, mode, {
-    [keys.resize_left] = { width = 0, height = 0 },
-    [keys.resize_right] = { width = 0, height = 0 },
-    -- TODO: Nvim is increasing cmdheight by resizing a single window up
-    -- [keys.resize_up] = { width = 0, height = 0 },
-    -- [keys.resize_down] = { width = 0, height = 0 },
-  }, keys.switch_up, initial_win, "n")
-  validate_mapping(pre_command, mode, {
-    [keys.resize_left] = { width = 0, height = 0 },
-    [keys.resize_right] = { width = 0, height = 0 },
-    -- TODO: Nvim is increasing cmdheight by resizing a single window up
-    -- [keys.resize_up] = { width = 0, height = 0 },
-    -- [keys.resize_down] = { width = 0, height = 0 },
-  }, keys.switch_right, initial_win, "n")
+  validate_mapping(pre_command, mode, {}, keys.switch_left, initial_win, "n")
+  validate_mapping(pre_command, mode, {}, keys.switch_down, initial_win, "n")
+  validate_mapping(pre_command, mode, {}, keys.switch_up, initial_win, "n")
+  validate_mapping(pre_command, mode, {}, keys.switch_right, initial_win, "n")
 end
 
+T["single window"]["resizing"] = function(mode, pre_command)
+  cmd(pre_command)
+
+  validate_resize(keys.resize_left, { width = 0, height = 0 }, mode)
+  validate_resize(keys.resize_right, { width = 0, height = 0 }, mode)
+  validate_resize(keys.resize_down, { width = 0, height = 0 }, mode)
+  -- Resize up reduces height of the window and increases 'cmdheight'
+  validate_resize(keys.resize_up, { width = 0, height = -resize_amount }, mode)
+  validate_resize(keys.resize_down, { width = 0, height = resize_amount }, mode)
+end
 return T
