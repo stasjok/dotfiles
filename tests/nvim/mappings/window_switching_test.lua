@@ -25,7 +25,12 @@ local resize_amount = 2
 
 local T = new_set({
   hooks = {
-    pre_case = child.setup,
+    pre_case = function()
+      -- Avoid tmux auto-detection by smart-splits.nvim
+      vim.env.TERM_PROGRAM = ""
+
+      child.setup()
+    end,
     post_once = child.stop,
   },
   parametrize = {
