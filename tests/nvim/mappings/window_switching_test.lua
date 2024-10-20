@@ -9,6 +9,14 @@ local api = child.api
 local cmd = child.cmd
 local type_keys = child.type_keys
 
+---@enum keys
+local keys = {
+  switch_left = "<M-h>",
+  switch_down = "<M-j>",
+  switch_up = "<M-k>",
+  switch_right = "<M-l>",
+}
+
 local T = new_set({
   hooks = {
     pre_case = child.setup,
@@ -71,19 +79,19 @@ T["multiple windows"] = new_set({
 T["multiple windows"]["works"] = function(mode, pre_command)
   eq(get_current_win_number(), 1)
 
-  validate_mapping(pre_command, mode, "<M-l>", 2, "n")
-  validate_mapping(pre_command, mode, "<M-j>", 4, "n")
-  validate_mapping(pre_command, mode, "<M-h>", 3, "n")
-  validate_mapping(pre_command, mode, "<M-k>", 1, "n")
+  validate_mapping(pre_command, mode, keys.switch_right, 2, "n")
+  validate_mapping(pre_command, mode, keys.switch_down, 4, "n")
+  validate_mapping(pre_command, mode, keys.switch_left, 3, "n")
+  validate_mapping(pre_command, mode, keys.switch_up, 1, "n")
 end
 
 T["multiple windows"]["wraps around"] = function(mode, pre_command)
   eq(get_current_win_number(), 1)
 
-  validate_mapping(pre_command, mode, "<M-h>", 2, "n")
-  validate_mapping(pre_command, mode, "<M-k>", 4, "n")
-  validate_mapping(pre_command, mode, "<M-l>", 3, "n")
-  validate_mapping(pre_command, mode, "<M-j>", 1, "n")
+  validate_mapping(pre_command, mode, keys.switch_left, 2, "n")
+  validate_mapping(pre_command, mode, keys.switch_up, 4, "n")
+  validate_mapping(pre_command, mode, keys.switch_right, 3, "n")
+  validate_mapping(pre_command, mode, keys.switch_down, 1, "n")
 end
 
 T["single window"] = new_set()
@@ -92,14 +100,10 @@ T["single window"]["does nothing"] = function(mode, pre_command)
   local initial_win = get_current_win_number()
 
   -- TODO: Current mappings are always returning to normal mode
-  -- validate_mapping(pre_command, mode, "<M-h>", initial_win, mode)
-  validate_mapping(pre_command, mode, "<M-h>", initial_win, "n")
-  -- validate_mapping(pre_command, mode, "<M-j>", initial_win, mode)
-  validate_mapping(pre_command, mode, "<M-j>", initial_win, "n")
-  -- validate_mapping(pre_command, mode, "<M-k>", initial_win, mode)
-  validate_mapping(pre_command, mode, "<M-k>", initial_win, "n")
-  -- validate_mapping(pre_command, mode, "<M-l>", initial_win, mode)
-  validate_mapping(pre_command, mode, "<M-l>", initial_win, "n")
+  validate_mapping(pre_command, mode, keys.switch_left, initial_win, "n")
+  validate_mapping(pre_command, mode, keys.switch_down, initial_win, "n")
+  validate_mapping(pre_command, mode, keys.switch_up, initial_win, "n")
+  validate_mapping(pre_command, mode, keys.switch_right, initial_win, "n")
 end
 
 return T
