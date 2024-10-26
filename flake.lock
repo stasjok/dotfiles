@@ -75,11 +75,11 @@
     "mini-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1729157343,
-        "narHash": "sha256-sht0BAvlW6HC4/7X1NNAp/K1hDHMNVlWdPSL44mFCLk=",
+        "lastModified": 1729943471,
+        "narHash": "sha256-HNcIUpoWUaXdvLQbZNteQiD0hwJhIZikR+RVJFxh6C0=",
         "owner": "stasjok",
         "repo": "mini.nvim",
-        "rev": "1d0cf6263cf1934d721e132cbb0150d6f1d02740",
+        "rev": "1850d42b6e8b0f6a5c9b6c14a9be20ea08551e73",
         "type": "github"
       },
       "original": {
