@@ -7,6 +7,7 @@
     terminal = "tmux-256color";
     prefix = "M-q";
     keyMode = "vi";
+    mouse = true;
     historyLimit = 50000;
     escapeTime = 5;
     baseIndex = 1;
