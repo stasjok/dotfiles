@@ -39,22 +39,6 @@ in
     };
   };
 
-  # Don't copy upstream queries from tree-sitter parsers
-  # This reverts https://github.com/NixOS/nixpkgs/pull/321550
-  neovimUtils = prev.neovimUtils // {
-    grammarToPlugin =
-      grammar:
-      let
-        prevPlugin = prev.neovimUtils.grammarToPlugin grammar;
-      in
-      prevPlugin.overrideAttrs (prevAttrs: {
-        buildCommand = ''
-          mkdir -p $out/parser
-          ln -s ${grammar}/parser $out/parser/${lib.removePrefix "vimplugin-treesitter-grammar-" prevAttrs.name}.so
-        '';
-      });
-  };
-
   # Avoid binary clashing with nixfmt-rfc-style
   nixfmt-classic = prev.runCommand "nixfmt-classic" { } ''
     mkdir -p $out/bin
