@@ -97,11 +97,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1729942640,
-        "narHash": "sha256-oXmYt1Hl8h9U73PBBO9J5lCkzyqlSVijynaQRZcdoYU=",
+        "lastModified": 1733070698,
+        "narHash": "sha256-3ObKDCslQnVBMHzMrD3gdIoMjk7O68rO2Bp/j6uda9c=",
         "owner": "stasjok",
         "repo": "neovim",
-        "rev": "a1b4e4b96eb80b704388c24e4b254bf2ec931000",
+        "rev": "9463ec6f2432f2f29d03ad7fda58df39ba0dfa70",
         "type": "github"
       },
       "original": {
