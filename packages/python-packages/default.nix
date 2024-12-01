@@ -13,7 +13,7 @@ final: prev: {
       "--suffix ANSIBLE_STRATEGY_PLUGINS : ${final.mitogen}/${final.python.sitePackages}/ansible_mitogen"
       "--set-default ANSIBLE_STRATEGY mitogen_linear"
     ];
-    propagatedBuildInputs = prevAttrs.propagatedBuildInputs ++ [ final.mitogen ];
+    dependencies = prevAttrs.dependencies ++ [ final.mitogen ];
   });
 
   ansible = prev.ansible.overridePythonAttrs (prevAttrs: rec {
