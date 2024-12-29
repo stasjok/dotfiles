@@ -21,13 +21,14 @@
 
     # My config
     extraConfig = builtins.readFile ./tmux.conf;
-
-    catppuccin.extraConfig = ''
-      # Use basename of the current directory as window name
-      set-option -g @catppuccin_window_text " #{b:pane_current_path}"
-      set-option -g @catppuccin_window_current_text " #{b:pane_current_path}"
-    '';
   };
+
+  # Catppuccin theme settings
+  catppuccin.tmux.extraConfig = ''
+    # Use basename of the current directory as window name
+    set-option -g @catppuccin_window_text " #{b:pane_current_path}"
+    set-option -g @catppuccin_window_current_text " #{b:pane_current_path}"
+  '';
 
   # Source config file automatically when it's changed
   xdg.configFile."tmux/tmux.conf".onChange =
