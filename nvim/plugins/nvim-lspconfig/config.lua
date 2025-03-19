@@ -162,7 +162,7 @@ local lsp_servers = {
         end
       end
 
-      return require("lspconfig.server_configurations.rust_analyzer").default_config.root_dir(fname)
+      return require("lspconfig.configs.rust_analyzer").default_config.root_dir(fname)
     end,
   },
 
