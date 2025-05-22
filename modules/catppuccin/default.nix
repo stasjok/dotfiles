@@ -1,0 +1,5 @@
+{
+  imports = [
+    ./gh-dash.nix
+  ];
+}

@@ -3,6 +3,7 @@
     ./bat.nix
     ./catppuccin.nix
     ./fzf.nix
+    ./gh.nix
     ./git.nix
     ./go.nix
     ./gpg.nix
