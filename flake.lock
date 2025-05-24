@@ -21,6 +21,22 @@
         "type": "github"
       }
     },
+    "catppuccin-palette": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1742245182,
+        "narHash": "sha256-R52Q1FVAclvBk7xNgj/Jl+GPCIbORNf6YbJ1nxH3Gzs=",
+        "owner": "catppuccin",
+        "repo": "palette",
+        "rev": "0df7db6fe201b437d91e7288fa22807bb0e44701",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "palette",
+        "type": "github"
+      }
+    },
     "fix-auto-scroll-nvim": {
       "flake": false,
       "locked": {
@@ -138,6 +154,7 @@
     "root": {
       "inputs": {
         "catppuccin": "catppuccin",
+        "catppuccin-palette": "catppuccin-palette",
         "fix-auto-scroll-nvim": "fix-auto-scroll-nvim",
         "home-manager": "home-manager",
         "mini-nvim": "mini-nvim",

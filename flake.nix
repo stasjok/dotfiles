@@ -19,6 +19,10 @@
       url = "github:catppuccin/nix/0ba11b12be81f0849a89ed17ab635164ea8f0112";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    catppuccin-palette = {
+      url = "github:catppuccin/palette";
+      flake = false;
+    };
 
     # Neovim plugins
     mini-nvim = {
