@@ -100,7 +100,7 @@
           };
           modules = lib.flatten [
             nixvim.homeManagerModules.nixvim
-            catppuccin.homeManagerModules.catppuccin
+            catppuccin.homeModules.catppuccin
             ./modules
             ./home.nix
             (lib.optional isGenericLinux ./linux.nix)
