@@ -173,7 +173,6 @@ in
       luasnip
       # LSP
       nvim-lspconfig
-      lsp_signature-nvim
       none-ls-nvim
       # Telescope
       telescope-nvim
