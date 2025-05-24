@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   # Imports
   imports = [
@@ -8,6 +8,11 @@
     ./nvim
     ./tmux
   ];
+
+  # Don't generate news
+  news = {
+    entries = lib.mkForce [ ];
+  };
 
   # Packages
   home.packages =
