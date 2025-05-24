@@ -6,6 +6,9 @@ let
   callPackage = lib.callPackageWith (final // { inherit inputs; });
 in
 {
+  # Nvim
+  neovim-patched = callPackage ../packages/neovim-patched { };
+
   # Fish plugins
   fishPlugins = prev.fishPlugins.overrideScope (callPackage ../packages/fish-plugins { });
 
