@@ -8,7 +8,7 @@ let
   catppuccinCfg = config.catppuccin;
   cfg = catppuccinCfg.gh-dash;
   ghDashCfg = config.programs.gh-dash;
-  theme = "${catppuccinCfg.sources.gh-dash}/themes/${cfg.flavor}/catppuccin-${cfg.flavor}-${cfg.accent}.yml";
+  theme = "${catppuccinCfg.sources.gh-dash}/${cfg.flavor}/catppuccin-${cfg.flavor}-${cfg.accent}.yml";
 in
 {
   # A workaround to avoid IFD
