@@ -63,6 +63,7 @@ in
   programs.nixvim = {
     enable = true;
     package = neovim;
+    nixpkgs.useGlobalPackages = true;
 
     # Disable all providers
     withNodeJs = false;
