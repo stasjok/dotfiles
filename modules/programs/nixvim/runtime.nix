@@ -39,8 +39,8 @@ in
       (
         let
           paths = builtins.concatStringsSep "," [
-            "${pkgs.vimUtils.packDir config.build.package.packpathDirs}"
-            "${config.build.package.unwrapped}/share/nvim/runtime"
+            "${pkgs.vimUtils.packDir config.build.nvimPackage.packpathDirs}"
+            "${config.build.nvimPackage.unwrapped}/share/nvim/runtime"
           ];
         in
         {
