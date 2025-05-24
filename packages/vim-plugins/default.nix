@@ -29,9 +29,12 @@ in
       hash = "sha256-p94f+DbPgKY3heB+T+oE33HGCdiyTJMKm5n418XKt1A=";
     };
   };
-  smart-splits-nvim = mkPlugin "smart-splits.nvim";
   fix-auto-scroll-nvim = mkPlugin "fix-auto-scroll.nvim";
   surround-nvim = mkPlugin "surround.nvim";
+
+  smart-splits-nvim = prev.smart-splits-nvim.overrideAttrs {
+    src = inputs.smart-splits-nvim;
+  };
 
   # Remove tests because there are invalid lua files there
   nvim-treesitter = prev.nvim-treesitter.overrideAttrs (prev: {

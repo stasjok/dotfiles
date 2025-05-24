@@ -38,10 +38,6 @@
           to = flakeLock.nixvim.locked;
           exact = false;
         };
-        neovim = {
-          to = flakeLock.neovim.locked;
-          exact = false;
-        };
       };
 
     channels = {

@@ -9,7 +9,7 @@ let
   cfg = config.programs.nixvim;
 
   # Neovim package
-  neovim = inputs.neovim.packages.${pkgs.system}.neovim-unwrapped;
+  neovim = pkgs.neovim-patched;
 
   # Read a lua chunk from file, wrap it in do...end block, and prefix it with `name` comment
   luaBlock =
@@ -63,6 +63,7 @@ in
   programs.nixvim = {
     enable = true;
     package = neovim;
+    nixpkgs.useGlobalPackages = true;
 
     # Disable all providers
     withNodeJs = false;
@@ -193,7 +194,7 @@ in
     extraConfigLua =
       let
         # List of plugins
-        plugins = cfg.extraPlugins;
+        plugins = map (p: p.plugin or p) cfg.extraPlugins;
 
         # List of plugin names
         pluginNames = builtins.map lib.getName plugins;
@@ -221,7 +222,7 @@ in
     extraFiles =
       let
         # List of plugins
-        plugins = cfg.extraPlugins;
+        plugins = map (p: p.plugin or p) cfg.extraPlugins;
 
         # Extend plugin list with dependencies
         allPlugins =

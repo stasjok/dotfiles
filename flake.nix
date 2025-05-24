@@ -2,33 +2,21 @@
   description = "Home Manager configuration of Stas";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-24.11";
+      url = "github:nix-community/nixvim/nixos-25.05";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         # Remove optional dependencies
-        devshell.follows = "";
-        flake-compat.follows = "";
-        git-hooks.follows = "";
-        home-manager.follows = "";
-        nix-darwin.follows = "";
-        treefmt-nix.follows = "";
         nuschtosSearch.follows = "";
       };
     };
     # Pin to v1.2.1. Before https://github.com/catppuccin/nix/commit/115c3de5635c257bd2a723e06f8262a5edd66d9c
     catppuccin.url = "github:catppuccin/nix/1e4c3803b8da874ff75224ec8512cb173036bbd8";
-
-    # Neovim package
-    neovim = {
-      url = "github:stasjok/neovim?ref=release-0.10-patched";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     # Neovim plugins
     mini-nvim = {
@@ -59,7 +47,7 @@
       flake = false;
     };
     yaml-language-server = {
-      url = "github:stasjok/yaml-language-server?rev=36084f03f936d3a0b59934f4bf3ef70bc40bbf92";
+      url = "github:stasjok/yaml-language-server?ref=custom-kube-schema-url";
       flake = false;
     };
     vale-at-red-hat = {

@@ -24,8 +24,8 @@ final: prev: {
       hash = "sha256-VFVzk/rldo7mQwSRxVt094Mdid0ZjT10Qx7arkQAQpg=";
     };
 
-    propagatedBuildInputs = lib.unique (
-      prevAttrs.propagatedBuildInputs
+    dependencies = lib.unique (
+      prevAttrs.dependencies
       ++ (with final; [
         # json_query filter
         jmespath
