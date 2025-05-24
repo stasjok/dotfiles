@@ -18,10 +18,14 @@ end
 ---@param config lspconfig.Config
 ---@param root_dir string
 M.on_new_config = function(config, root_dir)
-  local settings = vim.defaulttable()
-
-  -- Default nixpkgs
-  settings.nixpkgs.expr = '(builtins.getFlake "nixpkgs").legacyPackages.${builtins.currentSystem}'
+  local settings = {
+    -- Default nixpkgs
+    nixpkgs = { expr = '(builtins.getFlake "nixpkgs").legacyPackages.${builtins.currentSystem}' },
+    options = {
+      ["home-manager"] = {},
+      nixos = {},
+    },
+  }
 
   ---@param path string
   ---@param pkgs string
