@@ -56,7 +56,7 @@ local function on_attach(args)
       _, cancel_requests = lsp.buf_request(
         buf,
         "textDocument/documentHighlight",
-        lsp.util.make_position_params(),
+        lsp.util.make_position_params(0, client.offset_encoding),
         function(...)
           -- cancel_requests is nil if request was cancelled
           if cancel_requests then
