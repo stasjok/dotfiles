@@ -47,7 +47,7 @@
       flake = false;
     };
     yaml-language-server = {
-      url = "github:stasjok/yaml-language-server?rev=36084f03f936d3a0b59934f4bf3ef70bc40bbf92";
+      url = "github:stasjok/yaml-language-server?ref=custom-kube-schema-url";
       flake = false;
     };
     vale-at-red-hat = {
