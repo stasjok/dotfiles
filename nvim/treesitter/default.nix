@@ -50,10 +50,5 @@ in
       ++ (with pkgs.tree-sitter.builtGrammars; [
         tree-sitter-jinja2
       ]);
-
-    # Don't install any packages
-    treesitterPackage = null;
-    gccPackage = null;
-    nodejsPackage = null;
   };
 }
