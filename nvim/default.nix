@@ -9,7 +9,7 @@ let
   cfg = config.programs.nixvim;
 
   # Neovim package
-  neovim = inputs.neovim.packages.${pkgs.system}.neovim-unwrapped;
+  neovim = pkgs.neovim-unwrapped;
 
   # Read a lua chunk from file, wrap it in do...end block, and prefix it with `name` comment
   luaBlock =

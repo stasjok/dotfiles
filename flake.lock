@@ -90,28 +90,6 @@
         "type": "github"
       }
     },
-    "neovim": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "utils": "utils"
-      },
-      "locked": {
-        "lastModified": 1735471010,
-        "narHash": "sha256-rx/vg5gYB1Rdi408EgD4shkQNAJFXcYjcRgywTxUpE0=",
-        "owner": "stasjok",
-        "repo": "neovim",
-        "rev": "932b0888f3345d69ff63cc10a3e0477b11639f0b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "stasjok",
-        "ref": "release-0.10-patched",
-        "repo": "neovim",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1747953325,
@@ -135,7 +113,7 @@
           "nixpkgs"
         ],
         "nuschtosSearch": [],
-        "systems": "systems_2"
+        "systems": "systems"
       },
       "locked": {
         "lastModified": 1748042776,
@@ -158,7 +136,6 @@
         "fix-auto-scroll-nvim": "fix-auto-scroll-nvim",
         "home-manager": "home-manager",
         "mini-nvim": "mini-nvim",
-        "neovim": "neovim",
         "nixpkgs": "nixpkgs",
         "nixvim": "nixvim",
         "smart-splits-nvim": "smart-splits-nvim",
@@ -218,21 +195,6 @@
         "type": "github"
       }
     },
-    "systems_2": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
-      }
-    },
     "tree-sitter-jinja2": {
       "flake": false,
       "locked": {
@@ -246,24 +208,6 @@
       "original": {
         "owner": "theHamsta",
         "repo": "tree-sitter-jinja2",
-        "type": "github"
-      }
-    },
-    "utils": {
-      "inputs": {
-        "systems": "systems"
-      },
-      "locked": {
-        "lastModified": 1726560853,
-        "narHash": "sha256-X6rJYSESBVr3hBoH0WbKE5KvhPU5bloyZ2L4K60/fPQ=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "c1dfcf08411b08f6b8615f7d8971a2bfa81d5e8a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
         "type": "github"
       }
     },
