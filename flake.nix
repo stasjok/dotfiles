@@ -15,8 +15,14 @@
         nuschtosSearch.follows = "";
       };
     };
-    # Pin to v1.2.1. Before https://github.com/catppuccin/nix/commit/115c3de5635c257bd2a723e06f8262a5edd66d9c
-    catppuccin.url = "github:catppuccin/nix/1e4c3803b8da874ff75224ec8512cb173036bbd8";
+    catppuccin = {
+      url = "github:catppuccin/nix/0ba11b12be81f0849a89ed17ab635164ea8f0112";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    catppuccin-palette = {
+      url = "github:catppuccin/palette";
+      flake = false;
+    };
 
     # Neovim plugins
     mini-nvim = {
@@ -94,7 +100,7 @@
           };
           modules = lib.flatten [
             nixvim.homeManagerModules.nixvim
-            catppuccin.homeManagerModules.catppuccin
+            catppuccin.homeModules.catppuccin
             ./modules
             ./home.nix
             (lib.optional isGenericLinux ./linux.nix)
