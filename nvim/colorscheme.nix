@@ -1,3 +1,4 @@
+{ helpers, ... }:
 {
   colorschemes.catppuccin = {
     enableCompiled = true;
@@ -50,8 +51,8 @@
           bg = "";
         };
         # Don't hide tree-sitter comment highlights
-        "@lsp.type.comment.lua" = { };
-        "@lsp.type.comment.nix" = { };
+        "@lsp.type.comment.lua" = helpers.emptyTable;
+        "@lsp.type.comment.nix" = helpers.emptyTable;
       };
     };
   };
