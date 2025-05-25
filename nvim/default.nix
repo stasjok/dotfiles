@@ -83,6 +83,7 @@ in
         enable = true;
         plugins = true;
         nvimRuntime = true;
+        luaLib = true;
       };
 
       # Reduce the number of runtime paths
