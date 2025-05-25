@@ -43,6 +43,7 @@ in
           modules = lib.toList {
             imports = [
               ./colorscheme.nix
+              ./diagnostic.nix
               ./ftplugin
               ./icons.nix
               ./indent
