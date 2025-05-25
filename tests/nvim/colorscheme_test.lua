@@ -19,8 +19,6 @@ end
 
 T["highlight groups"] = new_set({
   parametrize = {
-    -- Cursor is invisible in inactive terminal
-    { "TermCursorNC", {}, true },
     -- LSP semantic tokens don't overlap 'comment' tree-sitter highlights
     { "@lsp.type.comment.lua", {}, true },
     { "@lsp.type.comment.nix", {}, true },
