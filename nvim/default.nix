@@ -66,6 +66,9 @@ in
     package = neovim;
     nixpkgs.useGlobalPackages = true;
 
+    # Make Nvim pure
+    wrapRc = true;
+
     # Disable all providers
     withNodeJs = false;
     withRuby = false;
@@ -93,6 +96,8 @@ in
           # telescope-fzf-native-nvim
           "/build"
         ];
+        # Make sure there are no standalone plugins except 'extraFiles'
+        standalonePlugins = lib.mkForce [ (lib.getName cfg.build.extraFiles) ];
       };
     };
 
@@ -223,7 +228,11 @@ in
     extraFiles =
       let
         # List of plugins
-        plugins = map (p: p.plugin or p) cfg.extraPlugins;
+        plugins = lib.pipe cfg.extraPlugins [
+          (map (p: p.plugin or p))
+          # Skip 'extraFiles' plugin to avoid infinite recursion
+          (builtins.filter (p: p.name != cfg.build.extraFiles.name))
+        ];
 
         # Extend plugin list with dependencies
         allPlugins =
