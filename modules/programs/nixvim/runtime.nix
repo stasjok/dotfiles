@@ -39,7 +39,7 @@ in
       (
         let
           paths = builtins.concatStringsSep "," [
-            "${pkgs.vimUtils.packDir config.build.nvimPackage.packpathDirs}"
+            "${pkgs.neovimUtils.packDir config.build.nvimPackage.packpathDirs}"
             "${config.build.nvimPackage.unwrapped}/share/nvim/runtime"
           ];
         in
