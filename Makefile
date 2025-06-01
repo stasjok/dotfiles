@@ -50,10 +50,10 @@ else
 test_all : test_nvim
 
 test_nvim tests/nvim :
-	@nvim -l tests/nvim/runner.lua tests/nvim
+	@nvim -u NONE -l tests/nvim/runner.lua tests/nvim
 # Separated tests
 $(nvim_tests) :
-	@nvim -l tests/nvim/runner.lua "$(@)"
+	@nvim -u NONE -l tests/nvim/runner.lua "$(@)"
 endif
 
 # Cleaning

@@ -2,7 +2,7 @@
 vim.cmd.filetype("off")
 vim.cmd.syntax("off")
 
--- Add test helpers to runtime
-vim.opt.runtimepath:prepend("tests/nvim/runtime")
 -- Set runtime
-require("test.utils").set_rtp()
+vim.o.runtimepath = "tests/nvim/runtime,"
+  .. assert(vim.env.runtimePaths, "No 'runtimePaths' environment variable defined")
+vim.o.packpath = assert(vim.env.packPaths, "No 'packPaths' environment variable defined")

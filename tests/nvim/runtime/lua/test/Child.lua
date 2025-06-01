@@ -26,7 +26,8 @@ function Child.new(opts)
       "let g:did_load_ftplugin = 1 | let g:did_indent_on = 1",
     }
   else
-    args = { "-u", "~/.config/nvim/init.lua" }
+    local init = assert(vim.env.initFile, "No 'initFile' environment variable defined")
+    args = { "-u", init }
   end
 
   -- Restart child, or start it if's not started yet

@@ -43,15 +43,19 @@ let
     tests =
       let
         name = "tests";
+        homeConfiguration = homeConfigurations.stas;
         buildHome = import ./build-home.nix {
-          inherit lib;
-          homeConfiguration = homeConfigurations.stas;
+          inherit lib homeConfiguration;
           targetDirectory = "/tmp/home-configuration-test/${name}/home";
           runOnChangeHooks = false;
         };
       in
       mkShellNoCC {
         inherit name;
+
+        # 'runtimepath' and 'packpath' for minimal_init.lua (Nvim tests)
+        inherit (homeConfiguration.config.programs.nixvim.runtime) runtimePaths packPaths;
+        inherit (homeConfiguration.config.programs.nixvim.build) initFile;
 
         # Locale with UTF-8 support
         LANG = "C.UTF-8";
