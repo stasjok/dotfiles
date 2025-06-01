@@ -38,14 +38,17 @@ nvim_tests ::= $(wildcard \
 	tests/nvim/*/*/*/*_test.lua \
 	)
 nvim_all_tests ::= test_nvim tests/nvim $(nvim_tests)
-all_tests ::= test_all $(nvim_all_tests)
+non_nvim_tests ::= test_all
+all_tests ::= $(non_nvim_tests) $(nvim_all_tests)
 
 .PHONY : $(all_tests)
 
 # Run the same target in nix shell
 ifndef NIX_BUILD_TOP
-$(all_tests) :
+$(non_nvim_tests) :
 	@nix develop -i -k TERM .#tests -c $(MAKE) $@
+$(nvim_all_tests) :
+	@nix develop -i -k TERM .#nvimTests -c $(MAKE) $@
 else
 test_all : test_nvim
 
