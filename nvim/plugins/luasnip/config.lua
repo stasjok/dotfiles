@@ -127,7 +127,7 @@ map("s", "<Del>", "<C-O>c")
 
 -- Load snippets
 local opts = {
-  paths = vim.fs.joinpath(vim.fn.stdpath("config"), "snippets"),
+  paths = vim.api.nvim__get_runtime({ "snippets" }, false, {}),
   fs_event_providers = {},
 }
 
