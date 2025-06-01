@@ -27,6 +27,7 @@ end
 T["checkhealth"] = function()
   -- List of ignored messages
   local ignored = {
+    "Missing user config file",
     "`tree-sitter` executable not found",
     "`cc` executable not found",
     "No clipboard tool found",
