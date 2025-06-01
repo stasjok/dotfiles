@@ -43,10 +43,10 @@ T["runtime paths"] = function(type)
   -- Runtimepath
   local rtp = vim.split(target.o.runtimepath, ",", { plain = true })
   eq(rtp[1], "tests/nvim/runtime") -- Test runtime
-  eq(rtp[2], target.fn.stdpath("config")) -- XDG_CONFIG_HOME
+  matches(rtp[2], "nvim%-config$") -- home config
   matches(rtp[3], "vim-pack-dir", 1, true) -- Plugins
   eq(rtp[4], target.env.VIMRUNTIME) -- Nvim runtime
-  eq(rtp[5], target.fn.stdpath("config") .. "/after") -- XDG_CONFIG_HOME after directory
+  matches(rtp[5], "nvim-config/after", 1, true) -- home config after directory
   eq(#rtp, 5) -- No more paths
 
   -- Packdir

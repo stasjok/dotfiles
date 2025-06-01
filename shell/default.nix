@@ -36,30 +36,57 @@ let
 
   # Shells
   shells = lib.mapAttrs homeConfigurationToDevShell homeConfigurations;
-  extraShells = {
-    # Default shell
-    default = shells.stas;
-    # Shell for tests
-    tests =
-      let
-        name = "tests";
-        buildHome = import ./build-home.nix {
-          inherit lib;
-          homeConfiguration = homeConfigurations.stas;
-          targetDirectory = "/tmp/home-configuration-test/${name}/home";
-          runOnChangeHooks = false;
-        };
-      in
-      mkShellNoCC {
-        inherit name;
+  extraShells =
+    let
+      testHomeConfiguration = homeConfigurations.stas;
+      testEnv = {
+        # Pass 'runtimepath', 'packpath' and init.lua paths to Nvim test runner
+        inherit (testHomeConfiguration.config.programs.nixvim.runtime) runtimePaths packPaths;
+        inherit (testHomeConfiguration.config.programs.nixvim.build) initFile;
 
         # Locale with UTF-8 support
         LANG = "C.UTF-8";
-
-        shellHook = ''
-          ${buildHome}
-        '';
       };
-  };
+    in
+    {
+      # Default shell
+      default = shells.stas;
+      # Shell for tests
+      tests =
+        let
+          name = "tests";
+          buildHome = import ./build-home.nix {
+            inherit lib;
+            homeConfiguration = testHomeConfiguration;
+            targetDirectory = "/tmp/home-configuration-test/${name}/home";
+            runOnChangeHooks = false;
+          };
+        in
+        mkShellNoCC (
+          {
+            inherit name;
+
+            shellHook = ''
+              ${buildHome}
+            '';
+          }
+          // testEnv
+        );
+      # Shell for Nvim tests
+      nvimTests = mkShellNoCC (
+        {
+          name = "nvim-tests";
+          packages = [
+            testHomeConfiguration.config.home.path
+          ];
+          shellHook = ''
+            export HOME=$(mktemp -d)
+            export USER="${testHomeConfiguration.config.home.username}"
+            export XDG_RUNTIME_DIR=$(mktemp -d)
+          '';
+        }
+        // testEnv
+      );
+    };
 in
 shells // extraShells

@@ -68,9 +68,10 @@ T["child { minimal = false }"] = function()
   child.setup()
   MiniTest.finally(child.stop)
 
-  -- Full child is using init.lua from XDG_CONFIG_HOME
-  local init_lua_info = child.fn.getscriptinfo({ name = "nvim/init.lua" })[1]
-  ok(init_lua_info, "expected init.lua from XDG_CONFIG_HOME to be sourced")
+  -- Full child is using init.lua from 'initFile' environment variable
+  ok(vim.env.initFile and vim.initFile ~= "", "expected 'initFile' to be defined")
+  local init_lua_info = child.fn.getscriptinfo({ name = vim.env.initFile })[1]
+  ok(init_lua_info, "expected init.lua from 'initFile' to be sourced")
 
   -- Make sure nothing is disabled in full child Nvim
   not_errors(child.api.nvim_get_autocmds, { group = "filetypeplugin" })

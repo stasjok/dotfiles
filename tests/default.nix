@@ -14,6 +14,10 @@ stdenvNoCC.mkDerivation {
   name = "tests";
   src = ../.;
 
+  # 'runtimepath' and 'packpath' for minimal_init.lua (Nvim tests)
+  inherit (homeConfiguration.config.programs.nixvim.runtime) runtimePaths packPaths;
+  inherit (homeConfiguration.config.programs.nixvim.build) initFile;
+
   # Locale with UTF-8 support
   LANG = "C.UTF-8";
 

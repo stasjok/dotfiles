@@ -30,29 +30,49 @@ in
   };
 
   config = {
-    runtime = lib.mkMerge [
-      # XDG_CONFIG_HOME
-      {
-        runtimePaths = lib.mkOrder 800 "${hmConfig.xdg.configHome}/nvim";
-      }
-      # Plugin pack and Nvim runtime
-      (
-        let
-          paths = builtins.concatStringsSep "," [
-            "${pkgs.neovimUtils.packDir config.build.nvimPackage.packpathDirs}"
-            "${config.build.nvimPackage.unwrapped}/share/nvim/runtime"
-          ];
-        in
+    runtime =
+      let
+        configHome =
+          if config.wrapRc then "${config.build.extraFiles}" else "${hmConfig.xdg.configHome}/nvim";
+      in
+      lib.mkMerge [
+        # User configuration
         {
-          runtimePaths = lib.mkOrder 1200 paths;
-          packPaths = lib.mkOrder 1200 paths;
+          runtimePaths = lib.mkOrder 800 configHome;
         }
-      )
-      # XDG_CONFIG_HOME after directory
-      {
-        runtimePaths = lib.mkOrder 1700 "${hmConfig.xdg.configHome}/nvim/after";
-      }
-    ];
+        # Plugin pack and Nvim runtime
+        (
+          let
+            packDir = pkgs.neovimUtils.packDir (
+              # Remove extraFiles plugin from packpathDirs
+              if config.wrapRc then
+                lib.updateManyAttrsByPath [
+                  {
+                    path = [
+                      "myNeovimPackages"
+                      "start"
+                    ];
+                    update = builtins.filter (p: p.name != config.build.extraFiles.name);
+                  }
+                ] config.build.nvimPackage.packpathDirs
+              else
+                config.build.nvimPackage.packpathDirs
+            );
+            paths = builtins.concatStringsSep "," [
+              packDir
+              "${config.build.nvimPackage.unwrapped}/share/nvim/runtime"
+            ];
+          in
+          {
+            runtimePaths = lib.mkOrder 1200 paths;
+            packPaths = lib.mkOrder 1200 paths;
+          }
+        )
+        # User configuration 'after' directory
+        {
+          runtimePaths = lib.mkOrder 1700 "${configHome}/after";
+        }
+      ];
 
     extraConfigLuaPre = lib.mkIf cfg.enable (
       lib.mkBefore ''
