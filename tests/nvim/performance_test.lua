@@ -25,8 +25,12 @@ end
 
 T["byte compiling"] = function()
   expect.no_error(child.lua_func, function()
-    -- Test every lua file found in runtime
-    for _, path in ipairs(vim.api.nvim_get_runtime_file("**/*.lua", true)) do
+    -- Get init.lua path
+    local init = vim.fn.getscriptinfo({ name = "init.lua" })[1].name
+    -- Test every lua file
+    local paths = vim.api.nvim_get_runtime_file("**/*.lua", true)
+    table.insert(paths, init)
+    for _, path in ipairs(paths) do
       local f = assert(io.open(path, "rb"))
       -- Read three bytes
       local data = assert(f:read(3)) --[[@as string]]
