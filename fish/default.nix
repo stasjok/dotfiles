@@ -38,9 +38,6 @@
           bind \eF forward-bigword
           bind \eP __fish_paginate
         '';
-
-        # My current dev neovim configuration
-        nvim-dev = "nix develop -i -k TERM -k TERM_PROGRAM -k TMUX dotfiles -c nvim $argv";
       }
       // saltFunctions;
   };
