@@ -1,7 +1,6 @@
 { helpers, ... }:
 {
   diagnostic.settings = {
-    virtual_text = false;
     update_in_insert = true;
     severity_sort = true;
     float = {
