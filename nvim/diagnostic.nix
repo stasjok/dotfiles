@@ -5,6 +5,7 @@
     severity_sort = true;
     float = {
       focusable = false;
+      source = "if_many";
     };
     jump = {
       float = true;
