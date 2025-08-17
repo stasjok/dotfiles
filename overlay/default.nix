@@ -48,6 +48,21 @@ in
     ln -s ${lib.getBin prev.nixfmt-classic}/bin/nixfmt $out/bin/nixfmt-classic
   '';
 
+  # beancount-language-server
+  beancount-language-server = prev.beancount-language-server.overrideAttrs (prevAttrs: rec {
+    version = "1.4.1";
+    src = prevAttrs.src.override {
+      rev = "v${version}";
+      hash = "sha256-cx/Y0jBpnNN+QVEovpbhCG70VwOqwDE+8lBcRAJtlF4=";
+    };
+    cargoHash = "sha256-P3Oug9YNsTmsOz68rGUcYJwq9NsKErHt/fOCvqXixNU=";
+    cargoDeps = final.rustPlatform.fetchCargoVendor {
+      inherit (prevAttrs) pname;
+      inherit version src;
+      hash = cargoHash;
+    };
+  });
+
   # Allow changing kubernetes schema URL via settings
   yaml-language-server = prev.yaml-language-server.overrideAttrs {
     src = inputs.yaml-language-server;
