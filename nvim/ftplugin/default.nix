@@ -7,6 +7,7 @@
   extraFiles =
     lib.pipe
       [
+        ./beancount.vim
         ./jinja.vim
         ./salt.vim
         ./terraform-vars.vim
