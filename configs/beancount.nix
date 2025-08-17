@@ -1,0 +1,5 @@
+{
+  programs.beancount = {
+    enable = true;
+  };
+}
