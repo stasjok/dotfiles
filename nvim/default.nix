@@ -47,9 +47,11 @@ in
               ./ftplugin
               ./icons.nix
               ./indent
+              ./lsp
               ./options.nix
               ./plugins
               ./skeletons.nix
+              ./snippets.nix
               ./treesitter
             ];
           };

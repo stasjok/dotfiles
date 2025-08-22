@@ -69,6 +69,9 @@ local settings = {
   ["terraform-vars"] = {
     on_save = true,
   },
+  beancount = {
+    on_save = true,
+  },
 }
 
 ---Returns a function for formatting with specific client id

@@ -6,6 +6,10 @@
         "path": "./ansible_filters.json"
       },
       {
+        "language": "beancount",
+        "path": "./beancount.json"
+      },
+      {
         "language": "salt",
         "path": "./salt.json"
       },

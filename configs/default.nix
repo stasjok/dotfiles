@@ -1,6 +1,7 @@
 {
   imports = [
     ./bat.nix
+    ./beancount.nix
     ./catppuccin.nix
     ./fzf.nix
     ./gh.nix
