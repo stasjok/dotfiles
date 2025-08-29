@@ -11,5 +11,6 @@
     ./k9s.nix
     ./nix.nix
     ./rust.nix
+    ./uv.nix
   ];
 }
