@@ -113,7 +113,6 @@ in
         shellcheck
         shfmt
         # Python
-        pyright
         black
         # Lua
         lua-language-server

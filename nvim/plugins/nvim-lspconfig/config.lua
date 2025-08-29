@@ -85,9 +85,6 @@ local lsp_servers = {
     },
   },
 
-  -- Python
-  pyright = {},
-
   -- Nix
   nil_ls = {
     root_dir = require("plugin_configs.lspconfig.nixd").root_dir,

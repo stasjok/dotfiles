@@ -1,5 +1,8 @@
 {
   lsp.servers = {
+    # Python
+    basedpyright.enable = true;
+
     # TypeScript
     vtsls.enable = true;
 
