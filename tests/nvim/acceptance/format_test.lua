@@ -46,7 +46,7 @@ local tests = {
   },
   python = {
     ext = "py",
-    lsp_name = "null-ls",
+    lsp_name = "ruff",
     string = "a=1",
     formatted_string = "a = 1",
     formatting = true,

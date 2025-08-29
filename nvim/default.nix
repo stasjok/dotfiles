@@ -112,8 +112,6 @@ in
         bash-language-server
         shellcheck
         shfmt
-        # Python
-        black
         # Lua
         lua-language-server
         stylua

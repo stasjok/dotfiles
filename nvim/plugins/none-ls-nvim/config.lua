@@ -7,7 +7,6 @@ null_ls.setup({
   sources = {
     -- Formatting
     formatting.stylua,
-    formatting.black,
     formatting.fish_indent,
     formatting.mdformat,
     formatting.packer,
