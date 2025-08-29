@@ -63,7 +63,8 @@
       opentofu
       terraformAlias
       nodejs
-      nodePackages.typescript
+      pnpm
+      typescript
     ];
 
   # Home Manager
