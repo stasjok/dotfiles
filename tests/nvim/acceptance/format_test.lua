@@ -51,6 +51,7 @@ local tests = {
     formatted_string = "a = 1",
     formatting = true,
     range_formatting = true,
+    on_save = true,
   },
   sh = {
     lsp_name = "bashls",

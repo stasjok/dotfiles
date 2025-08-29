@@ -37,6 +37,10 @@ local settings = {
       return not vim.api.nvim_buf_get_name(args.buf):find("nixpkgs", 8, true)
     end,
   },
+  python = {
+    server = "ruff",
+    on_save = true,
+  },
   yaml = {
     server = "yamlls",
     override_document_formatting = true,
