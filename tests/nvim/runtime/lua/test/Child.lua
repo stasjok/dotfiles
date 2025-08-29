@@ -170,6 +170,11 @@ function Child.new(opts)
 
     -- none-ls.nvim
     child.lua([[require("null-ls").disable({})]])
+
+    -- vim.lsp.config
+    child.lua([[vim.iter(vim.tbl_keys(vim.lsp._enabled_configs)):each(function(name)
+      vim.lsp.enable(name, false)
+    end)]])
   end
 
   return child
