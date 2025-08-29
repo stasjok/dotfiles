@@ -18,14 +18,20 @@
   home.packages =
     with pkgs;
     let
-      pythonWithPackages = python3.withPackages (
-        p: with p; [
-          requests
-          pyyaml
-          # ansible-language-server uses python to get sys.path in order to get collections list
-          ansible
-        ]
-      );
+      pythonWithPackages =
+        (python3.withPackages (
+          p: with p; [
+            requests
+            pyyaml
+            # ansible-language-server uses python to get sys.path in order to get collections list
+            ansible
+            # beancount-lsp-server uses python to run beancheck
+            beancount
+          ]
+        )).overrideAttrs
+          # Avoid collisions with beancount installed in profile
+          # TODO: find a better way
+          { meta.priority = 10; };
       terraformAlias = stdenvNoCC.mkDerivation {
         pname = "opentofu-alias";
         version = "0.1";
