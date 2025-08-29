@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   lsp.servers = {
     # Python
@@ -7,7 +8,24 @@
     # TypeScript
     vtsls.enable = true;
 
-    # beancount-language-server
-    beancount.enable = true;
+    # beancount-lsp-server
+    beancount-lsp-server = {
+      enable = true;
+      name = "beancount-lsp-server";
+      package = pkgs.beancount-lsp-server;
+      settings = {
+        cmd = [
+          "beancount-lsp-server"
+          "--stdio"
+        ];
+        filetypes = [ "beancount" ];
+        root_markers = [ ".git" ];
+        settings = {
+          beanLsp = {
+            mainBeanFile = "main.beancount";
+          };
+        };
+      };
+    };
   };
 }
