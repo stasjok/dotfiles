@@ -146,8 +146,6 @@ in
         terraform-ls
         # Packer
         packer
-        # TypeScript
-        typescript-language-server
         # Go
         gopls
         # Rust

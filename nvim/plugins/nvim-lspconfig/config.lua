@@ -134,11 +134,6 @@ local lsp_servers = {
   -- Terraform
   terraformls = {},
 
-  -- Typescript
-  ts_ls = {
-    cmd = { "typescript-language-server", "--stdio", "--tsserver-path", "tsserver" },
-  },
-
   -- Go
   gopls = {
     settings = {
