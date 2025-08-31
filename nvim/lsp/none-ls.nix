@@ -9,6 +9,8 @@
           enable = true;
           # beancount v3 requires '-' to format stdin
           settings.args = [ "-" ];
+          # Already installed by home-manager, need to override by nix-develop
+          package = null;
         };
         fish_indent = {
           enable = true;
