@@ -163,7 +163,6 @@
         "smart-splits-nvim": "smart-splits-nvim",
         "surround-nvim": "surround-nvim",
         "tree-sitter-jinja2": "tree-sitter-jinja2",
-        "vale-at-red-hat": "vale-at-red-hat",
         "vim-mediawiki": "vim-mediawiki",
         "yaml-language-server": "yaml-language-server"
       }
@@ -230,22 +229,6 @@
       "original": {
         "owner": "theHamsta",
         "repo": "tree-sitter-jinja2",
-        "type": "github"
-      }
-    },
-    "vale-at-red-hat": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1755696553,
-        "narHash": "sha256-d114prAkXySD01NbQYfJvtBgiijVh/5QZtyPmLFiaIU=",
-        "owner": "redhat-documentation",
-        "repo": "vale-at-red-hat",
-        "rev": "c949ea4dcef805813bf8e11d3d16b32ab2a16269",
-        "type": "github"
-      },
-      "original": {
-        "owner": "redhat-documentation",
-        "repo": "vale-at-red-hat",
         "type": "github"
       }
     },

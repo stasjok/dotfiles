@@ -56,10 +56,6 @@
       url = "github:stasjok/yaml-language-server?ref=custom-kube-schema-url";
       flake = false;
     };
-    vale-at-red-hat = {
-      url = "github:redhat-documentation/vale-at-red-hat";
-      flake = false;
-    };
   };
 
   outputs =
