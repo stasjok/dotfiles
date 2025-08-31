@@ -74,6 +74,7 @@ local settings = {
     on_save = true,
   },
   beancount = {
+    server = "null-ls",
     on_save = true,
   },
 }

@@ -5,6 +5,11 @@
 
     sources = {
       formatting = {
+        bean_format = {
+          enable = true;
+          # beancount v3 requires '-' to format stdin
+          settings.args = [ "-" ];
+        };
         fish_indent = {
           enable = true;
           # Already installed by home-manager
