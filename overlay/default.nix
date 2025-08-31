@@ -33,6 +33,9 @@ in
   # Node packages
   nodePackages = prev.nodePackages.extend (callPackage ../packages/node-packages { });
 
+  # Perl packages
+  perlPackages = prev.perlPackages.overrideScope (callPackage ../packages/perl-packages { });
+
   # Tree-sitter grammars
   tree-sitter = prev.tree-sitter.override {
     extraGrammars = {
@@ -65,6 +68,9 @@ in
 
   # https://github.com/fengkx/beancount-lsp
   beancount-lsp-server = callPackage ../packages/beancount-lsp-server { };
+
+  # A tool to convert HomeBank files to Ledger format
+  homebank2ledger = final.perlPackages.AppHomeBank2Ledger;
 
   # Allow changing kubernetes schema URL via settings
   yaml-language-server = prev.yaml-language-server.overrideAttrs {
