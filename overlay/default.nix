@@ -63,6 +63,9 @@ in
     };
   });
 
+  # https://github.com/fengkx/beancount-lsp
+  beancount-lsp-server = callPackage ../packages/beancount-lsp-server { };
+
   # Allow changing kubernetes schema URL via settings
   yaml-language-server = prev.yaml-language-server.overrideAttrs {
     src = inputs.yaml-language-server;
