@@ -136,7 +136,6 @@ in
         python3Packages.mdformat
         # Spelling
         ltex-ls
-        vale
         # XML
         lemminx
         # Terraform
@@ -301,23 +300,5 @@ in
       p: with p; [
         jsregexp
       ];
-  };
-
-  home.file = {
-    # Vale configuration
-    ".vale.ini".text = ''
-      StylesPath = .vale
-      MinAlertLevel = suggestion
-
-      [*]
-      BasedOnStyles = RedHat
-    '';
-
-    # Vale styles
-    ".vale/RedHat".source =
-      let
-        src = inputs.vale-at-red-hat;
-      in
-      "${src}/.vale/styles/RedHat";
   };
 }
