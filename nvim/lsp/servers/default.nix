@@ -22,7 +22,7 @@
         root_markers = [ ".git" ];
         settings = {
           beanLsp = {
-            mainBeanFile = "main.beancount";
+            mainBeanFile = "ledger.beancount";
           };
         };
         # This server provides wrong capabilities in InitializeResult
