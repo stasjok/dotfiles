@@ -114,7 +114,6 @@ in
         shfmt
         # Lua
         lua-language-server
-        stylua
         # Nix
         nil
         nixd
@@ -132,16 +131,12 @@ in
         taplo
         # Markdown
         marksman
-        markdownlint-cli
-        python3Packages.mdformat
         # Spelling
         ltex-ls
         # XML
         lemminx
         # Terraform
         terraform-ls
-        # Packer
-        packer
         # Go
         gopls
         # Rust
@@ -176,7 +171,6 @@ in
       luasnip
       # LSP
       nvim-lspconfig
-      none-ls-nvim
       # Telescope
       telescope-nvim
       telescope-fzf-native-nvim
