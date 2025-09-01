@@ -8,6 +8,9 @@
     # TypeScript
     vtsls.enable = true;
 
+    # Perl
+    perlnavigator.enable = true;
+
     # beancount-lsp-server
     beancount-lsp-server = {
       enable = true;
