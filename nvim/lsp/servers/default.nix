@@ -8,6 +8,9 @@
     # TypeScript
     vtsls.enable = true;
 
+    # Typos
+    typos_lsp.enable = true;
+
     # Perl
     perlnavigator.enable = true;
 
