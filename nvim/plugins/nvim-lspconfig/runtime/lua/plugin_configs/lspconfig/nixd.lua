@@ -57,6 +57,14 @@ M.on_new_config = function(config, root_dir)
     -- Add NixVim-scoped options in place of nixos options
     settings.options.nixos.expr = settings.options["home-manager"].expr
       .. ".programs.nixvim.type.getSubOptions []"
+  elseif dirname == "accounting" then
+    -- My 'accounting' repo
+    settings.options["nixos"].expr = string.format(
+      [[with builtins.getFlake "git+file:%s"; (inputs.flake-parts.lib.evalFlakeModule {inherit inputs;} {systems = ["x86_64-linux"]; imports = builtins.catAttrs "flakeModule" (builtins.attrValues inputs);}).options]],
+      root_dir
+    )
+    settings.options["home-manager"].expr = settings.options["nixos"].expr
+      .. ".perSystem.type.getSubOptions []"
   elseif
     dirname == "nixpkgs"
     or vim.endswith(dirname, "-source") and uv.fs_stat(fs.joinpath(root_dir, "pkgs/top-level"))
