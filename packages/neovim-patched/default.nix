@@ -1,5 +1,6 @@
 {
   stdenv,
+  fetchpatch,
   neovim-unwrapped,
 }:
 
@@ -25,6 +26,16 @@ stdenv.mkDerivation {
       rm -r $runtime/pack/dist/opt/$p
     done
   '';
+
+  patches = [
+    # fix(lsp): close floating preview window correctly
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/44b8255fa28406d372dc3a7ee4a6afce2514adeb.diff";
+      stripLen = 1;
+      extraPrefix = "share/nvim/";
+      hash = "sha256-fYl7nq7dqlPSBpklFBgOdYr0S/dsQyS4pQ3TwrIlFig=";
+    })
+  ];
 
   nativeBuildInputs = [ neovim-unwrapped ];
 
