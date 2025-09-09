@@ -11,6 +11,9 @@
     # Typos
     typos_lsp.enable = true;
 
+    # Helm language server
+    helm_ls.enable = true;
+
     # Perl
     perlnavigator.enable = true;
 

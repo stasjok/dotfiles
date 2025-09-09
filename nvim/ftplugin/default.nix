@@ -1,6 +1,7 @@
 { lib, ... }:
 {
   imports = [
+    ./helm.nix
     ./mediawiki.nix
   ];
 
@@ -10,6 +11,7 @@
         ./beancount.vim
         ./jinja.vim
         ./salt.vim
+        ./helm.vim
         ./terraform-vars.vim
       ]
       [
