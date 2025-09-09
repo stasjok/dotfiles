@@ -64,6 +64,7 @@
       # Kubernetes
       kubectl
       kubernetes-helm
+      talosctl
       # Languages
       pythonWithPackages
       opentofu
