@@ -252,6 +252,9 @@ for _, rule in ipairs(npairs.config.rules) do
     -- Disable '' in nix
     table.insert(rule.not_filetypes, "nix")
   end
+  if rule.start_pair == '"' and rule.not_filetypes then
+    table.insert(rule.not_filetypes, "beancount")
+  end
 end
 
 -- Add pairs
