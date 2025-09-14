@@ -28,7 +28,10 @@
           "--stdio"
         ];
         filetypes = [ "beancount" ];
-        root_markers = [ ".git" ];
+        root_markers = [
+          "ledger.beancount"
+          ".git"
+        ];
         settings = {
           beanLsp = {
             mainBeanFile = "ledger.beancount";
