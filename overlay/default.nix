@@ -77,6 +77,11 @@ in
     src = inputs.yaml-language-server;
   };
 
+  # Disable history merging
+  fzf = prev.fzf.overrideAttrs {
+    patches = ./patches/fzf/0001-disable-fish-history-merge.patch;
+  };
+
   # Freeze packer to the letest version with Mozilla Public License 2.0
   packer = callPackage ../packages/packer { };
 }

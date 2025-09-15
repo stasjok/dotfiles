@@ -1,0 +1,22 @@
+From 1c4c257e61fe1e3aebb0babffbc5ccf1f2d971da Mon Sep 17 00:00:00 2001
+From: Stanislav Asunkin <1353637+stasjok@users.noreply.github.com>
+Date: Mon, 15 Sep 2025 10:04:39 +0300
+Subject: disable fish history merge
+
+
+diff --git a/shell/key-bindings.fish b/shell/key-bindings.fish
+index c8ecdd9e..b58eb3cc 100644
+--- a/shell/key-bindings.fish
++++ b/shell/key-bindings.fish
+@@ -177,7 +177,7 @@ function fzf_key_bindings
+     end
+ 
+     # Merge history from other sessions before searching
+-    test -z "$fish_private_mode"; and builtin history merge
++    # test -z "$fish_private_mode"; and builtin history merge
+ 
+     if set -l result (eval $FZF_DEFAULT_COMMAND \| (__fzfcmd) --query=$fzf_query | string split0)
+       if test "$total_lines" -eq 1
+-- 
+2.50.1
+
