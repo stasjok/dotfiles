@@ -89,7 +89,10 @@ local function is_proc_uses_esc(pid)
   if procs_which_uses_esc[api.nvim_get_proc(pid).name] then
     return true
   end
-  for _, child_pid in ipairs(api.nvim_get_proc_children(pid)) do
+  -- TODO: Use 'vim.api.nvim_get_proc_children' when it's fixed
+  -- See: https://github.com/neovim/neovim/issues/28741
+  -- https://github.com/neovim/neovim/pull/32839
+  for _, child_pid in ipairs(vim._os_proc_children(pid)) do
     if is_proc_uses_esc(child_pid) then
       return true
     end
