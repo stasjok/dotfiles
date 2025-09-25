@@ -69,6 +69,7 @@
       pythonWithPackages
       opentofu
       terraformAlias
+      pulumi
       nodejs
       pnpm
       typescript
