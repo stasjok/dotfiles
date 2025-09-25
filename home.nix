@@ -70,6 +70,8 @@
       opentofu
       terraformAlias
       pulumi
+      pulumiPackages.pulumi-nodejs
+      pulumiPackages.pulumi-python
       nodejs
       pnpm
       typescript
