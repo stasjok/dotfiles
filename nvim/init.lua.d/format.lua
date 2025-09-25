@@ -48,6 +48,12 @@ local settings = {
   sh = {
     on_save = true,
   },
+  typescript = {
+    on_save = true,
+  },
+  javascript = {
+    on_save = true,
+  },
   toml = {
     on_save = true,
   },
