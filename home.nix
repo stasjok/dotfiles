@@ -90,6 +90,9 @@
   home.sessionVariables = {
     # Disable HashiCorp checkpoint service (terraform, packer etc)
     CHECKPOINT_DISABLE = 1;
+
+    # Skip Pulumi version update check
+    PULUMI_SKIP_UPDATE_CHECK = "true";
   };
 
   # ssh-agent
