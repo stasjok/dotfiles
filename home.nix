@@ -69,9 +69,12 @@
       pythonWithPackages
       opentofu
       terraformAlias
-      pulumi
-      pulumiPackages.pulumi-nodejs
-      pulumiPackages.pulumi-python
+      (pulumi.withPackages (
+        ps: with ps; [
+          pulumi-nodejs
+          pulumi-python
+        ]
+      ))
       nodejs
       pnpm
       typescript
