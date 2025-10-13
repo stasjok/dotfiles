@@ -25,7 +25,7 @@
               name:
               funcWithDesc "Run ${name} command over SSH" ''
                 test -z $salt_hostname; and read -U -P "Enter Salt hostname: " salt_hostname
-                ssh -t root@$salt_hostname ${name} --force-color (string escape -- $argv)
+                ssh -t root@$salt_hostname ${name} --force-color (bash -c 'printf "%q " "$@"' printf $argv)
               ''
             );
       in
