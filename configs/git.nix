@@ -37,6 +37,9 @@
         colorMoved = "default";
         colorMovedWS = "allow-indentation-change";
       };
+
+      # Avoid requiring ssh keys
+      url."https://github.com/".insteadOf = "git@github.com:";
     };
 
     # Delta
