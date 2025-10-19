@@ -24,6 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
         GIT_CONFIG_VALUE_0 = "git@github.com:";
       };
 
+  patches = [
+    ./0001-add-ability-to-customize-indexing-debouncing-via-ini.patch
+  ];
+
   nativeBuildInputs = [
     nodejs
     pnpm.configHook

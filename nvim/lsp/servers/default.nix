@@ -27,6 +27,7 @@
           "beancount-lsp-server"
           "--stdio"
         ];
+        init_options.debounceTime = 1200;
         filetypes = [ "beancount" ];
         root_markers = [
           "ledger.beancount"
