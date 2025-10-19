@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./0001-add-ability-to-customize-indexing-debouncing-via-ini.patch
+    ./0001-disable-filterText-generation.patch
   ];
 
   nativeBuildInputs = [
