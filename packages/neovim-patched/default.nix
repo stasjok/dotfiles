@@ -35,6 +35,14 @@ stdenv.mkDerivation {
       extraPrefix = "share/nvim/";
       hash = "sha256-fYl7nq7dqlPSBpklFBgOdYr0S/dsQyS4pQ3TwrIlFig=";
     })
+    # fix(treesitter): inconsistent highlight of multiline combined injection
+    # fixes errors when deleting something at the end of the document
+    (fetchpatch {
+      url = "https://github.com/neovim/neovim/commit/4b957a4d18d5ffbd969ce82f5c6a0178c2e8e422.diff";
+      stripLen = 1;
+      extraPrefix = "share/nvim/";
+      hash = "sha256-Q6BOEKYIlk+CAG/mm1YWHur4Myeg4CdYa6xRiHP5ZpM=";
+    })
   ];
 
   nativeBuildInputs = [ neovim-unwrapped ];
