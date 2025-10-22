@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./0001-disable-filterText-generation.patch
+    ./0001-perf-do-not-index-included-documents.patch
     ./0001-fix-add-missing-prepare-rename-for-links.patch
     ./0001-fix-support-renaming-and-finding-references-for-narr.patch
   ];

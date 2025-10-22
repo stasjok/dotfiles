@@ -1,0 +1,50 @@
+From 252063120345424d574d6641498d6a7c75f88769 Mon Sep 17 00:00:00 2001
+From: Stanislav Asunkin <1353637+stasjok@users.noreply.github.com>
+Date: Wed, 22 Oct 2025 15:10:16 +0300
+Subject: perf: do not index included documents
+
+This language server is already indexing all beancount files after
+startup. No need to index included documents since they should already
+be indexed.
+
+diff --git a/packages/lsp-server/src/common/features/symbol-index.ts b/packages/lsp-server/src/common/features/symbol-index.ts
+index c69c256..4d68eaf 100644
+--- a/packages/lsp-server/src/common/features/symbol-index.ts
++++ b/packages/lsp-server/src/common/features/symbol-index.ts
+@@ -254,33 +254,6 @@ export class SymbolIndex {
+ 			this._symbolInfoStorage.insertAsync(links),
+ 		]);
+ 
+-		await yieldToMain();
+-		const tree = await this._trees.getParseTree(document);
+-		if (tree) {
+-			const captures = await TreeQuery.captures('(include (string) @path)', tree.rootNode);
+-			const includePatterns = captures.map((c: { node: { text: string } }) => {
+-				const text = c.node.text;
+-				const stripedQuotationMark = text.replace(/^"/, '').replace(/"$/, '');
+-				const u = UriUtils.joinPath(UriUtils.dirname(URI.parse(document.uri)), stripedQuotationMark);
+-				return u.path;
+-			});
+-			let hasNew = false;
+-			const beanFiles = this._documents.beanFiles;
+-			this.logger.debug(`[index] Found ${beanFiles.length} bean files`);
+-			includePatterns.forEach((pattern: string) => {
+-				const list = beanFiles;
+-				const matched = mm.match(list, pattern, { contains: true });
+-				matched.map((p: string) => p).forEach((uri: string) => {
+-					hasNew = true;
+-					this.addAsyncFile(uri);
+-				});
+-			});
+-			if (hasNew) {
+-				await yieldToMain();
+-				this.unleashFiles([]);
+-			}
+-		}
+-
+ 		// Add currency definitions
+ 		const currencyDefinitions = await getCurrencyDefinitions(document, this._trees);
+ 		if (currencyDefinitions.length > 0) {
+-- 
+2.50.1
+
