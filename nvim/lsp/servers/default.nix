@@ -1,4 +1,4 @@
-{ pkgs, helpers, ... }:
+{ pkgs, ... }:
 {
   lsp.servers = {
     # Python
@@ -27,7 +27,6 @@
           "beancount-lsp-server"
           "--stdio"
         ];
-        init_options.debounceTime = 1200;
         filetypes = [ "beancount" ];
         root_markers = [
           "ledger.beancount"
@@ -38,14 +37,6 @@
             mainBeanFile = "ledger.beancount";
           };
         };
-        # This server provides wrong capabilities in InitializeResult
-        # It sends its capabilities with client/registerCapability, but Nvim doesn't support
-        # dynamic registration for most capabilities
-        on_init = helpers.mkRaw ''
-          function(client)
-            client.server_capabilities.completionProvider.triggerCharacters = { "2", "#", '"', "^" }
-          end
-        '';
       };
     };
   };
