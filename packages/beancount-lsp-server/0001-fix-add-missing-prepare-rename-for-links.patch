@@ -1,0 +1,30 @@
+From e74356e4b2f5b8f9cd08c672687d3f4b8392ebdc Mon Sep 17 00:00:00 2001
+From: Stanislav Asunkin <1353637+stasjok@users.noreply.github.com>
+Date: Tue, 21 Oct 2025 20:18:08 +0300
+Subject: fix: add missing prepare rename for links
+
+
+diff --git a/packages/lsp-server/src/common/features/rename.ts b/packages/lsp-server/src/common/features/rename.ts
+index abef1d3..acd2a28 100644
+--- a/packages/lsp-server/src/common/features/rename.ts
++++ b/packages/lsp-server/src/common/features/rename.ts
+@@ -88,6 +88,16 @@ export class RenameFeature {
+ 			};
+ 		}
+ 
++		// Check for link at position
++		const linkAtPosition = await positionUtils.getLinkAtPosition(this.trees, document, params.position);
++		if (linkAtPosition) {
++			logger.debug(`Found renamable link at position: ${linkAtPosition}`);
++			return {
++				range,
++				placeholder: textAtRange, // Use exact text from document
++			};
++		}
++
+ 		// Check for payee at position
+ 		const payeeAtPosition = await positionUtils.getPayeeAtPosition(this.trees, document, params.position);
+ 		if (payeeAtPosition) {
+-- 
+2.50.1
+
