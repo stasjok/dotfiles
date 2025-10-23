@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-perf-improve-symbol-extractors-performance.patch
     ./0002-perf-enable-cache-for-query-matches.patch
     ./0003-perf-do-not-index-included-documents.patch
+    ./0001-feat-rename-documents-along-with-accounts.patch
   ];
 
   nativeBuildInputs = [

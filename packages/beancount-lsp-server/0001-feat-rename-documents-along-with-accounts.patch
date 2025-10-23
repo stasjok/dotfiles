@@ -1,0 +1,166 @@
+From 2d6f95d80556f6ff551628065f1df31534810e5c Mon Sep 17 00:00:00 2001
+From: Stanislav Asunkin <1353637+stasjok@users.noreply.github.com>
+Date: Tue, 21 Oct 2025 18:13:20 +0300
+Subject: feat: rename documents along with accounts
+
+
+diff --git a/packages/lsp-client/src/common/client.ts b/packages/lsp-client/src/common/client.ts
+index 0af8b15..41ccd6b 100644
+--- a/packages/lsp-client/src/common/client.ts
++++ b/packages/lsp-client/src/common/client.ts
+@@ -232,6 +232,7 @@ export function setupCustomMessageHandlers(ctx: ExtensionContext<'browser' | 'no
+ 		params.capabilities['customMessage'] = {
+ 			[CustomMessages.ListBeanFile]: true,
+ 			[CustomMessages.FileRead]: true,
++			[CustomMessages.FindFiles]: true,
+ 		};
+ 		return originalInitialize(connection, params);
+ 	};
+@@ -245,6 +246,11 @@ export function setupCustomMessageHandlers(ctx: ExtensionContext<'browser' | 'no
+ 		return uriStrings;
+ 	});
+ 
++	ctx.client.onRequest(CustomMessages.FindFiles, async (pattern: string) => {
++		const files = await vscode.workspace.findFiles(pattern);
++		return files.map(f => f.toString());
++	});
++
+ 	ctx.client.onRequest(CustomMessages.FileRead, async (raw: string): Promise<number[]> => {
+ 		const uri = vscode.Uri.parse(raw);
+ 
+diff --git a/packages/lsp-server/src/common/document-store.ts b/packages/lsp-server/src/common/document-store.ts
+index 0e46137..8ef41d7 100644
+--- a/packages/lsp-server/src/common/document-store.ts
++++ b/packages/lsp-server/src/common/document-store.ts
+@@ -137,6 +137,20 @@ export class DocumentStore extends TextDocuments<TextDocument> {
+ 		return new ArrayBuffer(0);
+ 	}
+ 
++	async findFiles(pattern: string): Promise<string[]> {
++		// Check if client supports FindFiles capability
++		// @ts-expect-error customMessage is not part of the protocol
++		if (!this._initializeParams?.capabilities?.customMessage?.[CustomMessages.FindFiles]) {
++			return this.fallbackFindFiles(pattern);
++		}
++		return this._connection.sendRequest<string[]>(CustomMessages.FindFiles, pattern);
++	}
++
++	protected async fallbackFindFiles(_pattern: string): Promise<string[]> {
++		this.logger.warn('Client does not support FindFiles capability');
++		return [];
++	}
++
+ 	removeFile(uri: string): boolean {
+ 		return this._documentsCache.delete(uri);
+ 	}
+diff --git a/packages/lsp-server/src/common/features/rename.ts b/packages/lsp-server/src/common/features/rename.ts
+index abef1d3..0fc6288 100644
+--- a/packages/lsp-server/src/common/features/rename.ts
++++ b/packages/lsp-server/src/common/features/rename.ts
+@@ -6,6 +6,7 @@ import { DefinitionFeature } from './definitions';
+ import * as positionUtils from './position-utils';
+ import { ReferencesFeature } from './references';
+ import { SymbolIndex } from './symbol-index';
++import { URI, Utils as UriUtils } from 'vscode-uri';
+ 
+ // Create a logger for the rename module
+ const logger = new Logger('rename');
+@@ -194,17 +195,49 @@ export class RenameFeature {
+ 		});
+ 
+ 		// Convert the map to the LSP-required format
+-		const changes: { [uri: string]: lsp.TextEdit[] } = {};
++		let documentChanges: (lsp.TextDocumentEdit | lsp.CreateFile | lsp.RenameFile | lsp.DeleteFile)[] = []
+ 		editsMap.forEach((edits, uri) => {
+-			changes[uri] = edits;
++			documentChanges.push({
++				textDocument: { uri: uri, version: null },
++				edits: edits,
++			})
+ 		});
+ 
++		// If current position is account, rename also documents
++		const accountAtPosition = await positionUtils.getAccountAtPosition(this.trees, document, params.position);
++		if (accountAtPosition) {
++			// TODO: "documents" option is a list, can be specified multiple times
++			const documentsOption = this.symbolIndex.getOption("documents")
++			const mainBeanFile = await this.documents.getMainBeanFileUri()
++
++			if (mainBeanFile && documentsOption.source === mainBeanFile) {
++				let documentsDirectory = URI.file(documentsOption.asString())
++				// TODO: What about Windows?
++				if (!documentsOption.asString().startsWith("/")) {
++					// Relative paths are against mainBeanFile
++					documentsDirectory = UriUtils.joinPath(UriUtils.dirname(URI.parse(mainBeanFile)), documentsOption.asString())
++				}
++				const accountDocumentsDirectory = UriUtils.joinPath(documentsDirectory, ...accountAtPosition.split(":"))
++				logger.debug(`Searching documents for account ${accountAtPosition} in ${accountDocumentsDirectory}`);
++				const documents = await this.documents.findFiles(accountDocumentsDirectory.fsPath + "/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]?*")
++				documents.forEach(oldUri => {
++					const documentName = UriUtils.basename(URI.parse(oldUri))
++					const newUri = UriUtils.joinPath(documentsDirectory, ...params.newName.split(":"), documentName)
++					documentChanges.push({
++						kind: "rename",
++						oldUri: oldUri,
++						newUri: newUri.toString(),
++						options: { overwrite: false },
++					})
++				})
++			}
++		}
++
+ 		logger.debug(
+-			`Rename will update ${
+-				Object.keys(changes).length
++			`Rename will update ${documentChanges.length
+ 			} files and ${allLocations.length} occurrences (${references.length} references, ${definitions.length} definitions)`,
+ 		);
+ 
+-		return { changes };
++		return { documentChanges };
+ 	}
+ }
+diff --git a/packages/lsp-server/src/common/utils/beancount-options.ts b/packages/lsp-server/src/common/utils/beancount-options.ts
+index 0570a48..090d003 100644
+--- a/packages/lsp-server/src/common/utils/beancount-options.ts
++++ b/packages/lsp-server/src/common/utils/beancount-options.ts
+@@ -7,7 +7,7 @@ import { parseExpression } from './expression-parser';
+ // Create a logger for the options manager
+ const logger = new Logger('BeancountOptions');
+ 
+-export type SupportedOption = 'infer_tolerance_from_cost' | 'inferred_tolerance_multiplier';
++export type SupportedOption = 'infer_tolerance_from_cost' | 'inferred_tolerance_multiplier' | 'documents';
+ type OptionKeys = LiteralUnion<SupportedOption, string>;
+ 
+ /**
+diff --git a/packages/lsp-server/src/node/server.ts b/packages/lsp-server/src/node/server.ts
+index ee6c759..b6f6e29 100644
+--- a/packages/lsp-server/src/node/server.ts
++++ b/packages/lsp-server/src/node/server.ts
+@@ -25,6 +25,11 @@ class DocumentStoreInNode extends DocumentStore {
+ 		new Uint8Array(ab).set(buffer);
+ 		return ab;
+ 	}
++
++	protected override async fallbackFindFiles(pattern: string): Promise<string[]> {
++		const files = await glob(pattern, { absolute: true })
++		return files.map((p) => pathToFileURL(p).toString());
++	}
+ }
+ 
+ // Create a connection for the server, using Node's IPC as a transport.
+diff --git a/packages/shared/src/messages.ts b/packages/shared/src/messages.ts
+index b65cd62..bbc61ef 100644
+--- a/packages/shared/src/messages.ts
++++ b/packages/shared/src/messages.ts
+@@ -4,6 +4,7 @@ import { BQL_COLUMNS, BQL_FUNCTIONS } from './constraint/bean-query-doc';
+ export const CustomMessages = {
+ 	FileRead: 'beanLspCustom/fileRead' as const,
+ 	ListBeanFile: 'beanLsPCustom/listBeanFile' as const,
++	FindFiles: 'beanLsPCustom/findFiles' as const,
+ 	QueueInit: 'beanLspCustom/queueInit' as const,
+ 	GetAccounts: 'beanLspCustom/getAccounts' as const,
+ 	GetPayees: 'beanLspCustom/getPayees' as const,
+-- 
+2.50.1
+
