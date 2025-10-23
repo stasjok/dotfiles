@@ -25,11 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
       };
 
   patches = [
+    ./0001-feat-allow-to-exclude-files-from-ListBeanFiles.patch
     ./0001-disable-filterText-generation.patch
-    ./0001-perf-do-not-index-included-documents.patch
     ./0001-fix-add-missing-prepare-rename-for-links.patch
     ./0001-fix-support-renaming-and-finding-references-for-narr.patch
-    ./0001-feat-allow-to-exclude-files-from-ListBeanFiles.patch
+    ./0001-perf-improve-symbol-extractors-performance.patch
+    ./0002-perf-enable-cache-for-query-matches.patch
+    ./0003-perf-do-not-index-included-documents.patch
   ];
 
   nativeBuildInputs = [

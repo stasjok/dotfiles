@@ -1,6 +1,6 @@
-From 252063120345424d574d6641498d6a7c75f88769 Mon Sep 17 00:00:00 2001
+From 360be327f9a03d01100ef47a71aba119542906d1 Mon Sep 17 00:00:00 2001
 From: Stanislav Asunkin <1353637+stasjok@users.noreply.github.com>
-Date: Wed, 22 Oct 2025 15:10:16 +0300
+Date: Thu, 23 Oct 2025 20:34:44 +0300
 Subject: perf: do not index included documents
 
 This language server is already indexing all beancount files after
@@ -8,13 +8,27 @@ startup. No need to index included documents since they should already
 be indexed.
 
 diff --git a/packages/lsp-server/src/common/features/symbol-index.ts b/packages/lsp-server/src/common/features/symbol-index.ts
-index c69c256..4d68eaf 100644
+index 6c96f9c..62610d4 100644
 --- a/packages/lsp-server/src/common/features/symbol-index.ts
 +++ b/packages/lsp-server/src/common/features/symbol-index.ts
-@@ -254,33 +254,6 @@ export class SymbolIndex {
- 			this._symbolInfoStorage.insertAsync(links),
- 		]);
+@@ -1,4 +1,3 @@
+-import mm from 'micromatch';
+ import { CancellationTokenSource } from 'vscode-languageserver';
+ import { TextDocument } from 'vscode-languageserver-textdocument';
+ import { isInteresting, parallel, StopWatch } from '../common';
+@@ -13,7 +12,6 @@ import {
+ } from './symbol-extractors';
  
+ import { Logger } from '@bean-lsp/shared';
+-import { URI, Utils as UriUtils } from 'vscode-uri';
+ import { TreeQuery } from '../language';
+ import { BeancountOptionsManager, SupportedOption } from '../utils/beancount-options';
+ import { globalEventBus, GlobalEvents } from '../utils/event-bus';
+@@ -192,33 +190,6 @@ export class SymbolIndex {
+ 
+ 		this._symbolInfoStorage.removeSync({ _uri: document.uri });
+ 		await this._symbolInfoStorage.insertAsync(symbols)
+-
 -		await yieldToMain();
 -		const tree = await this._trees.getParseTree(document);
 -		if (tree) {
@@ -41,10 +55,9 @@ index c69c256..4d68eaf 100644
 -				this.unleashFiles([]);
 -			}
 -		}
--
- 		// Add currency definitions
- 		const currencyDefinitions = await getCurrencyDefinitions(document, this._trees);
- 		if (currencyDefinitions.length > 0) {
+ 	}
+ 
+ 	/**
 -- 
 2.50.1
 
