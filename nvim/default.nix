@@ -94,10 +94,6 @@ in
       # Reduce the number of runtime paths
       combinePlugins = {
         enable = true;
-        pathsToLink = [
-          # telescope-fzf-native-nvim
-          "/build"
-        ];
         # Make sure there are no standalone plugins except 'extraFiles'
         standalonePlugins = lib.mkForce [ (lib.getName cfg.build.extraFiles) ];
       };
@@ -171,9 +167,6 @@ in
       luasnip
       # LSP
       nvim-lspconfig
-      # Telescope
-      telescope-nvim
-      telescope-fzf-native-nvim
       # Editing
       surround-nvim
       nvim-autopairs
