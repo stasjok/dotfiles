@@ -1,0 +1,49 @@
+From 62af99efc97e2bacee85fa927a761ce2bd00e139 Mon Sep 17 00:00:00 2001
+From: Stanislav Asunkin <1353637+stasjok@users.noreply.github.com>
+Date: Thu, 23 Oct 2025 20:07:26 +0300
+Subject: feat: allow to exclude files from ListBeanFiles
+
+
+diff --git a/packages/lsp-server/src/common/document-store.ts b/packages/lsp-server/src/common/document-store.ts
+index 0e46137..d0e0fd4 100644
+--- a/packages/lsp-server/src/common/document-store.ts
++++ b/packages/lsp-server/src/common/document-store.ts
+@@ -81,7 +81,7 @@ export class DocumentStore extends TextDocuments<TextDocument> {
+ 				this._beanFiles = [];
+ 				return;
+ 			}
+-			this._beanFiles = await this.fallbackListBeanFiles(this._initializeParams.workspaceFolders[0]);
++			this._beanFiles = await this.fallbackListBeanFiles(this._initializeParams.workspaceFolders[0], this._initializeParams.initializationOptions?.exclude);
+ 			return;
+ 		}
+ 
+@@ -89,7 +89,7 @@ export class DocumentStore extends TextDocuments<TextDocument> {
+ 		this._beanFiles = files;
+ 	}
+ 
+-	protected async fallbackListBeanFiles(_workspaceFolder: WorkspaceFolder): Promise<string[]> {
++	protected async fallbackListBeanFiles(_workspaceFolder: WorkspaceFolder, _exclude?: string[]): Promise<string[]> {
+ 		this.logger.warn('Client does not support ListBeanFile capability');
+ 		return this.all().map(doc => doc.uri);
+ 	}
+diff --git a/packages/lsp-server/src/node/server.ts b/packages/lsp-server/src/node/server.ts
+index ee6c759..407b50e 100644
+--- a/packages/lsp-server/src/node/server.ts
++++ b/packages/lsp-server/src/node/server.ts
+@@ -9,11 +9,11 @@ import { beananagerFactory } from './beancount-manager';
+ import { factory } from './storage';
+ 
+ class DocumentStoreInNode extends DocumentStore {
+-	protected override async fallbackListBeanFiles(workspaceFolder: { uri: string }): Promise<string[]> {
++	protected override async fallbackListBeanFiles(workspaceFolder: { uri: string }, exclude?: string[]): Promise<string[]> {
+ 		const workspacePath = URI.parse(workspaceFolder.uri).fsPath;
+ 		const files = await glob('**/*.{bean,beancount}', {
+ 			cwd: workspacePath,
+-			ignore: ['.venv/**', '**/*.log', '**/*.tmp', '**/*.tmp.*', '**/*.tmp.*.*', '**/*.pyc'],
++			ignore: ['.venv/**', '**/*.log', '**/*.tmp', '**/*.tmp.*', '**/*.tmp.*.*', '**/*.pyc'].concat(exclude ?? []),
+ 			absolute: true,
+ 		});
+ 		return files.map((p) => pathToFileURL(p).toString());
+-- 
+2.50.1
+

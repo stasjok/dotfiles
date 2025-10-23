@@ -32,6 +32,10 @@
           "ledger.beancount"
           ".git"
         ];
+        init_options.exclude = [
+          "zenmoney/**"
+          "easyfinance/**"
+        ];
         settings = {
           beanLsp = {
             mainBeanFile = "ledger.beancount";

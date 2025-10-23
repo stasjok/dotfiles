@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-perf-do-not-index-included-documents.patch
     ./0001-fix-add-missing-prepare-rename-for-links.patch
     ./0001-fix-support-renaming-and-finding-references-for-narr.patch
+    ./0001-feat-allow-to-exclude-files-from-ListBeanFiles.patch
   ];
 
   nativeBuildInputs = [
