@@ -10,4 +10,7 @@ setlocal comments=:;
 
 setlocal iskeyword=@,48-57,_,192-255,:,-,.
 
+nnoremap <buffer> <LocalLeader>s <Cmd>Telescope beancount sections<CR>
+
 let b:undo_ftplugin = "setlocal shiftwidth< commentstring< comments< iskeyword<"
+let b:undo_ftplugin .= " | silent! nunmap <buffer> <LocalLeader>s"

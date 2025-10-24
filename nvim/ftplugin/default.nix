@@ -1,6 +1,7 @@
 { lib, ... }:
 {
   imports = [
+    ./beancount
     ./helm.nix
     ./mediawiki.nix
   ];
