@@ -5,16 +5,17 @@
     extensions.fzf-native.enable = true;
 
     settings = {
-      defaults.mappings.i = {
-        "<Esc>" = helpers.mkRaw "require('telescope.actions').close";
-        "<C-C>" = false;
-      };
-      pickers.buffers.mappings = {
+      defaults.mappings = {
         i = {
-          "<C-E>" = "delete_buffer";
+          "<Esc>" = helpers.mkRaw "require('telescope.actions').close";
+          "<C-C>" = false;
         };
-        n = {
-          D = "delete_buffer";
+      };
+      pickers = {
+        buffers.mappings = {
+          n = {
+            D = "delete_buffer";
+          };
         };
       };
     };
