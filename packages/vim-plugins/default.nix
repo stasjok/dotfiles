@@ -44,6 +44,11 @@ in
     };
   };
 
+  # Fixes errors in telescope keymaps picker
+  telescope-nvim = prev.telescope-nvim.overrideAttrs {
+    patches = ./telescope-keymaps-picker.patch;
+  };
+
   # Remove tests because there are invalid lua files there
   nvim-treesitter = prev.nvim-treesitter.overrideAttrs (prev: {
     postPatch = prev.postPatch + "rm -r tests";

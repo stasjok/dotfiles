@@ -1,0 +1,13 @@
+diff --git a/lua/telescope/actions/utils.lua b/lua/telescope/actions/utils.lua
+index 81bd870..b4165c7 100644
+--- a/lua/telescope/actions/utils.lua
++++ b/lua/telescope/actions/utils.lua
+@@ -113,7 +113,7 @@ function utils._get_anon_function_name(info)
+   -- if fn defined in string (ie loadstring) source is string
+   -- if fn defined in file, source is file name prefixed with a `@´
+   local path = Path:new((info.source:gsub("@", "")))
+-  if not path:exists() then
++  if not path:exists() or info.linedefined == 0 then
+     return "<anonymous>"
+   end
+   for i, line in ipairs(path:readlines()) do
