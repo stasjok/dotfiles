@@ -271,6 +271,8 @@ if cmp then
         ["*"] = false,
         lua = default_handler,
         python = default_handler,
+        typescript = default_handler,
+        javascript = default_handler,
       },
     })
   )
