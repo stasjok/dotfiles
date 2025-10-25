@@ -4,11 +4,24 @@ local conf = require("telescope.config").values
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 
----@param node TSNode
----@return TSNode[]
-local function get_subsections(node)
-  local nodes = vim.iter(node:field("subsection")):map(get_subsections):flatten(1):totable()
-  return vim.list_extend({ node }, nodes)
+---@param node TSNode Section node
+---@param parents TSNode[] Section parents
+---@return TSNode[][]
+local function get_subsections(node, parents)
+  local parents_with_node = vim.list_extend({}, parents)
+  table.insert(parents_with_node, node)
+  local subsections = vim
+    .iter(node:field("subsection"))
+    :map(function(node_)
+      return get_subsections(node_, vim.list_extend({}, parents))
+    end)
+    :flatten(1)
+    :map(function(node_)
+      return vim.list_extend(vim.list_extend({}, parents_with_node), node_)
+    end)
+    :totable()
+  table.insert(subsections, 1, parents_with_node)
+  return subsections
 end
 
 local sections = function(opts)
@@ -27,25 +40,34 @@ local sections = function(opts)
     :filter(function(node)
       return node:type() == "section"
     end)
-    :map(get_subsections)
+    :map(function(node)
+      return get_subsections(node, {})
+    end)
     :totable()
   sections = vim.iter(sections):flatten(1):totable()
 
-  ---@param entry TSNode
+  ---@param entry TSNode[]
   ---@return table
   local function entry_maker(entry)
-    local headline = entry:field("headline")[1]
-    if not headline then
-      return { valid = false }
-    end
-    local text = vim.treesitter.get_node_text(headline, bufnr)
+    local headings = vim
+      .iter(entry)
+      :map(function(node)
+        return node:field("headline")[1]
+      end)
+      :map(function(node)
+        return node:field("item")[1]
+      end)
+      :map(function(node)
+        return vim.treesitter.get_node_text(node, bufnr)
+      end)
+      :totable()
     return {
-      -- value = entry,
-      display = text,
-      ordinal = text:gsub("^[%s*]*", "", 1),
+      value = entry,
+      display = table.concat(headings, " -> "),
+      ordinal = table.concat(headings, ""),
       path = vim.api.nvim_buf_get_name(bufnr),
-      lnum = headline:start() + 1,
-      lend = entry:end_(),
+      lnum = entry[#entry]:start() + 1,
+      lend = entry[#entry]:end_(),
     }
   end
 
