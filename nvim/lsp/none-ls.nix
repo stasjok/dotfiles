@@ -28,10 +28,6 @@
         };
         stylua.enable = true;
       };
-
-      diagnostics = {
-        markdownlint.enable = true;
-      };
     };
   };
 }
