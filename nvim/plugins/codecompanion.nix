@@ -1,0 +1,3 @@
+{
+  plugins.codecompanion.enable = true;
+}
