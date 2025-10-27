@@ -8,7 +8,7 @@ setlocal shiftwidth=2
 setlocal commentstring=;\ %s
 setlocal comments=:;
 
-setlocal iskeyword=@,48-57,_,192-255,:,-,.
+setlocal iskeyword=@,48-57,_,192-255,:,-,.,#,^ " '^' should be last
 
 nnoremap <buffer> <LocalLeader>s <Cmd>Telescope beancount sections<CR>
 
