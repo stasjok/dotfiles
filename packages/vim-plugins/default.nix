@@ -36,6 +36,20 @@ in
     src = inputs.smart-splits-nvim;
   };
 
+  codecompanion-nvim = prev.codecompanion-nvim.overrideAttrs (prevAttrs: {
+    version = "2025-10-23";
+    src = prevAttrs.src.override {
+      rev = "v17.28.0";
+      sha256 = "sha256-UB6VT40bmD2iKXenNs8skGfYLlVFlMFOb2IiufTvmZY=";
+    };
+    nvimSkipModules = prevAttrs.nvimSkipModules ++ [
+      "codecompanion.providers.actions.fzf_lua"
+      "codecompanion.providers.actions.snacks"
+      "codecompanion.providers.completion.blink.setup"
+      "codecompanion.providers.completion.cmp.setup"
+    ];
+  });
+
   # Fix :LspPyrightSetPythonPath command
   nvim-lspconfig = prev.nvim-lspconfig.overrideAttrs {
     patches = fetchpatch {
