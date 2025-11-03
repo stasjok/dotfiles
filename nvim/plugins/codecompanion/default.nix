@@ -13,6 +13,14 @@
                 api_key = "BOTHUB_API_KEY";
                 url = "https://bothub.chat/api/v2/openai";
               };
+              schema.model = {
+                default = "qwen3-coder";
+                choices = helpers.mkRaw ''
+                  (function()
+                    ${builtins.readFile ./get_models.lua}
+                  end)()
+                '';
+              };
             }
           })
         end

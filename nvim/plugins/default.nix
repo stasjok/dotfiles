@@ -1,6 +1,6 @@
 {
   imports = [
-    ./codecompanion.nix
+    ./codecompanion
     ./lsp-signature.nix
     ./mini.nix
     ./smart_splits.nix
