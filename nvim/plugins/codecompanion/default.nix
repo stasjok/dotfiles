@@ -11,7 +11,9 @@
               formatted_name = "BotHub";
               env = {
                 api_key = "BOTHUB_API_KEY";
-                url = "https://bothub.chat/api/v2/openai";
+                url = "https://bothub.chat/api";
+                chat_url = "/v2/openai/v1/chat/completions";
+                models_endpoint = "/v2/model/list?children=1";
               };
               schema.model = {
                 default = "qwen3-coder";

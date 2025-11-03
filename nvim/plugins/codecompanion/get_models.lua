@@ -44,9 +44,6 @@ return function(self)
   local headers = {
     ["content-type"] = "application/json",
   }
-  if adapter.env_replaced.api_key then
-    headers["Authorization"] = "Bearer " .. adapter.env_replaced.api_key
-  end
 
   local ok, response, json
 
@@ -60,7 +57,7 @@ return function(self)
   end)
   if not ok then
     log:error(
-      "Could not get the OpenAI compatible models from " .. url .. models_endpoint .. ".\nError: %s",
+      "Could not get the BotHub models from " .. url .. models_endpoint .. ".\nError: %s",
       response
     )
     return {}
@@ -72,16 +69,15 @@ return function(self)
     return {}
   end
 
-  for _, model in ipairs(json.data) do
-    local params = as_set(model.supported_parameters or {})
-    local inputs = as_set((model.architecture or {}).input_modalities or {})
-    if params.tools then
+  for _, model in ipairs(json) do
+    local params = as_set(model.features or {})
+    if params.TEXT_TO_TEXT then
       _cached_models[model.id] = {
         opts = {
           stream = true,
           has_tools = true,
-          has_vision = inputs.image,
-          can_reason = params.reasoning,
+          has_vision = params.IMAGE_TO_TEXT,
+          can_reason = params.REASONING or params.EFFORT,
         },
       }
     end
