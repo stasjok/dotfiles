@@ -1,4 +1,9 @@
-{ pkgs, helpers, ... }:
+{
+  pkgs,
+  helpers,
+  hmConfig,
+  ...
+}:
 {
   plugins.codecompanion = {
     enable = true;
@@ -22,7 +27,22 @@
                   name = "bothub";
                   formatted_name = "BotHub";
                   env = {
-                    api_key = "BOTHUB_API_KEY";
+                    api_key = helpers.mkRaw ''
+                      (function()
+                        local function from_file()
+                          local lines = vim.F.npcall(vim.fn.readfile, "${hmConfig.xdg.configHome}/bothub/key", "", 1)
+                          return lines and lines[1]
+                        end
+                        local api_key
+                        return function()
+                          api_key = vim.env.BOTHUB_API_KEY
+                            or api_key
+                            or from_file()
+                            or vim.fn.inputsecret("Enter BotHub API key: ")
+                          return api_key
+                        end
+                      end)()
+                    '';
                     url = "https://bothub.chat/api";
                     chat_url = "/v2/openai/v1/chat/completions";
                     models_endpoint = "/v2/model/list?children=1";
