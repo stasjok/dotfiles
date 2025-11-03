@@ -64,6 +64,32 @@
       };
     };
   };
+
+  # Mappings
+  keymaps = [
+    {
+      mode = [
+        "n"
+        "v"
+      ];
+      key = "<Leader>o";
+      action = "<Cmd>CodeCompanionActions<CR>";
+    }
+    {
+      mode = [
+        "n"
+        "v"
+      ];
+      key = "<C-A>";
+      action = "<Cmd>CodeCompanionChat Toggle<CR>";
+    }
+    {
+      mode = "v";
+      key = "ga";
+      action = "<Cmd>CodeCompanionChat Add<CR>";
+    }
+  ];
+
   extraFiles = {
     # OpenRouter adapter with reasoning
     # https://gist.github.com/ernie/e8f3a4bb2a01d3f449ec000605631eb8
