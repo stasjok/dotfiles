@@ -2,31 +2,46 @@
 {
   plugins.codecompanion = {
     enable = true;
-    settings.adapters.http = {
-      bothub = helpers.mkRaw ''
-        function()
-          return require("codecompanion.adapters").extend("openrouter",${
-            helpers.toLuaObject {
-              name = "bothub";
-              formatted_name = "BotHub";
-              env = {
-                api_key = "BOTHUB_API_KEY";
-                url = "https://bothub.chat/api";
-                chat_url = "/v2/openai/v1/chat/completions";
-                models_endpoint = "/v2/model/list?children=1";
-              };
-              schema.model = {
-                default = "qwen3-coder";
-                choices = helpers.mkRaw ''
-                  (function()
-                    ${builtins.readFile ./get_models.lua}
-                  end)()
-                '';
-              };
-            }
-          })
-        end
-      '';
+    settings = {
+      strategies = {
+        chat.adapter = "bothub";
+        inline.adapter = "bothub";
+        cmd.adapter = "bothub";
+      };
+      adapters = {
+        http = {
+          opts = {
+            show_defaults = false;
+            # Default 'opts' are lost when 'show_defaults = false'
+            show_model_choices = true;
+          };
+          bothub = helpers.mkRaw ''
+            function()
+              return require("codecompanion.adapters").extend("openrouter",${
+                helpers.toLuaObject {
+                  name = "bothub";
+                  formatted_name = "BotHub";
+                  env = {
+                    api_key = "BOTHUB_API_KEY";
+                    url = "https://bothub.chat/api";
+                    chat_url = "/v2/openai/v1/chat/completions";
+                    models_endpoint = "/v2/model/list?children=1";
+                  };
+                  schema.model = {
+                    default = "qwen3-coder";
+                    choices = helpers.mkRaw ''
+                      (function()
+                        ${builtins.readFile ./get_models.lua}
+                      end)()
+                    '';
+                  };
+                }
+              })
+            end
+          '';
+        };
+        acp.opts.show_defaults = false;
+      };
     };
   };
   extraFiles = {
