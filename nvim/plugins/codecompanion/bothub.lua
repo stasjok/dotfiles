@@ -1,7 +1,28 @@
+local openai = require("codecompanion.adapters.http.openai")
 local log = require("codecompanion.utils.log")
 local Curl = require("plenary.curl")
 local config = require("codecompanion.config")
 local utils = require("codecompanion.utils.adapters")
+
+---Remove any keys from the message that are not allowed by the API
+---@param message table The message to filter
+---@return table The filtered message
+local function filter_message(message)
+  local allowed = {
+    "content",
+    "role",
+    "reasoning_details",
+    "tool_calls",
+    "tool_call_id",
+  }
+
+  for key, _ in pairs(message) do
+    if not vim.tbl_contains(allowed, key) then
+      message[key] = nil
+    end
+  end
+  return message
+end
 
 local cached_models
 local cache_expires
@@ -179,6 +200,27 @@ return require("codecompanion.adapters.http").extend("openrouter", {
     url = "https://bothub.chat/api",
     chat_url = "/v2/openai/v1/chat/completions",
     models_endpoint = "/v2/model/list?children=1",
+  },
+  handlers = {
+    form_messages = function(self, messages)
+      local result = openai.handlers.form_messages(self, messages)
+
+      result.messages = vim
+        .iter(result.messages)
+        :map(function(m)
+          -- https://gist.github.com/ernie/e8f3a4bb2a01d3f449ec000605631eb8#file-openrouter-lua-L200-L208
+          -- Pull reasoning back out to a top-level message key
+          -- https://openrouter.ai/docs/use-cases/reasoning-tokens#example-preserving-reasoning-blocks-with-openrouter-and-claude
+          if m.reasoning and m.reasoning.details then
+            m.reasoning_details = m.reasoning.details
+          end
+          m = filter_message(m)
+          return m
+        end)
+        :totable()
+
+      return result
+    end,
   },
   schema = {
     model = {
