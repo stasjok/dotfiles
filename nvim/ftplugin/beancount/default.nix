@@ -1,3 +1,3 @@
 {
-  extraFiles."lua/telescope/_extensions/beancount.lua".source = ./telescope.lua;
+  extraFiles."lua/telescope/_extensions/beancount.lua".text = builtins.readFile ./telescope.lua;
 }
