@@ -9,7 +9,20 @@
     enable = true;
     settings = {
       strategies = {
-        chat.adapter = "bothub";
+        chat = {
+          adapter = "bothub";
+          keymaps.send.modes = {
+            i = [
+              "<C-S>"
+              "<C-J>"
+            ];
+            n = [
+              "<C-S>"
+              "<C-J>"
+              "<CR>"
+            ];
+          };
+        };
         inline.adapter = "bothub";
         cmd.adapter = "bothub";
       };
