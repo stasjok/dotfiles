@@ -26,6 +26,19 @@
         inline.adapter = "bothub";
         cmd.adapter = "bothub";
       };
+      display.chat = {
+        window = {
+          width = "auto";
+          opts = {
+            number = false;
+            relativenumber = false;
+          };
+        };
+        # Enable wrap in debug window
+        child_window.opts.wrap = true;
+        # but disable in diff window (not used in super diff window unfortunately)
+        diff_window.opts.wrap = false;
+      };
       adapters = {
         http = {
           opts = {
