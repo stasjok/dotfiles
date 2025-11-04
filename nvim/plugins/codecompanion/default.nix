@@ -1,9 +1,4 @@
-{
-  pkgs,
-  helpers,
-  hmConfig,
-  ...
-}:
+{ pkgs, ... }:
 {
   plugins.codecompanion = {
     enable = true;
