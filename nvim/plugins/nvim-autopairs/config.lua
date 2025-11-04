@@ -251,9 +251,10 @@ for _, rule in ipairs(npairs.config.rules) do
   if rule.start_pair == "'" and rule.not_filetypes then
     -- Disable '' in nix
     table.insert(rule.not_filetypes, "nix")
-  end
-  if rule.start_pair == '"' and rule.not_filetypes then
+  elseif rule.start_pair == '"' and rule.not_filetypes then
     table.insert(rule.not_filetypes, "beancount")
+  elseif rule.start_pair == "```" and rule.filetypes then
+    table.insert(rule.filetypes, "codecompanion")
   end
 end
 
