@@ -24,7 +24,7 @@ local function models()
 end
 
 ---@param self CodeCompanion.HTTPAdapter
-return function(self)
+local function get_models(self)
   if _cached_models and _cache_expires and _cache_expires > os.time() then
     return models()
   end
@@ -87,3 +87,41 @@ return function(self)
 
   return models()
 end
+
+---@type string
+local api_key
+
+-- Get BotHub API key from the file
+---@return string?
+local function from_file()
+  local path = vim.fs.joinpath(vim.fs.dirname(vim.fn.stdpath("config")), "bothub/key")
+  local lines = vim.F.npcall(vim.fn.readfile, path, "", 1) --[[@as string[]?]]
+  return lines and lines[1]
+end
+
+-- Get BotHub API key from various sources
+---@return string
+local function get_api_key()
+  api_key = vim.env.BOTHUB_API_KEY
+    or api_key
+    or from_file()
+    or vim.fn.inputsecret("Enter BotHub API key: ")
+  return api_key
+end
+
+return require("codecompanion.adapters.http").extend("openrouter", {
+  name = "bothub",
+  formatted_name = "BotHub",
+  env = {
+    api_key = get_api_key,
+    url = "https://bothub.chat/api",
+    chat_url = "/v2/openai/v1/chat/completions",
+    models_endpoint = "/v2/model/list?children=1",
+  },
+  schema = {
+    model = {
+      default = "qwen3-coder",
+      choices = get_models,
+    },
+  },
+})
