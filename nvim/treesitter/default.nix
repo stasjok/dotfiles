@@ -27,10 +27,10 @@ in
 
       incremental_selection = {
         enable = true;
-        # Disable <CR> mapping in |command-line-window|
+        # Disable <CR> mapping in |command-line-window| and in codecompanion.nvim
         disable = mkRaw ''
           function()
-            return vim.fn.win_gettype() == "command"
+            return vim.fn.win_gettype() == "command" or vim.bo.filetype == "codecompanion"
           end
         '';
         keymaps = {
