@@ -2,9 +2,10 @@ local log = require("codecompanion.utils.log")
 local Curl = require("plenary.curl")
 local config = require("codecompanion.config")
 local utils = require("codecompanion.utils.adapters")
-local _cache_expires
-local _cache_file = vim.fn.tempname()
-local _cached_models
+
+local cached_models
+local cache_expires
+local fetch_in_progress = false
 
 ---Return a list as a set
 ---@param tbl table
@@ -17,25 +18,38 @@ local function as_set(tbl)
   return set
 end
 
----Return the cached models
----@return any
-local function models()
-  return _cached_models
+---Refresh the cache expiry timestamp
+---@param seconds number|nil Number of seconds until the cache expires. Default: 1800
+---@return number
+local function set_cache_expiry(seconds)
+  seconds = seconds or 1800
+  cache_expires = os.time() + seconds
+  return cache_expires
 end
 
----@param self CodeCompanion.HTTPAdapter
-local function get_models(self)
-  if _cached_models and _cache_expires and _cache_expires > os.time() then
-    return models()
+---Return cached models if the cache is still valid.
+---@return table|nil
+local function get_cached_models()
+  if cached_models and cache_expires and cache_expires > os.time() then
+    log:trace("BotHub Adapter: Using cached models")
+    return cached_models
   end
 
-  _cached_models = {}
+  return nil
+end
 
-  local adapter = require("codecompanion.adapters").resolve(self)
-  if not adapter then
-    log:error("Could not resolve OpenRouter adapter in the `get_models` function")
-    return {}
+---Asynchronously fetch the list of available models
+---@param adapter CodeCompanion.HTTPAdapter
+---@return boolean
+local function fetch_async(adapter)
+  cached_models = get_cached_models()
+  if cached_models then
+    return true
   end
+  if fetch_in_progress then
+    return true
+  end
+  fetch_in_progress = true
 
   utils.get_env_vars(adapter)
   local url = adapter.env_replaced.url
@@ -45,47 +59,95 @@ local function get_models(self)
     ["content-type"] = "application/json",
   }
 
-  local ok, response, json
-
-  ok, response = pcall(function()
-    return Curl.get(url .. models_endpoint, {
-      sync = true,
+  -- Async request via plenary.curl with a callback
+  local ok, err = pcall(function()
+    Curl.get(url .. models_endpoint, {
       headers = headers,
       insecure = config.adapters.http.opts.allow_insecure,
       proxy = config.adapters.http.opts.proxy,
+      callback = vim.schedule_wrap(function(response)
+        fetch_in_progress = false
+
+        if not response or not response.body then
+          log:error(
+            "Could not get the BotHub models from " .. url .. models_endpoint .. ". Empty response"
+          )
+          return
+        end
+
+        local ok_json, json = pcall(vim.json.decode, response.body)
+        if not ok_json then
+          log:error("Could not parse the response from " .. url .. models_endpoint)
+          return
+        end
+
+        local models = {}
+        for _, model in ipairs(json) do
+          local params = as_set(model.features or {})
+          if params.TEXT_TO_TEXT then
+            models[model.id] = {
+              opts = {
+                stream = true,
+                has_tools = true,
+                has_vision = params.IMAGE_TO_TEXT,
+                can_reason = params.REASONING or params.EFFORT,
+              },
+            }
+          end
+        end
+
+        cached_models = models
+        set_cache_expiry(config.adapters.http.opts.cache_models_for)
+      end),
     })
   end)
+
   if not ok then
-    log:error(
-      "Could not get the BotHub models from " .. url .. models_endpoint .. ".\nError: %s",
-      response
-    )
+    fetch_in_progress = false
+    log:error("Could not start async request for BotHub models: %s", err)
+    return false
+  end
+
+  return true
+end
+
+---Fetch the list of available models synchronously.
+---@param adapter CodeCompanion.HTTPAdapter
+---@return table
+local function fetch(adapter)
+  fetch_async(adapter)
+
+  -- Block until models are cached or timeout (milliseconds)
+  local ok = vim.wait(3000, function()
+    return get_cached_models() ~= nil
+  end, 10)
+
+  if not ok then
+    log:error("BotHub Adapter: Timeout waiting for models")
     return {}
   end
 
-  ok, json = pcall(vim.json.decode, response.body)
-  if not ok then
-    log:error("Could not parse the response from " .. url .. models_endpoint)
+  return cached_models or {}
+end
+
+---@param self CodeCompanion.HTTPAdapter
+---@param opts? { async: boolean }
+---@return table
+local function get_models(self, opts)
+  opts = opts or { async = true }
+  local adapter = require("codecompanion.adapters.http").resolve(self)
+  if not adapter then
+    log:error("Could not resolve BotHub adapter in the `get_models` function")
     return {}
   end
 
-  for _, model in ipairs(json) do
-    local params = as_set(model.features or {})
-    if params.TEXT_TO_TEXT then
-      _cached_models[model.id] = {
-        opts = {
-          stream = true,
-          has_tools = true,
-          has_vision = params.IMAGE_TO_TEXT,
-          can_reason = params.REASONING or params.EFFORT,
-        },
-      }
-    end
+  if not opts.async then
+    return fetch(adapter)
   end
 
-  _cache_expires = utils.refresh_cache(_cache_file, config.adapters.http.opts.cache_models_for)
-
-  return models()
+  -- Non-blocking: start async fetching (if possible) and return whatever is cached
+  fetch_async(adapter)
+  return get_cached_models() or {}
 end
 
 ---@type string
