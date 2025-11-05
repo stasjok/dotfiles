@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "beancount-lsp-server";
-  version = "0.0.138";
+  version = "0.0.139";
 
   src =
     (fetchFromGitHub {
@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
       repo = "beancount-lsp";
       rev = "v${finalAttrs.version}";
       fetchSubmodules = true;
-      hash = "sha256-Iskf3Ck2NLusYn1c6xN5CW6+1YsCbKmiQJ+ATK4m7zw=";
+      hash = "sha256-eRrovxePp4cbJy8NhBFR3HMZQbnVpIbVopPruGdu6Dw=";
     }).overrideAttrs
       # fetchgit doesn't have ssh, need http url type
       {
@@ -27,11 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./0001-feat-allow-to-exclude-files-from-ListBeanFiles.patch
     ./0001-disable-filterText-generation.patch
-    ./0001-fix-add-missing-prepare-rename-for-links.patch
-    ./0001-fix-support-renaming-and-finding-references-for-narr.patch
-    ./0001-perf-improve-symbol-extractors-performance.patch
-    ./0002-perf-enable-cache-for-query-matches.patch
-    ./0003-perf-do-not-index-included-documents.patch
     ./0001-feat-rename-documents-along-with-accounts.patch
   ];
 

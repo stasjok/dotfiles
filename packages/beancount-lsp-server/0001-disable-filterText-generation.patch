@@ -1,4 +1,4 @@
-From f74a021b8e414535950647c960c27db12565ae1f Mon Sep 17 00:00:00 2001
+From dcab5c8677a9515bc675a91ae16fc6dd4a9d3b97 Mon Sep 17 00:00:00 2001
 From: Stanislav Asunkin <1353637+stasjok@users.noreply.github.com>
 Date: Sun, 19 Oct 2025 14:34:24 +0300
 Subject: disable filterText generation
@@ -6,20 +6,10 @@ Subject: disable filterText generation
 For my usecase (nvim-cmp) it makes things worse.
 
 diff --git a/packages/lsp-server/src/common/features/completions/index.ts b/packages/lsp-server/src/common/features/completions/index.ts
-index 7e5d8ed..9a5f08c 100644
+index b071018..82cb2aa 100644
 --- a/packages/lsp-server/src/common/features/completions/index.ts
 +++ b/packages/lsp-server/src/common/features/completions/index.ts
-@@ -355,7 +355,8 @@ function extractUserInput(
-  * @param text The text to create filter strings for
-  * @returns Space-separated filter strings for the text
-  */
--function createFilterString(text: string): string {
-+function createFilterString(text: string): string | undefined {
-+	return undefined
- 	if (!text) return '';
- 
- 	// Original text in lowercase
-@@ -458,23 +459,6 @@ function addCompletionItem(
+@@ -458,23 +458,6 @@ function addCompletionItem(
  	}
  
  	let filterText: string | undefined = undefined;
@@ -38,7 +28,7 @@ index 7e5d8ed..9a5f08c 100644
 -			});
 -		}
 -	} else {
--		filterText = createFilterString(item.label);
+-		filterText = createFilterString(item.label, collector.enablePinyin);
 -	}
  
  	// Calculate score for sorting if userInput is provided
