@@ -108,8 +108,6 @@ local function fetch_async(adapter)
           if params.TEXT_TO_TEXT then
             models[model.id] = {
               opts = {
-                stream = true,
-                has_tools = true,
                 has_vision = params.IMAGE_TO_TEXT,
                 can_reason = params.REASONING or params.EFFORT,
               },
