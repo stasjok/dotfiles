@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  lib,
+  helpers,
+  ...
+}:
 {
   plugins.codecompanion = {
     enable = true;
@@ -42,7 +47,46 @@
             show_model_choices = true;
           };
           bothub = "bothub";
-        };
+        }
+        // builtins.listToAttrs (
+          lib.flip map
+            [
+              "claude-haiku-4.5"
+              "claude-sonnet-4.5"
+              "deepseek-r1-0528"
+              "deepseek-v3.1-terminus"
+              "gemini-2.5-flash"
+              "gemini-2.5-pro"
+              "glm-4.6"
+              "gpt-5"
+              "gpt-5-codex"
+              "gpt-5-mini"
+              "gpt-oss-120b"
+              "grok-4"
+              "grok-4-fast"
+              "grok-code-fast-1"
+              "kimi-k2-0905"
+              "kimi-k2-thinking"
+              "minimax-m2"
+              "qwen3-235b-a22b-2507"
+              "qwen3-coder"
+              "qwen3-max"
+            ]
+            (name: {
+              # CodeCompanion recognizes only alphanumerics and underscores in inline prompt
+              # https://github.com/olimorris/codecompanion.nvim/blob/991dd81ac37b56b6d13529a08e86a42d183d79dc/lua/codecompanion/strategies/inline/init.lua#L236
+              name = lib.replaceStrings [ "-" "." ] [ "_" "_" ] name;
+              value = helpers.mkRaw ''
+                require("codecompanion.adapters.http").extend("bothub", ${
+                  helpers.toLuaObject {
+                    inherit name;
+                    formatted_name = name;
+                    schema.model.default = name;
+                  }
+                })
+              '';
+            })
+        );
         acp.opts.show_defaults = false;
       };
     };
