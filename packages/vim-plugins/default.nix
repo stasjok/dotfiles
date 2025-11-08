@@ -37,10 +37,10 @@ in
   };
 
   codecompanion-nvim = prev.codecompanion-nvim.overrideAttrs (prevAttrs: {
-    version = "17.30.0";
+    version = "17.31.0";
     src = prevAttrs.src.override {
-      rev = "v17.30.0";
-      sha256 = "sha256-mtw7RlP/VbVf2JwjWDDxsgTIBWt+gbTsJWjGS4RCSrI=";
+      rev = "v17.31.0";
+      sha256 = "sha256-pWRMOmiJLxA37Nnq6VibCQtuILZ3g0AYpirzxbjZwqA=";
     };
     nvimSkipModules = prevAttrs.nvimSkipModules ++ [
       "codecompanion.providers.actions.fzf_lua"
