@@ -27,6 +27,9 @@
           "beancount-lsp-server"
           "--stdio"
         ];
+        cmd_env = {
+          NODE_OPTIONS = "--max-old-space-size=6144";
+        };
         filetypes = [ "beancount" ];
         root_markers = [
           "ledger.beancount"
