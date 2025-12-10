@@ -28,7 +28,6 @@
       };
       display.chat = {
         window = {
-          width = "auto";
           opts = {
             number = false;
             relativenumber = false;
@@ -108,7 +107,12 @@
         "v"
       ];
       key = "<C-A>";
-      action = "<Cmd>CodeCompanionChat Toggle<CR>";
+      action = helpers.mkRaw ''
+        function()
+          require("codecompanion").toggle({ window_opts = { width = "auto" }})
+        end
+      '';
+      options.desc = "CodeCompanionChat Toggle";
     }
     {
       mode = "v";
