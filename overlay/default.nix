@@ -82,6 +82,18 @@ in
     patches = ./patches/fzf/0001-disable-fish-history-merge.patch;
   };
 
+  # Last version of Ansible supporting python 2.6
+  ansible_2_12 =
+    let
+      pkgs_22_11_pkgs =
+        (builtins.getFlake "github:NixOS/nixpkgs/ea4c80b39be4c09702b0cb3b42eab59e2ba4f24b")
+        .legacyPackages.${final.system};
+    in
+    pkgs_22_11_pkgs.ansible_2_12.overrideAttrs (prevAttrs: {
+      propagatedBuildInputs =
+        prevAttrs.propagatedBuildInputs ++ (with pkgs_22_11_pkgs.python3Packages; [ jmespath ]);
+    });
+
   # Freeze packer to the letest version with Mozilla Public License 2.0
   packer = callPackage ../packages/packer { };
 }
