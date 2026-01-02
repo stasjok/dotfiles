@@ -22,7 +22,7 @@
       enable = true;
       name = "beancount-lsp-server";
       package = pkgs.beancount-lsp-server;
-      settings = {
+      config = {
         cmd = [
           "beancount-lsp-server"
           "--stdio"
