@@ -91,7 +91,7 @@
             inherit inputs;
           };
           modules = lib.flatten [
-            nixvim.homeManagerModules.nixvim
+            nixvim.homeModules.nixvim
             catppuccin.homeModules.catppuccin
             ./modules
             ./home.nix
