@@ -113,10 +113,9 @@ in
         # Nix
         nil
         nixd
-        nixfmt-rfc-style
+        nixfmt
         alejandra
         nixpkgs-fmt
-        nixfmt-classic
         # Ansible
         ansible-language-server
         ansible-lint

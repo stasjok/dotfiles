@@ -45,12 +45,6 @@ in
     };
   };
 
-  # Avoid binary clashing with nixfmt-rfc-style
-  nixfmt-classic = prev.runCommand "nixfmt-classic" { } ''
-    mkdir -p $out/bin
-    ln -s ${lib.getBin prev.nixfmt-classic}/bin/nixfmt $out/bin/nixfmt-classic
-  '';
-
   # beancount-language-server
   beancount-language-server = prev.beancount-language-server.overrideAttrs (prevAttrs: rec {
     version = "1.4.1";

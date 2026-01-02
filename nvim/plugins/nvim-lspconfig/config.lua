@@ -90,21 +90,6 @@ local lsp_servers = {
     root_dir = require("plugin_configs.lspconfig.nixd").root_dir,
     settings = { ["nil"] = { nix = { flake = { nixpkgsInputName = vim.NIL } } } },
 
-    ---@param new_config lspconfig.Config
-    ---@param root_dir string
-    on_new_config = function(new_config, root_dir)
-      local formatter_command
-
-      local dirname = vim.fs.basename(root_dir)
-      if dirname == "home-manager" then
-        formatter_command = { "nixfmt-classic" }
-      else
-        formatter_command = { "nixfmt" }
-      end
-
-      new_config.settings["nil"].formatting = { command = formatter_command }
-    end,
-
     ---@param client vim.lsp.Client
     on_init = function(client)
       client.server_capabilities.definitionProvider = false
