@@ -94,6 +94,9 @@ in
         prevAttrs.propagatedBuildInputs ++ (with pkgs_22_11_pkgs.python3Packages; [ jmespath ]);
     });
 
+  # ansible-language-server was removed from nixpkgs
+  ansible-language-server = callPackage ../packages/ansible-language-server { };
+
   # Freeze packer to the letest version with Mozilla Public License 2.0
   packer = callPackage ../packages/packer { };
 }
