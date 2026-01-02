@@ -16,7 +16,7 @@
       };
     };
     catppuccin = {
-      url = "github:catppuccin/nix/0ba11b12be81f0849a89ed17ab635164ea8f0112";
+      url = "github:catppuccin/nix/c11bfcf5671358a12fa2d906e7c859d0644d9b2d";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin-palette = {
