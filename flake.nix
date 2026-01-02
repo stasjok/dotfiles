@@ -25,10 +25,6 @@
     };
 
     # Neovim plugins
-    mini-nvim = {
-      url = "github:stasjok/mini.nvim";
-      flake = false;
-    };
     fix-auto-scroll-nvim = {
       url = "github:BranimirE/fix-auto-scroll.nvim";
       flake = false;

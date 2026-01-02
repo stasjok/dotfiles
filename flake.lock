@@ -95,22 +95,6 @@
         "type": "github"
       }
     },
-    "mini-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1749281527,
-        "narHash": "sha256-i7uCqdaapy1G+U4pwjNQAF8oKKVOlUARd5c/48oeXIM=",
-        "owner": "stasjok",
-        "repo": "mini.nvim",
-        "rev": "01466d8ca8052be7a3b5eda5aaf1751c6a2a39aa",
-        "type": "github"
-      },
-      "original": {
-        "owner": "stasjok",
-        "repo": "mini.nvim",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1767325753,
@@ -157,7 +141,6 @@
         "catppuccin-palette": "catppuccin-palette",
         "fix-auto-scroll-nvim": "fix-auto-scroll-nvim",
         "home-manager": "home-manager",
-        "mini-nvim": "mini-nvim",
         "nixpkgs": "nixpkgs",
         "nixvim": "nixvim",
         "smart-splits-nvim": "smart-splits-nvim",

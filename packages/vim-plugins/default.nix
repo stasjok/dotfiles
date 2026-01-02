@@ -1,5 +1,6 @@
 {
   inputs,
+  fetchFromGitHub,
   fetchpatch,
   vimUtils,
 }:
@@ -22,18 +23,27 @@ let
 in
 {
   # Flake input plugins
-  mini-nvim = mkPlugin' "mini.nvim" {
-    patches = fetchpatch {
-      # Remove ':Git' doc tag to avoid clashing with vim-fugitive
-      url = "https://github.com/stasjok/mini.nvim/commit/e19c76e0c4cca9aab9f6b45a32cbccff09974c69.diff";
-      hash = "sha256-p94f+DbPgKY3heB+T+oE33HGCdiyTJMKm5n418XKt1A=";
-    };
-  };
   fix-auto-scroll-nvim = mkPlugin "fix-auto-scroll.nvim";
   surround-nvim = mkPlugin "surround.nvim";
 
   smart-splits-nvim = prev.smart-splits-nvim.overrideAttrs {
     src = inputs.smart-splits-nvim;
+  };
+
+  # My fork of mini.nvim
+  mini-nvim = prev.mini-nvim.overrideAttrs {
+    version = "2026-01-02";
+    src = fetchFromGitHub {
+      owner = "stasjok";
+      repo = "mini.nvim";
+      rev = "11f9ad7ffd8f6a3b1865163d97420244448d1efa";
+      hash = "sha256-CF2yNYvn9UoWo9e56PmKKxlp2iDUw8BcdEVLidDbY7E=";
+    };
+    patches = fetchpatch {
+      # Remove ':Git' doc tag to avoid clashing with vim-fugitive
+      url = "https://github.com/stasjok/mini.nvim/commit/808752f590c9e93532521b12b8f3f7f6e3bfb342.diff";
+      hash = "sha256-BmSOHALTtLXe1jQ1P/Qslq3STkreLXXL5vQtGcWT4GE=";
+    };
   };
 
   # Fixes errors in telescope keymaps picker
