@@ -1,10 +1,11 @@
-{ lib }:
+{ lib, fetchPypi }:
 final: prev: {
-  # Intergate ansible_mitogen
+  # Integrate ansible_mitogen
   ansible-core = prev.ansible-core.overridePythonAttrs (prevAttrs: rec {
     # Latest version supporting python 2.7 and 3.6
     version = "2.16.13";
-    src = prevAttrs.src.override {
+    src = fetchPypi {
+      pname = "ansible_core";
       inherit version;
       hash = "sha256-RRlOEe/jxMDJuwsRK23cHKUCigG+a0G65ZNXaosRJ68=";
     };
