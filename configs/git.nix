@@ -2,20 +2,16 @@
   programs.git = {
     enable = true;
 
-    userName = "Stanislav Asunkin";
-    userEmail = "1353637+stasjok@users.noreply.github.com";
+    settings = {
+      user = {
+        name = "Stanislav Asunkin";
+        email = "1353637+stasjok@users.noreply.github.com";
+      };
 
-    aliases = {
-      tree = "log --oneline --decorate --all --graph";
-    };
+      alias = {
+        tree = "log --oneline --decorate --all --graph";
+      };
 
-    ignores = [
-      "*.swp"
-      "*.swo"
-      "*.swn"
-    ];
-
-    extraConfig = {
       # Cache credentials
       credential.helper = "cache --timeout 3600";
 
@@ -41,6 +37,12 @@
       # Avoid requiring ssh keys
       url."https://github.com/".insteadOf = "git@github.com:";
     };
+
+    ignores = [
+      "*.swp"
+      "*.swo"
+      "*.swn"
+    ];
 
     # Delta
     delta = {
