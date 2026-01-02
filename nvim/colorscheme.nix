@@ -1,4 +1,4 @@
-{ helpers, ... }:
+{ lib, ... }:
 {
   colorschemes.catppuccin = {
     enableCompiled = true;
@@ -46,8 +46,8 @@
 
       custom_highlights = {
         # Don't hide tree-sitter comment highlights
-        "@lsp.type.comment.lua" = helpers.emptyTable;
-        "@lsp.type.comment.nix" = helpers.emptyTable;
+        "@lsp.type.comment.lua" = lib.nixvim.emptyTable;
+        "@lsp.type.comment.nix" = lib.nixvim.emptyTable;
       };
     };
   };

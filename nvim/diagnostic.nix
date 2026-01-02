@@ -1,4 +1,4 @@
-{ helpers, ... }:
+{ lib, ... }:
 {
   diagnostic.settings = {
     update_in_insert = true;
@@ -12,7 +12,7 @@
     };
 
     # Diagnostic icons
-    signs.text = helpers.toRawKeys {
+    signs.text = lib.nixvim.toRawKeys {
       "vim.diagnostic.severity.ERROR" = "";
       "vim.diagnostic.severity.WARN" = "";
       "vim.diagnostic.severity.INFO" = "";

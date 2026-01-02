@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  helpers,
   ...
 }:
 {
@@ -75,9 +74,9 @@
               # CodeCompanion recognizes only alphanumerics and underscores in inline prompt
               # https://github.com/olimorris/codecompanion.nvim/blob/991dd81ac37b56b6d13529a08e86a42d183d79dc/lua/codecompanion/strategies/inline/init.lua#L236
               name = lib.replaceStrings [ "-" "." ] [ "_" "_" ] name;
-              value = helpers.mkRaw ''
+              value = lib.nixvim.mkRaw ''
                 require("codecompanion.adapters.http").extend("bothub", ${
-                  helpers.toLuaObject {
+                  lib.nixvim.toLuaObject {
                     inherit name;
                     formatted_name = name;
                     schema.model.default = name;
@@ -107,7 +106,7 @@
         "v"
       ];
       key = "<C-A>";
-      action = helpers.mkRaw ''
+      action = lib.nixvim.mkRaw ''
         function()
           require("codecompanion").toggle({ window_opts = { width = "auto" }})
         end
