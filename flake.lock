@@ -163,8 +163,7 @@
         "smart-splits-nvim": "smart-splits-nvim",
         "surround-nvim": "surround-nvim",
         "tree-sitter-jinja2": "tree-sitter-jinja2",
-        "vim-mediawiki": "vim-mediawiki",
-        "yaml-language-server": "yaml-language-server"
+        "vim-mediawiki": "vim-mediawiki"
       }
     },
     "smart-splits-nvim": {
@@ -245,23 +244,6 @@
       "original": {
         "owner": "m-pilia",
         "repo": "vim-mediawiki",
-        "type": "github"
-      }
-    },
-    "yaml-language-server": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1748081540,
-        "narHash": "sha256-BIQHS2AWOAuxti2pqkRHd5F1tmTIvqCkcT1Pbrgb4NU=",
-        "owner": "stasjok",
-        "repo": "yaml-language-server",
-        "rev": "dd09db98b965114a213662fc419aa4666a9b8d5d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "stasjok",
-        "ref": "custom-kube-schema-url",
-        "repo": "yaml-language-server",
         "type": "github"
       }
     }

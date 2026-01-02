@@ -52,10 +52,6 @@
       url = "github:theHamsta/tree-sitter-jinja2";
       flake = false;
     };
-    yaml-language-server = {
-      url = "github:stasjok/yaml-language-server?ref=custom-kube-schema-url";
-      flake = false;
-    };
   };
 
   outputs =

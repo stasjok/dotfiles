@@ -73,9 +73,14 @@ in
   homebank2ledger = final.perlPackages.AppHomeBank2Ledger;
 
   # Allow changing kubernetes schema URL via settings
-  yaml-language-server = prev.yaml-language-server.overrideAttrs {
-    src = inputs.yaml-language-server;
-  };
+  yaml-language-server = prev.yaml-language-server.overrideAttrs (prevAttrs: {
+    src = prevAttrs.src.override {
+      owner = "stasjok";
+      tag = null;
+      rev = "cc4e519833a9c4f91055f26d6b0ce532cb17227d";
+      hash = "sha256-DXNxGHIlGabKH6xEivI/odVJU2DpMMbvqI1f3ReXW2Y=";
+    };
+  });
 
   # Disable history merging
   fzf = prev.fzf.overrideAttrs {
