@@ -50,14 +50,6 @@ in
     ];
   });
 
-  # Fix :LspPyrightSetPythonPath command
-  nvim-lspconfig = prev.nvim-lspconfig.overrideAttrs {
-    patches = fetchpatch {
-      url = "https://github.com/neovim/nvim-lspconfig/commit/f4dee350521da3b95fffdfdb94f7a1b5cdb88d79.diff";
-      hash = "sha256-NgIR4zNC5HLeYc2rBCHV9sjKdLorUTL3liCZdG8EXhA=";
-    };
-  };
-
   # Fixes errors in telescope keymaps picker
   telescope-nvim = prev.telescope-nvim.overrideAttrs {
     patches = ./telescope-keymaps-picker.patch;
