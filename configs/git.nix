@@ -43,13 +43,5 @@
       "*.swo"
       "*.swn"
     ];
-
-    # Delta
-    delta = {
-      enable = true;
-      options = {
-        true-color = "always";
-      };
-    };
   };
 }
