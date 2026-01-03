@@ -8,6 +8,17 @@
     basedpyright.enable = true;
     ruff.enable = true;
 
+    # Ansible
+    ansiblels = {
+      enable = true;
+      package = pkgs.ansible-language-server;
+      config = {
+        settings.ansible = {
+          completion.provideRedirectModules = false;
+        };
+      };
+    };
+
     # TypeScript
     vtsls.enable = true;
 
@@ -54,5 +65,7 @@
   extraPackages = with pkgs; [
     # bashls
     shfmt
+    # ansiblels
+    ansible-lint
   ];
 }

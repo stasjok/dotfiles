@@ -1,3 +1,4 @@
+{ lib, ... }:
 let
   proxy = "http://rmt4prod.msk.absolutbank.ru:3128";
 in
@@ -9,6 +10,15 @@ in
     NO_PROXY = "127.0.0.1,localhost,msk.absolutbank.ru";
   };
 
-  # CodeCompanion proxy
-  programs.nixvim.plugins.codecompanion.settings.adapters.http.opts.proxy = proxy;
+  # Nixvim
+  programs.nixvim = {
+    # CodeCompanion proxy
+    plugins.codecompanion.settings.adapters.http.opts.proxy = proxy;
+
+    # ansible-language-server settings
+    lsp.servers.ansiblels.config.settings.ansible = {
+      ansible.useFullyQualifiedCollectionNames = false;
+      completion.provideRedirectModules = lib.mkForce true;
+    };
+  };
 }

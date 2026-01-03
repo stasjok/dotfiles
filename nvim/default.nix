@@ -112,9 +112,6 @@ in
         nixfmt
         alejandra
         nixpkgs-fmt
-        # Ansible
-        ansible-language-server
-        ansible-lint
         # Json/YAML/TOML
         vscode-langservers-extracted
         yaml-language-server

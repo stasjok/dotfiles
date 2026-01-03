@@ -11,31 +11,6 @@ local lsp_servers = {
   -- Lua
   lua_ls = require("plugin_configs.lspconfig.lua_ls"),
 
-  -- Ansible
-  ansiblels = {
-    filetypes = { "yaml.ansible" },
-
-    root_dir = function(filename)
-      local util = require("lspconfig.util")
-      return util.root_pattern("ansible.cfg", ".git")(filename) or util.path.dirname(filename)
-    end,
-
-    settings = {
-      ansible = {
-        ansible = {
-          useFullyQualifiedCollectionNames = not is_at_work,
-        },
-        python = {
-          interpreterPath = "python3",
-        },
-        completion = {
-          provideRedirectModules = is_at_work,
-          provideModuleOptionAliases = true,
-        },
-      },
-    },
-  },
-
   -- JSON
   jsonls = {
     settings = {
