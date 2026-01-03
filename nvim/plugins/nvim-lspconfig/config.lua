@@ -11,14 +11,6 @@ local lsp_servers = {
   -- Lua
   lua_ls = require("plugin_configs.lspconfig.lua_ls"),
 
-  -- Bash
-  bashls = {
-    root_dir = function(filename)
-      local util = require("lspconfig.util")
-      return util.find_git_ancestor(filename) or util.path.dirname(filename)
-    end,
-  },
-
   -- Ansible
   ansiblels = {
     filetypes = { "yaml.ansible" },

@@ -104,10 +104,6 @@ in
       with pkgs.nodePackages;
       with pkgs;
       [
-        # Bash
-        bash-language-server
-        shellcheck
-        shfmt
         # Lua
         lua-language-server
         # Nix

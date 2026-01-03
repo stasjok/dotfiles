@@ -1,6 +1,9 @@
 { pkgs, ... }:
 {
   lsp.servers = {
+    # Bash
+    bashls.enable = true;
+
     # Python
     basedpyright.enable = true;
     ruff.enable = true;
@@ -47,4 +50,9 @@
       };
     };
   };
+
+  extraPackages = with pkgs; [
+    # bashls
+    shfmt
+  ];
 }
