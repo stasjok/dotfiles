@@ -54,7 +54,8 @@ local root_files = {
   "selene.yml",
 }
 
-function lua_ls.root_dir(fname)
+function lua_ls.root_dir(buf, on_dir)
+  local fname = vim.api.nvim_buf_get_name(buf)
   local root_dir = vim.fs.dirname(vim.fs.find(root_files, {
     path = fname,
     upward = true,
@@ -89,13 +90,16 @@ function lua_ls.root_dir(fname)
       end
     end
   end
-  return root_dir
+  on_dir(root_dir)
 end
 
 ---Change library
----@param config table
----@param root_dir string
-function lua_ls.on_new_config(config, root_dir)
+---@param client vim.lsp.Client
+function lua_ls.on_init(client)
+  if not client.workspace_folders then
+    return
+  end
+  local root_dir = client.workspace_folders[1].name
   local lua_rc = read_luarc(root_dir) or {}
   local lua_rc_has_runtime = vim.iter(lua_rc):any(function(key)
     return vim.startswith(key, "runtime")
@@ -104,9 +108,9 @@ function lua_ls.on_new_config(config, root_dir)
     return vim.startswith(key, "workspace")
   end)
   if lua_rc_has_runtime then
-    config.settings.Lua.runtime = nil
+    client.config.settings.Lua.runtime = nil
   elseif vim.endswith(root_dir, "/dotfiles") then
-    config.settings.Lua.runtime.path = {
+    client.config.settings.Lua.runtime.path = {
       -- meta/3rd library from lua-language-server
       "library/?.lua",
       "library/?/init.lua",
@@ -115,11 +119,11 @@ function lua_ls.on_new_config(config, root_dir)
     }
   end
   if lua_rc_has_workspace then
-    config.settings.Lua.workspace = nil
+    client.config.settings.Lua.workspace = nil
   elseif vim.endswith(root_dir, "/dotfiles") then
-    config.settings.Lua.workspace.library = library_for_dotfiles
+    client.config.settings.Lua.workspace.library = library_for_dotfiles
   elseif vim.endswith(root_dir, "/neovim") then
-    config.settings.Lua.workspace.library = {}
+    client.config.settings.Lua.workspace.library = {}
   end
 end
 

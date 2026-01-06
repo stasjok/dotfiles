@@ -8,9 +8,6 @@ end
 
 -- List of configured language servers
 local lsp_servers = {
-  -- Lua
-  lua_ls = require("plugin_configs.lspconfig.lua_ls"),
-
   -- JSON
   jsonls = {
     settings = {

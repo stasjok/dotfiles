@@ -8,6 +8,9 @@
     basedpyright.enable = true;
     ruff.enable = true;
 
+    # Lua
+    lua_ls.enable = true;
+
     # Ansible
     ansiblels = {
       enable = true;
@@ -68,4 +71,8 @@
     # ansiblels
     ansible-lint
   ];
+
+  extraFiles = {
+    "lsp/lua_ls.lua".text = builtins.readFile ./lua_ls.lua;
+  };
 }

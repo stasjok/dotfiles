@@ -104,8 +104,6 @@ in
       with pkgs.nodePackages;
       with pkgs;
       [
-        # Lua
-        lua-language-server
         # Nix
         nil
         nixd
