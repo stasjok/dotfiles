@@ -99,15 +99,6 @@ in
       };
     };
 
-    # Extra packages available to neovim
-    extraPackages =
-      with pkgs.nodePackages;
-      with pkgs;
-      [
-        # C
-        clang-tools
-      ];
-
     # init.lua before plugins
     # Read `init.lua` file first, then read all .lua files in `init.lua.d` directory.
     extraConfigLuaPre = lib.pipe ([ ./init.lua ] ++ lib.filesystem.listFilesRecursive ./init.lua.d) [
