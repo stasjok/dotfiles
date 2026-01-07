@@ -106,8 +106,6 @@ in
       [
         # Json/YAML/TOML
         taplo
-        # XML
-        lemminx
         # Terraform
         terraform-ls
         # Go

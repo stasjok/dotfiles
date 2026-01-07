@@ -94,6 +94,9 @@
       };
     };
 
+    # XML
+    lemminx.enable = true;
+
     # TypeScript
     vtsls.enable = true;
 
