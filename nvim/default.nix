@@ -111,8 +111,6 @@ in
         alejandra
         nixpkgs-fmt
         # Json/YAML/TOML
-        yaml-language-server
-        yamllint
         taplo
         # Markdown
         marksman

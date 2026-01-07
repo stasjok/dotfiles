@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   lsp.servers = {
     # Bash
@@ -39,6 +39,28 @@
             url = "file://${pkgs.writeText "snippets.json" (builtins.readFile ../../schemas/snippets.json)}";
           }
         ];
+      };
+    };
+
+    # YAML
+    yamlls = {
+      enable = true;
+      config.settings.yaml = {
+        customTags = [ "!vault" ];
+        kubernetesSchemaUrl = lib.nixvim.mkRaw ''
+          (function()
+            local schema_path = vim.fs.normalize("~/.kube/json-schema/all.json")
+            return vim.fn.filereadable(schema_path) == 1 and schema_path or nil
+          end)()
+        '';
+        schemas = {
+          kubernetes = [
+            "/deckhouse/**/*.yml"
+            "/deckhouse/**/*.yaml"
+            "/kubernetes/**/*.yml"
+            "/kubernetes/**/*.yaml"
+          ];
+        };
       };
     };
 
@@ -90,6 +112,7 @@
     shfmt
     # ansiblels
     ansible-lint
+    yamllint
   ];
 
   extraFiles = {

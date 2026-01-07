@@ -1,31 +1,8 @@
 -- Whether I'm at work
 local is_at_work = vim.env.USER == "admAsunkinSS"
 
-local function kubernetes_schema_url()
-  local schema_path = vim.fs.normalize("~/.kube/json-schema/all.json")
-  return vim.fn.filereadable(schema_path) == 1 and schema_path or nil
-end
-
 -- List of configured language servers
 local lsp_servers = {
-  -- YAML
-  yamlls = {
-    settings = {
-      yaml = {
-        customTags = { "!vault" },
-        kubernetesSchemaUrl = kubernetes_schema_url(),
-        schemas = {
-          kubernetes = {
-            "/deckhouse/**/*.yml",
-            "/deckhouse/**/*.yaml",
-            "/kubernetes/**/*.yml",
-            "/kubernetes/**/*.yaml",
-          },
-        },
-      },
-    },
-  },
-
   -- Nix
   nil_ls = {
     root_dir = require("plugin_configs.lspconfig.nixd").root_dir,
