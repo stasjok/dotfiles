@@ -39,6 +39,9 @@
       };
     };
 
+    # Markdown
+    marksman.enable = true;
+
     # JSON
     jsonls = {
       enable = true;

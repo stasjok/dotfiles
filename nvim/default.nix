@@ -106,8 +106,6 @@ in
       [
         # Json/YAML/TOML
         taplo
-        # Markdown
-        marksman
         # Spelling
         ltex-ls
         # XML
