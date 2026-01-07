@@ -31,6 +31,7 @@ T["checkhealth"] = function()
     "`tree-sitter` executable not found",
     "`cc` executable not found",
     "No clipboard tool found",
+    "vim.validate is deprecated",
     -- It's expected when running tests inside neovim terminal
     "$TERM differs from the tmux `default-terminal` setting",
     -- I'm testing internal watcher

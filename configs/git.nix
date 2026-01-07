@@ -2,20 +2,16 @@
   programs.git = {
     enable = true;
 
-    userName = "Stanislav Asunkin";
-    userEmail = "1353637+stasjok@users.noreply.github.com";
+    settings = {
+      user = {
+        name = "Stanislav Asunkin";
+        email = "1353637+stasjok@users.noreply.github.com";
+      };
 
-    aliases = {
-      tree = "log --oneline --decorate --all --graph";
-    };
+      alias = {
+        tree = "log --oneline --decorate --all --graph";
+      };
 
-    ignores = [
-      "*.swp"
-      "*.swo"
-      "*.swn"
-    ];
-
-    extraConfig = {
       # Cache credentials
       credential.helper = "cache --timeout 3600";
 
@@ -42,12 +38,10 @@
       url."https://github.com/".insteadOf = "git@github.com:";
     };
 
-    # Delta
-    delta = {
-      enable = true;
-      options = {
-        true-color = "always";
-      };
-    };
+    ignores = [
+      "*.swp"
+      "*.swo"
+      "*.swn"
+    ];
   };
 }

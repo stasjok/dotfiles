@@ -28,13 +28,15 @@ T["dotfiles"] = function()
   child.cmd("cd tests/fixtures/dotfiles")
 
   -- Set `b:diagnostics` variable to `true` when diagnostics are published
-  child.lua('vim.lsp.handlers["textDocument/publishDiagnostics"] = loadstring(...)', {
-    string.dump(function(...)
-      vim.lsp.diagnostic.on_publish_diagnostics(...)
-      local bufnr = vim.uri_to_bufnr(select(2, ...).uri)
-      vim.b[bufnr].diagnostics = true
-    end),
-  })
+  child.lua_func(function()
+    vim.lsp.handlers["textDocument/publishDiagnostics"] = function(err, result, ctx)
+      vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx)
+      if vim.lsp.get_client_by_id(ctx.client_id).name == "lua_ls" then
+        local bufnr = vim.uri_to_bufnr(result.uri)
+        vim.b[bufnr].diagnostics = true
+      end
+    end
+  end)
 
   ---Wait until `b:diagnostics` variable is truthy
   ---@param bufnr integer A buffer handler

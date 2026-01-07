@@ -99,50 +99,6 @@ in
       };
     };
 
-    # Extra packages available to neovim
-    extraPackages =
-      with pkgs.nodePackages;
-      with pkgs;
-      [
-        # Bash
-        bash-language-server
-        shellcheck
-        shfmt
-        # Lua
-        lua-language-server
-        # Nix
-        nil
-        nixd
-        nixfmt-rfc-style
-        alejandra
-        nixpkgs-fmt
-        nixfmt-classic
-        # Ansible
-        ansible-language-server
-        ansible-lint
-        # Json/YAML/TOML
-        vscode-langservers-extracted
-        yaml-language-server
-        yamllint
-        taplo
-        # Markdown
-        marksman
-        # Spelling
-        ltex-ls
-        # XML
-        lemminx
-        # Terraform
-        terraform-ls
-        # Go
-        gopls
-        # Rust
-        rust-analyzer
-        rustc
-        rustfmt
-        # C
-        clang-tools
-      ];
-
     # init.lua before plugins
     # Read `init.lua` file first, then read all .lua files in `init.lua.d` directory.
     extraConfigLuaPre = lib.pipe ([ ./init.lua ] ++ lib.filesystem.listFilesRecursive ./init.lua.d) [
@@ -161,12 +117,10 @@ in
       nvim-cmp
       cmp-buffer
       cmp-cmdline
-      cmp-nvim-lsp # Must be before nvim-lspconfig
+      cmp-nvim-lsp
       cmp_luasnip
       # Snippets
       luasnip
-      # LSP
-      nvim-lspconfig
       # Editing
       surround-nvim
       nvim-autopairs

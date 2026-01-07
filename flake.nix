@@ -2,13 +2,13 @@
   description = "Home Manager configuration of Stas";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-25.05";
+      url = "github:nix-community/nixvim/nixos-25.11";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         # Remove optional dependencies
@@ -16,7 +16,7 @@
       };
     };
     catppuccin = {
-      url = "github:catppuccin/nix/0ba11b12be81f0849a89ed17ab635164ea8f0112";
+      url = "github:catppuccin/nix/c11bfcf5671358a12fa2d906e7c859d0644d9b2d";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin-palette = {
@@ -25,10 +25,6 @@
     };
 
     # Neovim plugins
-    mini-nvim = {
-      url = "github:stasjok/mini.nvim";
-      flake = false;
-    };
     fix-auto-scroll-nvim = {
       url = "github:BranimirE/fix-auto-scroll.nvim";
       flake = false;
@@ -50,10 +46,6 @@
     # Other inputs
     tree-sitter-jinja2 = {
       url = "github:theHamsta/tree-sitter-jinja2";
-      flake = false;
-    };
-    yaml-language-server = {
-      url = "github:stasjok/yaml-language-server?ref=custom-kube-schema-url";
       flake = false;
     };
   };
@@ -95,7 +87,7 @@
             inherit inputs;
           };
           modules = lib.flatten [
-            nixvim.homeManagerModules.nixvim
+            nixvim.homeModules.nixvim
             catppuccin.homeModules.catppuccin
             ./modules
             ./home.nix

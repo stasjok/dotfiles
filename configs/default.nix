@@ -3,6 +3,7 @@
     ./bat.nix
     ./beancount.nix
     ./catppuccin.nix
+    ./delta.nix
     ./fzf.nix
     ./gh.nix
     ./git.nix

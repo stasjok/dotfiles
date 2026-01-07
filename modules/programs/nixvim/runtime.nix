@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  helpers,
   hmConfig,
   ...
 }:
@@ -77,8 +76,8 @@ in
     extraConfigLuaPre = lib.mkIf cfg.enable (
       lib.mkBefore ''
         -- Runtime
-        vim.o.runtimepath = ${helpers.toLuaObject cfg.runtimePaths}
-        vim.o.packpath = ${helpers.toLuaObject cfg.packPaths}
+        vim.o.runtimepath = ${lib.nixvim.toLuaObject cfg.runtimePaths}
+        vim.o.packpath = ${lib.nixvim.toLuaObject cfg.packPaths}
       ''
     );
   };

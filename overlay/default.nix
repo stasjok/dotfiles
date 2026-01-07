@@ -45,12 +45,6 @@ in
     };
   };
 
-  # Avoid binary clashing with nixfmt-rfc-style
-  nixfmt-classic = prev.runCommand "nixfmt-classic" { } ''
-    mkdir -p $out/bin
-    ln -s ${lib.getBin prev.nixfmt-classic}/bin/nixfmt $out/bin/nixfmt-classic
-  '';
-
   # beancount-language-server
   beancount-language-server = prev.beancount-language-server.overrideAttrs (prevAttrs: rec {
     version = "1.4.1";
@@ -73,9 +67,14 @@ in
   homebank2ledger = final.perlPackages.AppHomeBank2Ledger;
 
   # Allow changing kubernetes schema URL via settings
-  yaml-language-server = prev.yaml-language-server.overrideAttrs {
-    src = inputs.yaml-language-server;
-  };
+  yaml-language-server = prev.yaml-language-server.overrideAttrs (prevAttrs: {
+    src = prevAttrs.src.override {
+      owner = "stasjok";
+      tag = null;
+      rev = "cc4e519833a9c4f91055f26d6b0ce532cb17227d";
+      hash = "sha256-DXNxGHIlGabKH6xEivI/odVJU2DpMMbvqI1f3ReXW2Y=";
+    };
+  });
 
   # Disable history merging
   fzf = prev.fzf.overrideAttrs {
@@ -93,6 +92,9 @@ in
       propagatedBuildInputs =
         prevAttrs.propagatedBuildInputs ++ (with pkgs_22_11_pkgs.python3Packages; [ jmespath ]);
     });
+
+  # ansible-language-server was removed from nixpkgs
+  ansible-language-server = callPackage ../packages/ansible-language-server { };
 
   # Freeze packer to the letest version with Mozilla Public License 2.0
   packer = callPackage ../packages/packer { };

@@ -4,20 +4,37 @@ local uv = vim.uv
 
 local M = {}
 
----@param filename string
----@return string?
-function M.root_dir(filename)
+---@param bufnr integer
+---@param on_dir function
+function M.root_dir(bufnr, on_dir)
+  local filename = vim.api.nvim_buf_get_name(bufnr)
   local root_dir = fs.root(filename, { "flake.nix", ".git" })
   -- 'lib' directory inside nixpkgs repository also contains flake.nix, ignore it
   if root_dir and fs.basename(root_dir) == "lib" then
     root_dir = fs.root(fs.dirname(root_dir), { "flake.nix", ".git" }) or root_dir
   end
-  return root_dir
+  on_dir(root_dir)
 end
 
----@param config lspconfig.Config
----@param root_dir string
-M.on_new_config = function(config, root_dir)
+---@param client vim.lsp.Client
+M.on_init = function(client)
+  ---@type lsp.ServerCapabilities
+  local overrides = {
+    documentHighlightProvider = false,
+    documentSymbolProvider = false,
+    renameProvider = false,
+  }
+  -- Override server capabilities
+  client.server_capabilities = vim.tbl_deep_extend("force", client.server_capabilities, overrides)
+  -- Disable semantic tokens
+  client.server_capabilities.semanticTokensProvider = nil
+
+  -- Settings
+  if not client.workspace_folders then
+    return
+  end
+  local root_dir = client.workspace_folders[1].name
+
   local settings = {
     -- Default nixpkgs
     nixpkgs = { expr = '(builtins.getFlake "nixpkgs").legacyPackages.${builtins.currentSystem}' },
@@ -98,21 +115,7 @@ M.on_new_config = function(config, root_dir)
     )
   end
 
-  config.settings = vim.tbl_deep_extend("force", config.settings or {}, { nixd = settings })
-end
-
----@param client vim.lsp.Client
-M.on_init = function(client)
-  ---@type lsp.ServerCapabilities
-  local overrrides = {
-    documentHighlightProvider = false,
-    documentSymbolProvider = false,
-    renameProvider = false,
-  }
-  -- Override server capabilities
-  client.server_capabilities = vim.tbl_deep_extend("force", client.server_capabilities, overrrides)
-  -- Disable semantic tokens
-  client.server_capabilities.semanticTokensProvider = nil
+  client.settings.nixd = vim.tbl_deep_extend("force", client.settings.nixd or {}, settings)
 end
 
 return M

@@ -1,5 +1,6 @@
 {
   inputs,
+  fetchFromGitHub,
   fetchpatch,
   vimUtils,
 }:
@@ -22,13 +23,6 @@ let
 in
 {
   # Flake input plugins
-  mini-nvim = mkPlugin' "mini.nvim" {
-    patches = fetchpatch {
-      # Remove ':Git' doc tag to avoid clashing with vim-fugitive
-      url = "https://github.com/stasjok/mini.nvim/commit/e19c76e0c4cca9aab9f6b45a32cbccff09974c69.diff";
-      hash = "sha256-p94f+DbPgKY3heB+T+oE33HGCdiyTJMKm5n418XKt1A=";
-    };
-  };
   fix-auto-scroll-nvim = mkPlugin "fix-auto-scroll.nvim";
   surround-nvim = mkPlugin "surround.nvim";
 
@@ -36,31 +30,29 @@ in
     src = inputs.smart-splits-nvim;
   };
 
-  codecompanion-nvim = prev.codecompanion-nvim.overrideAttrs (prevAttrs: {
-    version = "17.31.0";
-    src = prevAttrs.src.override {
-      rev = "v17.31.0";
-      sha256 = "sha256-pWRMOmiJLxA37Nnq6VibCQtuILZ3g0AYpirzxbjZwqA=";
+  # My fork of mini.nvim
+  mini-nvim = prev.mini-nvim.overrideAttrs {
+    version = "2026-01-02";
+    src = fetchFromGitHub {
+      owner = "stasjok";
+      repo = "mini.nvim";
+      rev = "11f9ad7ffd8f6a3b1865163d97420244448d1efa";
+      hash = "sha256-CF2yNYvn9UoWo9e56PmKKxlp2iDUw8BcdEVLidDbY7E=";
     };
-    nvimSkipModules = prevAttrs.nvimSkipModules ++ [
-      "codecompanion.providers.actions.fzf_lua"
-      "codecompanion.providers.actions.snacks"
-      "codecompanion.providers.completion.blink.setup"
-      "codecompanion.providers.completion.cmp.setup"
-    ];
-  });
-
-  # Fix :LspPyrightSetPythonPath command
-  nvim-lspconfig = prev.nvim-lspconfig.overrideAttrs {
     patches = fetchpatch {
-      url = "https://github.com/neovim/nvim-lspconfig/commit/f4dee350521da3b95fffdfdb94f7a1b5cdb88d79.diff";
-      hash = "sha256-NgIR4zNC5HLeYc2rBCHV9sjKdLorUTL3liCZdG8EXhA=";
+      # Remove ':Git' doc tag to avoid clashing with vim-fugitive
+      url = "https://github.com/stasjok/mini.nvim/commit/808752f590c9e93532521b12b8f3f7f6e3bfb342.diff";
+      hash = "sha256-BmSOHALTtLXe1jQ1P/Qslq3STkreLXXL5vQtGcWT4GE=";
     };
   };
 
   # Fixes errors in telescope keymaps picker
   telescope-nvim = prev.telescope-nvim.overrideAttrs {
     patches = ./telescope-keymaps-picker.patch;
+  };
+
+  nvim-lspconfig = prev.nvim-lspconfig.overrideAttrs {
+    patches = ./lspconfig-nix-store-rust-library.patch;
   };
 
   # Remove tests because there are invalid lua files there

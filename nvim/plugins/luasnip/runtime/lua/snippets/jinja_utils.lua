@@ -352,7 +352,7 @@ local function jinja_statement_generator(block, inline)
       if block then
         return r(pos, "statement_nodes")
       else
-        return wn(pos, nodes)
+        return wn(pos, vim.deepcopy(nodes))
       end
     end
     local snip_nodes = {

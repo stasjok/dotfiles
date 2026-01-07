@@ -69,9 +69,9 @@ T["integrations"] = new_set({
       "DiagnosticUnderlineError",
       { sp = "red", underline = true, cterm = { underline = true } },
     },
-    { "semantic_tokens", "@lsp.type.interface", { fg = "flamingo" } },
+    { "semantic_tokens", "@lsp.type.enumMember", { fg = "teal" } },
     { "telescope", "TelescopeMatching", { fg = "blue" } },
-    { "treesitter", "@constructor", { fg = "sapphire" } },
+    { "treesitter", "@constructor", { fg = "yellow" } },
   },
   hooks = {
     pre_once = function()

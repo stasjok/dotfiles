@@ -40,6 +40,7 @@ local tests = {
     on_save = true,
   },
   yaml = {
+    lsp_name = "yamlls",
     string = "a:  1",
     formatted_string = "a: 1",
     formatting = true,

@@ -1,4 +1,4 @@
-{ helpers, ... }:
+{ lib, ... }:
 {
   plugins.telescope = {
     enable = true;
@@ -10,7 +10,7 @@
     settings = {
       defaults.mappings = {
         i = {
-          "<Esc>" = helpers.mkRaw "require('telescope.actions').close";
+          "<Esc>" = lib.nixvim.mkRaw "require('telescope.actions').close";
           "<C-C>" = false;
         };
       };
