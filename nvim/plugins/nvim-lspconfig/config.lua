@@ -8,29 +8,6 @@ end
 
 -- List of configured language servers
 local lsp_servers = {
-  -- JSON
-  jsonls = {
-    settings = {
-      json = {
-        -- Need to specify explicitly.
-        -- See: https://github.com/b0o/SchemaStore.nvim/issues/8#issuecomment-1129531174
-        validate = { enable = true },
-        format = { enable = true },
-        schemas = {
-          {
-            fileMatch = {
-              "/snippets/*.json",
-              "!package.json",
-            },
-            url = vim.uri_from_fname(
-              vim.fs.joinpath(vim.fn.stdpath("config"), "schemas/snippets.json")
-            ),
-          },
-        },
-      },
-    },
-  },
-
   -- YAML
   yamlls = {
     settings = {

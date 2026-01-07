@@ -111,7 +111,6 @@ in
         alejandra
         nixpkgs-fmt
         # Json/YAML/TOML
-        vscode-langservers-extracted
         yaml-language-server
         yamllint
         taplo
