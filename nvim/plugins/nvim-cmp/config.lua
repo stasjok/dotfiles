@@ -123,6 +123,10 @@ cmp.setup({
     ["<M-d>"] = mapping(mapping.scroll_docs(8), { "i", "c" }),
     ["<M-u>"] = mapping(mapping.scroll_docs(-8), { "i", "c" }),
   },
+  window = {
+    completion = { border = "none" },
+    documentation = { border = { "", "", "", " ", "", "", "", " " } },
+  },
 })
 
 cmp.setup.cmdline(":", {
