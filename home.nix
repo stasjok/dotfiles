@@ -47,6 +47,7 @@
       # Command-line tools
       ripgrep
       yq-go
+      curl
       # Task runners
       gnumake
       go-task
