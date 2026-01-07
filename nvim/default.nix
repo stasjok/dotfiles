@@ -106,10 +106,6 @@ in
       [
         # Json/YAML/TOML
         taplo
-        # Rust
-        rust-analyzer
-        rustc
-        rustfmt
         # C
         clang-tools
       ];

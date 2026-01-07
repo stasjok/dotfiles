@@ -114,6 +114,11 @@
       };
     };
 
+    # Rust
+    rust_analyzer = {
+      enable = true;
+    };
+
     # Typos
     typos_lsp.enable = true;
 
@@ -159,6 +164,9 @@
     shfmt
     # Nix
     nixfmt
+    # rust_analyzer
+    rustc
+    rustfmt
     # ansiblels
     ansible-lint
     yamllint

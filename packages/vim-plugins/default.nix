@@ -51,6 +51,10 @@ in
     patches = ./telescope-keymaps-picker.patch;
   };
 
+  nvim-lspconfig = prev.nvim-lspconfig.overrideAttrs {
+    patches = ./lspconfig-nix-store-rust-library.patch;
+  };
+
   # Remove tests because there are invalid lua files there
   nvim-treesitter = prev.nvim-treesitter.overrideAttrs (prev: {
     postPatch = prev.postPatch + "rm -r tests";

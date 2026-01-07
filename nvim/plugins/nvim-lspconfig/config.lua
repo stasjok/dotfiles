@@ -3,21 +3,6 @@ local is_at_work = vim.env.USER == "admAsunkinSS"
 
 -- List of configured language servers
 local lsp_servers = {
-  -- Rust
-  rust_analyzer = {
-    root_dir = function(fname)
-      -- Re-use language server for libraries
-      if fname:sub(1, 11) == "/nix/store/" or fname:find("/.cargo/registry/src/", 5, true) then
-        local clients = vim.lsp.get_active_clients({ name = "rust_analyzer" })
-        if clients[1] then
-          return clients[1].config.root_dir
-        end
-      end
-
-      return require("lspconfig.configs.rust_analyzer").default_config.root_dir(fname)
-    end,
-  },
-
   -- TOML
   taplo = {
     settings = {
