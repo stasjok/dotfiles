@@ -11,6 +11,23 @@
     # Lua
     lua_ls.enable = true;
 
+    # Nix
+    nil_ls = {
+      enable = true;
+      config = {
+        root_dir = lib.nixvim.mkRaw "vim.lsp.config.nixd.root_dir";
+        on_init = lib.nixvim.mkRaw ''
+          function(client)
+            client.server_capabilities.definitionProvider = false
+            client.server_capabilities.referencesProvider = false
+            client.server_capabilities.hoverProvider = false
+          end
+        '';
+        settings.nil.nix.flake.nixpkgsInputName = lib.nixvim.mkRaw "vim.NIL";
+      };
+    };
+    nixd.enable = true;
+
     # Ansible
     ansiblels = {
       enable = true;
@@ -110,6 +127,8 @@
   extraPackages = with pkgs; [
     # bashls
     shfmt
+    # Nix
+    nixfmt
     # ansiblels
     ansible-lint
     yamllint
@@ -117,5 +136,6 @@
 
   extraFiles = {
     "lsp/lua_ls.lua".text = builtins.readFile ./lua_ls.lua;
+    "lsp/nixd.lua".text = builtins.readFile ./nixd.lua;
   };
 }

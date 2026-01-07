@@ -3,21 +3,6 @@ local is_at_work = vim.env.USER == "admAsunkinSS"
 
 -- List of configured language servers
 local lsp_servers = {
-  -- Nix
-  nil_ls = {
-    root_dir = require("plugin_configs.lspconfig.nixd").root_dir,
-    settings = { ["nil"] = { nix = { flake = { nixpkgsInputName = vim.NIL } } } },
-
-    ---@param client vim.lsp.Client
-    on_init = function(client)
-      client.server_capabilities.definitionProvider = false
-      client.server_capabilities.referencesProvider = false
-      client.server_capabilities.hoverProvider = false
-    end,
-  },
-
-  nixd = require("plugin_configs.lspconfig.nixd"),
-
   -- Markdown
   marksman = {},
   ltex = {

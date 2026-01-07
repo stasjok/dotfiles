@@ -104,12 +104,6 @@ in
       with pkgs.nodePackages;
       with pkgs;
       [
-        # Nix
-        nil
-        nixd
-        nixfmt
-        alejandra
-        nixpkgs-fmt
         # Json/YAML/TOML
         taplo
         # Markdown
