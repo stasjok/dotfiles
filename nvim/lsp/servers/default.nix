@@ -103,6 +103,17 @@
     # TypeScript
     vtsls.enable = true;
 
+    # Go
+    gopls = {
+      enable = true;
+      config.settings.gopls = {
+        "ui.semanticTokens" = true;
+        "ui.noSemanticString" = true;
+        "ui.noSemanticNumber" = true;
+        "ui.diagnostic.staticcheck" = true;
+      };
+    };
+
     # Typos
     typos_lsp.enable = true;
 

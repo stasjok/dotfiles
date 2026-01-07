@@ -106,8 +106,6 @@ in
       [
         # Json/YAML/TOML
         taplo
-        # Go
-        gopls
         # Rust
         rust-analyzer
         rustc

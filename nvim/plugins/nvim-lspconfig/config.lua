@@ -3,18 +3,6 @@ local is_at_work = vim.env.USER == "admAsunkinSS"
 
 -- List of configured language servers
 local lsp_servers = {
-  -- Go
-  gopls = {
-    settings = {
-      gopls = {
-        ["ui.semanticTokens"] = true,
-        ["ui.noSemanticString"] = true,
-        ["ui.noSemanticNumber"] = true,
-        ["ui.diagnostic.staticcheck"] = true,
-      },
-    },
-  },
-
   -- Rust
   rust_analyzer = {
     root_dir = function(fname)
