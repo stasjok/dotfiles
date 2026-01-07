@@ -1,0 +1,22 @@
+From 63d6566707b64d64639eacc93065419d593b7ee7 Mon Sep 17 00:00:00 2001
+From: Stanislav Asunkin <1353637+stasjok@users.noreply.github.com>
+Date: Wed, 7 Jan 2026 18:01:44 +0300
+Subject: add /nix/store to is_library function
+
+
+diff --git a/lsp/rust_analyzer.lua b/lsp/rust_analyzer.lua
+index c5eed517..9b5594eb 100644
+--- a/lsp/rust_analyzer.lua
++++ b/lsp/rust_analyzer.lua
+@@ -44,7 +44,7 @@ local function is_library(fname)
+   local rustup_home = os.getenv 'RUSTUP_HOME' or user_home .. '/.rustup'
+   local toolchains = rustup_home .. '/toolchains'
+ 
+-  for _, item in ipairs { toolchains, registry, git_registry } do
++  for _, item in ipairs { '/nix/store', toolchains, registry, git_registry } do
+     if vim.fs.relpath(item, fname) then
+       local clients = vim.lsp.get_clients { name = 'rust_analyzer' }
+       return #clients > 0 and clients[#clients].config.root_dir or nil
+-- 
+2.50.1
+
