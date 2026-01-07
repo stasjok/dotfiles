@@ -43,7 +43,6 @@ local settings = {
   },
   yaml = {
     server = "yamlls",
-    override_document_formatting = true,
   },
   sh = {
     on_save = true,
