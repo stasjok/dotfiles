@@ -94,6 +94,12 @@
       };
     };
 
+    # TOML
+    taplo = {
+      enable = true;
+      config.settings.formatter.arrayAutoCollapse = false;
+    };
+
     # Terraform
     terraformls.enable = true;
 

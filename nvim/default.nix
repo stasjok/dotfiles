@@ -104,8 +104,6 @@ in
       with pkgs.nodePackages;
       with pkgs;
       [
-        # Json/YAML/TOML
-        taplo
         # C
         clang-tools
       ];
