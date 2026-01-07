@@ -106,8 +106,6 @@ in
       [
         # Json/YAML/TOML
         taplo
-        # Terraform
-        terraform-ls
         # Go
         gopls
         # Rust

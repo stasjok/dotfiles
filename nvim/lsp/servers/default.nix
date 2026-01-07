@@ -94,6 +94,9 @@
       };
     };
 
+    # Terraform
+    terraformls.enable = true;
+
     # XML
     lemminx.enable = true;
 

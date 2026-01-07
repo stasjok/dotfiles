@@ -3,9 +3,6 @@ local is_at_work = vim.env.USER == "admAsunkinSS"
 
 -- List of configured language servers
 local lsp_servers = {
-  -- Terraform
-  terraformls = {},
-
   -- Go
   gopls = {
     settings = {
