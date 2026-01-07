@@ -42,6 +42,16 @@
     # Markdown
     marksman.enable = true;
 
+    # Spelling
+    ltex = {
+      enable = true;
+      activate = false;
+      config.filetypes = [
+        "markdown"
+        "rst"
+      ];
+    };
+
     # JSON
     jsonls = {
       enable = true;

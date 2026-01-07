@@ -106,8 +106,6 @@ in
       [
         # Json/YAML/TOML
         taplo
-        # Spelling
-        ltex-ls
         # XML
         lemminx
         # Terraform
