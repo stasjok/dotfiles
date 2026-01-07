@@ -1,6 +1,13 @@
 { lib, pkgs, ... }:
 {
+  plugins.lspconfig.enable = true;
+
   lsp.servers = {
+    # Defaults
+    "*".config.capabilities = {
+      workspace.didChangeWatchedFiles.dynamicRegistration = true;
+    };
+
     # Bash
     bashls.enable = true;
 

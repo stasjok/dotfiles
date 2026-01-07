@@ -117,12 +117,10 @@ in
       nvim-cmp
       cmp-buffer
       cmp-cmdline
-      cmp-nvim-lsp # Must be before nvim-lspconfig
+      cmp-nvim-lsp
       cmp_luasnip
       # Snippets
       luasnip
-      # LSP
-      nvim-lspconfig
       # Editing
       surround-nvim
       nvim-autopairs
