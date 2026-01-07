@@ -161,7 +161,7 @@ function Child.new(opts)
     child.prevent_hanging("disable_lsp_autostart")
 
     -- nvim-lspconfig
-    child.api.nvim_clear_autocmds({ group = "lspconfig" })
+    child.api.nvim_create_augroup("lspconfig", { clear = true })
     child.lua_func(function()
       for _, server in ipairs(require("lspconfig.util").available_servers()) do
         require("lspconfig")[server].autostart = false
