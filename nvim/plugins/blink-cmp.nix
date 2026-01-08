@@ -5,7 +5,10 @@
     settings = {
       keymap.preset = "enter";
       appearance.nerd_font_variant = "normal";
-      completion.documentation.auto_show = true;
+      completion = {
+        menu.max_height = 20;
+        documentation.auto_show = true;
+      };
     };
   };
 
