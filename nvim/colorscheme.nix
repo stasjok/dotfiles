@@ -9,7 +9,7 @@
       # Integrations
       default_integrations = false;
       integrations = {
-        cmp = true;
+        blink_cmp.enabled = true;
         diffview = true;
         gitsigns = true;
         mini.enabled = true;
