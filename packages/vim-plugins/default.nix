@@ -55,6 +55,13 @@ in
     patches = ./lspconfig-nix-store-rust-library.patch;
   };
 
+  codecompanion-nvim = prev.codecompanion-nvim.overrideAttrs {
+    # Collision with blink-cmp
+    postPatch = ''
+      find doc -mindepth 1 \( -name robots.txt -or -not -name '*.txt' \) -delete
+    '';
+  };
+
   # Remove tests because there are invalid lua files there
   nvim-treesitter = prev.nvim-treesitter.overrideAttrs (prev: {
     postPatch = prev.postPatch + "rm -r tests";

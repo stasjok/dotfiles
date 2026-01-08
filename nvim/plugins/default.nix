@@ -1,5 +1,6 @@
 {
   imports = [
+    ./blink-cmp.nix
     ./codecompanion
     ./lsp-signature.nix
     ./mini.nix
