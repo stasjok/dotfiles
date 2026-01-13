@@ -11,6 +11,11 @@
       ctrl-backspace.command = "backward-kill-token";
       ctrl-h.command = "backward-kill-token";
       alt-backspace.command = "backward-kill-word";
+      alt-p.command = "history-token-search-backward";
+      alt-n.command = "history-token-search-forward";
+      alt-B.command = "backward-bigword";
+      alt-F.command = "forward-bigword";
+      alt-P.command = "__fish_paginate";
     };
 
     # Functions
@@ -36,16 +41,6 @@
               ''
             );
       in
-      {
-        # Custom bindings
-        fish_user_key_bindings = ''
-          bind \ep history-token-search-backward
-          bind \en history-token-search-forward
-          bind \eB backward-bigword
-          bind \eF forward-bigword
-          bind \eP __fish_paginate
-        '';
-      }
-      // saltFunctions;
+      saltFunctions;
   };
 }
