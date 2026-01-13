@@ -33,6 +33,7 @@
         list.selection.preselect = false;
       };
 
+      # Providers
       sources.providers = {
         buffer.name = "[Buff]";
         buffer.opts.get_bufnrs = lib.nixvim.mkRaw ''
@@ -49,6 +50,9 @@
         path.name = "[Path]";
         snippets.name = "[Snip]";
       };
+
+      # Snippets
+      snippets.preset = "luasnip";
 
       # Appearance
       appearance = {
