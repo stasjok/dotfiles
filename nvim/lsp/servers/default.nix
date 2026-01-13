@@ -120,10 +120,12 @@
     gopls = {
       enable = true;
       config.settings.gopls = {
-        "ui.semanticTokens" = true;
-        "ui.noSemanticString" = true;
-        "ui.noSemanticNumber" = true;
-        "ui.diagnostic.staticcheck" = true;
+        staticcheck = true;
+        semanticTokens = true;
+        semanticTokenTypes = {
+          string = false;
+          number = false;
+        };
       };
     };
 
