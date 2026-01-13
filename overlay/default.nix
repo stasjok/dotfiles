@@ -77,6 +77,15 @@ in
     };
   });
 
+  nixd = prev.nixd.overrideAttrs {
+    patches = [
+      # https://github.com/nix-community/nixd/pull/698
+      ./patches/nixd/0001-Increase-max-completion-items.patch
+      ./patches/nixd/0002-Remove-completion-prefix-filtering.patch
+    ];
+    patchFlags = "-p2";
+  };
+
   # Disable history merging
   fzf = prev.fzf.overrideAttrs {
     patches = ./patches/fzf/0001-disable-fish-history-merge.patch;

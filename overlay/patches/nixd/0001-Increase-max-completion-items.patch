@@ -1,0 +1,35 @@
+From 8452e4ac5ca6887ca0069e437c73328fb50c2c67 Mon Sep 17 00:00:00 2001
+From: Andrew Onyshchuk <andryk.rv@gmail.com>
+Date: Tue, 24 Jun 2025 17:59:53 -0700
+Subject: Increase max completion items
+
+
+diff --git a/nixd/lib/Controller/Completion.cpp b/nixd/lib/Controller/Completion.cpp
+index 14938fe..04b80cb 100644
+--- a/nixd/lib/Controller/Completion.cpp
++++ b/nixd/lib/Controller/Completion.cpp
+@@ -31,7 +31,7 @@ namespace {
+ /// Set max completion size to this value, we don't want to send large lists
+ /// because of slow IO.
+ /// Items exceed this size should be marked "incomplete" and recomputed.
+-constexpr int MaxCompletionSize = 30;
++constexpr int MaxCompletionSize = 1000;
+ 
+ CompletionItemKind OptionKind = CompletionItemKind::Constructor;
+ CompletionItemKind OptionAttrKind = CompletionItemKind::Class;
+diff --git a/nixd/lib/Eval/AttrSetProvider.cpp b/nixd/lib/Eval/AttrSetProvider.cpp
+index 41ac27f..e0e356c 100644
+--- a/nixd/lib/Eval/AttrSetProvider.cpp
++++ b/nixd/lib/Eval/AttrSetProvider.cpp
+@@ -14,7 +14,7 @@ using namespace lspserver;
+ 
+ namespace {
+ 
+-constexpr int MaxItems = 30;
++constexpr int MaxItems = 1000;
+ 
+ void fillString(nix::EvalState &State, nix::Value &V,
+                 const std::vector<std::string_view> &AttrPath,
+-- 
+2.51.2
+

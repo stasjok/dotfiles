@@ -1,0 +1,22 @@
+From 4cd9d17b30fc3bdc8becdd98d91dc3e305c6eb3d Mon Sep 17 00:00:00 2001
+From: Andrew Onyshchuk <andryk.rv@gmail.com>
+Date: Tue, 24 Jun 2025 17:59:53 -0700
+Subject: Remove completion prefix filtering
+
+
+diff --git a/nixd/lib/Controller/Completion.cpp b/nixd/lib/Controller/Completion.cpp
+index 04b80cb..983a718 100644
+--- a/nixd/lib/Controller/Completion.cpp
++++ b/nixd/lib/Controller/Completion.cpp
+@@ -278,7 +278,7 @@ void completeAttrPath(const Node &N, const ParentMapAnalysis &PM,
+   auto R = findAttrPathForOptions(N, PM, Scope);
+   if (R == PathResult::OK) {
+     // Construct request.
+-    std::string Prefix = Scope.back();
++    std::string Prefix = "";
+     Scope.pop_back();
+     {
+       std::lock_guard _(OptionsLock);
+-- 
+2.51.2
+
