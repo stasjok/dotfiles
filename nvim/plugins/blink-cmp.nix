@@ -3,12 +3,18 @@
     enable = true;
 
     settings = {
-      appearance.nerd_font_variant = "normal";
       completion = {
         list.selection.preselect = false;
         menu.max_height = 20;
         documentation.auto_show = true;
       };
+      cmdline.completion = {
+        menu.auto_show = true;
+        list.selection.preselect = false;
+      };
+
+      # Appearance
+      appearance.nerd_font_variant = "normal";
 
       # Mappings
       keymap = {
@@ -40,6 +46,12 @@
         "<C-E>" = [ "hide" ];
         "<M-d>" = [ "scroll_documentation_down" ];
         "<M-u>" = [ "scroll_documentation_up" ];
+      };
+      cmdline.keymap = {
+        preset = "inherit";
+        "<CR>" = false;
+        "<M-d>" = false;
+        "<M-u>" = false;
       };
     };
   };
