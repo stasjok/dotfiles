@@ -35,6 +35,15 @@
 
       sources.providers = {
         buffer.name = "[Buff]";
+        buffer.opts.get_bufnrs = lib.nixvim.mkRaw ''
+          function()
+            local api = vim.api
+            return vim.tbl_filter(function(buf)
+              return api.nvim_get_option_value("buflisted", {buf = buf})
+                and api.nvim_get_option_value("buftype", {buf = buf}) == ""
+            end, api.nvim_list_bufs())
+          end
+        '';
         cmdline.name = "[Cmd]";
         lsp.name = "[LSP]";
         path.name = "[Path]";
