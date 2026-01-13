@@ -11,10 +11,7 @@
           border = "none";
           draw.columns = [
             (
-              lib.nixvim.listToUnkeyedAttrs [
-                "label"
-                "label_description"
-              ]
+              lib.nixvim.listToUnkeyedAttrs [ "label" ]
               // {
                 gap = 1;
               }
