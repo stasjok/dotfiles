@@ -2,7 +2,6 @@ local npairs = require("nvim-autopairs")
 local Rule = require("nvim-autopairs.rule")
 local cond = require("nvim-autopairs.conds")
 local ts_conds = require("nvim-autopairs.ts-conds")
-local completion_cmp = require("nvim-autopairs.completion.cmp")
 
 -- Condition opts types
 
@@ -260,21 +259,3 @@ end
 
 -- Add pairs
 npairs.add_rules(pairs)
-
--- Automatically insert brackets for functions and methods
-local default_handler = completion_cmp.filetypes["*"]
-local cmp = vim.F.npcall(require, "cmp")
-if cmp then
-  cmp.event:on(
-    "confirm_done",
-    completion_cmp.on_confirm_done({
-      filetypes = {
-        ["*"] = false,
-        lua = default_handler,
-        python = default_handler,
-        typescript = default_handler,
-        javascript = default_handler,
-      },
-    })
-  )
-end

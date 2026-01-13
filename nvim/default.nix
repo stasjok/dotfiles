@@ -113,12 +113,6 @@ in
       plenary-nvim
       # Interface
       fix-auto-scroll-nvim
-      # Autocompletion
-      nvim-cmp
-      cmp-buffer
-      cmp-cmdline
-      cmp-nvim-lsp
-      cmp_luasnip
       # Snippets
       luasnip
       # Editing
