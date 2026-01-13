@@ -26,6 +26,11 @@
             [ "source_name" ]
           ];
         };
+        # These language servers are smart enough
+        accept.auto_brackets.blocked_filetypes = [
+          "go"
+          "rust"
+        ];
         documentation = {
           auto_show = true;
           auto_show_delay_ms = 50;
