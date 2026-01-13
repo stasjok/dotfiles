@@ -11,11 +11,9 @@
       ctrl-backspace.command = "backward-kill-token";
       ctrl-h.command = "backward-kill-token";
       alt-backspace.command = "backward-kill-word";
-      alt-p.command = "history-token-search-backward";
       alt-n.command = "history-token-search-forward";
-      alt-B.command = "backward-bigword";
-      alt-F.command = "forward-bigword";
-      alt-P.command = "__fish_paginate";
+      alt-shift-b.command = "backward-token";
+      alt-shift-f.command = "forward-token";
     };
 
     # Functions
