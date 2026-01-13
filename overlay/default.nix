@@ -45,6 +45,22 @@ in
     };
   };
 
+  # Support incremental document changes
+  typos-lsp = prev.typos-lsp.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      version = "0.1.47";
+      src = prevAttrs.src.override {
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-Sv11I2HdPwgxA1SV1/bo9MS2aanzqjtm4KtnMl6iiqU=";
+      };
+      cargoHash = "sha256-qgpM5z5VF1fvaZKmJJZXTHOFMuz82a6UtnkKhgYUh3M=";
+      cargoDeps = final.rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs) pname version src;
+        hash = finalAttrs.cargoHash;
+      };
+    }
+  );
+
   # https://github.com/fengkx/beancount-lsp
   beancount-lsp-server = callPackage ../packages/beancount-lsp-server { };
 
