@@ -38,6 +38,8 @@ T["checkhealth"] = function()
     "libuv-watchdirs has known performance issues",
     -- diffview.nvim
     "`hg_cmd` is not executable",
+    -- blink.cmp
+    'Some providers may show up as "disabled"',
   }
 
   -- Mock Nvim health functions (:h health-functions) in order to collect warnings and errors.

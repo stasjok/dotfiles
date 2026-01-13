@@ -59,7 +59,6 @@ end
 -- Test enabled integrations
 T["integrations"] = new_set({
   parametrize = {
-    { "cmp", "CmpItemKind", { fg = "blue" } },
     { "diffview", "DiffviewPrimary", { fg = "blue" } },
     { "gitsigns", "GitSignsAdd", { fg = "green" } },
     { "markdown", "markdownCode", { fg = "flamingo" } },
