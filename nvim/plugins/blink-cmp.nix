@@ -1,3 +1,4 @@
+{ lib, ... }:
 {
   plugins.blink-cmp = {
     enable = true;
@@ -6,6 +7,22 @@
       completion = {
         list.selection.preselect = false;
         menu.max_height = 20;
+        menu.draw.columns = [
+          (
+            lib.nixvim.listToUnkeyedAttrs [
+              "label"
+              "label_description"
+            ]
+            // {
+              gap = 1;
+            }
+          )
+          [
+            "kind_icon"
+            "kind"
+          ]
+          [ "source_name" ]
+        ];
         documentation = {
           auto_show = true;
           auto_show_delay_ms = 50;
@@ -14,6 +31,14 @@
       cmdline.completion = {
         menu.auto_show = true;
         list.selection.preselect = false;
+      };
+
+      sources.providers = {
+        buffer.name = "[Buff]";
+        cmdline.name = "[Cmd]";
+        lsp.name = "[LSP]";
+        path.name = "[Path]";
+        snippets.name = "[Snip]";
       };
 
       # Appearance
