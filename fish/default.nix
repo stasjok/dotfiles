@@ -6,6 +6,13 @@
     loginShellInit = builtins.readFile ./login.fish;
     interactiveShellInit = builtins.readFile ./interactive.fish;
 
+    # Bindings
+    binds = {
+      ctrl-backspace.command = "backward-kill-token";
+      ctrl-h.command = "backward-kill-token";
+      alt-backspace.command = "backward-kill-word";
+    };
+
     # Functions
     functions =
       let
