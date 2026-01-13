@@ -128,7 +128,10 @@
           "accept"
           "show"
         ];
-        "<C-E>" = [ "hide" ];
+        "<C-E>" = [
+          "hide"
+          "fallback"
+        ];
         "<M-d>" = [ "scroll_documentation_down" ];
         "<M-u>" = [ "scroll_documentation_up" ];
       };
