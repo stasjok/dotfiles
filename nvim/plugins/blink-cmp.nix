@@ -6,26 +6,30 @@
     settings = {
       completion = {
         list.selection.preselect = false;
-        menu.max_height = 20;
-        menu.draw.columns = [
-          (
-            lib.nixvim.listToUnkeyedAttrs [
-              "label"
-              "label_description"
+        menu = {
+          max_height = 20;
+          border = "none";
+          draw.columns = [
+            (
+              lib.nixvim.listToUnkeyedAttrs [
+                "label"
+                "label_description"
+              ]
+              // {
+                gap = 1;
+              }
+            )
+            [
+              "kind_icon"
+              "kind"
             ]
-            // {
-              gap = 1;
-            }
-          )
-          [
-            "kind_icon"
-            "kind"
-          ]
-          [ "source_name" ]
-        ];
+            [ "source_name" ]
+          ];
+        };
         documentation = {
           auto_show = true;
           auto_show_delay_ms = 50;
+          window.border = "padded";
         };
       };
       cmdline.completion = {
