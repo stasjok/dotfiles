@@ -6,7 +6,10 @@
       completion = {
         list.selection.preselect = false;
         menu.max_height = 20;
-        documentation.auto_show = true;
+        documentation = {
+          auto_show = true;
+          auto_show_delay_ms = 50;
+        };
       };
       cmdline.completion = {
         menu.auto_show = true;
