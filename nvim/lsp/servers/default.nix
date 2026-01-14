@@ -23,19 +23,22 @@
     # Lua
     emmylua_ls = {
       enable = true;
-      config.settings.Lua = {
-        runtime = {
-          version = "LuaJIT";
-          requirePattern = [
-            "lua/?.lua"
-            "lua/?/init.lua"
-          ];
+      config = {
+        settings.Lua = {
+          runtime = {
+            version = "LuaJIT";
+            requirePattern = [
+              "lua/?.lua"
+              "lua/?/init.lua"
+            ];
+          };
+          workspace = {
+            library = [
+              "${config.package}/share/nvim/runtime"
+            ];
+          };
         };
-        workspace = {
-          library = [
-            "${config.package}/share/nvim/runtime"
-          ];
-        };
+        cmd_env.VIMRUNTIME = "${config.package}/share/nvim/runtime";
       };
     };
 
