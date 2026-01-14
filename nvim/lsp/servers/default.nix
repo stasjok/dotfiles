@@ -24,6 +24,33 @@
     emmylua_ls = {
       enable = true;
       config = {
+        root_dir = lib.nixvim.mkRaw ''
+          function(buf, on_dir)
+            local name = vim.api.nvim_buf_get_name(buf)
+            local root_dir = vim.fs.root(name, {
+              {
+                ".emmyrc.json",
+                ".luarc.json",
+                ".stylua.toml",
+                "stylua.toml",
+              },
+              {
+                "lua",
+                ".git",
+              },
+            })
+            if vim.startswith(name, "${builtins.storeDir}/") then
+              local client = vim.lsp.get_clients({ name = "emmylua_ls" })[1]
+              if client then
+                local lib = vim.tbl_get(client, "settings", "Lua", "workspace", "library") or {}
+                if vim.list_contains(lib, root_dir) then
+                  root_dir = client.root_dir or root_dir
+                end
+              end
+            end
+            on_dir(root_dir)
+          end
+        '';
         settings.Lua = {
           runtime = {
             version = "LuaJIT";
