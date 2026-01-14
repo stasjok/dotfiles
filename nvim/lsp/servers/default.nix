@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   plugins.lspconfig.enable = true;
 
@@ -16,7 +21,23 @@
     ruff.enable = true;
 
     # Lua
-    emmylua_ls.enable = true;
+    emmylua_ls = {
+      enable = true;
+      config.settings.Lua = {
+        runtime = {
+          version = "LuaJIT";
+          requirePattern = [
+            "lua/?.lua"
+            "lua/?/init.lua"
+          ];
+        };
+        workspace = {
+          library = [
+            "${config.package}/share/nvim/runtime"
+          ];
+        };
+      };
+    };
 
     # Nix
     nil_ls = {

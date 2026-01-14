@@ -1,3 +1,4 @@
+local mt = require("mini.test")
 local Child = require("test.Child")
 local expect = MiniTest.expect
 local new_set = MiniTest.new_set
