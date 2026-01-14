@@ -16,7 +16,7 @@
     ruff.enable = true;
 
     # Lua
-    lua_ls.enable = true;
+    emmylua_ls.enable = true;
 
     # Nix
     nil_ls = {
