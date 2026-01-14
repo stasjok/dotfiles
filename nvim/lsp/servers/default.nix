@@ -66,6 +66,38 @@
           };
         };
         cmd_env.VIMRUNTIME = "${config.package}/share/nvim/runtime";
+        on_init = lib.nixvim.mkRaw ''
+          function(client)
+            local root_dir = client.root_dir
+            if not root_dir then
+              return
+            end
+            if
+              vim
+                .iter({
+                  ".emmyrc.json",
+                  ".luarc.json",
+                })
+                :any(function(file)
+                  return vim.uv.fs_stat(vim.fs.joinpath(root_dir, file)) ~= nil
+                end)
+            then
+              -- Clean config if there is a workspace config
+              client.settings.Lua = nil
+            elseif vim.fs.basename(root_dir) == "dotfiles" then
+              client.settings.Lua.workspace.library = ${
+                lib.nixvim.toLuaObject [
+                  config.package
+                  config.plugins.mini.package
+                  config.plugins.luasnip.package
+                ]
+              }
+            elseif vim.endswith(root_dir, "/share/nvim/runtime") then
+              -- Nvim in Nix store
+              client.settings.Lua.workspace.library = nil
+            end
+          end
+        '';
       };
     };
 
