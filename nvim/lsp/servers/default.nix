@@ -196,7 +196,6 @@
   ];
 
   extraFiles = {
-    "lsp/lua_ls.lua".text = builtins.readFile ./lua_ls.lua;
     "lsp/nixd.lua".text = builtins.readFile ./nixd.lua;
   };
 }
