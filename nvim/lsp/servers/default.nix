@@ -64,6 +64,10 @@
               "${config.package}/share/nvim/runtime"
             ];
           };
+          strict = {
+            requirePath = true;
+            typeCall = true;
+          };
         };
         cmd_env.VIMRUNTIME = "${config.package}/share/nvim/runtime";
         on_init = lib.nixvim.mkRaw ''
@@ -87,10 +91,14 @@
             elseif vim.fs.basename(root_dir) == "dotfiles" then
               client.settings.Lua.workspace.library = ${
                 lib.nixvim.toLuaObject [
-                  config.package
+                  "${config.package}/share/nvim/runtime"
                   config.plugins.mini.package
                   config.plugins.luasnip.package
                 ]
+              }
+              client.settings.Lua.workspace.workspaceRoots = {
+                "nvim/runtime",
+                "tests/nvim/runtime",
               }
             elseif vim.endswith(root_dir, "/share/nvim/runtime") then
               -- Nvim in Nix store
