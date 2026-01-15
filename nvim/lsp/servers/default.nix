@@ -1,5 +1,6 @@
 {
   config,
+  hmConfig,
   lib,
   pkgs,
   ...
@@ -39,11 +40,12 @@
                 ".git",
               },
             })
-            if vim.startswith(name, "${builtins.storeDir}/") then
+            local is_std = vim.startswith(name, "${hmConfig.xdg.dataHome}/emmylua_ls/")
+            if vim.startswith(name, "${builtins.storeDir}/") or is_std then
               local client = vim.lsp.get_clients({ name = "emmylua_ls" })[1]
               if client then
                 local lib = vim.tbl_get(client, "settings", "Lua", "workspace", "library") or {}
-                if vim.list_contains(lib, root_dir) then
+                if vim.list_contains(lib, root_dir) or is_std then
                   root_dir = client.root_dir or root_dir
                 end
               end
