@@ -1,6 +1,7 @@
 {
   stdenv,
   neovim-unwrapped,
+  fetchurl,
 }:
 
 # To avoid re-building neovim just copy attrs and files from original neovim
@@ -28,10 +29,19 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ neovim-unwrapped ];
 
-  buildPhase = ''
+  installPhase = ''
     cp -r . $out
 
     # Regenerate doc tags
     $out/bin/nvim -u NONE -i NONE --cmd "helptags $out/share/nvim/runtime/doc" --cmd q
+
+    # Add luv meta
+    mkdir $out/share/nvim/runtime/lua/uv
+    cp ${
+      fetchurl {
+        url = "https://raw.githubusercontent.com/luvit/luv/refs/heads/master/docs/meta.lua";
+        hash = "sha256-fTusNw6+LHAY1UFdouhTOLt3MV5rrtqrMLQ6v7WMl2A=";
+      }
+    } $out/share/nvim/runtime/lua/uv/_meta.lua
   '';
 }
