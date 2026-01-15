@@ -25,10 +25,6 @@
     };
 
     # Neovim plugins
-    fix-auto-scroll-nvim = {
-      url = "github:BranimirE/fix-auto-scroll.nvim";
-      flake = false;
-    };
     vim-mediawiki = {
       url = "github:m-pilia/vim-mediawiki";
       flake = false;

@@ -23,11 +23,23 @@ let
 in
 {
   # Flake input plugins
-  fix-auto-scroll-nvim = mkPlugin "fix-auto-scroll.nvim";
   surround-nvim = mkPlugin "surround.nvim";
 
   smart-splits-nvim = prev.smart-splits-nvim.overrideAttrs {
     src = inputs.smart-splits-nvim;
+  };
+
+  # Fix Auto Scroll Neovim
+  fix-auto-scroll-nvim = vimUtils.buildVimPlugin {
+    pname = "fix-auto-scroll.nvim";
+    version = "2023-11-23";
+    src = fetchFromGitHub {
+      owner = "BranimirE";
+      repo = "fix-auto-scroll.nvim";
+      rev = "c211a42f4030c9ed03a1456919917cdf1a193bd9";
+      hash = "sha256-nJdkGwP9L/9Q547PuD0ZZmKvEAxr/59wMXlh8UgTomI=";
+    };
+    meta.homepage = "https://github.com/BranimirE/fix-auto-scroll.nvim";
   };
 
   # My fork of mini.nvim

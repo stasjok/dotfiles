@@ -37,22 +37,6 @@
         "type": "github"
       }
     },
-    "fix-auto-scroll-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1700694779,
-        "narHash": "sha256-nJdkGwP9L/9Q547PuD0ZZmKvEAxr/59wMXlh8UgTomI=",
-        "owner": "BranimirE",
-        "repo": "fix-auto-scroll.nvim",
-        "rev": "c211a42f4030c9ed03a1456919917cdf1a193bd9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "BranimirE",
-        "repo": "fix-auto-scroll.nvim",
-        "type": "github"
-      }
-    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -139,7 +123,6 @@
       "inputs": {
         "catppuccin": "catppuccin",
         "catppuccin-palette": "catppuccin-palette",
-        "fix-auto-scroll-nvim": "fix-auto-scroll-nvim",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nixvim": "nixvim",

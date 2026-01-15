@@ -111,8 +111,6 @@ in
     extraPlugins = with pkgs.vimPlugins; [
       # Libraries
       plenary-nvim
-      # Interface
-      fix-auto-scroll-nvim
       # Snippets
       luasnip
       # Editing
