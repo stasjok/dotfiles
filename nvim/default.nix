@@ -165,13 +165,6 @@ in
           (builtins.filter (p: p.name != cfg.build.extraFiles.name))
         ];
 
-        # Extend plugin list with dependencies
-        allPlugins =
-          let
-            pluginWithDeps = plugin: [ plugin ] ++ builtins.concatMap pluginWithDeps plugin.dependencies or [ ];
-          in
-          lib.unique (builtins.concatMap pluginWithDeps plugins);
-
         # List of plugin names
         pluginNames = builtins.map lib.getName plugins;
 
@@ -201,32 +194,8 @@ in
         runtime =
           let
             pluginRuntimes = builtins.map pluginRuntime pluginNames;
-
-            # List of plugin sources for lua-language-server
-            luaLsLibrary = {
-              "lua_ls_library.json".text = lib.pipe allPlugins [
-                # Filter out non-lua plugins
-                (builtins.filter (
-                  p:
-                  let
-                    name = lib.getName p;
-                  in
-                  !lib.hasPrefix "vim-" name
-                  && !lib.hasSuffix "-vim" name
-                  && !lib.hasSuffix ".vim" name
-                  && !lib.hasInfix "-grammar-" name
-                  # Catppuccin is byte compiled
-                  && name != "catppuccin-nvim-compiled"
-                ))
-                # Append types and neovim runtime
-                (lib.concat [ neovim ])
-                (builtins.map (plugin: lib.nameValuePair (pluginNormalizedName (lib.getName plugin)) plugin))
-                builtins.listToAttrs
-                builtins.toJSON
-              ];
-            };
           in
-          builtins.foldl' (r1: r2: r1 // r2) (mkRuntimeAttrs ./runtime // luaLsLibrary) pluginRuntimes;
+          builtins.foldl' (r1: r2: r1 // r2) (mkRuntimeAttrs ./runtime) pluginRuntimes;
       in
       runtime;
 

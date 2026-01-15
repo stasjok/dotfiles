@@ -61,6 +61,21 @@ in
     }
   );
 
+  # Support param/@return completion
+  emmylua-ls = prev.emmylua-ls.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      version = "0.19.0";
+      src = prevAttrs.src.override {
+        hash = "sha256-bdvJInMuWJq7MZa+4wrKBn0myLTHCayhDAhB8Stjp6A=";
+      };
+      cargoHash = "sha256-bF6bdTbcHDecj+wVoNsaKBzsz96d3vo6cqp5MjSbT4E=";
+      cargoDeps = final.rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs) pname version src;
+        hash = finalAttrs.cargoHash;
+      };
+    }
+  );
+
   # https://github.com/fengkx/beancount-lsp
   beancount-lsp-server = callPackage ../packages/beancount-lsp-server { };
 

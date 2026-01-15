@@ -1,5 +1,13 @@
-{ lib, pkgs, ... }:
 {
+  lib,
+  pkgs,
+  ...
+}:
+{
+  imports = [
+    ./emmylua_ls.nix
+  ];
+
   plugins.lspconfig.enable = true;
 
   lsp.servers = {
@@ -14,9 +22,6 @@
     # Python
     basedpyright.enable = true;
     ruff.enable = true;
-
-    # Lua
-    lua_ls.enable = true;
 
     # Nix
     nil_ls = {
@@ -191,7 +196,6 @@
   ];
 
   extraFiles = {
-    "lsp/lua_ls.lua".text = builtins.readFile ./lua_ls.lua;
     "lsp/nixd.lua".text = builtins.readFile ./nixd.lua;
   };
 }
