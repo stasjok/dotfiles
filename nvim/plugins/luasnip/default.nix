@@ -6,9 +6,12 @@
     luaConfig.pre = builtins.readFile ./pre.lua;
 
     settings = {
-      updateevents = "TextChanged,TextChangedI";
+      updateevents = [
+        "TextChanged"
+        "TextChangedI"
+      ];
       region_check_events = "InsertEnter";
-      store_selection_keys = "<C-H>";
+      cut_selection_keys = "<C-H>";
       snip_env = {
         __snip_env_behaviour = "set";
       };
@@ -64,6 +67,11 @@
           return c(pos, { i(nil, snip_text), snip })
         end
       '';
+    };
+
+    # Filetypes
+    filetypeExtend = {
+      salt = [ "jinja" ];
     };
 
     # Snippet loaders

@@ -2,9 +2,6 @@ local luasnip = require("luasnip")
 local extend_load_ft = require("luasnip.extras.filetype_functions").extend_load_ft
 local jinja_ft_func = require("snippets.jinja_utils").jinja_ft_func
 
--- Filetypes
-luasnip.filetype_set("salt", { "salt", "jinja" })
-
 ---@type fun(): string[] Returns a list of snippet filetypes for current cursor position
 local ft_func = setmetatable({
   jinja = jinja_ft_func("jinja"),
