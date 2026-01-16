@@ -111,8 +111,6 @@ in
     extraPlugins = with pkgs.vimPlugins; [
       # Libraries
       plenary-nvim
-      # Snippets
-      luasnip
       # Editing
       surround-nvim
       nvim-autopairs

@@ -3,6 +3,7 @@
     ./blink-cmp.nix
     ./codecompanion
     ./lsp-signature.nix
+    ./luasnip
     ./mini.nix
     ./smart_splits.nix
     ./telescope.nix
