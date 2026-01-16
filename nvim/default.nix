@@ -194,11 +194,5 @@ in
           builtins.foldl' (r1: r2: r1 // r2) (mkRuntimeAttrs ./runtime) pluginRuntimes;
       in
       runtime;
-
-    # Lua libraries
-    extraLuaPackages =
-      p: with p; [
-        jsregexp
-      ];
   };
 }
