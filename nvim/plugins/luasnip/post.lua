@@ -37,15 +37,5 @@ map("x", "<C-E>", on_the_fly_visual, { remap = true, expr = true })
 map("s", "<BS>", "<C-O>c")
 map("s", "<Del>", "<C-O>c")
 
--- Load snippets
-local opts = {
-  paths = vim.api.nvim__get_runtime({ "snippets" }, false, {}),
-  fs_event_providers = {},
-}
-
-require("luasnip.loaders.from_vscode").lazy_load(opts)
-require("luasnip.loaders.from_snipmate").lazy_load(opts)
-require("luasnip.loaders.from_lua").lazy_load(opts)
-
 -- Clear LuaSnip FS watcher autocommands
 vim.api.nvim_del_augroup_by_name("_luasnip_fs_watcher")

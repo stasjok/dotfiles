@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 {
   plugins.luasnip = {
     enable = true;
@@ -65,6 +65,23 @@
         end
       '';
     };
+
+    # Snippet loaders
+    fromLua = [
+      {
+        paths = [ "${config.build.extraFiles}/snippets" ];
+      }
+    ];
+    fromVscode = [
+      {
+        paths = [ "${config.build.extraFiles}/snippets" ];
+      }
+    ];
+    fromSnipmate = [
+      {
+        paths = [ "${config.build.extraFiles}/snippets" ];
+      }
+    ];
 
     luaConfig.post = builtins.readFile ./post.lua;
   };
