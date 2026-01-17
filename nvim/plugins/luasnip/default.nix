@@ -179,13 +179,10 @@
       key = "<C-E>";
       action = lib.nixvim.mkRaw ''
         function()
-          return "c<C-E>" .. vim.v.register
+          vim.api.nvim_feedkeys("c", "nx", false)
+          require("luasnip.extras.otf").on_the_fly(vim.v.register)
         end
       '';
-      options = {
-        expr = true;
-        remap = true;
-      };
     }
 
     # This mappings are switching to Insert mode after <BS> or <Del>
