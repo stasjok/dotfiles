@@ -28,103 +28,6 @@ local function is_ansible()
   return vim.bo.filetype == "yaml.ansible" or match_file_path({ "ansible", "role" })
 end
 
--- Flags to avoid setting queries twice
-local is_jinja_query_set = false
-local is_yaml_query_set = false
-
---- Set `ft_func` jinja2 query
-local function set_jinja_query()
-  if not is_jinja_query_set then
-    is_jinja_query_set = true
-
-    vim.treesitter.query.set(
-      "jinja2",
-      "ft_func",
-      [[
-        (jinja_stuff) @jinja
-        (text) @text
-      ]]
-    )
-  end
-end
-
---- Set `ft_func` yaml query
-local function set_yaml_query()
-  if not is_yaml_query_set then
-    is_yaml_query_set = true
-
-    vim.treesitter.query.set(
-      "yaml",
-      "ft_func",
-      [[
-        (block_mapping_pair
-          key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
-          value: (flow_node [
-            (plain_scalar (string_scalar))
-            (double_quote_scalar)
-            (single_quote_scalar)
-          ] @value))
-
-        (block_mapping_pair
-          key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
-          value: (block_node
-            (block_scalar) @value))
-
-        (block_mapping_pair
-          key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
-          value: (block_node
-            (block_sequence
-              (block_sequence_item
-                (flow_node [
-                  (plain_scalar (string_scalar))
-                  (double_quote_scalar)
-                  (single_quote_scalar)
-                ] @value)))))
-
-        (block_mapping_pair
-          key: (flow_node) @key (#not-any-of? @key "when" "that" "var")
-          value: (block_node
-            (block_sequence
-              (block_sequence_item
-                (block_node
-                  (block_scalar) @value)))))
-
-        (block_mapping_pair
-          key: (flow_node) @key (#any-of? @key "when" "that" "var")
-          value: (flow_node [
-            (plain_scalar (string_scalar))
-            (double_quote_scalar)
-            (single_quote_scalar)
-          ] @jinja))
-
-        (block_mapping_pair
-          key: (flow_node) @key (#any-of? @key "when" "that" "var")
-          value: (block_node
-            (block_scalar) @jinja))
-
-        (block_mapping_pair
-          key: (flow_node) @key (#any-of? @key "when" "that" "var")
-          value: (block_node
-            (block_sequence
-              (block_sequence_item
-                (flow_node [
-                  (plain_scalar (string_scalar))
-                  (double_quote_scalar)
-                  (single_quote_scalar)
-                ] @jinja)))))
-
-        (block_mapping_pair
-          key: (flow_node) @key (#any-of? @key "when" "that" "var")
-          value: (block_node
-            (block_sequence
-              (block_sequence_item
-                (block_node
-                  (block_scalar) @jinja)))))
-      ]]
-    )
-  end
-end
-
 ---Returns LuaSnip `ft_func` for jinja or salt filetypes
 ---@param ft "jinja" | "salt" | "ansible" Filetype for `ft_func`
 ---@return fun(): string[]
@@ -213,8 +116,6 @@ function jinja_utils.jinja_ft_func(ft)
 
   local ft_funcs = {
     jinja = function()
-      set_jinja_query()
-
       local filetypes = {}
       local captures = get_captures_at_cursor("ft_func", 0, "jinja2")
       for _, capture in ipairs(captures) do
@@ -229,9 +130,6 @@ function jinja_utils.jinja_ft_func(ft)
       return filetypes
     end,
     ansible = function()
-      set_yaml_query()
-      set_jinja_query()
-
       local filetypes = {}
       local captures = get_captures_at_cursor("ft_func", 0, "yaml")
       for _, capture in ipairs(captures) do
