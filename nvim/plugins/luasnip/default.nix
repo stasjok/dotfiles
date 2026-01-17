@@ -119,6 +119,85 @@
       }
     ];
 
-    luaConfig.post = builtins.readFile ./post.lua;
+    # Clear LuaSnip FS watcher autocommands
+    luaConfig.post = ''
+      vim.api.nvim_del_augroup_by_name("_luasnip_fs_watcher")
+    '';
   };
+
+  # Mappings
+  keymaps = [
+    {
+      mode = "i";
+      key = "<C-H>";
+      action = "<Plug>luasnip-expand-snippet";
+
+    }
+    {
+      mode = [
+        "i"
+        "s"
+        "n"
+      ];
+      key = "<C-J>";
+      action = "<Plug>luasnip-jump-next";
+    }
+    {
+      mode = [
+        "i"
+        "s"
+        "n"
+      ];
+      key = "<C-K>";
+      action = "<Plug>luasnip-jump-prev";
+    }
+    {
+      mode = [
+        "i"
+        "s"
+        "n"
+      ];
+      key = "<C-L>";
+      action = "<Plug>luasnip-next-choice";
+    }
+
+    # On-the-fly snippets
+    {
+      mode = "i";
+      key = "<C-E>";
+      action = lib.nixvim.mkRaw ''
+        function()
+          local register = vim.fn.getcharstr()
+          if #register == 1 and register:match('[%w"*+-]') then
+            require("luasnip.extras.otf").on_the_fly(register)
+          end
+        end
+      '';
+    }
+    {
+      mode = "x";
+      key = "<C-E>";
+      action = lib.nixvim.mkRaw ''
+        function()
+          return "c<C-E>" .. vim.v.register
+        end
+      '';
+      options = {
+        expr = true;
+        remap = true;
+      };
+    }
+
+    # This mappings are switching to Insert mode after <BS> or <Del>
+    {
+      mode = "s";
+      key = "<BS>";
+      action = "<C-O>c";
+    }
+    {
+      mode = "s";
+      key = "<Del>";
+      action = "<C-O>c";
+    }
+  ];
 }
