@@ -185,7 +185,7 @@
       '';
     }
 
-    # This mappings are switching to Insert mode after <BS> or <Del>
+    # These mappings switch to Insert mode when pressing <BS> or <Del>.
     {
       mode = "s";
       key = "<BS>";
