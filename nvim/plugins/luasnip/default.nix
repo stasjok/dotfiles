@@ -38,43 +38,45 @@
       '';
 
       load_ft_func = lib.nixvim.mkRaw ''
-        require("luasnip.extras.filetype_functions").extend_load_ft({
-          jinja = {
-            "jinja_statements",
-            "jinja_stuff",
-            "jinja_filters",
-            "jinja_tests",
-            "salt_statements",
-            "salt_jinja_stuff",
-            "salt_filters",
-            "salt_tests",
-            "ansible_jinja_stuff",
-            "ansible_filters",
-            "ansible_tests",
-          },
-          salt = {
-            "jinja_statements",
-            "jinja_stuff",
-            "jinja_filters",
-            "jinja_tests",
-            "salt_statements",
-            "salt_jinja_stuff",
-            "salt_filters",
-            "salt_tests",
-          },
-          ansible = {
-            "jinja_statements",
-            "jinja_stuff",
-            "jinja_filters",
-            "jinja_tests",
-            "ansible_jinja_stuff",
-            "ansible_filters",
-            "ansible_tests",
-          },
-          lua = {
-            "lua",
-            "lua_spec",
-          },
+        require("luasnip.extras.filetype_functions").extend_load_ft(${
+          lib.nixvim.toLuaObject {
+            jinja = [
+              "ansible_filters"
+              "ansible_jinja_stuff"
+              "ansible_tests"
+              "jinja_filters"
+              "jinja_statements"
+              "jinja_stuff"
+              "jinja_tests"
+              "salt_filters"
+              "salt_jinja_stuff"
+              "salt_statements"
+              "salt_tests"
+            ];
+            salt = [
+              "jinja_filters"
+              "jinja_statements"
+              "jinja_stuff"
+              "jinja_tests"
+              "salt_filters"
+              "salt_jinja_stuff"
+              "salt_statements"
+              "salt_tests"
+            ];
+            ansible = [
+              "ansible_filters"
+              "ansible_jinja_stuff"
+              "ansible_tests"
+              "jinja_filters"
+              "jinja_statements"
+              "jinja_stuff"
+              "jinja_tests"
+            ];
+            lua = [
+              "lua"
+              "lua_spec"
+            ];
+          }
         })
       '';
 
