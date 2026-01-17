@@ -105,7 +105,7 @@
         "n"
         "v"
       ];
-      key = "<C-A>";
+      key = "<C-Q>";
       action = lib.nixvim.mkRaw ''
         function()
           require("codecompanion").toggle({ window_opts = { width = "auto" }})
