@@ -1,10 +1,3 @@
-local s = require("luasnip.nodes.snippet").S
-local t = require("luasnip.nodes.textNode").T
-local i = require("luasnip.nodes.insertNode").I
-local c = require("luasnip.nodes.choiceNode").C
-local r = require("luasnip.nodes.restoreNode").R
-local n = require("luasnip.extras").nonempty
-
 return {
   s({ trig = "raise", dscr = "Raise custom error" }, {
     t('raise("'),

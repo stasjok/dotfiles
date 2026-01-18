@@ -1,4 +1,7 @@
-{ config, lib, ... }:
+{ lib, ... }:
+let
+  inherit (lib.nixvim) mkRaw;
+in
 {
   plugins.luasnip = {
     enable = true;
@@ -11,7 +14,7 @@
       region_check_events = "InsertEnter";
       cut_selection_keys = "<C-H>";
 
-      ft_func = lib.nixvim.mkRaw ''
+      ft_func = mkRaw ''
         setmetatable({
           jinja = require("snippets.jinja_utils").jinja_ft_func("jinja"),
           salt = require("snippets.jinja_utils").jinja_ft_func("salt"),
@@ -37,7 +40,7 @@
           })
       '';
 
-      load_ft_func = lib.nixvim.mkRaw ''
+      load_ft_func = mkRaw ''
         require("luasnip.extras.filetype_functions").extend_load_ft(${
           lib.nixvim.toLuaObject {
             jinja = [
@@ -80,7 +83,7 @@
         })
       '';
 
-      parser_nested_assembler = lib.nixvim.mkRaw ''
+      parser_nested_assembler = mkRaw ''
         function(pos, snip)
           local s = require("luasnip.nodes.snippet").S
           local i = require("luasnip.nodes.insertNode").I
@@ -93,7 +96,9 @@
       '';
 
       snip_env = {
-        __snip_env_behaviour = "set";
+        "cr" = mkRaw "require('snippets.nodes').cr";
+        "expand_conds" = mkRaw "require('snippets.expand_conditions')";
+        "show_conds" = mkRaw "require('snippets.show_conditions')";
       };
     };
 
@@ -141,7 +146,7 @@
         "n"
       ];
       key = "<C-L>";
-      action = lib.nixvim.mkRaw ''
+      action = mkRaw ''
         function()
           if require("luasnip").choice_active() then
             require("luasnip").change_choice(1)
@@ -154,7 +159,7 @@
     {
       mode = "i";
       key = "<C-E>";
-      action = lib.nixvim.mkRaw ''
+      action = mkRaw ''
         function()
           local register = vim.fn.getcharstr()
           if #register == 1 and register:match('[%w"*+-]') then
@@ -166,7 +171,7 @@
     {
       mode = "x";
       key = "<C-E>";
-      action = lib.nixvim.mkRaw ''
+      action = mkRaw ''
         function()
           vim.api.nvim_feedkeys("c", "nx", false)
           require("luasnip.extras.otf").on_the_fly(vim.v.register)

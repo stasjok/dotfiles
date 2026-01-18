@@ -1,8 +1,3 @@
-local s = require("luasnip.nodes.snippet").S
-local t = require("luasnip.nodes.textNode").T
-local i = require("luasnip.nodes.insertNode").I
-local c = require("luasnip.nodes.choiceNode").C
-
 return {
   s({ trig = "ansible_facts", dscr = "Ansible fact" }, {
     t('ansible_facts["'),

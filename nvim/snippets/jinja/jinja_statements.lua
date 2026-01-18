@@ -1,16 +1,3 @@
-local s = require("luasnip.nodes.snippet").S
-local t = require("luasnip.nodes.textNode").T
-local i = require("luasnip.nodes.insertNode").I
-local d = require("luasnip.nodes.dynamicNode").D
-local r = require("luasnip.nodes.restoreNode").R
-local l = require("luasnip.extras").lambda
-local rep = require("luasnip.extras").rep
-local p = require("luasnip.extras").partial
-local n = require("luasnip.extras").nonempty
-local dl = require("luasnip.extras").dynamic_lambda
-local cr = require("snippets.nodes").cr
-local expand_conds = require("snippets.expand_conditions")
-local show_conds = require("snippets.show_conditions")
 local utils = require("snippets.jinja_utils")
 
 -- Jinja statements

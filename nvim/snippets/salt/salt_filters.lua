@@ -1,9 +1,3 @@
-local t = require("luasnip.nodes.textNode").T
-local i = require("luasnip.nodes.insertNode").I
-local c = require("luasnip.nodes.choiceNode").C
-local r = require("luasnip.nodes.restoreNode").R
-local n = require("luasnip.extras").nonempty
-local cr = require("snippets.nodes").cr
 local jinja_filter_snippets = require("snippets.jinja_utils").jinja_filter_snippets
 
 -- SaltStack jinja filters

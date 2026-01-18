@@ -1,4 +1,3 @@
-local i = require("luasnip.nodes.insertNode").I
 local jinja_filter_snippets = require("snippets.jinja_utils").jinja_filter_snippets
 
 -- Jinja tests

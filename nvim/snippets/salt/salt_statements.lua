@@ -1,7 +1,3 @@
-local t = require("luasnip.nodes.textNode").T
-local i = require("luasnip.nodes.insertNode").I
-local l = require("luasnip.extras").lambda
-local dl = require("luasnip.extras").dynamic_lambda
 local jinja_statement_snippets = require("snippets.jinja_utils").jinja_statement_snippets
 
 -- SaltStack jinja statements
