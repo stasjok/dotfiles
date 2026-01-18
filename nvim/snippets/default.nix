@@ -6,6 +6,7 @@
     ./beancount.nix
     ./gitcommit.nix
     ./jinja
+    ./make
     ./mediawiki.nix
     ./python.nix
     ./salt
