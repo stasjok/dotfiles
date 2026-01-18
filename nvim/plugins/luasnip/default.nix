@@ -158,7 +158,13 @@
         "n"
       ];
       key = "<C-L>";
-      action = "<Plug>luasnip-next-choice";
+      action = lib.nixvim.mkRaw ''
+        function()
+          if require("luasnip").choice_active() then
+            require("luasnip").change_choice(1)
+          end
+        end
+      '';
     }
 
     # On-the-fly snippets
