@@ -10,10 +10,6 @@
         "path": "./salt.json"
       },
       {
-        "language": "mediawiki",
-        "path": "./mediawiki.json"
-      },
-      {
         "language": "python",
         "path": "./python.json"
       },

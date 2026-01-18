@@ -4,5 +4,6 @@
   imports = [
     ./beancount.nix
     ./gitcommit.nix
+    ./mediawiki.nix
   ];
 }
