@@ -102,13 +102,6 @@
       salt = [ "jinja" ];
     };
 
-    # Snippet loaders
-    fromLua = [
-      {
-        paths = [ "${config.build.extraFiles}/snippets" ];
-      }
-    ];
-
     # Clear LuaSnip FS watcher autocommands
     luaConfig.post = ''
       vim.api.nvim_del_augroup_by_name("_luasnip_fs_watcher")
