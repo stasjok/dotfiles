@@ -3,5 +3,6 @@
 
   imports = [
     ./beancount.nix
+    ./gitcommit.nix
   ];
 }

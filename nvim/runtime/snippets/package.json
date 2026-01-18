@@ -6,10 +6,6 @@
         "path": "./ansible_filters.json"
       },
       {
-        "language": "beancount",
-        "path": "./beancount.json"
-      },
-      {
         "language": "salt",
         "path": "./salt.json"
       },
@@ -24,13 +20,6 @@
       {
         "language": "sh",
         "path": "./sh.json"
-      },
-      {
-        "language": [
-          "gitcommit",
-          "NeogitCommitMessage"
-        ],
-        "path": "./gitcommit.json"
       }
     ]
   }
