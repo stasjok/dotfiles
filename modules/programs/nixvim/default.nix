@@ -4,8 +4,9 @@
     type = lib.types.submoduleWith {
       modules = lib.toList {
         imports = [
-          ./runtime.nix
           ./plugins
+          ./runtime.nix
+          ./snippets.nix
         ];
       };
     };

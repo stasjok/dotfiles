@@ -1,0 +1,26 @@
+return {
+  s({ trig = "ansible_facts", dscr = "Ansible fact" }, {
+    t('ansible_facts["'),
+    c(1, {
+      i(1, "os_family"),
+      i(1, "distribution"),
+      i(1, "distribution_major_version"),
+      i(1, "distribution_release"),
+      i(1, "hostname"),
+      i(1, "fqdn"),
+      i(1, "virtualization_type"),
+      i(1, "virtualization_role"),
+    }),
+    t('"]'),
+  }),
+  s({ trig = "ansible_managed", dscr = "The ansible_managed string" }, {
+    t("ansible_managed"),
+  }, {
+    condition = function()
+      return vim.bo.filetype ~= "yaml.ansible"
+    end,
+    show_condition = function()
+      return vim.bo.filetype ~= "yaml.ansible"
+    end,
+  }),
+}

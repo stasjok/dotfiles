@@ -87,6 +87,7 @@
             }
             client.settings.Lua.workspace.workspaceRoots = {
               "nvim/runtime",
+              "nvim/snippets/utils",
               "tests/nvim/runtime",
             }
           elseif vim.endswith(root_dir, "/share/nvim/runtime") then

@@ -51,7 +51,7 @@ in
               ./options.nix
               ./plugins
               ./skeletons.nix
-              ./snippets.nix
+              ./snippets
               ./treesitter
             ];
           };
