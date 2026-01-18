@@ -36,6 +36,33 @@ let
       };
     }
   );
+  vscodeSnippetsModule = submodule (
+    { config, ... }:
+    {
+      options = {
+        language = mkOption {
+          type = listOrStr;
+          description = "Language(s) for these snippets.";
+        };
+        snippets = mkOption {
+          type = attrsOf vscodeSnippet;
+          default = { };
+          description = "Snippets for this language.";
+        };
+        source = mkOption {
+          type = with lib.types; nullOr path;
+          description = "Path to a VS Code snippets JSON file.";
+        };
+      };
+
+      config = {
+        source = mkIf (config.snippets != { }) (jsonFormat.generate "snippets.json" config.snippets);
+      };
+    }
+  );
+  vscodeSnippetsType =
+    with lib.types;
+    coercedTo (attrsOf anything) lib.singleton (listOf vscodeSnippetsModule);
 
   # Generate VS Code snippet files and package.json
   vscodeSnippets = lib.imap1 (idx: contrib: {
@@ -104,32 +131,7 @@ in
     enable = mkEnableOption "snippets";
 
     vscode = mkOption {
-      type = listOf (
-        submodule (
-          { config, ... }:
-          {
-            options = {
-              language = mkOption {
-                type = listOrStr;
-                description = "Language(s) for these snippets.";
-              };
-              snippets = mkOption {
-                type = attrsOf vscodeSnippet;
-                default = { };
-                description = "Snippets for this language.";
-              };
-              source = mkOption {
-                type = with lib.types; nullOr path;
-                description = "Path to a VS Code snippets JSON file.";
-              };
-            };
-
-            config = {
-              source = mkIf (config.snippets != { }) (jsonFormat.generate "snippets.json" config.snippets);
-            };
-          }
-        )
-      );
+      type = vscodeSnippetsType;
       default = [ ];
       description = "VS Code snippets";
     };
