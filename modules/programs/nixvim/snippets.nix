@@ -19,7 +19,7 @@ let
   jsonFormat = pkgs.formats.json { };
 
   # Snippet submodule type
-  snippetType = submodule {
+  vscodeSnippetType = submodule {
     freeformType = jsonFormat.type;
     options = {
       prefix = mkOption {
@@ -40,20 +40,6 @@ let
         type = str;
         default = "";
         description = "Snippet description";
-      };
-    };
-  };
-
-  # Language snippet submodule type
-  languageSnippetType = submodule {
-    options = {
-      language = mkOption {
-        type = listOf str;
-        description = "Language(s) for these snippets";
-      };
-      snippets = mkOption {
-        type = attrsOf snippetType;
-        description = "Snippets for this language";
       };
     };
   };
@@ -80,13 +66,34 @@ in
     enable = mkEnableOption "snippets";
 
     vscode = mkOption {
-      type = listOf languageSnippetType;
+      type = listOf (submodule {
+        options = {
+          language = mkOption {
+            type = listOf str;
+            description = "Language(s) for these snippets";
+          };
+          snippets = mkOption {
+            type = attrsOf vscodeSnippetType;
+            description = "Snippets for this language";
+          };
+        };
+      });
       default = [ ];
       description = "VSCode-style snippets";
     };
-  };
 
-  config.plugins.luasnip.fromVscode = mkIf (cfg.enable && config.plugins.luasnip.enable) [
-    { paths = vscodeSnippetsDrv; }
-  ];
+    build.vscode = mkOption {
+      type = lib.types.package;
+      description = "VSCode snippets derivation";
+      readOnly = true;
+      internal = true;
+    };
+  };
+  config = mkIf cfg.enable {
+    snippets.build.vscode = vscodeSnippetsDrv;
+
+    plugins.luasnip.fromVscode = mkIf config.plugins.luasnip.enable [
+      { paths = vscodeSnippetsDrv; }
+    ];
+  };
 }
