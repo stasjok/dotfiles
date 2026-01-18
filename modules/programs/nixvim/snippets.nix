@@ -74,6 +74,7 @@ in
           };
           snippets = mkOption {
             type = attrsOf vscodeSnippetType;
+            default = { };
             description = "Snippets for this language";
           };
         };
