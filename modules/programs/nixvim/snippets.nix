@@ -14,30 +14,6 @@ let
   jsonFormat = pkgs.formats.json { };
   listOrStr = with lib.types; coercedTo str lib.singleton (listOf str);
 
-  luaSnippetFile = submodule (
-    { config, ... }:
-    {
-      options = {
-        text = mkOption {
-          type = with lib.types; nullOr str;
-          default = null;
-          description = "Lua snippet file contents.";
-        };
-
-        source = mkOption {
-          type = with lib.types; nullOr path;
-          description = "Path to a Lua snippet source file.";
-        };
-      };
-
-      config = {
-        source = mkIf (config.text != null) (pkgs.writeText "snippets.lua" config.text);
-      };
-    }
-  );
-
-  luaSnippetFt = with lib.types; either luaSnippetFile (listOf luaSnippetFile);
-
   # A submodule type for VS Code snippets
   vscodeSnippet = submodule (
     { config, ... }:
@@ -77,7 +53,32 @@ let
     [ packageJsonFile ] ++ vscodeSnippetFiles
   );
 
-  luaSnippetFarmEntries = lib.flatten (
+  # A submodule for Lua snippets file
+  luaSnippetFile = submodule (
+    { config, ... }:
+    {
+      options = {
+        text = mkOption {
+          type = with lib.types; nullOr str;
+          default = null;
+          description = "Lua snippets file contents.";
+        };
+
+        source = mkOption {
+          type = with lib.types; nullOr path;
+          description = "Path to a Lua snippets source file.";
+        };
+      };
+
+      config = {
+        source = mkIf (config.text != null) (pkgs.writeText "snippets.lua" config.text);
+      };
+    }
+  );
+  luaSnippetFiles = with lib.types; either luaSnippetFile (listOf luaSnippetFile);
+
+  # Generate Lua snippets
+  luaSnippetEntries = builtins.concatLists (
     lib.mapAttrsToList (
       ft: files:
       lib.imap1 (idx: file: {
@@ -86,9 +87,7 @@ let
       }) files
     ) cfg.lua
   );
-
-  luaSnippetsDrv = pkgs.linkFarm "luasnip-lua-snippets" luaSnippetFarmEntries;
-
+  luaSnippetsDrv = pkgs.linkFarm "luasnip-lua-snippets" luaSnippetEntries;
 in
 {
   options.snippets = {
@@ -113,9 +112,9 @@ in
     };
 
     lua = mkOption {
-      type = attrsOf luaSnippetFt;
+      type = attrsOf luaSnippetFiles;
       default = { };
-      apply = lib.mapAttrs (_: v: if lib.isList v then v else [ v ]);
+      apply = builtins.mapAttrs (_: lib.toList);
       description = ''
         LuaSnip "Lua loader" snippets. Keys are filetypes, values are snippet-file specs
         (single or list). Files are generated as <ft>/*.lua.
