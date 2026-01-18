@@ -5,5 +5,6 @@
     ./beancount.nix
     ./gitcommit.nix
     ./mediawiki.nix
+    ./python.nix
   ];
 }
