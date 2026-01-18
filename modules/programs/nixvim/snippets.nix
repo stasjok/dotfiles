@@ -85,7 +85,7 @@ in
   config = mkIf cfg.enable {
     snippets.build.vscode = vscodeSnippetsDrv;
 
-    plugins.luasnip.fromVscode = mkIf config.plugins.luasnip.enable [
+    plugins.luasnip.fromVscode = mkIf (cfg.vscode != [ ]) [
       { paths = vscodeSnippetsDrv; }
     ];
   };
