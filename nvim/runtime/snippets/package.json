@@ -8,10 +8,6 @@
       {
         "language": "salt",
         "path": "./salt.json"
-      },
-      {
-        "language": "sh",
-        "path": "./sh.json"
       }
     ]
   }
