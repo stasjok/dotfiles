@@ -79,6 +79,7 @@ in
       type = lib.types.package;
       description = "VSCode snippets derivation";
       readOnly = true;
+      visible = false;
       internal = true;
     };
   };
