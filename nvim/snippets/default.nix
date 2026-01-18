@@ -5,6 +5,7 @@
     ./ansible
     ./beancount.nix
     ./gitcommit.nix
+    ./jinja
     ./mediawiki.nix
     ./python.nix
     ./salt
