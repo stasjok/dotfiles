@@ -14,5 +14,8 @@
     ./salt
     ./sh.nix
     ./snippets.nix
+
+    # Lua utils for snippets
+    ./utils
   ];
 }
