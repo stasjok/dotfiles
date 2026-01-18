@@ -108,11 +108,6 @@
         paths = [ "${config.build.extraFiles}/snippets" ];
       }
     ];
-    fromSnipmate = [
-      {
-        paths = [ "${config.build.extraFiles}/snippets" ];
-      }
-    ];
 
     # Clear LuaSnip FS watcher autocommands
     luaConfig.post = ''

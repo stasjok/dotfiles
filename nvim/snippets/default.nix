@@ -2,6 +2,7 @@
   snippets.enable = true;
 
   imports = [
+    ./snippets.nix
     ./ansible
     ./beancount.nix
     ./gitcommit.nix
