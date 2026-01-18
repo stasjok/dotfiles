@@ -38,29 +38,28 @@ let
   );
 
   # Generate VS Code snippet files and package.json
-  vscodeSnippets = lib.imap1 (idx: contrib: rec {
-    inherit (contrib) language;
-    path = "${toString idx}-${builtins.head contrib.language}.json";
-    source = contrib.source;
+  vscodeSnippets = lib.imap1 (idx: contrib: {
+    inherit (contrib) language source;
+    name = "${toString idx}-${builtins.head contrib.language}.json";
   }) cfg.vscode;
   packageJsonFile = jsonFormat.generate "package.json" {
     contributes = {
-      snippets = map (contrib: { inherit (contrib) language path; }) vscodeSnippets;
+      snippets = map (contrib: {
+        inherit (contrib) language;
+        path = contrib.name;
+      }) vscodeSnippets;
     };
   };
-  vscodeSnippetEntries = map (contrib: {
-    name = contrib.path;
-    path = contrib.source;
-  }) vscodeSnippets;
-  vscodeSnippetsDrv = pkgs.linkFarm "vscode-snippets" (
-    [
-      {
-        name = "package.json";
-        path = packageJsonFile;
-      }
-    ]
-    ++ vscodeSnippetEntries
-  );
+  vscodeSnippetsEntries =
+    map (contrib: {
+      inherit (contrib) name;
+      path = contrib.source;
+    }) vscodeSnippets
+    ++ (lib.singleton {
+      name = "package.json";
+      path = packageJsonFile;
+    });
+  vscodeSnippetsDrv = pkgs.linkFarm "vscode-snippets" vscodeSnippetsEntries;
 
   # A submodule for Lua snippets file
   luaSnippetFile = submodule (
@@ -110,16 +109,16 @@ in
             options = {
               language = mkOption {
                 type = listOrStr;
-                description = "Language(s) for these snippets";
+                description = "Language(s) for these snippets.";
               };
               snippets = mkOption {
                 type = attrsOf vscodeSnippet;
                 default = { };
-                description = "Snippets for this language";
+                description = "Snippets for this language.";
               };
               source = mkOption {
                 type = with lib.types; nullOr path;
-                description = "Path to a VSCode snippets JSON file.";
+                description = "Path to a VS Code snippets JSON file.";
               };
             };
 
@@ -130,7 +129,7 @@ in
         )
       );
       default = [ ];
-      description = "VSCode-style snippets";
+      description = "VS Code snippets";
     };
 
     lua = mkOption {
@@ -138,14 +137,13 @@ in
       default = { };
       apply = builtins.mapAttrs (_: lib.toList);
       description = ''
-        LuaSnip "Lua loader" snippets. Keys are filetypes, values are snippet-file specs
-        (single or list). Files are generated as <ft>/*.lua.
+        Lua snippets.
       '';
     };
 
     build.vscode = mkOption {
       type = lib.types.package;
-      description = "VSCode snippets derivation";
+      description = "VS Code snippets derivation";
       readOnly = true;
       visible = false;
       internal = true;
@@ -153,7 +151,7 @@ in
 
     build.lua = mkOption {
       type = lib.types.package;
-      description = "LuaSnip Lua-loader snippets derivation";
+      description = "Lua snippets derivation";
       readOnly = true;
       visible = false;
       internal = true;
