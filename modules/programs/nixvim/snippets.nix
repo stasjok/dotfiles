@@ -41,16 +41,25 @@ let
   vscodeSnippets = lib.imap1 (idx: contrib: rec {
     inherit (contrib) language;
     path = "${toString idx}-${builtins.head contrib.language}.json";
-    drv = jsonFormat.generate path contrib.snippets;
+    source = contrib.source;
   }) cfg.vscode;
   packageJsonFile = jsonFormat.generate "package.json" {
     contributes = {
       snippets = map (contrib: { inherit (contrib) language path; }) vscodeSnippets;
     };
   };
-  vscodeSnippetFiles = builtins.catAttrs "drv" vscodeSnippets;
-  vscodeSnippetsDrv = pkgs.linkFarmFromDrvs "vscode-snippets" (
-    [ packageJsonFile ] ++ vscodeSnippetFiles
+  vscodeSnippetEntries = map (contrib: {
+    name = contrib.path;
+    path = contrib.source;
+  }) vscodeSnippets;
+  vscodeSnippetsDrv = pkgs.linkFarm "vscode-snippets" (
+    [
+      {
+        name = "package.json";
+        path = packageJsonFile;
+      }
+    ]
+    ++ vscodeSnippetEntries
   );
 
   # A submodule for Lua snippets file
@@ -94,19 +103,32 @@ in
     enable = mkEnableOption "snippets";
 
     vscode = mkOption {
-      type = listOf (submodule {
-        options = {
-          language = mkOption {
-            type = listOrStr;
-            description = "Language(s) for these snippets";
-          };
-          snippets = mkOption {
-            type = attrsOf vscodeSnippet;
-            default = { };
-            description = "Snippets for this language";
-          };
-        };
-      });
+      type = listOf (
+        submodule (
+          { config, ... }:
+          {
+            options = {
+              language = mkOption {
+                type = listOrStr;
+                description = "Language(s) for these snippets";
+              };
+              snippets = mkOption {
+                type = attrsOf vscodeSnippet;
+                default = { };
+                description = "Snippets for this language";
+              };
+              source = mkOption {
+                type = with lib.types; nullOr path;
+                description = "Path to a VSCode snippets JSON file.";
+              };
+            };
+
+            config = {
+              source = mkIf (config.snippets != { }) (jsonFormat.generate "snippets.json" config.snippets);
+            };
+          }
+        )
+      );
       default = [ ];
       description = "VSCode-style snippets";
     };
