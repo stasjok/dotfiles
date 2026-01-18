@@ -8,6 +8,7 @@
     ./jinja
     ./make
     ./mediawiki.nix
+    ./nix
     ./python.nix
     ./salt
     ./sh.nix
