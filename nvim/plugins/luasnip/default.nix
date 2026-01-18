@@ -108,11 +108,6 @@
         paths = [ "${config.build.extraFiles}/snippets" ];
       }
     ];
-    fromVscode = [
-      {
-        paths = [ "${config.build.extraFiles}/snippets" ];
-      }
-    ];
     fromSnipmate = [
       {
         paths = [ "${config.build.extraFiles}/snippets" ];

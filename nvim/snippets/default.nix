@@ -7,6 +7,7 @@
     ./gitcommit.nix
     ./mediawiki.nix
     ./python.nix
+    ./salt
     ./sh.nix
   ];
 }
