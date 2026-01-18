@@ -58,17 +58,22 @@ let
     };
   };
 
-  # Generate package.json directory using writeTextDir
-  packageDir = pkgs.writeTextDir "package.json" (
-    builtins.toJSON {
-      contributes = {
-        snippets = map (contrib: {
-          language = contrib.language;
-          path = jsonFormat.generate "${builtins.head contrib.language}.json" contrib.snippets;
-        }) cfg.vscode;
-      };
-    }
-  );
+  # Generate snippet files and package.json
+  vscodeSnippets = lib.imap1 (idx: contrib: rec {
+    inherit (contrib) language;
+    path = "${builtins.head contrib.language}-${toString idx}.json";
+    drv = jsonFormat.generate path contrib.snippets;
+  }) cfg.vscode;
+
+  packageJsonFile = jsonFormat.generate "package.json" {
+    contributes = {
+      snippets = map (contrib: { inherit (contrib) language path; }) vscodeSnippets;
+    };
+  };
+
+  snippetFiles = builtins.catAttrs "drv" vscodeSnippets;
+
+  vscodeSnippetsDrv = pkgs.linkFarmFromDrvs "vscode-snippets" ([ packageJsonFile ] ++ snippetFiles);
 in
 {
   options.snippets = {
@@ -82,6 +87,6 @@ in
   };
 
   config.plugins.luasnip.fromVscode = mkIf (cfg.enable && config.plugins.luasnip.enable) [
-    { paths = packageDir; }
+    { paths = vscodeSnippetsDrv; }
   ];
 }
