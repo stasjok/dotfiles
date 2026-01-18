@@ -83,7 +83,9 @@ let
       };
     }
   );
-  luaSnippetFiles = with lib.types; either luaSnippetFile (listOf luaSnippetFile);
+  luaSnippetFiles =
+    with lib.types;
+    coercedTo (attrsOf anything) lib.singleton (listOf luaSnippetFile);
 
   # Generate Lua snippets
   luaSnippetEntries = builtins.concatLists (
@@ -135,7 +137,6 @@ in
     lua = mkOption {
       type = attrsOf luaSnippetFiles;
       default = { };
-      apply = builtins.mapAttrs (_: lib.toList);
       description = ''
         Lua snippets.
       '';
