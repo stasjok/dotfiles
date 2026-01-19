@@ -1,8 +1,6 @@
-{ lib, ... }:
 {
-  snippets.vscode = lib.singleton {
-    language = "gitcommit";
-    snippets = {
+  snippets.filetype.gitcommit = {
+    lsp = {
       build = {
         prefix = "build";
         description = "Changes that affect the build system or external dependencies";

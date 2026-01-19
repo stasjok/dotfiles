@@ -1,8 +1,6 @@
-{ lib, ... }:
 {
-  snippets.vscode = lib.singleton {
-    language = "ansible_filters";
-    snippets = {
+  snippets.filetype.ansible_filters = {
+    lsp = {
       combine = {
         prefix = "combine";
         description = "Merge hashes";
@@ -50,5 +48,4 @@
       };
     };
   };
-
 }

@@ -1,6 +1,5 @@
-{ lib, ... }:
 {
-  snippets.lua.make = lib.singleton {
-    text = builtins.readFile ./make.lua;
+  snippets.filetype.make = {
+    lua.text = builtins.readFile ./make.lua;
   };
 }

@@ -1,8 +1,6 @@
-{ lib, ... }:
 {
-  snippets.vscode = lib.singleton {
-    language = "salt";
-    snippets = {
+  snippets.filetype.salt = {
+    lsp = {
       backup = {
         prefix = "backup";
         description = "Backing up files that are replaced by the file.managed and file.recurse states";

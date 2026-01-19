@@ -1,8 +1,6 @@
-{ lib, ... }:
 {
-  snippets.vscode = lib.singleton {
-    language = "python";
-    snippets = {
+  snippets.filetype.python = {
+    lsp = {
       "#!" = {
         prefix = "#!";
         description = "Shebang";

@@ -1,8 +1,7 @@
 {
-  snippets.vscode = [
-    {
-      language = "lua_spec";
-      snippets = {
+  snippets.filetype = {
+    lua_spec = {
+      lsp = {
         describe = {
           prefix = "describe";
           description = "Context block";
@@ -43,6 +42,6 @@
           ];
         };
       };
-    }
-  ];
+    };
+  };
 }

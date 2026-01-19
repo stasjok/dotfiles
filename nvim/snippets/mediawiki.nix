@@ -1,8 +1,6 @@
-{ lib, ... }:
 {
-  snippets.vscode = lib.singleton {
-    language = "mediawiki";
-    snippets = {
+  snippets.filetype.mediawiki = {
+    lsp = {
       a = {
         prefix = [
           "a"

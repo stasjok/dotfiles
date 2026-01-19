@@ -12,159 +12,198 @@ let
   cfg = config.snippets;
 
   jsonFormat = pkgs.formats.json { };
-  listOrStr = with lib.types; coercedTo str lib.singleton (listOf str);
+  strOrList = with lib.types; either str (listOf str);
+  coercedStrToList = with lib.types; coercedTo str lib.singleton (listOf str);
+  coercedPathToList = with lib.types; coercedTo path lib.singleton (listOf path);
 
-  # A submodule for VS Code snippet
-  snippet = submodule (
-    { config, ... }:
+  # A submodule for LSP snippet
+  lspSnippet = submodule (
+    { name, ... }:
     {
       freeformType = jsonFormat.type;
       options = {
         prefix = mkOption {
           description = "Snippet prefix";
-          type = listOrStr;
+          type = strOrList;
         };
         body = mkOption {
           description = "Snippet body";
-          type = listOrStr;
+          type = strOrList;
         };
         description = mkOption {
           description = "Snippet description";
-          type = listOrStr;
-          default = config.prefix;
+          type = strOrList;
+          default = name;
         };
       };
     }
   );
-  vscodeSnippets = submodule (
-    { config, ... }:
+
+  # Submodule for a single filetype
+  filetypeModule = submodule (
+    { name, config, ... }:
     {
       options = {
-        language = mkOption {
-          type = listOrStr;
-          description = "Language(s) for these snippets.";
-        };
-        snippets = mkOption {
-          type = attrsOf snippet;
+        lsp = mkOption {
+          type = attrsOf lspSnippet;
           default = { };
-          description = "Snippets for this language.";
+          description = "LSP snippets.";
+          example = lib.literalExpression ''
+            {
+              example = {
+                prefix = "example";
+                body = "example $1";
+                description = "Example snippet";
+              };
+            }'';
         };
-        source = mkOption {
-          type = with lib.types; nullOr path;
-          description = "Path to a VS Code snippets JSON file.";
+
+        lua = mkOption {
+          type = submodule {
+            options = {
+              text = mkOption {
+                type = coercedStrToList;
+                default = [ ];
+                description = "Lua snippet file contents.";
+                example = lib.literalExpression ''builtins.readFile ./snippets.lua'';
+              };
+
+              source = mkOption {
+                type = coercedPathToList;
+                default = [ ];
+                description = "Paths to Lua snippet files.";
+                example = lib.literalExpression ''./snippets.lua'';
+              };
+            };
+          };
+          default = { };
+          description = "Lua snippets.";
+        };
+
+        build = {
+          lsp = mkOption {
+            type = with lib.types; nullOr path;
+            default = null;
+            visible = false;
+            internal = true;
+            description = "Generated LSP snippets JSON file for this filetype.";
+          };
+
+          lua = mkOption {
+            type = with lib.types; nullOr path;
+            default = null;
+            visible = false;
+            internal = true;
+            description = "Generated directory containing Lua snippet files for this filetype.";
+          };
         };
       };
 
-      config = {
-        source = mkIf (config.snippets != { }) (jsonFormat.generate "snippets.json" config.snippets);
+      config.build = {
+        lsp = mkIf (config.lsp != { }) (jsonFormat.generate "${name}.json" config.lsp);
+
+        lua =
+          let
+            luaSources = map (pkgs.writeText "${name}.lua") config.lua.text ++ config.lua.source;
+          in
+          mkIf (luaSources != [ ]) (
+            pkgs.linkFarm name (
+              lib.imap (idx: path: {
+                name = "${toString idx}.lua";
+                inherit path;
+              }) luaSources
+            )
+          );
       };
+
     }
   );
 
-  # Generate VS Code snippet files and package.json
-  vscodeSnippetFiles = lib.imap1 (idx: contrib: {
-    inherit (contrib) language source;
-    name = "${toString idx}-${builtins.head contrib.language}.json";
-  }) cfg.vscode;
-  packageJsonFile = jsonFormat.generate "package.json" {
-    contributes = {
-      snippets = map (contrib: {
-        inherit (contrib) language;
-        path = contrib.name;
-      }) vscodeSnippetFiles;
-    };
-  };
-  vscodeSnippetEntries =
-    map (contrib: {
-      inherit (contrib) name;
-      path = contrib.source;
-    }) vscodeSnippetFiles
-    ++ (lib.singleton {
-      name = "package.json";
-      path = packageJsonFile;
-    });
-  vscodeSnippetsDrv = pkgs.linkFarm "vscode-snippets" vscodeSnippetEntries;
-
-  # A submodule for a file with Lua snippets
-  luaSnippet = submodule (
-    { config, ... }:
-    {
-      options = {
-        text = mkOption {
-          type = with lib.types; nullOr str;
-          default = null;
-          description = "Lua snippets file contents.";
-        };
-
-        source = mkOption {
-          type = with lib.types; nullOr path;
-          description = "Path to a Lua snippets source file.";
-        };
-      };
-
-      config = {
-        source = mkIf (config.text != null) (pkgs.writeText "snippets.lua" config.text);
-      };
-    }
+  # Generate LSP snippet files and package.json
+  snippetFiles = lib.pipe cfg.filetype [
+    (lib.mapAttrsToList (
+      language: config: {
+        inherit language;
+        path = config.build.lsp;
+      }
+    ))
+    (builtins.filter (attrs: attrs.path != null))
+  ];
+  snippetsDrv = pkgs.linkFarmFromDrvs "snippets" (
+    builtins.catAttrs "path" snippetFiles
+    ++ lib.singleton (
+      jsonFormat.generate "package.json" {
+        contributes.snippets = map (snippet: {
+          inherit (snippet) language;
+          path = lib.getName snippet.path;
+        }) snippetFiles;
+      }
+    )
   );
 
   # Generate Lua snippets
-  luaSnippetEntries = builtins.concatLists (
-    lib.mapAttrsToList (
-      ft: files:
-      lib.imap1 (idx: file: {
-        name = "${ft}/${toString idx}.lua";
-        path = file.source;
-      }) files
-    ) cfg.lua
-  );
-  luaSnippetsDrv = pkgs.linkFarm "luasnip-lua-snippets" luaSnippetEntries;
+  luaSnippetFiles = lib.pipe cfg.filetype [
+    (lib.mapAttrsToList (_: config: config.build.lua))
+    (builtins.filter (path: path != null))
+  ];
+  luaSnippetsDrv = pkgs.linkFarmFromDrvs "luasnip-lua-snippets" luaSnippetFiles;
 in
 {
   options.snippets = {
     enable = mkEnableOption "snippets";
 
-    vscode = mkOption {
-      type = listOf vscodeSnippets;
-      default = [ ];
-      description = "VS Code snippets";
-    };
-
-    lua = mkOption {
-      type = attrsOf (listOf luaSnippet);
+    filetype = mkOption {
+      type = attrsOf filetypeModule;
       default = { };
-      description = ''
-        Lua snippets.
-      '';
+      description = "Snippets organized by filetype.";
+      example = lib.literalExpression ''
+        {
+          nix = {
+            lsp = {
+              example = {
+                prefix = "example";
+                body = "example $1";
+                description = "Example snippet";
+              };
+            };
+            lua.text = builtins.readFile ./nix.lua;
+          };
+        }'';
     };
 
-    build.vscode = mkOption {
-      type = lib.types.package;
-      description = "VS Code snippets derivation";
-      readOnly = true;
-      visible = false;
-      internal = true;
-    };
+    build = {
+      lsp = mkOption {
+        type = lib.types.package;
+        description = "LSP snippets derivation";
+        readOnly = true;
+        visible = false;
+        internal = true;
+      };
 
-    build.lua = mkOption {
-      type = lib.types.package;
-      description = "Lua snippets derivation";
-      readOnly = true;
-      visible = false;
-      internal = true;
+      lua = mkOption {
+        type = lib.types.package;
+        description = "Lua snippets derivation";
+        readOnly = true;
+        visible = false;
+        internal = true;
+      };
     };
   };
 
   config = mkIf cfg.enable {
-    snippets.build.vscode = vscodeSnippetsDrv;
-    snippets.build.lua = luaSnippetsDrv;
+    snippets.build = {
+      lsp = snippetsDrv;
+      lua = luaSnippetsDrv;
+    };
 
-    plugins.luasnip.fromVscode = mkIf (cfg.vscode != [ ]) [
-      { paths = vscodeSnippetsDrv; }
-    ];
+    plugins.luasnip = {
+      fromVscode = mkIf (snippetFiles != [ ]) [
+        { paths = snippetsDrv; }
+      ];
 
-    plugins.luasnip.fromLua = mkIf (cfg.lua != { }) [
-      { paths = luaSnippetsDrv; }
-    ];
+      fromLua = mkIf (luaSnippetFiles != [ ]) [
+        { paths = luaSnippetsDrv; }
+      ];
+    };
   };
 }
