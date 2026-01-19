@@ -32,6 +32,9 @@
           window.border = "padded";
         };
       };
+      signature = {
+        enabled = true;
+      };
       cmdline.completion = {
         menu.auto_show = true;
         list.selection.preselect = false;
@@ -117,18 +120,20 @@
         ];
         "<C-P>" = [
           "select_prev"
-          "fallback_to_mappings"
+          "fallback"
         ];
         "<C-N>" = [
           "select_next"
-          "fallback_to_mappings"
+          "fallback"
         ];
         "<C-U>" = [
           "scroll_documentation_up"
+          "scroll_signature_up"
           "fallback"
         ];
         "<C-D>" = [
           "scroll_documentation_down"
+          "scroll_signature_down"
           "fallback"
         ];
         "<C-K>" = [
