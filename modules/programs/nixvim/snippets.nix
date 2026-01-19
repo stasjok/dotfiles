@@ -14,8 +14,8 @@ let
   jsonFormat = pkgs.formats.json { };
   listOrStr = with lib.types; coercedTo str lib.singleton (listOf str);
 
-  # A submodule type for VS Code snippets
-  vscodeSnippet = submodule (
+  # A submodule for VS Code snippet
+  snippet = submodule (
     { config, ... }:
     {
       freeformType = jsonFormat.type;
@@ -36,7 +36,7 @@ let
       };
     }
   );
-  vscodeSnippetsModule = submodule (
+  vscodeSnippets = submodule (
     { config, ... }:
     {
       options = {
@@ -45,7 +45,7 @@ let
           description = "Language(s) for these snippets.";
         };
         snippets = mkOption {
-          type = attrsOf vscodeSnippet;
+          type = attrsOf snippet;
           default = { };
           description = "Snippets for this language.";
         };
@@ -60,12 +60,9 @@ let
       };
     }
   );
-  vscodeSnippetsType =
-    with lib.types;
-    coercedTo (attrsOf anything) lib.singleton (listOf vscodeSnippetsModule);
 
   # Generate VS Code snippet files and package.json
-  vscodeSnippets = lib.imap1 (idx: contrib: {
+  vscodeSnippetFiles = lib.imap1 (idx: contrib: {
     inherit (contrib) language source;
     name = "${toString idx}-${builtins.head contrib.language}.json";
   }) cfg.vscode;
@@ -74,22 +71,22 @@ let
       snippets = map (contrib: {
         inherit (contrib) language;
         path = contrib.name;
-      }) vscodeSnippets;
+      }) vscodeSnippetFiles;
     };
   };
-  vscodeSnippetsEntries =
+  vscodeSnippetEntries =
     map (contrib: {
       inherit (contrib) name;
       path = contrib.source;
-    }) vscodeSnippets
+    }) vscodeSnippetFiles
     ++ (lib.singleton {
       name = "package.json";
       path = packageJsonFile;
     });
-  vscodeSnippetsDrv = pkgs.linkFarm "vscode-snippets" vscodeSnippetsEntries;
+  vscodeSnippetsDrv = pkgs.linkFarm "vscode-snippets" vscodeSnippetEntries;
 
-  # A submodule for Lua snippets file
-  luaSnippetFile = submodule (
+  # A submodule for a file with Lua snippets
+  luaSnippet = submodule (
     { config, ... }:
     {
       options = {
@@ -110,9 +107,6 @@ let
       };
     }
   );
-  luaSnippetFiles =
-    with lib.types;
-    coercedTo (attrsOf anything) lib.singleton (listOf luaSnippetFile);
 
   # Generate Lua snippets
   luaSnippetEntries = builtins.concatLists (
@@ -131,13 +125,13 @@ in
     enable = mkEnableOption "snippets";
 
     vscode = mkOption {
-      type = vscodeSnippetsType;
+      type = listOf vscodeSnippets;
       default = [ ];
       description = "VS Code snippets";
     };
 
     lua = mkOption {
-      type = attrsOf luaSnippetFiles;
+      type = attrsOf (listOf luaSnippet);
       default = { };
       description = ''
         Lua snippets.

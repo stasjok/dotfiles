@@ -1,5 +1,6 @@
+{ lib, ... }:
 {
-  snippets.vscode = {
+  snippets.vscode = lib.singleton {
     language = "sh";
     snippets = {
       "#!" = {

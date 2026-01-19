@@ -1,6 +1,7 @@
+{ lib, ... }:
 {
   snippets = {
-    vscode = {
+    vscode = lib.singleton {
       language = "nix";
       snippets = {
         "if" = {
@@ -22,6 +23,8 @@
       };
     };
 
-    lua.nix.text = builtins.readFile ./nix.lua;
+    lua.nix = lib.singleton {
+      text = builtins.readFile ./nix.lua;
+    };
   };
 }

@@ -6,10 +6,10 @@
     ./beancount.nix
     ./gitcommit.nix
     ./jinja
-    ./lua
-    ./make
+    ./lua.nix
+    ./make.nix
     ./mediawiki.nix
-    ./nix
+    ./nix.nix
     ./python.nix
     ./salt
     ./sh.nix

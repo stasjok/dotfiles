@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
-  snippets.vscode = {
+  snippets.vscode = lib.singleton {
     language = "beancount";
     source = pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/Lencerf/vscode-beancount/refs/tags/v0.13.0/snippets/beancount.json";
