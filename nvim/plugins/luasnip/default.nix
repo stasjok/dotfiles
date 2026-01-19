@@ -12,7 +12,7 @@ in
         "TextChangedI"
       ];
       region_check_events = "InsertEnter";
-      cut_selection_keys = "<C-H>";
+      cut_selection_keys = "<C-I>";
 
       ft_func = mkRaw ''
         setmetatable({
@@ -189,35 +189,31 @@ in
   keymaps = [
     {
       mode = "i";
-      key = "<C-H>";
+      key = "<C-Y>";
       action = "<Plug>luasnip-expand-snippet";
-
     }
     {
       mode = [
         "i"
         "s"
-        "n"
       ];
-      key = "<C-J>";
+      key = "<C-L>";
       action = "<Plug>luasnip-jump-next";
     }
     {
       mode = [
         "i"
         "s"
-        "n"
       ];
-      key = "<C-K>";
+      key = "<C-H>";
       action = "<Plug>luasnip-jump-prev";
     }
     {
       mode = [
         "i"
         "s"
-        "n"
       ];
-      key = "<C-L>";
+      key = "<C-J>";
       action = mkRaw ''
         function()
           if require("luasnip").choice_active() then
@@ -242,10 +238,10 @@ in
     }
     {
       mode = "x";
-      key = "<C-E>";
+      key = "<C-S>";
       action = mkRaw ''
         function()
-          vim.api.nvim_feedkeys("c", "nx", false)
+          vim.api.nvim_feedkeys(string.format('"%sc', vim.v.register), "nx", false)
           require("luasnip.extras.otf").on_the_fly(vim.v.register)
         end
       '';

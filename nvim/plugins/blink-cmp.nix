@@ -104,42 +104,46 @@
       # Mappings
       keymap = {
         preset = "none";
-        "<C-N>" = [
-          "select_next"
-          "fallback"
-        ];
-        "<C-P>" = [
-          "select_prev"
-          "fallback"
-        ];
-        "<Tab>" = [
-          "select_next"
-          "fallback"
-        ];
-        "<S-Tab>" = [
-          "select_prev"
-          "fallback"
-        ];
-        "<CR>" = [
-          "accept"
-          "fallback"
-        ];
-        "<C-Y>" = [
-          "accept"
+        "<C-Space>" = [
           "show"
+          "show_documentation"
+          "hide_documentation"
         ];
         "<C-E>" = [
           "hide"
           "fallback"
         ];
-        "<M-d>" = [ "scroll_documentation_down" ];
-        "<M-u>" = [ "scroll_documentation_up" ];
+        "<C-I>" = [
+          "select_and_accept"
+          "fallback"
+        ];
+        "<C-P>" = [
+          "select_prev"
+          "fallback_to_mappings"
+        ];
+        "<C-N>" = [
+          "select_next"
+          "fallback_to_mappings"
+        ];
+        "<C-U>" = [
+          "scroll_documentation_up"
+          "fallback"
+        ];
+        "<C-D>" = [
+          "scroll_documentation_down"
+          "fallback"
+        ];
+        "<C-K>" = [
+          "show_signature"
+          "hide_signature"
+          "fallback_to_mappings"
+        ];
       };
       cmdline.keymap = {
         preset = "inherit";
-        "<CR>" = false;
-        "<M-d>" = false;
-        "<M-u>" = false;
+        "<C-U>" = false;
+        "<C-D>" = false;
+        "<C-K>" = false;
       };
     };
   };
