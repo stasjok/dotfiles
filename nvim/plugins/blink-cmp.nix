@@ -8,7 +8,6 @@
         list.selection.preselect = false;
         menu = {
           max_height = 20;
-          border = "none";
           draw.columns = [
             (
               lib.nixvim.listToUnkeyedAttrs [ "label" ]
@@ -28,9 +27,6 @@
           "go"
           "rust"
         ];
-        documentation = {
-          window.border = "padded";
-        };
       };
 
       # Signature help
