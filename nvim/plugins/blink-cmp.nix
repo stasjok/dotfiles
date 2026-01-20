@@ -32,12 +32,28 @@
           window.border = "padded";
         };
       };
+
+      # Signature help
       signature = {
         enabled = true;
+        trigger = {
+          show_on_trigger_character = true;
+          show_on_insert_on_trigger_character = false;
+          show_on_accept_on_trigger_character = true;
+        };
+        window = {
+          max_height = 15;
+          show_documentation = false;
+          scrollbar = true;
+        };
       };
-      cmdline.completion = {
-        menu.auto_show = true;
-        list.selection.preselect = false;
+
+      # Cmdline ccompletion
+      cmdline = {
+        completion = {
+          menu.auto_show = true;
+          list.selection.preselect = false;
+        };
       };
 
       # Providers
