@@ -9,16 +9,13 @@
         menu = {
           max_height = 20;
           draw.columns = [
+            [ "kind_icon" ]
             (
               lib.nixvim.listToUnkeyedAttrs [ "label" ]
               // {
                 gap = 1;
               }
             )
-            [
-              "kind_icon"
-              "kind"
-            ]
             [ "source_name" ]
           ];
         };
