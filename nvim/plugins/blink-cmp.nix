@@ -1,4 +1,7 @@
 { lib, ... }:
+let
+  inherit (lib.nixvim) mkRaw;
+in
 {
   plugins.blink-cmp = {
     enable = true;
@@ -8,16 +11,48 @@
         list.selection.preselect = false;
         menu = {
           max_height = 20;
-          draw.columns = [
-            [ "kind_icon" ]
-            (
-              lib.nixvim.listToUnkeyedAttrs [ "label" ]
-              // {
-                gap = 1;
-              }
-            )
-            [ "source_name" ]
-          ];
+          draw = {
+            columns = [
+              [ "kind_icon" ]
+              (
+                lib.nixvim.listToUnkeyedAttrs [ "label" ]
+                // {
+                  gap = 1;
+                }
+              )
+              [ "source_name" ]
+            ];
+            components.kind_icon = {
+              text = mkRaw ''
+                function(ctx)
+                  if ctx.source_id ~= "path" then
+                    local kind_icon, _, _ = require('mini.icons').get('lsp', ctx.kind)
+                    return kind_icon
+                  end
+
+                  local is_unknown_type = vim.tbl_contains({ "link", "socket", "fifo", "char", "block", "unknown" }, ctx.item.data.type)
+                  local mini_icon, _ = require("mini.icons").get(
+                    is_unknown_type and "os" or ctx.item.data.type,
+                    is_unknown_type and "" or ctx.label
+                  )
+
+                  return (mini_icon or ctx.kind_icon) .. ctx.icon_gap
+                end
+              '';
+              highlight = mkRaw ''
+                function(ctx)
+                  if ctx.source_id ~= "path" then return ctx.kind_hl end
+
+                  local is_unknown_type = vim.tbl_contains({ "link", "socket", "fifo", "char", "block", "unknown" }, ctx.item.data.type)
+                  local mini_icon, mini_hl = require("mini.icons").get(
+                    is_unknown_type and "os" or ctx.item.data.type,
+                    is_unknown_type and "" or ctx.label
+                  )
+                  return mini_icon ~= nil and mini_hl or ctx.kind_hl
+                end
+              '';
+            };
+          };
         };
         # These language servers are smart enough
         accept.auto_brackets.blocked_filetypes = [
@@ -52,7 +87,7 @@
       # Providers
       sources.providers = {
         buffer.name = "[Buff]";
-        buffer.opts.get_bufnrs = lib.nixvim.mkRaw ''
+        buffer.opts.get_bufnrs = mkRaw ''
           function()
             local api = vim.api
             return vim.tbl_filter(function(buf)
@@ -73,42 +108,6 @@
       # Appearance
       appearance = {
         nerd_font_variant = "normal";
-        kind_icons = {
-          Array = "";
-          Boolean = "";
-          Class = "󰊾";
-          Color = "";
-          Constant = "";
-          Constructor = "";
-          Enum = "󰕘";
-          EnumMember = "󰕚";
-          Event = "";
-          Field = "";
-          File = "󰈙";
-          Folder = "󰝰";
-          Function = "";
-          Interface = "";
-          Key = "󰌋";
-          Keyword = "󰌈";
-          Method = "󰡱";
-          Module = "";
-          Namespace = "";
-          Null = "󰟢";
-          Number = "󰎠";
-          Object = "󰅩";
-          Operator = "";
-          Package = "";
-          Property = "";
-          Reference = "";
-          Snippet = "󰘌";
-          String = "";
-          Struct = "";
-          Text = "";
-          TypeParameter = "󰊄";
-          Unit = "";
-          Value = "󱗽";
-          Variable = "󰯍";
-        };
       };
 
       # Mappings

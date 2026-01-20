@@ -1,3 +1,6 @@
 {
-  plugins.web-devicons.enable = true;
+  plugins.mini = {
+    modules.icons = { };
+    mockDevIcons = true;
+  };
 }
