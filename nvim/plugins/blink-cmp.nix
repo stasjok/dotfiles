@@ -91,8 +91,9 @@ in
           function()
             local api = vim.api
             return vim.tbl_filter(function(buf)
-              return api.nvim_get_option_value("buflisted", {buf = buf})
-                and api.nvim_get_option_value("buftype", {buf = buf}) == ""
+              return api.nvim_get_option_value("buflisted", { buf = buf })
+                  and api.nvim_get_option_value("buftype", { buf = buf }) == ""
+                or buf == api.nvim_get_current_buf()
             end, api.nvim_list_bufs())
           end
         '';
