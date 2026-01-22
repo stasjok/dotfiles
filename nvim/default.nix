@@ -48,6 +48,7 @@ in
               ./icons.nix
               ./indent
               ./lsp
+              ./mappings.nix
               ./options.nix
               ./plugins
               ./skeletons.nix
