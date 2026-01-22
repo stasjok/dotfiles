@@ -133,17 +133,6 @@
       action = "<C-D>";
     }
 
-    # Create new lines in insert mode
-    {
-      mode = "i";
-      key = "<M-n>";
-      action = "<C-O>o";
-    }
-    {
-      mode = "i";
-      key = "<M-p>";
-      action = "<C-O>O";
-    }
     # Append semicolon to the end of line
     {
       mode = "i";
