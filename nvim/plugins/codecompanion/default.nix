@@ -117,10 +117,7 @@
   ];
 
   extraFiles = {
-    # OpenRouter adapter with reasoning
-    # https://gist.github.com/ernie/e8f3a4bb2a01d3f449ec000605631eb8
-    "lua/codecompanion/adapters/http/openrouter.lua".text = builtins.readFile ./openrouter.lua;
-    # BotHub adapter based on OpenRouter above
+    # BotHub adapter
     "lua/codecompanion/adapters/http/bothub.lua".text = builtins.readFile ./bothub.lua;
   };
 }
