@@ -2,6 +2,7 @@
   config,
   hmConfig,
   lib,
+  pkgs,
   ...
 }:
 {
@@ -81,8 +82,10 @@
             client.settings.Lua.workspace.library = ${
               lib.nixvim.toLuaObject [
                 "${config.package}/share/nvim/runtime"
+                pkgs.vimPlugins.plenary-nvim
                 config.plugins.mini.package
                 config.plugins.luasnip.package
+                config.plugins.codecompanion.package
               ]
             }
             client.settings.Lua.workspace.workspaceRoots = {

@@ -1,13 +1,9 @@
-{
-  pkgs,
-  lib,
-  ...
-}:
+{ lib, ... }:
 {
   plugins.codecompanion = {
     enable = true;
     settings = {
-      strategies = {
+      interactions = {
         chat = {
           adapter = "bothub";
           keymaps.send.modes = {
@@ -27,20 +23,27 @@
       };
       display.chat = {
         window = {
+          width = lib.nixvim.mkRaw ''
+            function()
+              return math.min(math.floor(vim.o.columns / 2), 79)
+            end
+          '';
           opts = {
             number = false;
             relativenumber = false;
+            signcolumn = "auto";
+            list = false;
           };
         };
         # Enable wrap in debug window
-        child_window.opts.wrap = true;
+        floating_window.opts.wrap = true;
         # but disable in diff window (not used in super diff window unfortunately)
         diff_window.opts.wrap = false;
       };
       adapters = {
         http = {
           opts = {
-            show_defaults = false;
+            show_presets = false;
             # Default 'opts' are lost when 'show_defaults = false'
             show_model_choices = true;
           };
@@ -106,12 +109,7 @@
         "v"
       ];
       key = "<C-Q>";
-      action = lib.nixvim.mkRaw ''
-        function()
-          require("codecompanion").toggle({ window_opts = { width = "auto" }})
-        end
-      '';
-      options.desc = "CodeCompanionChat Toggle";
+      action = "<Cmd>CodeCompanionChat Toggle<CR>";
     }
     {
       mode = "v";
@@ -121,15 +119,7 @@
   ];
 
   extraFiles = {
-    # OpenRouter adapter with reasoning
-    # https://gist.github.com/ernie/e8f3a4bb2a01d3f449ec000605631eb8
-    "lua/codecompanion/adapters/http/openrouter.lua".source = toString (
-      pkgs.fetchurl {
-        url = "https://gist.github.com/ernie/e8f3a4bb2a01d3f449ec000605631eb8/raw/de6244c5fb41ad687876fb640fb94c688e23daef/openrouter.lua";
-        hash = "sha256-gS2HKasKXyn5ILA/nE22SvUaWQJox+PIvBbbXmTjSVk=";
-      }
-    );
-    # BotHub adapter based on OpenRouter above
+    # BotHub adapter
     "lua/codecompanion/adapters/http/bothub.lua".text = builtins.readFile ./bothub.lua;
   };
 }
