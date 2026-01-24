@@ -1,8 +1,4 @@
-{
-  pkgs,
-  lib,
-  ...
-}:
+{ lib, ... }:
 {
   plugins.codecompanion = {
     enable = true;
@@ -123,12 +119,7 @@
   extraFiles = {
     # OpenRouter adapter with reasoning
     # https://gist.github.com/ernie/e8f3a4bb2a01d3f449ec000605631eb8
-    "lua/codecompanion/adapters/http/openrouter.lua".source = toString (
-      pkgs.fetchurl {
-        url = "https://gist.github.com/ernie/e8f3a4bb2a01d3f449ec000605631eb8/raw/de6244c5fb41ad687876fb640fb94c688e23daef/openrouter.lua";
-        hash = "sha256-gS2HKasKXyn5ILA/nE22SvUaWQJox+PIvBbbXmTjSVk=";
-      }
-    );
+    "lua/codecompanion/adapters/http/openrouter.lua".text = builtins.readFile ./openrouter.lua;
     # BotHub adapter based on OpenRouter above
     "lua/codecompanion/adapters/http/bothub.lua".text = builtins.readFile ./bothub.lua;
   };
