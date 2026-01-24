@@ -225,5 +225,62 @@ return require("codecompanion.adapters.http").extend("openrouter", {
       default = "qwen3-coder",
       choices = get_models,
     },
+    -- Source: https://github.com/olimorris/codecompanion.nvim/discussions/1013#discussioncomment-15375459
+    ["reasoning.enabled"] = {
+      optional = true,
+      default = true,
+      order = 2,
+      mapping = "parameters",
+      type = "string",
+      condition = function(self)
+        local model = self.schema.model.default
+        if type(model) == "function" then
+          model = model()
+        end
+        local choices = self.schema.model.choices
+        if type(choices) == "function" then
+          choices = choices(self)
+        end
+        if vim.tbl_get(choices, model, "opts", "can_reason") then
+          return true
+        end
+        return false
+      end,
+    },
+    ["reasoning.effort"] = {
+      optional = true,
+      default = "medium",
+      choices = {
+        "xhigh",
+        "high",
+        "medium",
+        "low",
+        "minimal",
+        "none",
+      },
+      order = 3,
+      mapping = "parameters",
+      type = "string",
+      condition = function(self)
+        local model = self.schema.model.default
+        if type(model) == "function" then
+          model = model()
+        end
+        local choices = self.schema.model.choices
+        if type(choices) == "function" then
+          choices = choices(self)
+        end
+        if vim.tbl_get(choices, model, "opts", "can_reason") then
+          return true
+        end
+        return false
+      end,
+    },
+    -- Disable 'reasoning_effort' from the upstream adapter
+    reasoning_effort = {
+      condition = function()
+        return false
+      end,
+    },
   },
 })
