@@ -31,6 +31,8 @@
           opts = {
             number = false;
             relativenumber = false;
+            signcolumn = "auto";
+            list = false;
           };
         };
         # Enable wrap in debug window
