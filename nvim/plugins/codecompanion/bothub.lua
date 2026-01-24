@@ -480,7 +480,7 @@ return {
       order = 2,
       mapping = "parameters",
       type = "string",
-      condition = function(self)
+      enabled = function(self)
         local model = self.schema.model.default
         if type(model) == "function" then
           model = model()
@@ -509,7 +509,7 @@ return {
       order = 3,
       mapping = "parameters",
       type = "string",
-      condition = function(self)
+      enabled = function(self)
         local model = self.schema.model.default
         if type(model) == "function" then
           model = model()
