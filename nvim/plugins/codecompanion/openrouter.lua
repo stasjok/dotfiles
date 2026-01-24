@@ -1,8 +1,8 @@
-local openai = require('codecompanion.adapters.http.openai')
-local log = require('codecompanion.utils.log')
-local utils = require('codecompanion.utils.adapters')
-local Curl = require('plenary.curl')
-local config = require('codecompanion.config')
+local openai = require("codecompanion.adapters.http.openai")
+local log = require("codecompanion.utils.log")
+local utils = require("codecompanion.utils.adapters")
+local Curl = require("plenary.curl")
+local config = require("codecompanion.config")
 local _cache_expires
 local _cache_file = vim.fn.tempname()
 local _cached_models
@@ -12,11 +12,11 @@ local _cached_models
 ---@return table The filtered message
 local function filter_message(message)
   local allowed = {
-    'content',
-    'role',
-    'reasoning_details',
-    'tool_calls',
-    'tool_call_id',
+    "content",
+    "role",
+    "reasoning_details",
+    "tool_calls",
+    "tool_call_id",
   }
 
   for key, _ in pairs(message) do
@@ -54,9 +54,9 @@ local function get_models(self)
 
   _cached_models = {}
 
-  local adapter = require('codecompanion.adapters').resolve(self)
+  local adapter = require("codecompanion.adapters").resolve(self)
   if not adapter then
-    log:error('Could not resolve OpenRouter adapter in the `get_models` function')
+    log:error("Could not resolve OpenRouter adapter in the `get_models` function")
     return {}
   end
 
@@ -65,10 +65,10 @@ local function get_models(self)
   local models_endpoint = adapter.env_replaced.models_endpoint
 
   local headers = {
-    ['content-type'] = 'application/json',
+    ["content-type"] = "application/json",
   }
   if adapter.env_replaced.api_key then
-    headers['Authorization'] = 'Bearer ' .. adapter.env_replaced.api_key
+    headers["Authorization"] = "Bearer " .. adapter.env_replaced.api_key
   end
 
   local ok, response, json
@@ -82,13 +82,16 @@ local function get_models(self)
     })
   end)
   if not ok then
-    log:error('Could not get the OpenAI compatible models from ' .. url .. models_endpoint .. '.\nError: %s', response)
+    log:error(
+      "Could not get the OpenAI compatible models from " .. url .. models_endpoint .. ".\nError: %s",
+      response
+    )
     return {}
   end
 
   ok, json = pcall(vim.json.decode, response.body)
   if not ok then
-    log:error('Could not parse the response from ' .. url .. models_endpoint)
+    log:error("Could not parse the response from " .. url .. models_endpoint)
     return {}
   end
 
@@ -96,8 +99,14 @@ local function get_models(self)
     local params = as_set(model.supported_parameters or {})
     local inputs = as_set((model.architecture or {}).input_modalities or {})
     if params.tools then
-      _cached_models[model.id] =
-        { opts = { stream = true, has_tools = true, has_vision = inputs.image, can_reason = params.reasoning } }
+      _cached_models[model.id] = {
+        opts = {
+          stream = true,
+          has_tools = true,
+          has_vision = inputs.image,
+          can_reason = params.reasoning,
+        },
+      }
     end
   end
 
@@ -108,12 +117,12 @@ end
 
 ---@class CodeCompanion.HTTPAdapter.OpenRouter: CodeCompanion.HTTPAdapter
 return {
-  name = 'openrouter',
-  formatted_name = 'OpenRouter',
+  name = "openrouter",
+  formatted_name = "OpenRouter",
   roles = {
-    llm = 'assistant',
-    user = 'user',
-    tool = 'tool',
+    llm = "assistant",
+    user = "user",
+    tool = "tool",
   },
   opts = {
     stream = true,
@@ -124,16 +133,16 @@ return {
     text = true,
     tokens = true,
   },
-  url = '${url}${chat_url}',
+  url = "${url}${chat_url}",
   env = {
-    api_key = 'OPENROUTER_API_KEY',
-    url = 'https://openrouter.ai/api',
-    chat_url = '/v1/chat/completions',
-    models_endpoint = '/v1/models',
+    api_key = "OPENROUTER_API_KEY",
+    url = "https://openrouter.ai/api",
+    chat_url = "/v1/chat/completions",
+    models_endpoint = "/v1/models",
   },
   headers = {
-    ['Content-Type'] = 'application/json',
-    Authorization = 'Bearer ${api_key}',
+    ["Content-Type"] = "application/json",
+    Authorization = "Bearer ${api_key}",
   },
   handlers = {
     ---@param self CodeCompanion.HTTPAdapter
@@ -157,12 +166,12 @@ return {
     ---@return table
     form_messages = function(self, messages)
       local model = self.schema.model.default
-      if type(model) == 'function' then
+      if type(model) == "function" then
         model = model(self)
       end
 
       messages = vim.tbl_map(function(m)
-        if vim.startswith(model, 'o1') and m.role == 'system' then
+        if vim.startswith(model, "o1") and m.role == "system" then
           m.role = self.roles.user
         end
 
@@ -173,7 +182,7 @@ return {
             :map(function(tool_call)
               return {
                 id = tool_call.id,
-                ['function'] = tool_call['function'],
+                ["function"] = tool_call["function"],
                 type = tool_call.type,
               }
             end)
@@ -181,13 +190,13 @@ return {
         end
 
         -- Process any images
-        if m.opts and m.opts.tag == 'image' and m.opts.mimetype then
+        if m.opts and m.opts.tag == "image" and m.opts.mimetype then
           if self.opts and self.opts.vision then
             m.content = {
               {
-                type = 'image_url',
+                type = "image_url",
                 image_url = {
-                  url = string.format('data:%s;base64,%s', m.opts.mimetype, m.content),
+                  url = string.format("data:%s;base64,%s", m.opts.mimetype, m.content),
                 },
               },
             }
@@ -229,14 +238,14 @@ return {
                   format = rd.format,
                   type = rd.type,
                 }
-              if rd.text and rd.text ~= '' then
-                details.text = (details.text or '') .. rd.text
+              if rd.text and rd.text ~= "" then
+                details.text = (details.text or "") .. rd.text
               end
-              if rd.summary and rd.summary ~= '' then
-                details.summary = (details.summary or '') .. rd.summary
+              if rd.summary and rd.summary ~= "" then
+                details.summary = (details.summary or "") .. rd.summary
               end
-              if rd.data and rd.data ~= '' then
-                details.data = (details.data or '') .. rd.data
+              if rd.data and rd.data ~= "" then
+                details.data = (details.data or "") .. rd.data
               end
               reasoning_details[rd.index + 1] = details
             end
@@ -247,7 +256,7 @@ return {
         :filter(function(content)
           return content ~= nil
         end)
-        :join('')
+        :join("")
 
       return {
         content = content,
@@ -277,12 +286,12 @@ return {
     ---@param tools? table The table to write any tool output to
     ---@return table|nil [status: string, output: table]
     chat_output = function(self, data, tools)
-      if not data or data == '' then
+      if not data or data == "" then
         return nil
       end
 
       -- Handle both streamed data and structured response
-      local data_mod = type(data) == 'table' and data.body or utils.clean_streamed_data(data)
+      local data_mod = type(data) == "table" and data.body or utils.clean_streamed_data(data)
       local ok, json = pcall(vim.json.decode, data_mod, { luanil = { object = true } })
 
       if not ok or not json.choices or #json.choices == 0 then
@@ -300,8 +309,8 @@ return {
 
               -- Some endpoints like Gemini do not set this (why?!)
               local id = tool.id
-              if not id or id == '' then
-                id = string.format('call_%s_%s', json.created, i)
+              if not id or id == "" then
+                id = string.format("call_%s_%s", json.created, i)
               end
 
               if self.opts.stream then
@@ -309,9 +318,11 @@ return {
                 for _, existing_tool in ipairs(tools) do
                   if existing_tool._index == tool_index then
                     -- Append to arguments if this is a continuation of a stream
-                    if tool['function'] and tool['function']['arguments'] then
-                      existing_tool['function']['arguments'] = (existing_tool['function']['arguments'] or '')
-                        .. tool['function']['arguments']
+                    if tool["function"] and tool["function"]["arguments"] then
+                      existing_tool["function"]["arguments"] = (
+                        existing_tool["function"]["arguments"] or ""
+                      )
+                        .. tool["function"]["arguments"]
                     end
                     found = true
                     break
@@ -323,9 +334,9 @@ return {
                     _index = tool_index,
                     id = id,
                     type = tool.type,
-                    ['function'] = {
-                      name = tool['function']['name'],
-                      arguments = tool['function']['arguments'] or '',
+                    ["function"] = {
+                      name = tool["function"]["name"],
+                      arguments = tool["function"]["arguments"] or "",
                     },
                   })
                 end
@@ -334,9 +345,9 @@ return {
                   _index = i,
                   id = id,
                   type = tool.type,
-                  ['function'] = {
-                    name = tool['function']['name'],
-                    arguments = tool['function']['arguments'],
+                  ["function"] = {
+                    name = tool["function"]["name"],
+                    arguments = tool["function"]["arguments"],
                   },
                 })
               end
@@ -353,12 +364,12 @@ return {
         return nil
       end
 
-      local result = { status = 'success', output = { role = delta.role } }
-      if delta.content and delta.content ~= '' then
+      local result = { status = "success", output = { role = delta.role } }
+      if delta.content and delta.content ~= "" then
         result.output.content = delta.content
       end
 
-      if delta.reasoning and delta.reasoning ~= '' then
+      if delta.reasoning and delta.reasoning ~= "" then
         result.output.reasoning = { content = delta.reasoning }
       end
 
@@ -414,11 +425,11 @@ return {
     ---@type CodeCompanion.Schema
     model = {
       order = 1,
-      mapping = 'parameters',
-      type = 'enum',
-      desc = 'ID of the model to use. See the model endpoint compatibility table for details on which models work with the Chat API.',
+      mapping = "parameters",
+      type = "enum",
+      desc = "ID of the model to use. See the model endpoint compatibility table for details on which models work with the Chat API.",
       ---@type string|fun(arg: CodeCompanion.HTTPAdapter): string
-      default = 'x-ai/grok-code-fast-1',
+      default = "x-ai/grok-code-fast-1",
       ---@type string|fun(arg: CodeCompanion.HTTPAdapter): table
       choices = function(self)
         return get_models(self)
@@ -426,126 +437,131 @@ return {
     },
     reasoning_effort = {
       order = 2,
-      mapping = 'parameters',
-      type = 'string',
+      mapping = "parameters",
+      type = "string",
       optional = true,
       condition = function(self)
         local model = self.schema.model.default
-        if type(model) == 'function' then
+        if type(model) == "function" then
           model = model()
         end
         local choices = self.schema.model.choices
-        if type(choices) == 'function' then
+        if type(choices) == "function" then
           choices = choices(self)
         end
-        if choices and choices[model] and choices[model].opts and choices[model].opts.can_reason then
+        if
+          choices
+          and choices[model]
+          and choices[model].opts
+          and choices[model].opts.can_reason
+        then
           return true
         end
         return false
       end,
-      default = 'medium',
-      desc = 'Constrains effort on reasoning for reasoning models. Reducing reasoning effort can result in faster responses and fewer tokens used on reasoning in a response.',
+      default = "medium",
+      desc = "Constrains effort on reasoning for reasoning models. Reducing reasoning effort can result in faster responses and fewer tokens used on reasoning in a response.",
       choices = {
-        'high',
-        'medium',
-        'low',
+        "high",
+        "medium",
+        "low",
       },
     },
     temperature = {
       order = 3,
-      mapping = 'parameters',
-      type = 'number',
+      mapping = "parameters",
+      type = "number",
       optional = true,
       default = 1,
-      desc = 'What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. We generally recommend altering this or top_p but not both.',
+      desc = "What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. We generally recommend altering this or top_p but not both.",
       validate = function(n)
-        return n >= 0 and n <= 2, 'Must be between 0 and 2'
+        return n >= 0 and n <= 2, "Must be between 0 and 2"
       end,
     },
     top_p = {
       order = 4,
-      mapping = 'parameters',
-      type = 'number',
+      mapping = "parameters",
+      type = "number",
       optional = true,
       default = 1,
-      desc = 'An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered. We generally recommend altering this or temperature but not both.',
+      desc = "An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered. We generally recommend altering this or temperature but not both.",
       validate = function(n)
-        return n >= 0 and n <= 1, 'Must be between 0 and 1'
+        return n >= 0 and n <= 1, "Must be between 0 and 1"
       end,
     },
     stop = {
       order = 5,
-      mapping = 'parameters',
-      type = 'list',
+      mapping = "parameters",
+      type = "list",
       optional = true,
       default = nil,
       subtype = {
-        type = 'string',
+        type = "string",
       },
-      desc = 'Up to 4 sequences where the API will stop generating further tokens.',
+      desc = "Up to 4 sequences where the API will stop generating further tokens.",
       validate = function(l)
-        return #l >= 1 and #l <= 4, 'Must have between 1 and 4 elements'
+        return #l >= 1 and #l <= 4, "Must have between 1 and 4 elements"
       end,
     },
     max_tokens = {
       order = 6,
-      mapping = 'parameters',
-      type = 'integer',
+      mapping = "parameters",
+      type = "integer",
       optional = true,
       default = nil,
       desc = "The maximum number of tokens to generate in the chat completion. The total length of input tokens and generated tokens is limited by the model's context length.",
       validate = function(n)
-        return n > 0, 'Must be greater than 0'
+        return n > 0, "Must be greater than 0"
       end,
     },
     presence_penalty = {
       order = 7,
-      mapping = 'parameters',
-      type = 'number',
+      mapping = "parameters",
+      type = "number",
       optional = true,
       default = 0,
       desc = "Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.",
       validate = function(n)
-        return n >= -2 and n <= 2, 'Must be between -2 and 2'
+        return n >= -2 and n <= 2, "Must be between -2 and 2"
       end,
     },
     frequency_penalty = {
       order = 8,
-      mapping = 'parameters',
-      type = 'number',
+      mapping = "parameters",
+      type = "number",
       optional = true,
       default = 0,
       desc = "Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.",
       validate = function(n)
-        return n >= -2 and n <= 2, 'Must be between -2 and 2'
+        return n >= -2 and n <= 2, "Must be between -2 and 2"
       end,
     },
     logit_bias = {
       order = 9,
-      mapping = 'parameters',
-      type = 'map',
+      mapping = "parameters",
+      type = "map",
       optional = true,
       default = nil,
-      desc = 'Modify the likelihood of specified tokens appearing in the completion. Maps tokens (specified by their token ID) to an associated bias value from -100 to 100. Use https://platform.openai.com/tokenizer to find token IDs.',
+      desc = "Modify the likelihood of specified tokens appearing in the completion. Maps tokens (specified by their token ID) to an associated bias value from -100 to 100. Use https://platform.openai.com/tokenizer to find token IDs.",
       subtype_key = {
-        type = 'integer',
+        type = "integer",
       },
       subtype = {
-        type = 'integer',
+        type = "integer",
         validate = function(n)
-          return n >= -100 and n <= 100, 'Must be between -100 and 100'
+          return n >= -100 and n <= 100, "Must be between -100 and 100"
         end,
       },
     },
     user = {
       order = 10,
-      mapping = 'parameters',
-      type = 'string',
+      mapping = "parameters",
+      type = "string",
       optional = true,
       default = nil,
-      desc = 'A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. Learn more.',
+      desc = "A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. Learn more.",
       validate = function(u)
-        return u:len() < 100, 'Cannot be longer than 100 characters'
+        return u:len() < 100, "Cannot be longer than 100 characters"
       end,
     },
   },
