@@ -67,12 +67,22 @@ in
     patches = ./lspconfig-nix-store-rust-library.patch;
   };
 
-  codecompanion-nvim = prev.codecompanion-nvim.overrideAttrs {
-    # Collision with blink-cmp
-    postPatch = ''
-      find doc -mindepth 1 \( -name robots.txt -or -not -name '*.txt' \) -delete
-    '';
-  };
+  codecompanion-nvim = prev.codecompanion-nvim.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      version = "18.5.0";
+      src = fetchFromGitHub {
+        owner = "olimorris";
+        repo = "codecompanion.nvim";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-UAvvj+iAWluJ2SD/KmyPovRjd/32351et/0Mftwehvw=";
+      };
+
+      # Collision with blink-cmp
+      postPatch = ''
+        find doc -mindepth 1 \( -name robots.txt -or -not -name '*.txt' \) -delete
+      '';
+    }
+  );
 
   # Remove tests because there are invalid lua files there
   nvim-treesitter = prev.nvim-treesitter.overrideAttrs (prev: {
