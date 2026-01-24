@@ -3,7 +3,7 @@
   plugins.codecompanion = {
     enable = true;
     settings = {
-      strategies = {
+      interactions = {
         chat = {
           adapter = "bothub";
           keymaps.send.modes = {
@@ -29,14 +29,14 @@
           };
         };
         # Enable wrap in debug window
-        child_window.opts.wrap = true;
+        floating_window.opts.wrap = true;
         # but disable in diff window (not used in super diff window unfortunately)
         diff_window.opts.wrap = false;
       };
       adapters = {
         http = {
           opts = {
-            show_defaults = false;
+            show_presets = false;
             # Default 'opts' are lost when 'show_defaults = false'
             show_model_choices = true;
           };
