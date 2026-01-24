@@ -23,6 +23,11 @@
       };
       display.chat = {
         window = {
+          width = lib.nixvim.mkRaw ''
+            function()
+              return math.min(math.floor(vim.o.columns / 2), 79)
+            end
+          '';
           opts = {
             number = false;
             relativenumber = false;
