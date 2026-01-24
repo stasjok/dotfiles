@@ -102,12 +102,7 @@
         "v"
       ];
       key = "<C-Q>";
-      action = lib.nixvim.mkRaw ''
-        function()
-          require("codecompanion").toggle({ window_opts = { width = "auto" }})
-        end
-      '';
-      options.desc = "CodeCompanionChat Toggle";
+      action = "<Cmd>CodeCompanionChat Toggle<CR>";
     }
     {
       mode = "v";
