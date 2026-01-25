@@ -20,6 +20,7 @@
         };
         inline.adapter = "bothub";
         cmd.adapter = "bothub";
+        background.adapter = "bothub";
       };
       display.chat = {
         window = {
