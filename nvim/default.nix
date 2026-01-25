@@ -50,6 +50,7 @@ in
               ./lsp
               ./mappings.nix
               ./options.nix
+              ./patches.nix
               ./plugins
               ./skeletons.nix
               ./snippets
