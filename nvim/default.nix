@@ -114,7 +114,6 @@ in
       # Libraries
       plenary-nvim
       # Editing
-      surround-nvim
       nvim-autopairs
       # Git
       vim-fugitive
