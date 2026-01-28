@@ -5,6 +5,7 @@
     ./luasnip
     ./mini
     ./smart_splits.nix
+    ./surround.nix
     ./telescope.nix
   ];
 
