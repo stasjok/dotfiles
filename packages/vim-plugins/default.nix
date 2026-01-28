@@ -4,27 +4,8 @@
   fetchpatch,
   vimUtils,
 }:
-final: prev:
-let
-  # Convert flake input to vim plugin
-  mkPlugin' =
-    pname: attrs:
-    let
-      src = inputs.${builtins.replaceStrings [ "." ] [ "-" ] pname};
-    in
-    vimUtils.buildVimPlugin (
-      {
-        inherit pname src;
-        version = src.lastModifiedDate;
-      }
-      // attrs
-    );
-  mkPlugin = name: mkPlugin' name { };
-in
-{
+final: prev: {
   # Flake input plugins
-  surround-nvim = mkPlugin "surround.nvim";
-
   smart-splits-nvim = prev.smart-splits-nvim.overrideAttrs {
     src = inputs.smart-splits-nvim;
   };

@@ -127,7 +127,6 @@
         "nixpkgs": "nixpkgs",
         "nixvim": "nixvim",
         "smart-splits-nvim": "smart-splits-nvim",
-        "surround-nvim": "surround-nvim",
         "tree-sitter-jinja2": "tree-sitter-jinja2",
         "vim-mediawiki": "vim-mediawiki"
       }
@@ -146,23 +145,6 @@
         "owner": "mrjones2014",
         "repo": "smart-splits.nvim",
         "rev": "159c4823e3a11c79bb65fc4b8560320c49f738f4",
-        "type": "github"
-      }
-    },
-    "surround-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1643684895,
-        "narHash": "sha256-XXR/48pbeGwKifYrhtEyMsOCUxejuIla60q0fSYFgTc=",
-        "owner": "ur4ltz",
-        "repo": "surround.nvim",
-        "rev": "549045828bbd9de0746b411a762fa8c382fb10ff",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ur4ltz",
-        "repo": "surround.nvim",
-        "rev": "549045828bbd9de0746b411a762fa8c382fb10ff",
         "type": "github"
       }
     },

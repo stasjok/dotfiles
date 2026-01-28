@@ -29,10 +29,6 @@
       url = "github:m-pilia/vim-mediawiki";
       flake = false;
     };
-    surround-nvim = {
-      url = "github:ur4ltz/surround.nvim?rev=549045828bbd9de0746b411a762fa8c382fb10ff";
-      flake = false;
-    };
     smart-splits-nvim = {
       # Pin smart-splits.nvim to the version that doesn't run tmux commands on startup
       url = "github:mrjones2014/smart-splits.nvim?rev=159c4823e3a11c79bb65fc4b8560320c49f738f4";
