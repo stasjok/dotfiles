@@ -77,6 +77,10 @@ in
         hash = "sha256-UAvvj+iAWluJ2SD/KmyPovRjd/32351et/0Mftwehvw=";
       };
 
+      patches = [
+        ./codecompanion-allow-string-dryrun.patch
+      ];
+
       # Collision with blink-cmp
       postPatch = ''
         find doc -mindepth 1 \( -name robots.txt -or -not -name '*.txt' \) -delete

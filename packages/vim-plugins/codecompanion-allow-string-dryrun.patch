@@ -1,0 +1,16 @@
+diff --git a/lua/codecompanion/interactions/chat/tools/builtin/insert_edit_into_file/init.lua b/lua/codecompanion/interactions/chat/tools/builtin/insert_edit_into_file/init.lua
+index fc75c2b5..960b9581 100644
+--- a/lua/codecompanion/interactions/chat/tools/builtin/insert_edit_into_file/init.lua
++++ b/lua/codecompanion/interactions/chat/tools/builtin/insert_edit_into_file/init.lua
+@@ -764,6 +764,11 @@ local function edit_file(action, chat_bufnr, output_handler, opts)
+     ", "
+   )
+ 
++  -- Some models like GLM often send "false" as string
++  if type(action.dryRun) == "string" then
++    action.dryRun = action.dryRun ~= "false"
++  end
++
+   if action.dryRun then
+     local ok, edit_word = pcall(utils.pluralize, #action.edits, "edit")
+     if not ok then
