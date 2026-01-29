@@ -42,6 +42,7 @@ in
         type = lib.types.submoduleWith {
           modules = lib.toList {
             imports = [
+              ./autopairs
               ./colorscheme.nix
               ./diagnostic.nix
               ./ftplugin
@@ -113,8 +114,6 @@ in
     extraPlugins = with pkgs.vimPlugins; [
       # Libraries
       plenary-nvim
-      # Editing
-      nvim-autopairs
       # Git
       vim-fugitive
       gitsigns-nvim

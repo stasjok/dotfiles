@@ -86,6 +86,7 @@
                 config.plugins.mini.package
                 config.plugins.luasnip.package
                 config.plugins.codecompanion.package
+                config.plugins.nvim-autopairs.package
               ]
             }
             client.settings.Lua.workspace.workspaceRoots = {

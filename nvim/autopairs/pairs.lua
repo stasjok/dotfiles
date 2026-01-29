@@ -99,7 +99,7 @@ end
 local jinja_filetypes = { "jinja", "jinja2", "yaml.ansible", "salt" }
 
 -- Extra pairs
-local pairs = {
+npairs.add_rules({
   -- Add spaces between parentheses
   -- https://github.com/windwp/nvim-autopairs/issues/78
   -- https://github.com/windwp/nvim-autopairs/wiki/Custom-rules/425d8b096433b1329808797ff78f3acf23bc438f
@@ -237,12 +237,6 @@ local pairs = {
     end)
     :with_move(char_matches_end_pair)
     :with_cr(cond.none()),
-}
-
--- Configuration
-npairs.setup({
-  enable_check_bracket_line = false,
-  fast_wrap = {},
 })
 
 -- Fix basic rules
@@ -256,6 +250,3 @@ for _, rule in ipairs(npairs.config.rules) do
     table.insert(rule.filetypes, "codecompanion")
   end
 end
-
--- Add pairs
-npairs.add_rules(pairs)
