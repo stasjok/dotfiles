@@ -152,20 +152,32 @@ npairs.add_rules({
 
   -- Nix
   Rule("=", ";", "nix")
-    :with_pair(not_in_comment(), nil)
-    :with_pair(ts_conds.is_not_ts_node({ "source", "string", "indented_string" }), nil)
+    :with_pair(not_in_comment())
+    :with_pair(ts_conds.is_not_in_context())
+    :with_pair(ts_conds.is_not_ts_node({
+      "source",
+      "string",
+      "indented_string_expression",
+      "string_fragment",
+    }))
     :with_cr(cond.none())
     :with_move(char_matches_end_pair),
   Rule("'", "'", "nix")
-    :with_pair(cond.not_before_regex("[^%s]"), nil)
-    :with_pair(cond.not_after_regex([=[[%w%%%'%[%"%.%`%$]]=]), nil) -- Upstream default
-    :with_pair(ts_conds.is_ts_node("indented_string"), nil)
+    :with_pair(cond.not_before_regex("[^%s]"))
+    :with_pair(cond.not_after_regex([=[[%w%%%'%[%"%.%`%$]]=])) -- Upstream default
+    :with_pair(ts_conds.is_ts_node({ "indented_string_expression", "string_fragment" }))
     :with_move(cond.not_after_text("''"))
     :with_move(char_matches_end_pair),
   Rule("''", "''", "nix")
-    :with_pair(not_in_comment(), nil)
-    :with_pair(ts_conds.is_not_ts_node({ "source", "string", "indented_string" }), nil)
-    :with_pair(cond.not_before_text("''"), nil)
+    :with_pair(not_in_comment())
+    :with_pair(ts_conds.is_not_in_context())
+    :with_pair(ts_conds.is_not_ts_node({
+      "source",
+      "string",
+      "indented_string_expression",
+      "string_fragment",
+    }))
+    :with_pair(cond.not_before_text("''"))
     :with_move(char_matches_end_pair),
 
   -- Jinja
