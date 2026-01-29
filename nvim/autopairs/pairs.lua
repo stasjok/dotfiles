@@ -239,12 +239,6 @@ local pairs = {
     :with_cr(cond.none()),
 }
 
--- Configuration
-npairs.setup({
-  enable_check_bracket_line = false,
-  fast_wrap = {},
-})
-
 -- Fix basic rules
 for _, rule in ipairs(npairs.config.rules) do
   if rule.start_pair == "'" and rule.not_filetypes then
