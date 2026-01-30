@@ -531,7 +531,7 @@ return {
       default = true,
       order = 2,
       mapping = "parameters",
-      type = "string",
+      type = "boolean",
       enabled = function(self)
         local model = self.schema.model.default
         if type(model) == "function" then
@@ -672,6 +672,31 @@ return {
       validate = function(u)
         return u:len() < 100, "Cannot be longer than 100 characters"
       end,
+    },
+    provider = {
+      order = 11,
+      mapping = "parameters",
+      type = "map",
+      optional = true,
+      default = {
+        order = {
+          "OpenAI",
+          "Anthropic",
+          "xAI",
+          "Z.AI",
+          "Minimax",
+          "Moonshot AI",
+          "DeepSeek",
+          "Mistral",
+          "Xiaomi",
+          "Perplexity",
+          "Google",
+          "Amazon Bedrock",
+          "Novita",
+        },
+        allow_fallbacks = true,
+      },
+      desc = "When multiple model providers are available, optionally indicate your routing preference",
     },
   },
 }
