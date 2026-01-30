@@ -522,7 +522,7 @@ return {
       mapping = "parameters",
       type = "enum",
       desc = "ID of the model to use. See the model endpoint compatibility table for details on which models work with the Chat API.",
-      default = "qwen3-coder",
+      default = "kimi-k2.5",
       choices = get_models,
     },
     -- Source: https://github.com/olimorris/codecompanion.nvim/discussions/1013#discussioncomment-15375459
