@@ -6,6 +6,7 @@ local log = require("codecompanion.utils.log")
 local Curl = require("plenary.curl")
 local config = require("codecompanion.config")
 local utils = require("codecompanion.utils.adapters")
+local tokens = require("codecompanion.utils.tokens")
 
 ---Remove any keys from the message that are not allowed by the API
 ---@param message table The message to filter
@@ -206,6 +207,8 @@ return {
     stream = true,
     tools = true,
     vision = true,
+    cache_breakpoints = 4, -- Cache up to this many messages
+    cache_over = 300, -- Cache any message which has this many tokens or more
   },
   features = {
     text = true,
@@ -239,7 +242,7 @@ return {
     end,
 
     ---Set the format of the role and content for the messages from the chat buffer
-    ---@param self CodeCompanion.HTTPAdapter
+    ---@param self CodeCompanion.HTTPAdapter.BotHub
     ---@param messages table Format is: { { role = "user", content = "Your prompt here" } }
     ---@return table
     form_messages = function(self, messages)
@@ -258,6 +261,55 @@ return {
           return m
         end)
         :totable()
+
+      -- Prompt Caching for Claude
+      local model = self.schema.model.default
+      if type(model) == "function" then
+        model = model(self)
+      end
+      if vim.startswith(model, "claude-") then
+        local breakpoints_used = 0
+        local is_last_text = true
+        messages = result.messages
+        for i = #messages, 1, -1 do
+          local msgs = messages[i]
+          if type(msgs.content) == "table" then
+            -- Loop through the content
+            for _, msg in ipairs(msgs.content) do
+              if msg.type ~= "text" or msg.text == "" then
+                goto continue
+              end
+              if
+                tokens.calculate(msg.text) >= self.opts.cache_over
+                  and breakpoints_used < self.opts.cache_breakpoints
+                or is_last_text
+              then
+                msg.cache_control = { type = "ephemeral" }
+                breakpoints_used = breakpoints_used + 1
+                is_last_text = false
+              end
+              ::continue::
+            end
+          elseif type(msgs.content) == "string" then
+            if
+              tokens.calculate(msgs.content) >= self.opts.cache_over
+                and breakpoints_used < self.opts.cache_breakpoints
+              or is_last_text
+            then
+              msgs.content = {
+                {
+                  type = "text",
+                  text = msgs.content,
+                  cache_control = { type = "ephemeral" },
+                },
+              }
+              breakpoints_used = breakpoints_used + 1
+              is_last_text = false
+            end
+          end
+        end
+        result.messages = messages
+      end
 
       return result
     end,
