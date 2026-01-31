@@ -116,7 +116,6 @@ in
       # Libraries
       plenary-nvim
       # Languages
-      vim-nix
       ansible-vim
     ];
 
