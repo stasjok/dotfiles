@@ -112,12 +112,6 @@ in
       concatNonEmptyStringsSep
     ];
 
-    # Neovim plugins
-    extraPlugins = with pkgs.vimPlugins; [
-      # Libraries
-      plenary-nvim
-    ];
-
     # init.lua plugin configurations
     extraConfigLua =
       let
