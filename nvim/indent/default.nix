@@ -17,7 +17,17 @@
         ./yaml.vim
       ]
       [
-        (map (f: lib.nameValuePair ("indent/" + builtins.baseNameOf f) { text = builtins.readFile f; }))
+        (map (f: lib.nameValuePair ("indent/" + baseNameOf f) { text = builtins.readFile f; }))
+        builtins.listToAttrs
+      ]
+  //
+    # after/indent
+    lib.pipe
+      [
+        ./after/ansible.vim
+      ]
+      [
+        (map (f: lib.nameValuePair ("after/indent/" + baseNameOf f) { text = builtins.readFile f; }))
         builtins.listToAttrs
       ];
 }

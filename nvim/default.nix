@@ -45,6 +45,7 @@ in
               ./autopairs
               ./colorscheme.nix
               ./diagnostic.nix
+              ./filetype
               ./ftplugin
               ./git
               ./icons.nix
@@ -115,8 +116,6 @@ in
     extraPlugins = with pkgs.vimPlugins; [
       # Libraries
       plenary-nvim
-      # Languages
-      ansible-vim
     ];
 
     # init.lua plugin configurations
