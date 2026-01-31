@@ -59,7 +59,10 @@ final: prev: {
       };
 
       patches = [
+        # Workaround for glm-4.7 returning dryRun as string
         ./codecompanion-allow-string-dryrun.patch
+        # Workaround for deepseek-v3.2 returning malformed json
+        ./codecompanion-fix-missing-ending-quote-on-json-keys.patch
       ];
 
       # Collision with blink-cmp
