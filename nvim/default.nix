@@ -46,6 +46,7 @@ in
               ./colorscheme.nix
               ./diagnostic.nix
               ./ftplugin
+              ./git
               ./icons.nix
               ./indent
               ./lsp
@@ -114,10 +115,6 @@ in
     extraPlugins = with pkgs.vimPlugins; [
       # Libraries
       plenary-nvim
-      # Git
-      vim-fugitive
-      gitsigns-nvim
-      diffview-nvim
       # Languages
       vim-nix
       ansible-vim
