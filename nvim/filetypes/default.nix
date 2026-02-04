@@ -9,6 +9,7 @@
     ./lua.nix
     ./markdown.nix
     ./mediawiki.nix
+    ./nix.nix
     ./salt.nix
     ./terraform-vars.nix
     ./xml.nix

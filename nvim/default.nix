@@ -47,7 +47,6 @@ in
               ./diagnostic.nix
               ./filetype
               ./filetypes
-              ./ftplugin
               ./git
               ./icons.nix
               ./indent
