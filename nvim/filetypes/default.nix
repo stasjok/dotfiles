@@ -1,6 +1,6 @@
 {
   imports = [
-    ./ansible.nix
+    ./ansible
     ./beancount
     ./go.nix
     ./gomod.nix
@@ -11,8 +11,9 @@
     ./markdown.nix
     ./mediawiki.nix
     ./nix.nix
-    ./salt.nix
-    ./terraform-vars.nix
+    ./salt
+    ./terraform-vars
     ./xml.nix
+    ./yaml
   ];
 }

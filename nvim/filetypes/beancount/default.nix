@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   ftplugin.beancount = {
     opts = {
@@ -12,6 +13,16 @@
     '';
 
     undo = "silent! nunmap <buffer> <LocalLeader>s";
+  };
+
+  extraFiles = {
+    # Beancount indent from nathangrigg/vim-beancount plugin
+    "indent/beancount.vim" = {
+      source = pkgs.fetchurl {
+        url = "https://raw.githubusercontent.com/nathangrigg/vim-beancount/589a4f06f3b2fd7cd2356c2ef1dafadf6b7a97cf/indent/beancount.vim";
+        hash = "sha256-p0mFlHdW/mWC3ABObTVGG8mNM3pO7OT4k9OG9Z5eUEQ=";
+      };
+    };
   };
 
   # Telescope extension

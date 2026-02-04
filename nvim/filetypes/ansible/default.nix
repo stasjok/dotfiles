@@ -17,4 +17,7 @@
       "Taskfile.yml" = "yaml";
     };
   };
+
+  # Indent
+  extraFiles."after/indent/ansible.vim".text = builtins.readFile ./indent.vim;
 }

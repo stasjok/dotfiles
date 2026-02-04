@@ -48,7 +48,6 @@ in
               ./filetypes
               ./git
               ./icons.nix
-              ./indent
               ./lsp
               ./mappings.nix
               ./options.nix
