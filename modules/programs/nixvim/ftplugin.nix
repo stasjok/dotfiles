@@ -51,7 +51,7 @@ in
     autoCmd = lib.mapAttrsToList (filetype: opts: {
       event = "FileType";
       pattern = filetype;
-      desc = "Filetype-specific configuration";
+      desc = "${filetype} filetype configuration";
       callback = mkRaw ''
         function()
           if vim.b.did_ftplugin and vim.b.did_ftplugin >= 2 then
