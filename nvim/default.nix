@@ -45,7 +45,6 @@ in
               ./autopairs
               ./colorscheme.nix
               ./diagnostic.nix
-              ./filetype
               ./filetypes
               ./git
               ./icons.nix

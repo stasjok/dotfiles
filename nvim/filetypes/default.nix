@@ -1,5 +1,6 @@
 {
   imports = [
+    ./ansible.nix
     ./beancount
     ./go.nix
     ./gomod.nix
