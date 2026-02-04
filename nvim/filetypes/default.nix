@@ -8,6 +8,7 @@
     ./jinja.nix
     ./lua.nix
     ./markdown.nix
+    ./mediawiki.nix
     ./salt.nix
     ./terraform-vars.nix
     ./xml.nix
