@@ -1,8 +1,4 @@
-{
-  lib,
-  inputs,
-  ...
-}:
+{ lib, pkgs, ... }:
 {
   # Filetype detection
   filetype.extension.mediawiki = "mediawiki";
@@ -38,8 +34,13 @@
 
   # Required autoload functions
   extraFiles = {
-    "autoload/mediawiki.vim".source = "${inputs.vim-mediawiki}/autoload/mediawiki.vim";
-    "autoload/mediawiki/fenced_languages.vim".source =
-      "${inputs.vim-mediawiki}/autoload/mediawiki/fenced_languages.vim";
+    "autoload/mediawiki.vim".source = pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/m-pilia/vim-mediawiki/39987c3b7b3af25e223454d28dcfa91605eb693a/autoload/mediawiki.vim";
+      hash = "sha256-3u5WaI7wy0B7mehNfafgzm2scOmD1dQyC+6DBq2dL0I=";
+    };
+    "autoload/mediawiki/fenced_languages.vim".source = pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/m-pilia/vim-mediawiki/39987c3b7b3af25e223454d28dcfa91605eb693a/autoload/mediawiki/fenced_languages.vim";
+      hash = "sha256-CQ6Z8Lf1pUPyKhVEG+7erLn6u22+aMe0ocNfHnnGnQU=";
+    };
   };
 }

@@ -45,11 +45,9 @@ in
               ./autopairs
               ./colorscheme.nix
               ./diagnostic.nix
-              ./filetype
-              ./ftplugin
+              ./filetypes
               ./git
               ./icons.nix
-              ./indent
               ./lsp
               ./mappings.nix
               ./options.nix

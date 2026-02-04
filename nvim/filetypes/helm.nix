@@ -8,4 +8,9 @@
     "helmfile.*%.ya?ml.gotmpl" = "helm";
     "values.*%.yaml" = "yaml.helm-values";
   };
+
+  ftplugin.helm.opts = {
+    shiftwidth = 2;
+    commentstring = "{{/* %s */}}";
+  };
 }

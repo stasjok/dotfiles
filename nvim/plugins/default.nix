@@ -1,6 +1,5 @@
 {
   imports = [
-    ./ansible.nix
     ./blink-cmp.nix
     ./codecompanion
     ./luasnip

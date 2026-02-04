@@ -1,0 +1,19 @@
+{
+  imports = [
+    ./ansible
+    ./beancount
+    ./go.nix
+    ./gomod.nix
+    ./helm.nix
+    ./help.nix
+    ./jinja.nix
+    ./lua.nix
+    ./markdown.nix
+    ./mediawiki.nix
+    ./nix.nix
+    ./salt
+    ./terraform-vars
+    ./xml.nix
+    ./yaml
+  ];
+}
