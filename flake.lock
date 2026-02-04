@@ -127,8 +127,7 @@
         "nixpkgs": "nixpkgs",
         "nixvim": "nixvim",
         "smart-splits-nvim": "smart-splits-nvim",
-        "tree-sitter-jinja2": "tree-sitter-jinja2",
-        "vim-mediawiki": "vim-mediawiki"
+        "tree-sitter-jinja2": "tree-sitter-jinja2"
       }
     },
     "smart-splits-nvim": {
@@ -176,22 +175,6 @@
       "original": {
         "owner": "theHamsta",
         "repo": "tree-sitter-jinja2",
-        "type": "github"
-      }
-    },
-    "vim-mediawiki": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1729973244,
-        "narHash": "sha256-NjTJURsiC1eZfrCkHFoqJOweflN6rPkdve17LYz0qtE=",
-        "owner": "m-pilia",
-        "repo": "vim-mediawiki",
-        "rev": "39987c3b7b3af25e223454d28dcfa91605eb693a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "m-pilia",
-        "repo": "vim-mediawiki",
         "type": "github"
       }
     }
