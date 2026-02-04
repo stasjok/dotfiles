@@ -1,6 +1,6 @@
 {
   imports = [
-    ./beancount.nix
+    ./beancount
     ./go.nix
     ./gomod.nix
     ./helm.nix

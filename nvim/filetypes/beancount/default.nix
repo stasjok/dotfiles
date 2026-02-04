@@ -13,4 +13,7 @@
 
     undo = "silent! nunmap <buffer> <LocalLeader>s";
   };
+
+  # Telescope extension
+  extraFiles."lua/telescope/_extensions/beancount.lua".text = builtins.readFile ./telescope.lua;
 }
