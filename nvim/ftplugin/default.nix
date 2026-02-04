@@ -11,10 +11,16 @@
     lib.pipe
       [
         ./beancount.vim
-        ./jinja.vim
-        ./salt.vim
+        ./go.lua
+        ./gomod.lua
         ./helm.vim
+        ./help.lua
+        ./jinja.vim
+        ./lua.lua
+        ./markdown.lua
+        ./salt.vim
         ./terraform-vars.vim
+        ./xml.lua
       ]
       [
         (map (f: lib.nameValuePair ("ftplugin/" + builtins.baseNameOf f) { text = builtins.readFile f; }))
