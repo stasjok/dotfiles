@@ -46,6 +46,7 @@ in
               ./colorscheme.nix
               ./diagnostic.nix
               ./filetype
+              ./filetypes
               ./ftplugin
               ./git
               ./icons.nix
