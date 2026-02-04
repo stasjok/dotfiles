@@ -1,8 +1,8 @@
 {
-  ftplugin.terraform-vars.content = /* lua */ ''
-    vim.cmd("runtime! ftplugin/terraform.vim")
-  '';
-
-  # Indent
-  extraFiles."indent/terraform-vars.vim".text = builtins.readFile ./indent.vim;
+  extraFiles = {
+    # Ftplugin
+    "ftplugin/terraform-vars.vim".text = builtins.readFile ./ftplugin.vim;
+    # Indent
+    "indent/terraform-vars.vim".text = builtins.readFile ./indent.vim;
+  };
 }
