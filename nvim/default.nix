@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   ...
@@ -78,31 +77,6 @@ in
       (builtins.map (file: luaBlock (baseNameOf file) file))
       concatNonEmptyStringsSep
     ];
-
-    # init.lua plugin configurations
-    extraConfigLua =
-      let
-        # List of plugins
-        plugins = map (p: p.plugin or p) cfg.extraPlugins;
-
-        # List of plugin names
-        pluginNames = builtins.map lib.getName plugins;
-
-        # Normalized plugin name
-        pluginNormalizedName = name: builtins.replaceStrings [ "." ] [ "-" ] name;
-
-        # Get plugin config
-        pluginConfig =
-          name:
-          let
-            configPath = ./plugins/${pluginNormalizedName name}/config.lua;
-          in
-          lib.optionalString (builtins.pathExists configPath) (luaBlock name configPath);
-
-        # Merge all plugin configs
-        config = concatNonEmptyStringsSep (builtins.map pluginConfig pluginNames);
-      in
-      config;
 
     # init.lua after plugins
     extraConfigLuaPost = luaBlock "init_after.lua" ./init_after.lua;
