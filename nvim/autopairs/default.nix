@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, myLib, ... }:
 {
   plugins.nvim-autopairs = {
     enable = true;
@@ -8,6 +8,6 @@
       fast_wrap = lib.nixvim.emptyTable;
     };
 
-    luaConfig.post = lib.nixvim.wrapDo (builtins.readFile ./pairs.lua);
+    luaConfig.post = myLib.readWrapDo ./pairs.lua;
   };
 }
