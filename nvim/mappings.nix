@@ -1,5 +1,11 @@
 { lib, ... }:
 {
+  # Set <Leader> to <Space> and <LocalLeader> to `\`
+  globals = {
+    mapleader = " ";
+    maplocalleader = "\\";
+  };
+
   keymaps = [
     # Leader shouldn't work by itself
     {
