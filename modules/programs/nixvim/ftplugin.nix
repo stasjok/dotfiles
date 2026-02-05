@@ -48,7 +48,9 @@ in
   };
 
   config = mkIf (cfg != { }) {
+    autoGroups.FtpluginModule = { };
     autoCmd = lib.mapAttrsToList (filetype: opts: {
+      group = "FtpluginModule";
       event = "FileType";
       pattern = filetype;
       desc = "${filetype} filetype configuration";
