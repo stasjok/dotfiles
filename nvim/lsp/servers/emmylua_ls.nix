@@ -90,7 +90,7 @@
               ]
             }
             client.settings.Lua.workspace.workspaceRoots = {
-              "nvim/runtime",
+              "nvim/files",
               "nvim/snippets/utils",
               "tests/nvim/runtime",
             }
