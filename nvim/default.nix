@@ -94,6 +94,7 @@ in
       ./plugins
       ./skeletons.nix
       ./snippets
+      ./terminal
       ./treesitter
     ];
   };
