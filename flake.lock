@@ -125,26 +125,7 @@
         "catppuccin-palette": "catppuccin-palette",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "nixvim": "nixvim",
-        "smart-splits-nvim": "smart-splits-nvim",
-        "tree-sitter-jinja2": "tree-sitter-jinja2"
-      }
-    },
-    "smart-splits-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1708205259,
-        "narHash": "sha256-S5I9nQcNGmjqZFn5jQkoG5Oh/mu8oSJpDZpAG07GytA=",
-        "owner": "mrjones2014",
-        "repo": "smart-splits.nvim",
-        "rev": "159c4823e3a11c79bb65fc4b8560320c49f738f4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mrjones2014",
-        "repo": "smart-splits.nvim",
-        "rev": "159c4823e3a11c79bb65fc4b8560320c49f738f4",
-        "type": "github"
+        "nixvim": "nixvim"
       }
     },
     "systems": {
@@ -159,22 +140,6 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
-        "type": "github"
-      }
-    },
-    "tree-sitter-jinja2": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1614858978,
-        "narHash": "sha256-LhyWfhtS1M+5m3wVnlHkM7e0yAG+Cfb1iBS1QuslG/c=",
-        "owner": "theHamsta",
-        "repo": "tree-sitter-jinja2",
-        "rev": "3fa73cd4a871bf88e95d61adc8e66e7fb09016a1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "theHamsta",
-        "repo": "tree-sitter-jinja2",
         "type": "github"
       }
     }

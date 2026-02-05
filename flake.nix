@@ -23,19 +23,6 @@
       url = "github:catppuccin/palette";
       flake = false;
     };
-
-    # Neovim plugins
-    smart-splits-nvim = {
-      # Pin smart-splits.nvim to the version that doesn't run tmux commands on startup
-      url = "github:mrjones2014/smart-splits.nvim?rev=159c4823e3a11c79bb65fc4b8560320c49f738f4";
-      flake = false;
-    };
-
-    # Other inputs
-    tree-sitter-jinja2 = {
-      url = "github:theHamsta/tree-sitter-jinja2";
-      flake = false;
-    };
   };
 
   outputs =
@@ -113,7 +100,7 @@
         homeConfiguration = self.homeConfigurations.stas;
       };
 
-      overlays.default = import ./overlay { inherit inputs; };
+      overlays.default = import ./overlay;
 
       # Provide all upstream packages
       legacyPackages.${system} = pkgs;

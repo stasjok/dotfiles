@@ -1,15 +1,9 @@
 {
-  inputs,
   fetchFromGitHub,
   fetchpatch,
   vimUtils,
 }:
 final: prev: {
-  # Flake input plugins
-  smart-splits-nvim = prev.smart-splits-nvim.overrideAttrs {
-    src = inputs.smart-splits-nvim;
-  };
-
   # Fix Auto Scroll Neovim
   fix-auto-scroll-nvim = vimUtils.buildVimPlugin {
     pname = "fix-auto-scroll.nvim";
@@ -38,6 +32,15 @@ final: prev: {
       hash = "sha256-BmSOHALTtLXe1jQ1P/Qslq3STkreLXXL5vQtGcWT4GE=";
     };
   };
+
+  # Pin smart-splits.nvim to the version that doesn't run tmux commands on startup
+  smart-splits-nvim = prev.smart-splits-nvim.overrideAttrs (prevAttrs: {
+    version = "2024-02-18";
+    src = prevAttrs.src.override {
+      rev = "159c4823e3a11c79bb65fc4b8560320c49f738f4";
+      sha256 = "sha256-S5I9nQcNGmjqZFn5jQkoG5Oh/mu8oSJpDZpAG07GytA=";
+    };
+  });
 
   # Fixes errors in telescope keymaps picker
   telescope-nvim = prev.telescope-nvim.overrideAttrs {
