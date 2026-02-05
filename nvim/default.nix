@@ -79,6 +79,7 @@ in
     extraConfigLuaPost = luaBlock "init_after.lua" ./init_after.lua;
 
     imports = [
+      ./autocmds.nix
       ./autopairs
       ./colorscheme.nix
       ./diagnostic.nix
