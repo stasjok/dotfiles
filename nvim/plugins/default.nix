@@ -2,7 +2,6 @@
   imports = [
     ./blink-cmp.nix
     ./codecompanion
-    ./luasnip
     ./mini
     ./smart_splits.nix
     ./surround.nix

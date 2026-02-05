@@ -2,6 +2,9 @@
   snippets.enable = true;
 
   imports = [
+    # Snippet plugin
+    ./luasnip.nix
+
     ./ansible
     ./beancount.nix
     ./gitcommit.nix
