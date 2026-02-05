@@ -6,29 +6,6 @@
 }:
 let
   cfg = config.programs.nixvim;
-
-  # Read a lua chunk from file, wrap it in do...end block, and prefix it with `name` comment
-  luaBlock =
-    name: file:
-    let
-      indentedBlock = lib.pipe (lib.fileContents file) [
-        (lib.splitString "\n")
-        (lib.concatMapStringsSep "\n" (line: if line == "" then line else "  " + line))
-      ];
-    in
-    ''
-      -- ${name}
-      do
-      ${lib.removeSuffix "\n" indentedBlock}
-      end
-    '';
-
-  concatNonEmptyStringsSep =
-    strings:
-    lib.pipe strings [
-      (builtins.filter (str: str != ""))
-      (builtins.concatStringsSep "\n")
-    ];
 in
 {
   programs.nixvim = {
@@ -66,9 +43,6 @@ in
         standalonePlugins = lib.mkForce [ (lib.getName cfg.build.extraFiles) ];
       };
     };
-
-    # init.lua after plugins
-    extraConfigLuaPost = luaBlock "init_after.lua" ./init_after.lua;
 
     imports = [
       ./autocmds.nix
