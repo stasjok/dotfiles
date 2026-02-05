@@ -35,38 +35,6 @@ let
     ];
 in
 {
-  imports = [
-    # NixVim-scoped imports
-    {
-      options.programs.nixvim = lib.mkOption {
-        type = lib.types.submoduleWith {
-          modules = lib.toList {
-            imports = [
-              ./autopairs
-              ./colorscheme.nix
-              ./diagnostic.nix
-              ./files
-              ./filetypes
-              ./git
-              ./icons.nix
-              ./lsp
-              ./mappings.nix
-              ./options.nix
-              ./patches.nix
-              ./plugins
-              ./skeletons.nix
-              ./snippets
-              ./treesitter
-            ];
-          };
-          specialArgs = {
-            inherit inputs;
-          };
-        };
-      };
-    }
-  ];
-
   programs.nixvim = {
     enable = true;
     package = neovim;
@@ -138,5 +106,23 @@ in
 
     # init.lua after plugins
     extraConfigLuaPost = luaBlock "init_after.lua" ./init_after.lua;
+
+    imports = [
+      ./autopairs
+      ./colorscheme.nix
+      ./diagnostic.nix
+      ./files
+      ./filetypes
+      ./git
+      ./icons.nix
+      ./lsp
+      ./mappings.nix
+      ./options.nix
+      ./patches.nix
+      ./plugins
+      ./skeletons.nix
+      ./snippets
+      ./treesitter
+    ];
   };
 }
