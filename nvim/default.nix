@@ -84,6 +84,7 @@ in
       ./diagnostic.nix
       ./files
       ./filetypes
+      ./format
       ./git
       ./icons.nix
       ./lsp
