@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ myLib, ... }:
 {
-  extraConfigLua = lib.nixvim.wrapDo (builtins.readFile ./terminal.lua);
+  extraConfigLua = myLib.readWrapDo ./terminal.lua;
 }
