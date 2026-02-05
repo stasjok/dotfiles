@@ -7,9 +7,6 @@
 let
   cfg = config.programs.nixvim;
 
-  # Neovim package
-  neovim = pkgs.neovim-patched;
-
   # Read a lua chunk from file, wrap it in do...end block, and prefix it with `name` comment
   luaBlock =
     name: file:
@@ -36,7 +33,7 @@ in
 {
   programs.nixvim = {
     enable = true;
-    package = neovim;
+    package = pkgs.neovim-patched;
     nixpkgs.useGlobalPackages = true;
 
     # Make Nvim pure
