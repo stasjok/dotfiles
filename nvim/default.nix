@@ -45,6 +45,7 @@ in
               ./autopairs
               ./colorscheme.nix
               ./diagnostic.nix
+              ./files
               ./filetypes
               ./git
               ./icons.nix
@@ -137,49 +138,5 @@ in
 
     # init.lua after plugins
     extraConfigLuaPost = luaBlock "init_after.lua" ./init_after.lua;
-
-    # Runtime files, both plugin's and separate
-    extraFiles =
-      let
-        # List of plugins
-        plugins = lib.pipe cfg.extraPlugins [
-          (map (p: p.plugin or p))
-          # Skip 'extraFiles' plugin to avoid infinite recursion
-          (builtins.filter (p: p.name != cfg.build.extraFiles.name))
-        ];
-
-        # List of plugin names
-        pluginNames = builtins.map lib.getName plugins;
-
-        # Normalized plugin name
-        pluginNormalizedName = name: builtins.replaceStrings [ "." ] [ "-" ] name;
-
-        # Make attributes for runtime attribute of a plugin
-        mkRuntimeAttrs =
-          dir:
-          lib.pipe dir [
-            lib.filesystem.listFilesRecursive
-            (builtins.map (path: lib.removePrefix (builtins.toString dir + "/") (builtins.toString path)))
-            (lib.flip lib.genAttrs (name: {
-              text = builtins.readFile /${dir}/${name};
-            }))
-          ];
-
-        # Get plugin runtime
-        pluginRuntime =
-          name:
-          let
-            runtimeDir = ./plugins/${pluginNormalizedName name}/runtime;
-          in
-          lib.optionalAttrs (builtins.pathExists runtimeDir) (mkRuntimeAttrs runtimeDir);
-
-        # Merge all runtime files
-        runtime =
-          let
-            pluginRuntimes = builtins.map pluginRuntime pluginNames;
-          in
-          builtins.foldl' (r1: r2: r1 // r2) (mkRuntimeAttrs ./runtime) pluginRuntimes;
-      in
-      runtime;
   };
 }
