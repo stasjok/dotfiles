@@ -1,3 +1,4 @@
+{ lib, ... }:
 {
   keymaps = [
     # Leader shouldn't work by itself
@@ -256,6 +257,23 @@
       mode = "n";
       key = "<C-P>";
       action = "<Cmd>:tag<CR>";
+    }
+
+    # Enables russian-jcukenwin keymap if disabled, then toggles iminsert.
+    {
+      mode = [
+        "!"
+        "s"
+      ];
+      key = "<M-i>";
+      action = lib.nixvim.mkRaw ''
+        function()
+          if #vim.opt_local.keymap:get() == 0 then
+            vim.opt_local.keymap = "russian-jcukenwin"
+          end
+          vim.api.nvim_feedkeys(vim.keycode("<C-^>"), "n", false)
+        end
+      '';
     }
   ];
 }

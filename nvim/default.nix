@@ -69,11 +69,14 @@ in
 
     # init.lua before plugins
     # Read `init.lua` file first, then read all .lua files in `init.lua.d` directory.
-    extraConfigLuaPre = lib.pipe ([ ./init.lua ] ++ lib.filesystem.listFilesRecursive ./init.lua.d) [
-      (builtins.filter (name: lib.hasSuffix ".lua" name))
-      (builtins.map (file: luaBlock (baseNameOf file) file))
-      concatNonEmptyStringsSep
-    ];
+    extraConfigLuaPre =
+      lib.pipe
+        [ ./init.lua ]
+        [
+          (builtins.filter (name: lib.hasSuffix ".lua" name))
+          (builtins.map (file: luaBlock (baseNameOf file) file))
+          concatNonEmptyStringsSep
+        ];
 
     # init.lua after plugins
     extraConfigLuaPost = luaBlock "init_after.lua" ./init_after.lua;
