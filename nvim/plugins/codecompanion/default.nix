@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, myLib, ... }:
 {
   plugins.codecompanion = {
     enable = true;
@@ -90,6 +90,8 @@
         acp.opts.show_defaults = false;
       };
     };
+
+    luaConfig.post = myLib.readWrapDo ./post.lua;
   };
 
   # Mappings
