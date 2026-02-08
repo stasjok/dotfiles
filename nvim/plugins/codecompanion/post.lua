@@ -52,61 +52,33 @@ end
 local function open_file_picker(directory, opts)
   opts = opts or {}
 
-  -- Check if Telescope is available
-  local ok, telescope = pcall(require, "telescope.builtin")
-  if not ok then
-    log:warn("Telescope is not installed")
-    return
-  end
-
-  -- Function to handle file selection
-  local on_select = function(selection)
-    if not selection then
-      return
-    end
-
-    -- Extract the path from the selection
-    local path = selection.value or selection.path or selection
-    if type(path) == "table" then
-      path = path.path or path.value
-    end
-
-    if not path then
-      log:warn("No file selected")
-      return
-    end
-
-    -- Add the file to chat
-    add_file_to_chat(path, { silent = opts.silent })
-  end
+  local telescope = require("telescope.builtin")
 
   -- Get absolute directory path
   local target_dir = vim.fn.fnamemodify(directory, ":p")
 
   -- Open Telescope find_files
   telescope.find_files({
-    prompt_title = opts.title or "Select file from: " .. vim.fn.fnamemodify(target_dir, ":t"),
+    prompt_title = opts.title or "Select file(s) from: " .. vim.fn.fnamemodify(target_dir, ":t"),
     cwd = target_dir,
     hidden = opts.hidden or true,
-    attach_mappings = function(_, map)
+    attach_mappings = function()
       local actions = require("telescope.actions")
       local action_state = require("telescope.actions.state")
 
       -- Replace the default action with our custom handler
-      map("i", "<CR>", function(prompt_bufnr)
-        local picker = action_state.get_current_picker(prompt_bufnr)
+      actions.select_default:replace(function(bufnr, _)
+        local picker = action_state.get_current_picker(bufnr)
         local selections = picker:get_multi_selection()
 
         if vim.tbl_isempty(selections) then
           selections = { action_state.get_selected_entry() }
         end
 
-        actions.close(prompt_bufnr)
+        actions.close(bufnr)
 
         for _, selection in ipairs(selections) do
-          if selection then
-            on_select(selection)
-          end
+          add_file_to_chat(selection.path, { silent = opts.silent })
         end
       end)
 
@@ -152,15 +124,12 @@ local function add_or_pick(input, opts)
   end
 end
 
----Single user command that handles all cases
-vim.api.nvim_create_user_command("AddToChat", function(opts)
+-- A user command for adding files to CodeCompanion chat
+vim.api.nvim_create_user_command("CodeCompanionAddFile", function(opts)
   local input = opts.args
   add_or_pick(input)
 end, {
   nargs = "?",
-  complete = function(ArgLead, CmdLine, CursorPos)
-    -- Provide file and directory completion
-    return vim.fn.getcompletion(ArgLead, "file")
-  end,
-  desc = "Add file to chat (file: add directly, dir: open picker, empty: pick from cwd)",
+  complete = "file",
+  desc = "Add file to CodeCompanion chat or pick from the directory",
 })
