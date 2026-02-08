@@ -1,12 +1,10 @@
-local chat_helpers = require("codecompanion.interactions.chat.helpers")
 local config = require("codecompanion.config")
 local log = require("codecompanion.utils.log")
 local utils = require("codecompanion.utils")
 local codecompanion = require("codecompanion")
-local fmt = string.format
 
 --- Add a file to the current chat by its path
----@param path string Absolute path to the file
+---@param path string Path to the file
 local function add_file_to_chat(path)
   -- Get the current chat
   local chat = codecompanion.last_chat()
@@ -19,7 +17,8 @@ local function add_file_to_chat(path)
   end
 
   -- Format file for LLM
-  local content, id, relative_path = chat_helpers.format_file_for_llm(path)
+  local content, id, relative_path =
+    require("codecompanion.interactions.chat.helpers").format_file_for_llm(path)
 
   -- Add message to chat
   chat:add_message({
@@ -38,7 +37,9 @@ local function add_file_to_chat(path)
     source = "codecompanion.interactions.chat.slash_commands.builtin.file",
   })
 
-  utils.notify(fmt("Added the `%s` file to the chat", vim.fn.fnamemodify(relative_path, ":t")))
+  utils.notify(
+    string.format("Added the `%s` file to the chat", vim.fn.fnamemodify(relative_path, ":t"))
+  )
 end
 
 --- Open Telescope picker for a directory
@@ -78,18 +79,19 @@ end
 --- Add file or open picker if a directory
 ---@param opts vim.api.keyset.create_user_command.command_args
 local function add_files(opts)
-  local path = vim.fn.fnamemodify(opts.args, ":p:h")
+  local path = vim.fs.normalize(opts.args)
 
   local stat = vim.uv.fs_stat(path)
   if not stat then
-    utils.notify("Path not found: " .. path, vim.log.levels.WARN)
-    return
+    return utils.notify("Path not found: " .. path, vim.log.levels.WARN)
   end
+
+  path = vim.fs.abspath(opts.args)
 
   if stat.type == "directory" then
     open_file_picker(path)
   else
-    return add_file_to_chat(path)
+    add_file_to_chat(path)
   end
 end
 
