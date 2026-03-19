@@ -1,7 +1,6 @@
 {
   stdenv,
   neovim-unwrapped,
-  fetchpatch,
   fetchurl,
 }:
 
@@ -15,26 +14,6 @@ stdenv.mkDerivation {
     ;
 
   src = neovim-unwrapped;
-
-  patches = [
-    # 'vim.fs' is compiled into the binary. It's reloaded in patches.nix.
-    # fix(vim.fs): root() should always return absolute path
-    (fetchpatch {
-      url = "https://github.com/neovim/neovim/commit/d974c684da3072345287424d3112209564d7419a.diff";
-      stripLen = 1;
-      extraPrefix = "share/nvim/";
-      excludes = [ "share/nvim/test/functional/lua/fs_spec.lua" ];
-      hash = "sha256-rAt4B8i0WEh+lVKvjY9XUySh78MzS1uRlkBhonN/EsU=";
-    })
-    # fix(vim.fs): abspath(".") returns "/…/."
-    (fetchpatch {
-      url = "https://github.com/neovim/neovim/commit/6a507bad18a4fb184792a4b36c0f8bd675ce172e.diff";
-      stripLen = 1;
-      extraPrefix = "share/nvim/";
-      excludes = [ "share/nvim/test/functional/lua/fs_spec.lua" ];
-      hash = "sha256-mUio6RFH/Mkk+EuXruS7KX6GrBMDCFbwmG7CTCHn0dY=";
-    })
-  ];
 
   postPatch = ''
     # Move enabled by default opt plugins to runtime
