@@ -48,6 +48,8 @@
       ripgrep
       yq-go
       curl
+      whois
+      ipcalc
       # Task runners
       gnumake
       go-task
