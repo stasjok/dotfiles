@@ -45,6 +45,7 @@
     in
     [
       # Command-line tools
+      rlwrap
       ripgrep
       yq-go
       curl
