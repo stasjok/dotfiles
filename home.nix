@@ -48,6 +48,8 @@
       ripgrep
       yq-go
       curl
+      tshark
+      termshark
       whois
       ipcalc
       # Task runners
