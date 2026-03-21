@@ -1,14 +1,14 @@
-From c17caa057c0a272b316a406443de56c7f3914374 Mon Sep 17 00:00:00 2001
+From bd87744b630677e44aecee81eb526e6ab6763831 Mon Sep 17 00:00:00 2001
 From: Stanislav Asunkin <1353637+stasjok@users.noreply.github.com>
 Date: Tue, 21 Oct 2025 18:13:20 +0300
 Subject: feat: rename documents along with accounts
 
 
 diff --git a/packages/lsp-client/src/common/client.ts b/packages/lsp-client/src/common/client.ts
-index 0af8b15..41ccd6b 100644
+index f8c6a0c..dbca73e 100644
 --- a/packages/lsp-client/src/common/client.ts
 +++ b/packages/lsp-client/src/common/client.ts
-@@ -232,6 +232,7 @@ export function setupCustomMessageHandlers(ctx: ExtensionContext<'browser' | 'no
+@@ -289,6 +289,7 @@ export function setupCustomMessageHandlers(ctx: ExtensionContext<'browser' | 'no
  		params.capabilities['customMessage'] = {
  			[CustomMessages.ListBeanFile]: true,
  			[CustomMessages.FileRead]: true,
@@ -16,7 +16,7 @@ index 0af8b15..41ccd6b 100644
  		};
  		return originalInitialize(connection, params);
  	};
-@@ -245,6 +246,11 @@ export function setupCustomMessageHandlers(ctx: ExtensionContext<'browser' | 'no
+@@ -302,6 +303,11 @@ export function setupCustomMessageHandlers(ctx: ExtensionContext<'browser' | 'no
  		return uriStrings;
  	});
  
@@ -29,10 +29,10 @@ index 0af8b15..41ccd6b 100644
  		const uri = vscode.Uri.parse(raw);
  
 diff --git a/packages/lsp-server/src/common/document-store.ts b/packages/lsp-server/src/common/document-store.ts
-index 0a68b2d..c3c95a0 100644
+index 34497c8..330c1d5 100644
 --- a/packages/lsp-server/src/common/document-store.ts
 +++ b/packages/lsp-server/src/common/document-store.ts
-@@ -213,6 +213,20 @@ export class DocumentStore extends TextDocuments<TextDocument> {
+@@ -217,6 +217,20 @@ export class DocumentStore extends TextDocuments<TextDocument> {
  		return new ArrayBuffer(0);
  	}
  
@@ -54,17 +54,18 @@ index 0a68b2d..c3c95a0 100644
  		return this._documentsCache.delete(uri);
  	}
 diff --git a/packages/lsp-server/src/common/features/rename.ts b/packages/lsp-server/src/common/features/rename.ts
-index 77c6859..0ee1c7b 100644
+index ff54a5b..9925a2f 100644
 --- a/packages/lsp-server/src/common/features/rename.ts
 +++ b/packages/lsp-server/src/common/features/rename.ts
-@@ -1,5 +1,6 @@
+@@ -1,6 +1,7 @@
  import { Logger } from '@bean-lsp/shared';
  import * as lsp from 'vscode-languageserver';
+ import { ErrorCodes, ResponseError } from 'vscode-languageserver';
 +import { URI, Utils as UriUtils } from 'vscode-uri';
  import { DocumentStore } from '../document-store';
  import { Trees } from '../trees';
  import { DefinitionFeature } from './definitions';
-@@ -204,20 +205,56 @@ export class RenameFeature {
+@@ -220,19 +221,56 @@ export class RenameFeature {
  		});
  
  		// Convert the map to the LSP-required format
@@ -78,9 +79,7 @@ index 77c6859..0ee1c7b 100644
 +			});
  		});
  
-+		// If current position is account, rename also documents
-+		const accountAtPosition = await positionUtils.getAccountAtPosition(this.trees, document, params.position);
-+		if (accountAtPosition) {
++		if (target.kind === "account") {
 +			// TODO: "documents" option is a list, can be specified multiple times
 +			const documentsOption = this.symbolIndex.getOption('documents');
 +			const mainBeanFile = await this.documents.getMainBeanFileUri();
@@ -97,9 +96,9 @@ index 77c6859..0ee1c7b 100644
 +				}
 +				const accountDocumentsDirectory = UriUtils.joinPath(
 +					documentsDirectory,
-+					...accountAtPosition.split(':'),
++					...target.currentName.split(':'),
 +				);
-+				logger.debug(`Searching documents for account ${accountAtPosition} in ${accountDocumentsDirectory}`);
++				logger.debug(`Searching documents for account ${target.currentName} in ${accountDocumentsDirectory}`);
 +				const documents = await this.documents.findFiles(
 +					accountDocumentsDirectory.fsPath + '/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]?*',
 +				);
@@ -122,27 +121,38 @@ index 77c6859..0ee1c7b 100644
 -			} files and ${allLocations.length} occurrences (${references.length} references, ${definitions.length} definitions)`,
 +			`Rename will update ${documentChanges.length} files and ${allLocations.length} occurrences (${references.length} references, ${definitions.length} definitions)`,
  		);
--		Object.keys(changes).forEach(uri => {
--			this.symbolIndex.addAsyncFile(uri);
--		});
+-		this.invalidateAffectedUris(Object.keys(changes));
++		this.invalidateAffectedUris(Object.keys(editsMap));
  
 -		return { changes };
 +		return { documentChanges };
  	}
- }
+ 
+ 	private invalidateAffectedUris(uris: string[]): void {
 diff --git a/packages/lsp-server/src/common/utils/beancount-options.ts b/packages/lsp-server/src/common/utils/beancount-options.ts
-index 0570a48..090d003 100644
+index 7a41407..3f11204 100644
 --- a/packages/lsp-server/src/common/utils/beancount-options.ts
 +++ b/packages/lsp-server/src/common/utils/beancount-options.ts
-@@ -7,7 +7,7 @@ import { parseExpression } from './expression-parser';
+@@ -7,8 +7,9 @@ import { parseExpression } from './expression-parser';
  // Create a logger for the options manager
  const logger = new Logger('BeancountOptions');
  
--export type SupportedOption = 'infer_tolerance_from_cost' | 'inferred_tolerance_multiplier';
-+export type SupportedOption = 'infer_tolerance_from_cost' | 'inferred_tolerance_multiplier' | 'documents';
- type OptionKeys = LiteralUnion<SupportedOption, string>;
- 
- /**
+-export type SupportedOption = 
+-	| 'infer_tolerance_from_cost' 
++export type SupportedOption =
++	| 'documents'
++	| 'infer_tolerance_from_cost'
+ 	| 'inferred_tolerance_multiplier'
+ 	| 'name_assets'
+ 	| 'name_liabilities'
+@@ -85,6 +86,7 @@ export class BeancountOptionsManager {
+ 	 * From: https://beancount.github.io/docs/beancount_options_reference.html
+ 	 */
+ 	private readonly DEFAULT_OPTIONS: Record<OptionKeys, string> = {
++		'documents': '',
+ 		'allow_deprecated_none_for_tags_links': 'FALSE',
+ 		'allow_pipe_separator': 'FALSE',
+ 		'booking_method': 'STRICT',
 diff --git a/packages/lsp-server/src/node/server.ts b/packages/lsp-server/src/node/server.ts
 index ee6c759..b6f6e29 100644
 --- a/packages/lsp-server/src/node/server.ts
@@ -160,7 +170,7 @@ index ee6c759..b6f6e29 100644
  
  // Create a connection for the server, using Node's IPC as a transport.
 diff --git a/packages/shared/src/messages.ts b/packages/shared/src/messages.ts
-index b65cd62..bbc61ef 100644
+index 35c0b36..3f852b0 100644
 --- a/packages/shared/src/messages.ts
 +++ b/packages/shared/src/messages.ts
 @@ -4,6 +4,7 @@ import { BQL_COLUMNS, BQL_FUNCTIONS } from './constraint/bean-query-doc';
@@ -172,5 +182,5 @@ index b65cd62..bbc61ef 100644
  	GetAccounts: 'beanLspCustom/getAccounts' as const,
  	GetPayees: 'beanLspCustom/getPayees' as const,
 -- 
-2.50.1
+2.51.2
 

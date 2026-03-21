@@ -1,38 +1,21 @@
-From dcab5c8677a9515bc675a91ae16fc6dd4a9d3b97 Mon Sep 17 00:00:00 2001
+From f1e56af733af1c2d8037381839b27374517d2e34 Mon Sep 17 00:00:00 2001
 From: Stanislav Asunkin <1353637+stasjok@users.noreply.github.com>
 Date: Sun, 19 Oct 2025 14:34:24 +0300
 Subject: disable filterText generation
 
-For my usecase (nvim-cmp) it makes things worse.
 
-diff --git a/packages/lsp-server/src/common/features/completions/index.ts b/packages/lsp-server/src/common/features/completions/index.ts
-index b071018..82cb2aa 100644
---- a/packages/lsp-server/src/common/features/completions/index.ts
-+++ b/packages/lsp-server/src/common/features/completions/index.ts
-@@ -458,23 +458,6 @@ function addCompletionItem(
- 	}
- 
- 	let filterText: string | undefined = undefined;
--	if (/^[\w:\s]+$/.test(item.label)) {
--		filterText = item.label;
--		let matches = item.label.match(/:[^:]+/g);
--		if (matches && matches?.length > 0) {
--			if (matches?.length === 1) {
--				// Make the suffix appear twice to boost the score when it is a one level account
--				matches = [matches[0], matches[0]];
--			}
--
--			// boots the score of suffixes match
--			matches?.forEach(suffix => {
--				filterText = `${item.label[0]}${suffix} ${filterText}`;
--			});
--		}
--	} else {
--		filterText = createFilterString(item.label, collector.enablePinyin);
--	}
- 
- 	// Calculate score for sorting if userInput is provided
- 	let score = 0;
+diff --git a/packages/lsp-server/src/common/features/symbol-index.ts b/packages/lsp-server/src/common/features/symbol-index.ts
+index a0665af..5d75ba5 100644
+--- a/packages/lsp-server/src/common/features/symbol-index.ts
++++ b/packages/lsp-server/src/common/features/symbol-index.ts
+@@ -587,6 +587,7 @@ export class SymbolIndex {
+ 	 * @returns Filter text string for completion matching
+ 	 */
+ 	public getFilterText(text: string): string {
++		return text
+ 		// Check cache first
+ 		const cached = this._filterTextCache.get(text);
+ 		if (cached !== undefined) {
 -- 
-2.50.1
+2.51.2
 

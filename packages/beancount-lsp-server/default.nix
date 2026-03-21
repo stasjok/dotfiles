@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "beancount-lsp-server";
-  version = "0.0.146";
+  version = "0.0.178";
 
   src =
     (fetchFromGitHub {
@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
       repo = "beancount-lsp";
       rev = "v${finalAttrs.version}";
       fetchSubmodules = true;
-      hash = "sha256-kszz7F7auXpjy3m0Gn+nQENrx1BwM9HyH7+CoAgNvx4=";
+      hash = "sha256-MRgUpe0UZCPucHkMqza2iFKvTi3x3Wu5rTDqDO2M53Q=";
     }).overrideAttrs
       # fetchgit doesn't have ssh, need http url type
       {
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     fetcherVersion = 2;
-    hash = "sha256-mO0gigw5IQAhgo2CQ/TpSni9QCdzRWPEemKvqlQ0a0g=";
+    hash = "sha256-si+zUCosMw2vSPECaJQZ4BFWve9Y1fIohAi+bGjj0lA=";
   };
 
   buildPhase = ''
