@@ -1,0 +1,90 @@
+diff --git a/packages/lsp-server/src/common/features/completions/completion-engine.ts b/packages/lsp-server/src/common/features/completions/completion-engine.ts
+index cab9dde..6218408 100644
+--- a/packages/lsp-server/src/common/features/completions/completion-engine.ts
++++ b/packages/lsp-server/src/common/features/completions/completion-engine.ts
+@@ -162,85 +162,6 @@ export async function runCompletionEngine(args: RunCompletionEngineArgs): Promis
+ 		}
+ 	}
+ 
+-	if (completionItems.length === 0 && document) {
+-		try {
+-			const initial = completionItems.length;
+-			const scenarios: CompletionScenario[] = [
+-				{
+-					placeholder: 'Assets:Bank',
+-					kind: 'account',
+-					onSuccess: async () => {
+-						await deps.addAccountCompletions(collector);
+-					},
+-					description: 'account',
+-				},
+-				{
+-					placeholder: '#tag',
+-					kind: 'tag',
+-					onSuccess: async () => {
+-						await deps.addTagCompletions(collector);
+-					},
+-					description: 'tag',
+-				},
+-				{
+-					placeholder: ' CNY',
+-					kind: 'currency',
+-					onSuccess: async () => {
+-						await deps.addCurrencyCompletions(collector);
+-					},
+-					description: 'currency',
+-				},
+-				{
+-					placeholder: '^link',
+-					kind: 'link',
+-					onSuccess: async () => {
+-						await deps.addLinkCompletions(collector);
+-					},
+-					description: 'link',
+-				},
+-				{
+-					placeholder: 'somekey: "value"',
+-					kind: 'meta',
+-					onSuccess: async () => {
+-						logger.info('Fallback: metadata key_value context detected');
+-					},
+-					description: 'metadata_key_value',
+-				},
+-			];
+-
+-			for (const scenario of scenarios) {
+-				if (completionItems.length > initial) {
+-					break;
+-				}
+-
+-				const ctx = await deps.reparseWithPlaceholder(
+-					document,
+-					position,
+-					scenario.placeholder[0] === info.triggerCharacter
+-						? scenario.placeholder.slice(1)
+-						: scenario.placeholder,
+-					scenario.kind,
+-					scenario.ancestorTypes,
+-				);
+-
+-				if (ctx) {
+-					await scenario.onSuccess(ctx);
+-					if (completionItems.length > initial) {
+-						const ancestorTypes = Array.from(ctx.ancestors.keys()).join(' > ');
+-						logger.info(
+-							`Fallback: ${scenario.description} (${ancestorTypes}), added ${
+-								completionItems.length - initial
+-							} items`,
+-						);
+-						break;
+-					}
+-				}
+-			}
+-		} catch (e) {
+-			logger.info(`Fallback (placeholder reparse) failed: ${e}`);
+-		}
+-	}
+-
+ 	logger.info(`Final completion items: ${completionItems.length}`);
+ 	return completionItems;
+ }
