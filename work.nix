@@ -5,9 +5,9 @@ in
 {
   home.sessionVariables = {
     # Proxy settings
-    HTTP_PROXY = proxy;
-    HTTPS_PROXY = proxy;
-    NO_PROXY = "127.0.0.1,localhost,msk.absolutbank.ru";
+    http_proxy = proxy;
+    https_proxy = proxy;
+    no_proxy = "127.0.0.1,localhost,127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,absolutbank.ru";
   };
 
   # Nixvim
