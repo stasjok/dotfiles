@@ -2,7 +2,12 @@
 let
   cfg = config.ftplugin;
 
-  inherit (lib) types mkOption mkIf;
+  inherit (lib)
+    types
+    mkOption
+    mkIf
+    mkMerge
+    ;
   inherit (lib.nixvim) mkRaw toLuaObject lua-types;
 in
 {
@@ -26,20 +31,53 @@ in
               default = { };
               description = "Nvim options to set for this filetype";
             };
+            keymaps = mkOption {
+              type = types.listOf lib.nixvim.keymaps.mapOptionSubmodule;
+              default = [ ];
+              description = "Buffer local keymaps to set for this filetype";
+            };
           };
 
-          config = mkIf (config.opts != { }) {
-            content = ''
-              local set_option_value = vim.api.nvim_set_option_value
-              ${builtins.concatStringsSep "\n" (
-                lib.mapAttrsToList (
-                  name: value:
-                  "set_option_value(${toLuaObject name}, ${toLuaObject value}, ${toLuaObject { scope = "local"; }})"
-                ) config.opts
-              )}
-            '';
-            undo = "setlocal " + lib.concatMapAttrsStringSep " " (name: _: "${name}<") config.opts;
-          };
+          config = mkMerge [
+            # Options
+            (mkIf (config.opts != { }) {
+              content = ''
+                local set_option_value = vim.api.nvim_set_option_value
+                ${builtins.concatStringsSep "\n" (
+                  lib.mapAttrsToList (
+                    name: value:
+                    "set_option_value(${toLuaObject name}, ${toLuaObject value}, ${toLuaObject { scope = "local"; }})"
+                  ) config.opts
+                )}
+              '';
+              undo = "setlocal " + lib.concatMapAttrsStringSep " " (name: _: "${name}<") config.opts;
+            })
+
+            # Keymaps
+            (mkIf (config.keymaps != [ ]) {
+              content = ''
+                local keymap_set = vim.keymap.set
+                ${builtins.concatStringsSep "\n" (
+                  map (
+                    keymap:
+                    "keymap_set(${toLuaObject keymap.mode}, ${toLuaObject keymap.key}, ${toLuaObject keymap.action}, ${
+                      toLuaObject (keymap.options // { buffer = true; })
+                    })"
+                  ) config.keymaps
+                )}
+              '';
+              undo = "silent! execute 'lua ${
+                builtins.concatStringsSep " " (
+                  map (
+                    keymap:
+                    "vim.keymap.del(${toLuaObject keymap.mode}, ${
+                      builtins.replaceStrings [ "'" ] [ "''" ] (toLuaObject keymap.key)
+                    }, { buffer = true })"
+                  ) config.keymaps
+                )
+              }'";
+            })
+          ];
         }
       )
     );

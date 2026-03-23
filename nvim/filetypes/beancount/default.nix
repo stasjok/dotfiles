@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 {
   ftplugin.beancount = {
     opts = {
@@ -7,15 +7,17 @@
       comments = ":;";
       iskeyword = "@,48-57,_,192-255,:,-,.,#,^"; # '^' should be last
     };
-
-    content = /* lua */ ''
-      vim.keymap.set("n", "<LocalLeader>s", "<Cmd>Telescope beancount sections<CR>", { buffer = true })
-      vim.keymap.set('n', '<LocalLeader>t', '"_ciw<C-R>=strftime("%Y-%m-%d")<CR><Esc>', { buffer = true })
-    '';
-
-    undo = lib.mkMerge [
-      "silent! execute 'nunmap <buffer> <LocalLeader>t'"
-      "silent! execute 'nunmap <buffer> <LocalLeader>s'"
+    keymaps = [
+      {
+        mode = "n";
+        key = "<LocalLeader>s";
+        action = "<Cmd>Telescope beancount sections<CR>";
+      }
+      {
+        mode = "n";
+        key = "<LocalLeader>t";
+        action = ''"_ciw<C-R>=strftime("%Y-%m-%d")<CR><Esc>'';
+      }
     ];
   };
 
