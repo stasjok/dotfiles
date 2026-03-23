@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   ftplugin.beancount = {
     opts = {
@@ -10,9 +10,13 @@
 
     content = /* lua */ ''
       vim.keymap.set("n", "<LocalLeader>s", "<Cmd>Telescope beancount sections<CR>", { buffer = true })
+      vim.keymap.set('n', '<LocalLeader>t', '"_ciw<C-R>=strftime("%Y-%m-%d")<CR><Esc>', { buffer = true })
     '';
 
-    undo = "silent! nunmap <buffer> <LocalLeader>s";
+    undo = lib.mkMerge [
+      "silent! execute 'nunmap <buffer> <LocalLeader>t'"
+      "silent! execute 'nunmap <buffer> <LocalLeader>s'"
+    ];
   };
 
   extraFiles = {
