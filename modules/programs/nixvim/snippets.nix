@@ -8,6 +8,7 @@
 let
   inherit (lib) mkOption mkEnableOption mkIf;
   inherit (lib.types) attrsOf listOf submodule;
+  writeLua = lib.nixvim.builders.writeLuaWith pkgs;
 
   cfg = config.snippets;
 
@@ -65,14 +66,14 @@ let
                 type = coercedStrToList;
                 default = [ ];
                 description = "Lua snippet file contents.";
-                example = lib.literalExpression ''builtins.readFile ./snippets.lua'';
+                example = lib.literalExpression "builtins.readFile ./snippets.lua";
               };
 
               source = mkOption {
                 type = coercedPathToList;
                 default = [ ];
                 description = "Paths to Lua snippet files.";
-                example = lib.literalExpression ''./snippets.lua'';
+                example = lib.literalExpression "./snippets.lua";
               };
             };
           };
@@ -104,7 +105,7 @@ let
 
         lua =
           let
-            luaSources = map (pkgs.writeText "${name}.lua") config.lua.text ++ config.lua.source;
+            luaSources = map (writeLua "${name}.lua") config.lua.text ++ config.lua.source;
           in
           mkIf (luaSources != [ ]) (
             pkgs.linkFarm name (
