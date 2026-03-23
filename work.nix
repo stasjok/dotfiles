@@ -10,15 +10,22 @@ in
     no_proxy = "127.0.0.1,localhost,127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,absolutbank.ru";
   };
 
+  # Disable beancount
+  programs.beancount.enable = lib.mkForce false;
+
   # Nixvim
   programs.nixvim = {
     # CodeCompanion proxy
     plugins.codecompanion.settings.adapters.http.opts.proxy = proxy;
 
-    # ansible-language-server settings
-    lsp.servers.ansiblels.config.settings.ansible = {
-      ansible.useFullyQualifiedCollectionNames = false;
-      completion.provideRedirectModules = lib.mkForce true;
+    lsp.servers = {
+      # ansible-language-server settings
+      ansiblels.config.settings.ansible = {
+        ansible.useFullyQualifiedCollectionNames = false;
+        completion.provideRedirectModules = lib.mkForce true;
+      };
+      # disable beancount-lsp-server
+      beancount-lsp-server.enable = lib.mkForce false;
     };
   };
 }
