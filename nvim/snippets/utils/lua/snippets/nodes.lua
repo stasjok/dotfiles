@@ -1,7 +1,11 @@
 local nodes = {}
 
-function nodes.cr(pos, choices)
-  return require("luasnip.nodes.choiceNode").C(pos, choices, { restore_cursor = true })
+function nodes.cr(pos, choices, opts)
+  return require("luasnip.nodes.choiceNode").C(
+    pos,
+    choices,
+    vim.tbl_extend("keep", { restore_cursor = true }, opts or {})
+  )
 end
 
 ---Wrap nodes in snippetNode and set position
