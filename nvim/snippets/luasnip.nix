@@ -196,6 +196,7 @@ in
       mode = [
         "i"
         "s"
+        "n"
       ];
       key = "<C-L>";
       action = "<Plug>luasnip-jump-next";
@@ -204,6 +205,7 @@ in
       mode = [
         "i"
         "s"
+        "n"
       ];
       key = "<C-H>";
       action = "<Plug>luasnip-jump-prev";
@@ -212,6 +214,7 @@ in
       mode = [
         "i"
         "s"
+        "n"
       ];
       key = "<C-J>";
       action = mkRaw ''
