@@ -83,6 +83,7 @@ local procs_which_uses_esc = {
   nvim = true,
   vim = true,
   fzf = true,
+  k9s = true,
 }
 
 local function is_proc_uses_esc(pid)
