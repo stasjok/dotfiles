@@ -206,4 +206,22 @@ return {
       )
     end, { k("account"), k("date") }),
   }),
+
+  -- Close directive
+  sb({ trig = "close", desc = "Close directive" }, {
+    directive(1, "close"),
+    t({ "", "" }),
+    f(function(args)
+      local y, m, d = args[1][1]:match("(%d%d%d%d)%-(%d%d)%-(%d%d)")
+      return os.date("%Y-%m-%d", os.time({
+        year = tonumber(y or os.date("%Y")),
+        month = tonumber(m or os.date("%m")),
+        day = tonumber(d or os.date("%d")),
+      }) + 86400)
+    end, k("date")),
+    t(" balance "),
+    l(l._1, k("account")),
+    t(" 0.00 "),
+    currency(2),
+  }),
 }
