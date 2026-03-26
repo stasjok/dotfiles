@@ -61,7 +61,7 @@ in
                   map (
                     keymap:
                     "keymap_set(${toLuaObject keymap.mode}, ${toLuaObject keymap.key}, ${toLuaObject keymap.action}, ${
-                      toLuaObject (keymap.options // { buffer = true; })
+                      toLuaObject (keymap.options // { buffer = 0; })
                     })"
                   ) config.keymaps
                 )}
@@ -72,7 +72,7 @@ in
                     keymap:
                     "vim.keymap.del(${toLuaObject keymap.mode}, ${
                       builtins.replaceStrings [ "'" ] [ "''" ] (toLuaObject keymap.key)
-                    }, { buffer = true })"
+                    }, { buffer = 0 })"
                   ) config.keymaps
                 )
               }'";
