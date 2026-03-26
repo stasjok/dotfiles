@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-disable-filterText-generation.patch
     ./0001-feat-rename-documents-along-with-accounts.patch
     ./remove-reparsing.patch
+    ./disable-isincomplete.patch
   ];
 
   nativeBuildInputs = [

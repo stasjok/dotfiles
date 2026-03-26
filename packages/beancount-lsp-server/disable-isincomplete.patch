@@ -1,0 +1,13 @@
+diff --git a/packages/lsp-server/src/common/features/completions/index.ts b/packages/lsp-server/src/common/features/completions/index.ts
+index 9564f56..520dbe1 100644
+--- a/packages/lsp-server/src/common/features/completions/index.ts
++++ b/packages/lsp-server/src/common/features/completions/index.ts
+@@ -236,7 +236,7 @@ export class CompletionFeature implements Feature {
+ 			`[completion-context] requestId=${requestId} itemsCount=${completionItems.length}`,
+ 		);
+ 
+-		return CompletionList.create(completionItems, true);
++		return CompletionList.create(completionItems, false);
+ 	};
+ 
+ 	/**
