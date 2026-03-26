@@ -10,6 +10,7 @@
     ./inlay_hints.nix
     ./keymaps.nix
     ./none-ls.nix
+    ./otter.nix
     ./servers
   ];
 }
