@@ -199,7 +199,11 @@ in
         "n"
       ];
       key = "<C-L>";
-      action = "<Plug>luasnip-jump-next";
+      action = mkRaw ''
+        function()
+          require("luasnip").jump(1)
+        end
+      '';
     }
     {
       mode = [
@@ -208,7 +212,11 @@ in
         "n"
       ];
       key = "<C-H>";
-      action = "<Plug>luasnip-jump-prev";
+      action = mkRaw ''
+        function()
+          require("luasnip").jump(-1)
+        end
+      '';
     }
     {
       mode = [
