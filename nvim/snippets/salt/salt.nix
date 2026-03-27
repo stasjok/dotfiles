@@ -258,7 +258,12 @@
       tplroot = {
         prefix = "tplroot";
         description = "Get the tplroot from tpldir";
-        body = "{%- set tplroot = tpldir.split('/')[0] %}";
+        body = ''{%- set tplroot = tpldir.split("/")[0] %}'';
+      };
+      id_prefix = {
+        prefix = "id_prefix";
+        description = "A default prefix for state IDs";
+        body = ''{%- set id_prefix = sls | replace(".", " - ") %}'';
       };
       unless = {
         prefix = "unless";
