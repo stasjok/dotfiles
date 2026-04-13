@@ -172,6 +172,7 @@
         init_options.exclude = [
           "zenmoney/**"
           "easyfinance/**"
+          "importers/tests/**"
         ];
         settings = {
           beanLsp = {
