@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 let
   proxy = "http://rmt4prod.msk.absolutbank.ru:3128";
 in
@@ -9,6 +9,11 @@ in
     https_proxy = proxy;
     no_proxy = "127.0.0.1,localhost,127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,absolutbank.ru";
   };
+
+  # Packages
+  home.packages = with pkgs; [
+    govc
+  ];
 
   # Disable beancount
   programs.beancount.enable = lib.mkForce false;
