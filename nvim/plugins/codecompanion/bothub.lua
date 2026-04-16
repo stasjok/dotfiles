@@ -107,15 +107,31 @@ local function fetch_async(adapter)
         end
 
         local models = {}
-        for _, model in ipairs(json) do
-          local params = as_set(model.features or {})
-          if params.TEXT_TO_TEXT then
-            models[model.id] = {
-              opts = {
-                has_vision = params.IMAGE_TO_TEXT,
-                can_reason = params.REASONING or params.EFFORT,
-              },
-            }
+        if json.data then
+          -- OpenRouter
+          for _, model in ipairs(json.data) do
+            local params = as_set(model.supported_parameters or {})
+            local inputs = as_set((model.architecture or {}).input_modalities or {})
+            if params.tools then
+              models[model.id] = {
+                opts = {
+                  has_vision = inputs.image,
+                  can_reason = params.reasoning,
+                },
+              }
+            end
+          end
+        else
+          for _, model in ipairs(json) do
+            local params = as_set(model.features or {})
+            if params.TEXT_TO_TEXT then
+              models[model.id] = {
+                opts = {
+                  has_vision = params.IMAGE_TO_TEXT,
+                  can_reason = params.REASONING or params.EFFORT,
+                },
+              }
+            end
           end
         end
 
@@ -177,20 +193,20 @@ end
 local api_key
 
 -- Get BotHub API key from the file
+---@param adapter CodeCompanion.HTTPAdapter
 ---@return string?
-local function from_file()
-  local path = vim.fs.joinpath(vim.fs.dirname(vim.fn.stdpath("config")), "bothub/key")
-  local lines = vim.F.npcall(vim.fn.readfile, path, "", 1) --[[@as string[]?]]
+local function from_file(adapter)
+  local lines = vim.F.npcall(vim.fn.readfile, (adapter.env or {}).api_key_path, "", 1) --[[@as string[]?]]
   return lines and lines[1]
 end
 
 -- Get BotHub API key from various sources
+---@param adapter CodeCompanion.HTTPAdapter
 ---@return string
-local function get_api_key()
-  api_key = vim.env.BOTHUB_API_KEY
-    or api_key
-    or from_file()
-    or vim.fn.inputsecret("Enter BotHub API key: ")
+local function get_api_key(adapter)
+  api_key = vim.env[(adapter.env or {}).api_key_env]
+    or from_file(adapter)
+    or vim.fn.inputsecret(("Enter %s API key: "):format(adapter.formatted_name))
   return api_key
 end
 
@@ -220,6 +236,8 @@ return {
     url = "https://bothub.chat/api",
     chat_url = "/v2/openai/v1/chat/completions",
     models_endpoint = "/v2/model/list?children=1",
+    api_key_path = vim.fs.joinpath(vim.fs.dirname(vim.fn.stdpath("config")), "bothub/key"),
+    api_key_env = "BOTHUB_API_KEY",
   },
   headers = {
     ["Content-Type"] = "application/json",
