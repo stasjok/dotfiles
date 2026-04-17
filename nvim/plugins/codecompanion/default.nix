@@ -72,29 +72,30 @@ in
           lib.flip map
             [
               "claude-haiku-4.5"
-              "claude-sonnet-4.5"
+              "claude-sonnet-4.6"
               "deepseek-v3.2"
+              "elephant-alpha"
               "gemini-3-flash-preview"
-              "gemini-3-pro-preview"
-              "glm-4.7"
-              "gpt-5.2"
-              "gpt-5.2-codex"
-              "gpt-5-mini"
-              "gpt-5.1-codex-mini"
-              "gpt-oss-120b"
-              "grok-4"
+              "gemini-3.1-flash-lite-preview"
+              "gemini-3.1-pro-preview"
+              "glm-4.5-air:free"
+              "glm-5.1"
+              "gpt-5.4"
+              "gpt-5.4-mini"
+              "gpt-5.4-nano"
+              "gpt-oss-120b:free"
               "grok-4.1-fast"
-              "grok-code-fast-1"
+              "grok-4.20"
               "kimi-k2.5"
-              "minimax-m2.1"
-              "qwen3-235b-a22b-2507"
-              "qwen3-coder"
-              "qwen3-max"
+              "mimo-v2-pro"
+              "minimax-m2.5:free"
+              "minimax-m2.7"
+              "qwen3.6-plus"
             ]
             (name: {
               # CodeCompanion recognizes only alphanumerics and underscores in inline prompt
               # https://github.com/olimorris/codecompanion.nvim/blob/991dd81ac37b56b6d13529a08e86a42d183d79dc/lua/codecompanion/strategies/inline/init.lua#L236
-              name = lib.replaceStrings [ "-" "." ] [ "_" "_" ] name;
+              name = lib.replaceStrings [ "-" "." ":" ] [ "_" "_" "_" ] name;
               value = mkRaw ''
                 require("codecompanion.adapters.http").extend("bothub", ${
                   lib.nixvim.toLuaObject {
