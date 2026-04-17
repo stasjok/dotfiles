@@ -1,4 +1,7 @@
 { lib, myLib, ... }:
+let
+  inherit (lib.nixvim) mkRaw;
+in
 {
   plugins.codecompanion = {
     enable = true;
@@ -23,7 +26,7 @@
       };
       display.chat = {
         window = {
-          width = lib.nixvim.mkRaw ''
+          width = mkRaw ''
             function()
               return math.min(math.floor(vim.o.columns / 2), 79)
             end
@@ -48,6 +51,22 @@
             show_model_choices = true;
           };
           bothub = "bothub";
+          openrouter = mkRaw ''
+            require("codecompanion.adapters.http").extend("bothub", ${
+              lib.nixvim.toLuaObject {
+                name = "openrouter";
+                formatted_name = "OpenRouter";
+                schema.model.default = "moonshotai/kimi-k2.5";
+                env = {
+                  url = "https://openrouter.ai/api";
+                  chat_url = "/v1/chat/completions";
+                  models_endpoint = "/v1/models";
+                  api_key_path = mkRaw ''vim.fs.joinpath(vim.fs.dirname(vim.fn.stdpath("config")), "openrouter/key")'';
+                  api_key_env = "OPENROUTER_API_KEY";
+                };
+              }
+            })
+          '';
         }
         // builtins.listToAttrs (
           lib.flip map
@@ -76,7 +95,7 @@
               # CodeCompanion recognizes only alphanumerics and underscores in inline prompt
               # https://github.com/olimorris/codecompanion.nvim/blob/991dd81ac37b56b6d13529a08e86a42d183d79dc/lua/codecompanion/strategies/inline/init.lua#L236
               name = lib.replaceStrings [ "-" "." ] [ "_" "_" ] name;
-              value = lib.nixvim.mkRaw ''
+              value = mkRaw ''
                 require("codecompanion.adapters.http").extend("bothub", ${
                   lib.nixvim.toLuaObject {
                     inherit name;

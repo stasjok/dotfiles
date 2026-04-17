@@ -28,9 +28,9 @@ local function filter_message(message)
   return message
 end
 
-local cached_models
-local cache_expires
-local fetch_in_progress = false
+local cached_models = {}
+local cache_expires = {}
+local fetch_in_progress = {}
 
 ---Return a list as a set
 ---@param tbl table
@@ -44,20 +44,28 @@ local function as_set(tbl)
 end
 
 ---Refresh the cache expiry timestamp
+---@param adapter CodeCompanion.HTTPAdapter
 ---@param seconds number|nil Number of seconds until the cache expires. Default: 1800
 ---@return number
-local function set_cache_expiry(seconds)
+local function set_cache_expiry(adapter, seconds)
   seconds = seconds or 1800
-  cache_expires = os.time() + seconds
-  return cache_expires
+  local adapter_name = adapter.name
+  cache_expires[adapter_name] = os.time() + seconds
+  return cache_expires[adapter_name]
 end
 
 ---Return cached models if the cache is still valid.
+---@param adapter CodeCompanion.HTTPAdapter
 ---@return table|nil
-local function get_cached_models()
-  if cached_models and cache_expires and cache_expires > os.time() then
-    log:trace("BotHub Adapter: Using cached models")
-    return cached_models
+local function get_cached_models(adapter)
+  local adapter_name = adapter.name
+  if
+    cached_models[adapter_name]
+    and cache_expires[adapter_name]
+    and cache_expires[adapter_name] > os.time()
+  then
+    log:trace(adapter.formatted_name .. " Adapter: Using cached models")
+    return cached_models[adapter_name]
   end
 
   return nil
@@ -67,14 +75,15 @@ end
 ---@param adapter CodeCompanion.HTTPAdapter
 ---@return boolean
 local function fetch_async(adapter)
-  cached_models = get_cached_models()
-  if cached_models then
+  local adapter_name = adapter.name
+  local cached = get_cached_models(adapter)
+  if cached then
     return true
   end
-  if fetch_in_progress then
+  if fetch_in_progress[adapter_name] then
     return true
   end
-  fetch_in_progress = true
+  fetch_in_progress[adapter_name] = true
 
   utils.get_env_vars(adapter)
   local url = adapter.env_replaced.url
@@ -91,11 +100,16 @@ local function fetch_async(adapter)
       insecure = config.adapters.http.opts.allow_insecure,
       proxy = config.adapters.http.opts.proxy,
       callback = vim.schedule_wrap(function(response)
-        fetch_in_progress = false
+        fetch_in_progress[adapter_name] = false
 
         if not response or not response.body then
           log:error(
-            "Could not get the BotHub models from " .. url .. models_endpoint .. ". Empty response"
+            "Could not get the "
+              .. adapter.formatted_name
+              .. " models from "
+              .. url
+              .. models_endpoint
+              .. ". Empty response"
           )
           return
         end
@@ -107,27 +121,43 @@ local function fetch_async(adapter)
         end
 
         local models = {}
-        for _, model in ipairs(json) do
-          local params = as_set(model.features or {})
-          if params.TEXT_TO_TEXT then
-            models[model.id] = {
-              opts = {
-                has_vision = params.IMAGE_TO_TEXT,
-                can_reason = params.REASONING or params.EFFORT,
-              },
-            }
+        if json.data then
+          -- OpenRouter
+          for _, model in ipairs(json.data) do
+            local params = as_set(model.supported_parameters or {})
+            local inputs = as_set((model.architecture or {}).input_modalities or {})
+            if params.tools then
+              models[model.id] = {
+                opts = {
+                  has_vision = inputs.image,
+                  can_reason = params.reasoning,
+                },
+              }
+            end
+          end
+        else
+          for _, model in ipairs(json) do
+            local params = as_set(model.features or {})
+            if params.TEXT_TO_TEXT then
+              models[model.id] = {
+                opts = {
+                  has_vision = params.IMAGE_TO_TEXT,
+                  can_reason = params.REASONING or params.EFFORT,
+                },
+              }
+            end
           end
         end
 
-        cached_models = models
-        set_cache_expiry(config.adapters.http.opts.cache_models_for)
+        cached_models[adapter_name] = models
+        set_cache_expiry(adapter, config.adapters.http.opts.cache_models_for)
       end),
     })
   end)
 
   if not ok then
-    fetch_in_progress = false
-    log:error("Could not start async request for BotHub models: %s", err)
+    fetch_in_progress[adapter_name] = false
+    log:error("Could not start async request for " .. adapter.formatted_name .. " models: %s", err)
     return false
   end
 
@@ -142,15 +172,15 @@ local function fetch(adapter)
 
   -- Block until models are cached or timeout (milliseconds)
   local ok = vim.wait(3000, function()
-    return get_cached_models() ~= nil
+    return get_cached_models(adapter) ~= nil
   end, 10)
 
   if not ok then
-    log:error("BotHub Adapter: Timeout waiting for models")
+    log:error(adapter.formatted_name .. " Adapter: Timeout waiting for models")
     return {}
   end
 
-  return cached_models or {}
+  return get_cached_models(adapter) or {}
 end
 
 ---@param self CodeCompanion.HTTPAdapter
@@ -160,7 +190,9 @@ local function get_models(self, opts)
   opts = opts or { async = true }
   local adapter = require("codecompanion.adapters.http").resolve(self)
   if not adapter then
-    log:error("Could not resolve BotHub adapter in the `get_models` function")
+    log:error(
+      "Could not resolve " .. self.formatted_name .. " adapter in the `get_models` function"
+    )
     return {}
   end
 
@@ -170,27 +202,27 @@ local function get_models(self, opts)
 
   -- Non-blocking: start async fetching (if possible) and return whatever is cached
   fetch_async(adapter)
-  return get_cached_models() or {}
+  return get_cached_models(adapter) or {}
 end
 
 ---@type string
 local api_key
 
 -- Get BotHub API key from the file
+---@param adapter CodeCompanion.HTTPAdapter
 ---@return string?
-local function from_file()
-  local path = vim.fs.joinpath(vim.fs.dirname(vim.fn.stdpath("config")), "bothub/key")
-  local lines = vim.F.npcall(vim.fn.readfile, path, "", 1) --[[@as string[]?]]
+local function from_file(adapter)
+  local lines = vim.F.npcall(vim.fn.readfile, (adapter.env or {}).api_key_path, "", 1) --[[@as string[]?]]
   return lines and lines[1]
 end
 
 -- Get BotHub API key from various sources
+---@param adapter CodeCompanion.HTTPAdapter
 ---@return string
-local function get_api_key()
-  api_key = vim.env.BOTHUB_API_KEY
-    or api_key
-    or from_file()
-    or vim.fn.inputsecret("Enter BotHub API key: ")
+local function get_api_key(adapter)
+  api_key = vim.env[(adapter.env or {}).api_key_env]
+    or from_file(adapter)
+    or vim.fn.inputsecret(("Enter %s API key: "):format(adapter.formatted_name))
   return api_key
 end
 
@@ -220,6 +252,8 @@ return {
     url = "https://bothub.chat/api",
     chat_url = "/v2/openai/v1/chat/completions",
     models_endpoint = "/v2/model/list?children=1",
+    api_key_path = vim.fs.joinpath(vim.fs.dirname(vim.fn.stdpath("config")), "bothub/key"),
+    api_key_env = "BOTHUB_API_KEY",
   },
   headers = {
     ["Content-Type"] = "application/json",
