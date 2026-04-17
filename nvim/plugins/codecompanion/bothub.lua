@@ -28,9 +28,9 @@ local function filter_message(message)
   return message
 end
 
-local cached_models
-local cache_expires
-local fetch_in_progress = false
+local cached_models = {}
+local cache_expires = {}
+local fetch_in_progress = {}
 
 ---Return a list as a set
 ---@param tbl table
@@ -44,20 +44,28 @@ local function as_set(tbl)
 end
 
 ---Refresh the cache expiry timestamp
+---@param adapter CodeCompanion.HTTPAdapter
 ---@param seconds number|nil Number of seconds until the cache expires. Default: 1800
 ---@return number
-local function set_cache_expiry(seconds)
+local function set_cache_expiry(adapter, seconds)
   seconds = seconds or 1800
-  cache_expires = os.time() + seconds
-  return cache_expires
+  local adapter_name = adapter.name
+  cache_expires[adapter_name] = os.time() + seconds
+  return cache_expires[adapter_name]
 end
 
 ---Return cached models if the cache is still valid.
+---@param adapter CodeCompanion.HTTPAdapter
 ---@return table|nil
-local function get_cached_models()
-  if cached_models and cache_expires and cache_expires > os.time() then
-    log:trace("BotHub Adapter: Using cached models")
-    return cached_models
+local function get_cached_models(adapter)
+  local adapter_name = adapter.name
+  if
+    cached_models[adapter_name]
+    and cache_expires[adapter_name]
+    and cache_expires[adapter_name] > os.time()
+  then
+    log:trace("BotHub Adapter: Using cached models for " .. adapter_name)
+    return cached_models[adapter_name]
   end
 
   return nil
@@ -67,14 +75,15 @@ end
 ---@param adapter CodeCompanion.HTTPAdapter
 ---@return boolean
 local function fetch_async(adapter)
-  cached_models = get_cached_models()
-  if cached_models then
+  local adapter_name = adapter.name
+  local cached = get_cached_models(adapter)
+  if cached then
     return true
   end
-  if fetch_in_progress then
+  if fetch_in_progress[adapter_name] then
     return true
   end
-  fetch_in_progress = true
+  fetch_in_progress[adapter_name] = true
 
   utils.get_env_vars(adapter)
   local url = adapter.env_replaced.url
@@ -91,7 +100,7 @@ local function fetch_async(adapter)
       insecure = config.adapters.http.opts.allow_insecure,
       proxy = config.adapters.http.opts.proxy,
       callback = vim.schedule_wrap(function(response)
-        fetch_in_progress = false
+        fetch_in_progress[adapter_name] = false
 
         if not response or not response.body then
           log:error(
@@ -135,14 +144,14 @@ local function fetch_async(adapter)
           end
         end
 
-        cached_models = models
-        set_cache_expiry(config.adapters.http.opts.cache_models_for)
+        cached_models[adapter_name] = models
+        set_cache_expiry(adapter, config.adapters.http.opts.cache_models_for)
       end),
     })
   end)
 
   if not ok then
-    fetch_in_progress = false
+    fetch_in_progress[adapter_name] = false
     log:error("Could not start async request for BotHub models: %s", err)
     return false
   end
@@ -158,7 +167,7 @@ local function fetch(adapter)
 
   -- Block until models are cached or timeout (milliseconds)
   local ok = vim.wait(3000, function()
-    return get_cached_models() ~= nil
+    return get_cached_models(adapter) ~= nil
   end, 10)
 
   if not ok then
@@ -166,7 +175,7 @@ local function fetch(adapter)
     return {}
   end
 
-  return cached_models or {}
+  return get_cached_models(adapter) or {}
 end
 
 ---@param self CodeCompanion.HTTPAdapter
@@ -186,7 +195,7 @@ local function get_models(self, opts)
 
   -- Non-blocking: start async fetching (if possible) and return whatever is cached
   fetch_async(adapter)
-  return get_cached_models() or {}
+  return get_cached_models(adapter) or {}
 end
 
 ---@type string
