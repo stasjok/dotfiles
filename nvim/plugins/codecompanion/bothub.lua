@@ -301,7 +301,7 @@ return {
       if type(model) == "function" then
         model = model(self)
       end
-      if vim.startswith(model, "claude-") then
+      if model:find("claude", 0, true) or model:find("qwen", 0, true) then
         local breakpoints_used = 0
         local is_last_text = true
         messages = result.messages
