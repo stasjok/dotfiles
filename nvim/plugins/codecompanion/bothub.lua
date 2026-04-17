@@ -64,7 +64,7 @@ local function get_cached_models(adapter)
     and cache_expires[adapter_name]
     and cache_expires[adapter_name] > os.time()
   then
-    log:trace("BotHub Adapter: Using cached models for " .. adapter_name)
+    log:trace(adapter.formatted_name .. " Adapter: Using cached models")
     return cached_models[adapter_name]
   end
 
@@ -104,7 +104,12 @@ local function fetch_async(adapter)
 
         if not response or not response.body then
           log:error(
-            "Could not get the BotHub models from " .. url .. models_endpoint .. ". Empty response"
+            "Could not get the "
+              .. adapter.formatted_name
+              .. " models from "
+              .. url
+              .. models_endpoint
+              .. ". Empty response"
           )
           return
         end
@@ -152,7 +157,7 @@ local function fetch_async(adapter)
 
   if not ok then
     fetch_in_progress[adapter_name] = false
-    log:error("Could not start async request for BotHub models: %s", err)
+    log:error("Could not start async request for " .. adapter.formatted_name .. " models: %s", err)
     return false
   end
 
@@ -171,7 +176,7 @@ local function fetch(adapter)
   end, 10)
 
   if not ok then
-    log:error("BotHub Adapter: Timeout waiting for models")
+    log:error(adapter.formatted_name .. " Adapter: Timeout waiting for models")
     return {}
   end
 
@@ -185,7 +190,9 @@ local function get_models(self, opts)
   opts = opts or { async = true }
   local adapter = require("codecompanion.adapters.http").resolve(self)
   if not adapter then
-    log:error("Could not resolve BotHub adapter in the `get_models` function")
+    log:error(
+      "Could not resolve " .. self.formatted_name .. " adapter in the `get_models` function"
+    )
     return {}
   end
 
