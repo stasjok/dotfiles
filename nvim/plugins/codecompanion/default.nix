@@ -106,7 +106,7 @@ in
               '';
             })
         );
-        acp.opts.show_defaults = false;
+        acp.opts.show_presets = false;
       };
     };
 
