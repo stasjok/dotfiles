@@ -259,6 +259,19 @@ return {
     ["Content-Type"] = "application/json",
     Authorization = "Bearer ${api_key}",
   },
+  available_tools = {
+    ["web_search"] = {
+      description = "Allow models to search the web for the latest information before generating a response.",
+      enabled = true,
+      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param tools table The transformed tools table
+      callback = function(self, tools)
+        table.insert(tools, {
+          type = "openrouter:web_search",
+        })
+      end,
+    },
+  },
   handlers = {
     ---@param self CodeCompanion.HTTPAdapter
     ---@return boolean
@@ -393,11 +406,31 @@ return {
     end,
 
     ---Provides the schemas of the tools that are available to the LLM to call
-    ---@param self CodeCompanion.HTTPAdapter
+    ---@param self CodeCompanion.HTTPAdapter.BotHub
     ---@param tools table<string, table>
     ---@return table|nil
     form_tools = function(self, tools)
-      return openai.handlers.form_tools(self, tools)
+      if not self.opts.tools or not tools then
+        return nil
+      end
+      if vim.tbl_count(tools) == 0 then
+        return nil
+      end
+
+      local transformed = {}
+      for _, tool in pairs(tools) do
+        for _, schema in pairs(tool) do
+          if schema._meta and schema._meta.adapter_tool then
+            if self.available_tools[schema.name] then
+              self.available_tools[schema.name].callback(self, transformed)
+            end
+          else
+            table.insert(transformed, schema)
+          end
+        end
+      end
+
+      return { tools = transformed }
     end,
 
     ---Returns the number of tokens generated from the LLM
