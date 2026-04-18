@@ -65,7 +65,7 @@
             nixvim.homeModules.nixvim
             catppuccin.homeModules.catppuccin
             ./modules
-            ./home.nix
+            ./main.nix
             (lib.optional isGenericLinux ./linux.nix)
             {
               home = {
@@ -81,10 +81,14 @@
       homeConfigurations = {
         stas = makeOverridableHomeConfiguration {
           username = "stas";
+          extraModules = [ ./home.nix ];
         };
         "stas@server2" = makeOverridableHomeConfiguration {
           username = "stas";
-          extraModules = [ ./server2.nix ];
+          extraModules = [
+            ./home.nix
+            ./server2.nix
+          ];
         };
         admAsunkinSS = makeOverridableHomeConfiguration {
           username = "admAsunkinSS";

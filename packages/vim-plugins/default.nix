@@ -70,6 +70,8 @@ final: prev: {
         ./codecompanion-allow-string-dryrun.patch
         # Workaround for deepseek-v3.2 returning malformed json
         ./codecompanion-fix-missing-ending-quote-on-json-keys.patch
+        # Allow to set proxy for adapter via opts
+        ./codecompanion-add-support-for-per-adapter-proxy.patch
       ];
 
       # Collision with blink-cmp

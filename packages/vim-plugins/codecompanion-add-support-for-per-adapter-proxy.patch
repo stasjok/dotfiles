@@ -1,0 +1,22 @@
+diff --git a/lua/codecompanion/http.lua b/lua/codecompanion/http.lua
+index e010f84b..839abe31 100644
+--- a/lua/codecompanion/http.lua
++++ b/lua/codecompanion/http.lua
+@@ -227,7 +227,7 @@ function Client:send_sync(payload, opts)
+     url = adapter_utils.set_env_vars(adapter, adapter.url),
+     headers = adapter_utils.set_env_vars(adapter, adapter.headers),
+     insecure = config.adapters.http.opts.allow_insecure,
+-    proxy = config.adapters.http.opts.proxy,
++    proxy = adapter.opts and adapter.opts.proxy or config.adapters.http.opts.proxy,
+     raw = raw,
+     body = body_file.filename or "",
+     timeout = opts.timeout,
+@@ -363,7 +363,7 @@ function Client:request(payload, actions, opts)
+     url = adapter_utils.set_env_vars(adapter, adapter.url),
+     headers = adapter_utils.set_env_vars(adapter, adapter.headers),
+     insecure = config.adapters.http.opts.allow_insecure,
+-    proxy = config.adapters.http.opts.proxy,
++    proxy = adapter.opts and adapter.opts.proxy or config.adapters.http.opts.proxy,
+     raw = raw,
+     body = body_file.filename or "",
+     -- Final callback invoked when HTTP request is complete
