@@ -296,7 +296,13 @@ return {
       ---@param messages table
       ---@return table
       build_parameters = function(self, params, messages)
-        return openai.handlers.form_parameters(self, params, messages)
+        if not self._session_id then
+          local meta = _G.codecompanion_chat_metadata[vim.api.nvim_get_current_buf()]
+          local chat_id = meta and meta.id or math.random(10000000)
+          self._session_id = string.format("nvim-%d-chat-%d", vim.fn.getpid(), chat_id)
+        end
+        params.session_id = self._session_id
+        return params
       end,
 
       ---Set the format of the role and content for the messages from the chat buffer
