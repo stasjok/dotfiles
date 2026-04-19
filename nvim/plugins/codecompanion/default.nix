@@ -36,16 +36,10 @@ in
         };
         # Enable wrap in debug window
         floating_window.opts.wrap = true;
-        # but disable in diff window (not used in super diff window unfortunately)
-        diff_window.opts.wrap = false;
       };
       adapters = {
         http = {
-          opts = {
-            show_presets = false;
-            # Default 'opts' are lost when 'show_defaults = false'
-            show_model_choices = true;
-          };
+          opts.show_presets = false;
           bothub = "bothub";
           openrouter = mkRaw ''
             require("codecompanion.adapters.http").extend("bothub", ${
