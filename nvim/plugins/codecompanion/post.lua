@@ -97,7 +97,7 @@ end
 
 -- A user command for adding files to CodeCompanion chat
 vim.api.nvim_create_user_command("CodeCompanionAddFile", add_files, {
-  nargs = "?",
+  nargs = 1,
   complete = "file",
   desc = "Add file to CodeCompanion chat or pick from the directory",
 })
