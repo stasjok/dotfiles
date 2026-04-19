@@ -8,7 +8,7 @@ in
     settings = {
       interactions = {
         chat = {
-          adapter = "bothub";
+          adapter = "openrouter";
           keymaps.send.modes = {
             i = [
               "<C-S>"
@@ -20,9 +20,9 @@ in
             ];
           };
         };
-        inline.adapter = "bothub";
-        cmd.adapter = "bothub";
-        background.adapter = "bothub";
+        inline.adapter = "openrouter";
+        cmd.adapter = "openrouter";
+        background.adapter = "openrouter";
       };
       display.chat = {
         window = {
