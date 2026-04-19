@@ -362,45 +362,46 @@ return {
     end,
 
     ---Form the reasoning output that is stored in the chat buffer
-    ---@param self CodeCompanion.HTTPAdapter
+    ---@param self CodeCompanion.HTTPAdapter.BotHub
     ---@param data table The reasoning output from the LLM
-    ---@return nil|{ content: string, details: table }
+    ---@return table
     form_reasoning = function(self, data)
       local reasoning_details = {}
-      local content = vim
-        .iter(data)
-        :map(function(item)
-          if item.details and #item.details > 0 then
-            for _, rd in ipairs(item.details) do
-              local details = reasoning_details[rd.index + 1]
-                or {
-                  id = rd.id,
-                  index = rd.index,
-                  format = rd.format,
-                  type = rd.type,
-                }
-              if rd.text and rd.text ~= "" then
-                details.text = (details.text or "") .. rd.text
-              end
-              if rd.summary and rd.summary ~= "" then
-                details.summary = (details.summary or "") .. rd.summary
-              end
-              if rd.data and rd.data ~= "" then
-                details.data = (details.data or "") .. rd.data
-              end
-              reasoning_details[rd.index + 1] = details
-            end
+      for _, item in ipairs(data) do
+        for _, rd in ipairs(item.details) do
+          local details = reasoning_details[rd.index + 1] or {}
+          -- Common Fields
+          details.id = rd.id
+          details.format = rd.format
+          details.index = rd.index
+          -- Reasoning Detail Type
+          details.type = rd.type
+          -- Summary Type
+          if rd.summary then
+            details.summary = (details.summary or "") .. rd.summary
           end
-
-          return item.content
-        end)
-        :filter(function(content)
-          return content ~= nil
-        end)
-        :join("")
-
+          -- Encrypted Type
+          if rd.data then
+            details.data = (details.data or "") .. rd.data
+          end
+          -- Text Type
+          if rd.text then
+            details.text = (details.text or "") .. rd.text
+          end
+          if rd.signature then
+            details.signature = (details.signature or "") .. rd.signature
+          end
+          -- OpenRouter often returns "reasoning.summary" or "reasoning.text" first,
+          -- and then "reasoning.encrypted" with the same index
+          if details.type == "reasoning.encrypted" then
+            details.summary = nil
+            details.text = nil
+            details.signature = nil
+          end
+          reasoning_details[rd.index + 1] = details
+        end
+      end
       return {
-        content = content,
         details = reasoning_details,
       }
     end,
@@ -442,108 +443,38 @@ return {
     end,
 
     ---Output the data from the API ready for insertion into the chat buffer
-    ---@param self CodeCompanion.HTTPAdapter
+    ---@param self CodeCompanion.HTTPAdapter.BotHub
     ---@param data table The streamed JSON data from the API, also formatted by the format_data handler
     ---@param tools? table The table to write any tool output to
     ---@return table|nil #[status: string, output: table]
     chat_output = function(self, data, tools)
-      if not data or data == "" then
-        return nil
+      return openai.handlers.chat_output(self, data, tools)
+    end,
+
+    ---Process non-standard fields in the response
+    ---@param self CodeCompanion.HTTPAdapter.BotHub
+    ---@param data table
+    ---@return table
+    parse_message_meta = function(self, data)
+      local extra = data.extra
+      if not extra then
+        return data
       end
 
-      -- Handle both streamed data and structured response
-      local data_mod = type(data) == "table" and data.body or utils.clean_streamed_data(data)
-      local ok, json = pcall(vim.json.decode, data_mod, { luanil = { object = true } })
+      data.output.reasoning = {}
 
-      if not ok or not json.choices or #json.choices == 0 then
-        return nil
-      end
-
-      -- Process tool calls from all choices
-      if self.opts.tools and tools then
-        for _, choice in ipairs(json.choices) do
-          local delta = self.opts.stream and choice.delta or choice.message
-
-          if delta and delta.tool_calls and #delta.tool_calls > 0 then
-            for i, tool in ipairs(delta.tool_calls) do
-              local tool_index = tool.index and tonumber(tool.index) or i
-
-              -- Some endpoints like Gemini do not set this (why?!)
-              local id = tool.id
-              if not id or id == "" then
-                id = string.format("call_%s_%s", json.created, i)
-              end
-
-              if self.opts.stream then
-                local found = false
-                for _, existing_tool in ipairs(tools) do
-                  if existing_tool._index == tool_index then
-                    -- Append to arguments if this is a continuation of a stream
-                    if tool["function"] and tool["function"]["arguments"] then
-                      existing_tool["function"]["arguments"] = (
-                        existing_tool["function"]["arguments"] or ""
-                      )
-                        .. tool["function"]["arguments"]
-                    end
-                    found = true
-                    break
-                  end
-                end
-
-                if not found then
-                  table.insert(tools, {
-                    _index = tool_index,
-                    id = id,
-                    type = tool.type,
-                    ["function"] = {
-                      name = tool["function"]["name"],
-                      arguments = tool["function"]["arguments"] or "",
-                    },
-                  })
-                end
-              else
-                table.insert(tools, {
-                  _index = i,
-                  id = id,
-                  type = tool.type,
-                  ["function"] = {
-                    name = tool["function"]["name"],
-                    arguments = tool["function"]["arguments"],
-                  },
-                })
-              end
-            end
-          end
+      if extra.reasoning and extra.reasoning ~= "" then
+        data.output.reasoning.content = extra.reasoning
+        if data.output.content == "" then
+          data.output.content = nil
         end
       end
 
-      -- Process message content from the first choice
-      local choice = json.choices[1]
-      local delta = self.opts.stream and choice.delta or choice.message
-
-      if not delta then
-        return nil
+      if extra.reasoning_details and #extra.reasoning_details > 0 then
+        data.output.reasoning.details = extra.reasoning_details
       end
 
-      local result = { status = "success", output = { role = delta.role } }
-      if delta.content and delta.content ~= "" then
-        result.output.content = delta.content
-      end
-
-      if delta.reasoning and delta.reasoning ~= "" then
-        result.output.reasoning = { content = delta.reasoning }
-      end
-
-      if delta.reasoning_details and #delta.reasoning_details > 0 then
-        -- We have to stash these here because Chat:add_message doesn't
-        -- care about a toplevel reasoning_details key but it does carry
-        -- over what's in reasoning. We put this in its rightful place
-        -- in form_messages.
-        result.output.reasoning = (result.output.reasoning or {})
-        result.output.reasoning.details = delta.reasoning_details
-      end
-
-      return result
+      return data
     end,
 
     ---Output the data from the API ready for inlining into the current buffer
