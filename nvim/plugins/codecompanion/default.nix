@@ -26,11 +26,7 @@ in
       };
       display.chat = {
         window = {
-          width = mkRaw ''
-            function()
-              return math.min(math.floor(vim.o.columns / 2), 79)
-            end
-          '';
+          width = 0;
           opts = {
             number = false;
             relativenumber = false;
