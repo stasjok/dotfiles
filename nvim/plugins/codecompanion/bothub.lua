@@ -44,7 +44,7 @@ local function as_set(tbl)
 end
 
 ---Refresh the cache expiry timestamp
----@param adapter CodeCompanion.HTTPAdapter
+---@param adapter CodeCompanion.HTTPAdapter.BotHub
 ---@param seconds number|nil Number of seconds until the cache expires. Default: 1800
 ---@return number
 local function set_cache_expiry(adapter, seconds)
@@ -55,7 +55,7 @@ local function set_cache_expiry(adapter, seconds)
 end
 
 ---Return cached models if the cache is still valid.
----@param adapter CodeCompanion.HTTPAdapter
+---@param adapter CodeCompanion.HTTPAdapter.BotHub
 ---@return table|nil
 local function get_cached_models(adapter)
   local adapter_name = adapter.name
@@ -72,7 +72,7 @@ local function get_cached_models(adapter)
 end
 
 ---Asynchronously fetch the list of available models
----@param adapter CodeCompanion.HTTPAdapter
+---@param adapter CodeCompanion.HTTPAdapter.BotHub
 ---@return boolean
 local function fetch_async(adapter)
   local adapter_name = adapter.name
@@ -165,7 +165,7 @@ local function fetch_async(adapter)
 end
 
 ---Fetch the list of available models synchronously.
----@param adapter CodeCompanion.HTTPAdapter
+---@param adapter CodeCompanion.HTTPAdapter.BotHub
 ---@return table
 local function fetch(adapter)
   fetch_async(adapter)
@@ -183,7 +183,7 @@ local function fetch(adapter)
   return get_cached_models(adapter) or {}
 end
 
----@param self CodeCompanion.HTTPAdapter
+---@param self CodeCompanion.HTTPAdapter.BotHub
 ---@param opts? { async: boolean }
 ---@return table
 local function get_models(self, opts)
@@ -209,7 +209,7 @@ end
 local api_key
 
 -- Get BotHub API key from the file
----@param adapter CodeCompanion.HTTPAdapter
+---@param adapter CodeCompanion.HTTPAdapter.BotHub
 ---@return string?
 local function from_file(adapter)
   local lines = vim.F.npcall(vim.fn.readfile, (adapter.env or {}).api_key_path, "", 1) --[[@as string[]?]]
@@ -217,7 +217,7 @@ local function from_file(adapter)
 end
 
 -- Get BotHub API key from various sources
----@param adapter CodeCompanion.HTTPAdapter
+---@param adapter CodeCompanion.HTTPAdapter.BotHub
 ---@return string
 local function get_api_key(adapter)
   api_key = vim.env[(adapter.env or {}).api_key_env]
@@ -273,245 +273,251 @@ return {
     },
   },
   handlers = {
-    ---@param self CodeCompanion.HTTPAdapter
-    ---@return boolean
-    setup = function(self)
-      return openai.handlers.setup(self)
-    end,
+    lifecycle = {
+      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@return boolean
+      setup = function(self)
+        return openai.handlers.setup(self)
+      end,
 
-    ---Set the parameters
-    ---@param self CodeCompanion.HTTPAdapter
-    ---@param params table
-    ---@param messages table
-    ---@return table
-    form_parameters = function(self, params, messages)
-      return openai.handlers.form_parameters(self, params, messages)
-    end,
+      ---Function to run when the request has completed. Useful to catch errors
+      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param data? table
+      ---@return nil
+      on_exit = function(self, data)
+        return openai.handlers.on_exit(self, data)
+      end,
+    },
 
-    ---Set the format of the role and content for the messages from the chat buffer
-    ---@param self CodeCompanion.HTTPAdapter.BotHub
-    ---@param messages table Format is: { { role = "user", content = "Your prompt here" } }
-    ---@return table
-    form_messages = function(self, messages)
-      local result = openai.handlers.form_messages(self, messages)
+    request = {
+      ---Set the parameters
+      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param params table
+      ---@param messages table
+      ---@return table
+      build_parameters = function(self, params, messages)
+        return openai.handlers.form_parameters(self, params, messages)
+      end,
 
-      result.messages = vim
-        .iter(result.messages)
-        :map(function(m)
-          -- https://gist.github.com/ernie/e8f3a4bb2a01d3f449ec000605631eb8#file-openrouter-lua-L200-L208
-          -- Pull reasoning back out to a top-level message key
-          -- https://openrouter.ai/docs/use-cases/reasoning-tokens#example-preserving-reasoning-blocks-with-openrouter-and-claude
-          if m.reasoning and m.reasoning.details then
-            m.reasoning_details = m.reasoning.details
-          end
-          m = filter_message(m)
-          return m
-        end)
-        :totable()
+      ---Set the format of the role and content for the messages from the chat buffer
+      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param messages table Format is: { { role = "user", content = "Your prompt here" } }
+      ---@return table
+      build_messages = function(self, messages)
+        local result = openai.handlers.form_messages(self, messages)
 
-      -- Prompt Caching for Claude
-      local model = self.schema.model.default
-      if type(model) == "function" then
-        model = model(self)
-      end
-      if model:find("claude", 0, true) or model:find("qwen", 0, true) then
-        local breakpoints_used = 0
-        local is_last_text = true
-        messages = result.messages
-        for i = #messages, 1, -1 do
-          local msgs = messages[i]
-          if type(msgs.content) == "table" then
-            -- Loop through the content
-            for _, msg in ipairs(msgs.content) do
-              if msg.type ~= "text" or msg.text == "" then
-                goto continue
+        result.messages = vim
+          .iter(result.messages)
+          :map(function(m)
+            -- https://gist.github.com/ernie/e8f3a4bb2a01d3f449ec000605631eb8#file-openrouter-lua-L200-L208
+            -- Pull reasoning back out to a top-level message key
+            -- https://openrouter.ai/docs/use-cases/reasoning-tokens#example-preserving-reasoning-blocks-with-openrouter-and-claude
+            if m.reasoning and m.reasoning.details then
+              m.reasoning_details = m.reasoning.details
+            end
+            m = filter_message(m)
+            return m
+          end)
+          :totable()
+
+        -- Prompt Caching for Claude
+        local model = self.schema.model.default
+        if type(model) == "function" then
+          model = model(self)
+        end
+        if model:find("claude", 0, true) or model:find("qwen", 0, true) then
+          local breakpoints_used = 0
+          local is_last_text = true
+          messages = result.messages
+          for i = #messages, 1, -1 do
+            local msgs = messages[i]
+            if type(msgs.content) == "table" then
+              -- Loop through the content
+              for _, msg in ipairs(msgs.content) do
+                if msg.type ~= "text" or msg.text == "" then
+                  goto continue
+                end
+                if
+                  tokens.calculate(msg.text) >= self.opts.cache_over
+                    and breakpoints_used < self.opts.cache_breakpoints
+                  or is_last_text
+                then
+                  msg.cache_control = { type = "ephemeral" }
+                  breakpoints_used = breakpoints_used + 1
+                  is_last_text = false
+                end
+                ::continue::
               end
+            elseif type(msgs.content) == "string" then
               if
-                tokens.calculate(msg.text) >= self.opts.cache_over
+                tokens.calculate(msgs.content) >= self.opts.cache_over
                   and breakpoints_used < self.opts.cache_breakpoints
                 or is_last_text
               then
-                msg.cache_control = { type = "ephemeral" }
+                msgs.content = {
+                  {
+                    type = "text",
+                    text = msgs.content,
+                    cache_control = { type = "ephemeral" },
+                  },
+                }
                 breakpoints_used = breakpoints_used + 1
                 is_last_text = false
               end
-              ::continue::
             end
-          elseif type(msgs.content) == "string" then
-            if
-              tokens.calculate(msgs.content) >= self.opts.cache_over
-                and breakpoints_used < self.opts.cache_breakpoints
-              or is_last_text
-            then
-              msgs.content = {
-                {
-                  type = "text",
-                  text = msgs.content,
-                  cache_control = { type = "ephemeral" },
-                },
-              }
-              breakpoints_used = breakpoints_used + 1
-              is_last_text = false
+          end
+          result.messages = messages
+        end
+
+        return result
+      end,
+
+      ---Form the reasoning output that is stored in the chat buffer
+      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param data table The reasoning output from the LLM
+      ---@return table
+      build_reasoning = function(self, data)
+        local reasoning_details = {}
+        for _, item in ipairs(data) do
+          for _, rd in ipairs(item.details) do
+            local details = reasoning_details[rd.index + 1] or {}
+            -- Common Fields
+            details.id = rd.id
+            details.format = rd.format
+            details.index = rd.index
+            -- Reasoning Detail Type
+            details.type = rd.type
+            -- Summary Type
+            if rd.summary then
+              details.summary = (details.summary or "") .. rd.summary
+            end
+            -- Encrypted Type
+            if rd.data then
+              details.data = (details.data or "") .. rd.data
+            end
+            -- Text Type
+            if rd.text then
+              details.text = (details.text or "") .. rd.text
+            end
+            if rd.signature then
+              details.signature = (details.signature or "") .. rd.signature
+            end
+            -- OpenRouter often returns "reasoning.summary" or "reasoning.text" first,
+            -- and then "reasoning.encrypted" with the same index
+            if details.type == "reasoning.encrypted" then
+              details.summary = nil
+              details.text = nil
+              details.signature = nil
+            end
+            reasoning_details[rd.index + 1] = details
+          end
+        end
+        return {
+          details = reasoning_details,
+        }
+      end,
+
+      ---Provides the schemas of the tools that are available to the LLM to call
+      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param tools table<string, table>
+      ---@return table|nil
+      build_tools = function(self, tools)
+        if not self.opts.tools or not tools then
+          return nil
+        end
+        if vim.tbl_count(tools) == 0 then
+          return nil
+        end
+
+        local transformed = {}
+        for _, tool in pairs(tools) do
+          for _, schema in pairs(tool) do
+            if schema._meta and schema._meta.adapter_tool then
+              if self.available_tools[schema.name] then
+                self.available_tools[schema.name].callback(self, transformed)
+              end
+            else
+              table.insert(transformed, schema)
             end
           end
         end
-        result.messages = messages
-      end
 
-      return result
-    end,
+        return { tools = transformed }
+      end,
+    },
 
-    ---Form the reasoning output that is stored in the chat buffer
-    ---@param self CodeCompanion.HTTPAdapter.BotHub
-    ---@param data table The reasoning output from the LLM
-    ---@return table
-    form_reasoning = function(self, data)
-      local reasoning_details = {}
-      for _, item in ipairs(data) do
-        for _, rd in ipairs(item.details) do
-          local details = reasoning_details[rd.index + 1] or {}
-          -- Common Fields
-          details.id = rd.id
-          details.format = rd.format
-          details.index = rd.index
-          -- Reasoning Detail Type
-          details.type = rd.type
-          -- Summary Type
-          if rd.summary then
-            details.summary = (details.summary or "") .. rd.summary
-          end
-          -- Encrypted Type
-          if rd.data then
-            details.data = (details.data or "") .. rd.data
-          end
-          -- Text Type
-          if rd.text then
-            details.text = (details.text or "") .. rd.text
-          end
-          if rd.signature then
-            details.signature = (details.signature or "") .. rd.signature
-          end
-          -- OpenRouter often returns "reasoning.summary" or "reasoning.text" first,
-          -- and then "reasoning.encrypted" with the same index
-          if details.type == "reasoning.encrypted" then
-            details.summary = nil
-            details.text = nil
-            details.signature = nil
-          end
-          reasoning_details[rd.index + 1] = details
+    response = {
+      ---Returns the number of tokens generated from the LLM
+      ---@param self CodeCompanion.HTTPAdapter
+      ---@param data table The data from the LLM
+      ---@return number|nil
+      parse_tokens = function(self, data)
+        return openai.handlers.tokens(self, data)
+      end,
+
+      ---Output the data from the API ready for insertion into the chat buffer
+      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param data table The streamed JSON data from the API, also formatted by the format_data handler
+      ---@param tools? table The table to write any tool output to
+      ---@return table|nil #[status: string, output: table]
+      parse_chat = function(self, data, tools)
+        return openai.handlers.chat_output(self, data, tools)
+      end,
+
+      ---Process non-standard fields in the response
+      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param data table
+      ---@return table
+      parse_meta = function(self, data)
+        local extra = data.extra
+        if not extra then
+          return data
         end
-      end
-      return {
-        details = reasoning_details,
-      }
-    end,
 
-    ---Provides the schemas of the tools that are available to the LLM to call
-    ---@param self CodeCompanion.HTTPAdapter.BotHub
-    ---@param tools table<string, table>
-    ---@return table|nil
-    form_tools = function(self, tools)
-      if not self.opts.tools or not tools then
-        return nil
-      end
-      if vim.tbl_count(tools) == 0 then
-        return nil
-      end
+        data.output.reasoning = {}
 
-      local transformed = {}
-      for _, tool in pairs(tools) do
-        for _, schema in pairs(tool) do
-          if schema._meta and schema._meta.adapter_tool then
-            if self.available_tools[schema.name] then
-              self.available_tools[schema.name].callback(self, transformed)
-            end
-          else
-            table.insert(transformed, schema)
+        if extra.reasoning and extra.reasoning ~= "" then
+          data.output.reasoning.content = extra.reasoning
+          if data.output.content == "" then
+            data.output.content = nil
           end
         end
-      end
 
-      return { tools = transformed }
-    end,
+        if extra.reasoning_details and #extra.reasoning_details > 0 then
+          data.output.reasoning.details = extra.reasoning_details
+        end
 
-    ---Returns the number of tokens generated from the LLM
-    ---@param self CodeCompanion.HTTPAdapter
-    ---@param data table The data from the LLM
-    ---@return number|nil
-    tokens = function(self, data)
-      return openai.handlers.tokens(self, data)
-    end,
-
-    ---Output the data from the API ready for insertion into the chat buffer
-    ---@param self CodeCompanion.HTTPAdapter.BotHub
-    ---@param data table The streamed JSON data from the API, also formatted by the format_data handler
-    ---@param tools? table The table to write any tool output to
-    ---@return table|nil #[status: string, output: table]
-    chat_output = function(self, data, tools)
-      return openai.handlers.chat_output(self, data, tools)
-    end,
-
-    ---Process non-standard fields in the response
-    ---@param self CodeCompanion.HTTPAdapter.BotHub
-    ---@param data table
-    ---@return table
-    parse_message_meta = function(self, data)
-      local extra = data.extra
-      if not extra then
         return data
-      end
+      end,
 
-      data.output.reasoning = {}
-
-      if extra.reasoning and extra.reasoning ~= "" then
-        data.output.reasoning.content = extra.reasoning
-        if data.output.content == "" then
-          data.output.content = nil
-        end
-      end
-
-      if extra.reasoning_details and #extra.reasoning_details > 0 then
-        data.output.reasoning.details = extra.reasoning_details
-      end
-
-      return data
-    end,
-
-    ---Output the data from the API ready for inlining into the current buffer
-    ---@param self CodeCompanion.HTTPAdapter
-    ---@param data string|table The streamed JSON data from the API, also formatted by the format_data handler
-    ---@param context? table Useful context about the buffer to inline to
-    ---@return {status: string, output: table}|nil
-    inline_output = function(self, data, context)
-      return openai.handlers.inline_output(self, data, context)
-    end,
+      ---Output the data from the API ready for inlining into the current buffer
+      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param data string|table The streamed JSON data from the API, also formatted by the format_data handler
+      ---@param context? table Useful context about the buffer to inline to
+      ---@return {status: string, output: table}|nil
+      parse_inline = function(self, data, context)
+        return openai.handlers.inline_output(self, data, context)
+      end,
+    },
 
     tools = {
       ---Format the LLM's tool calls for inclusion back in the request
-      ---@param self CodeCompanion.HTTPAdapter
+      ---@param self CodeCompanion.HTTPAdapter.BotHub
       ---@param tools table The raw tools collected by chat_output
       ---@return table
-      format_tool_calls = function(self, tools)
+      format_calls = function(self, tools)
         return openai.handlers.tools.format_tool_calls(self, tools)
       end,
 
       ---Output the LLM's tool call so we can include it in the messages
-      ---@param self CodeCompanion.HTTPAdapter
+      ---@param self CodeCompanion.HTTPAdapter.BotHub
       ---@param tool_call {id: string, function: table, name: string}
       ---@param output string
       ---@return table
-      output_response = function(self, tool_call, output)
+      format_response = function(self, tool_call, output)
         return openai.handlers.tools.output_response(self, tool_call, output)
       end,
     },
-
-    ---Function to run when the request has completed. Useful to catch errors
-    ---@param self CodeCompanion.HTTPAdapter
-    ---@param data? table
-    ---@return nil
-    on_exit = function(self, data)
-      return openai.handlers.on_exit(self, data)
-    end,
   },
   schema = {
     ---@type CodeCompanion.Schema
