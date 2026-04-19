@@ -447,12 +447,26 @@ return {
     },
 
     response = {
-      ---Returns the number of tokens generated from the LLM
-      ---@param self CodeCompanion.HTTPAdapter
+      ---Returns detailed token usage from the LLM
+      ---@param self CodeCompanion.HTTPAdapter.BotHub
       ---@param data table The data from the LLM
-      ---@return number|nil
+      ---@return table|nil
       parse_tokens = function(self, data)
-        return openai.handlers.tokens(self, data)
+        if data and data ~= "" then
+          local data_mod = type(data) == "table" and data.body or utils.clean_streamed_data(data)
+          local ok, json = pcall(vim.json.decode, data_mod, { luanil = { object = true } })
+
+          if ok and json.usage then
+            return {
+              prompt = json.usage.prompt_tokens,
+              completion = json.usage.completion_tokens,
+              total = json.usage.total_tokens,
+              cached = json.usage.prompt_tokens_details
+                and json.usage.prompt_tokens_details.cached_tokens,
+              cost = json.usage.cost,
+            }
+          end
+        end
       end,
 
       ---Output the data from the API ready for insertion into the chat buffer
