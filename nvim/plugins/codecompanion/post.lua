@@ -49,7 +49,7 @@ local function open_file_picker(directory)
 
   -- Open Telescope find_files
   telescope.find_files({
-    prompt_title = "Select file(s) from: " .. directory,
+    prompt_title = "Select file(s)",
     cwd = directory,
     attach_mappings = function()
       local actions = require("telescope.actions")
