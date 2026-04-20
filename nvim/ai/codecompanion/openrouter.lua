@@ -43,85 +43,67 @@ local function as_set(tbl)
 end
 
 ---Refresh the cache expiry timestamp
----@param adapter CodeCompanion.HTTPAdapter.OpenRouter
+---@param url string
 ---@param seconds number|nil Number of seconds until the cache expires. Default: 1800
 ---@return number
-local function set_cache_expiry(adapter, seconds)
+local function set_cache_expiry(url, seconds)
   seconds = seconds or 1800
-  local adapter_name = adapter.name
-  cache_expires[adapter_name] = os.time() + seconds
-  return cache_expires[adapter_name]
+  cache_expires[url] = os.time() + seconds
+  return cache_expires[url]
 end
 
 ---Return cached models if the cache is still valid.
----@param adapter CodeCompanion.HTTPAdapter.OpenRouter
+---@param url string
 ---@return table|nil
-local function get_cached_models(adapter)
-  local adapter_name = adapter.name
-  if
-    cached_models[adapter_name]
-    and cache_expires[adapter_name]
-    and cache_expires[adapter_name] > os.time()
-  then
-    log:trace(adapter.formatted_name .. " Adapter: Using cached models")
-    return cached_models[adapter_name]
+local function get_cached_models(url)
+  if cached_models[url] and cache_expires[url] and cache_expires[url] > os.time() then
+    return cached_models[url]
   end
 
   return nil
 end
 
 ---Asynchronously fetch the list of available models
----@param adapter CodeCompanion.HTTPAdapter.OpenRouter
+---@param url string
+---@param name string
 ---@return boolean
-local function fetch_async(adapter)
-  local adapter_name = adapter.name
-  local cached = get_cached_models(adapter)
+local function fetch_async(url, name)
+  local cached = get_cached_models(url)
   if cached then
     return true
   end
-  if fetch_in_progress[adapter_name] then
+  if fetch_in_progress[url] then
     return true
   end
-
-  utils.get_env_vars(adapter)
-  local url = adapter.env_replaced.url
-  local models_endpoint = adapter.env_replaced.models_endpoint
 
   local headers = {
     ["content-type"] = "application/json",
   }
 
-  fetch_in_progress[adapter_name] = true
+  fetch_in_progress[url] = true
 
   -- Async request via plenary.curl with a callback
   local ok, err = pcall(function()
-    Curl.get(url .. models_endpoint, {
+    Curl.get(url, {
       headers = headers,
       insecure = config.adapters.http.opts.allow_insecure,
       proxy = config.adapters.http.opts.proxy,
       callback = vim.schedule_wrap(function(response)
-        fetch_in_progress[adapter_name] = false
+        fetch_in_progress[url] = false
 
         if not response or not response.body then
-          log:error(
-            "Could not get the "
-              .. adapter.formatted_name
-              .. " models from "
-              .. url
-              .. models_endpoint
-              .. ". Empty response"
-          )
+          log:error("Could not get the " .. name .. " models from " .. url .. ". Empty response")
           return
         end
 
         local ok_json, json = pcall(vim.json.decode, response.body)
         if not ok_json then
-          log:error("Could not parse the response from " .. url .. models_endpoint)
+          log:error("Could not parse the response from " .. url)
           return
         end
 
         local models = {}
-        if vim.startswith(models_endpoint, "/v2/model/list") then
+        if url:find("/v2/model/list", 1, true) then
           -- BotHub API model list
           for _, model in ipairs(json) do
             local params = as_set(model.features or {})
@@ -149,15 +131,15 @@ local function fetch_async(adapter)
           end
         end
 
-        cached_models[adapter_name] = models
-        set_cache_expiry(adapter, config.adapters.http.opts.cache_models_for)
+        cached_models[url] = models
+        set_cache_expiry(url, config.adapters.http.opts.cache_models_for)
       end),
     })
   end)
 
   if not ok then
-    fetch_in_progress[adapter_name] = false
-    log:error("Could not start async request for " .. adapter.formatted_name .. " models: %s", err)
+    fetch_in_progress[url] = false
+    log:error("Could not start async request for " .. name .. " models: %s", err)
     return false
   end
 
@@ -165,22 +147,23 @@ local function fetch_async(adapter)
 end
 
 ---Fetch the list of available models synchronously.
----@param adapter CodeCompanion.HTTPAdapter.OpenRouter
+---@param url string
+---@param name string
 ---@return table
-local function fetch(adapter)
-  fetch_async(adapter)
+local function fetch(url, name)
+  fetch_async(url, name)
 
   -- Block until models are cached or timeout (milliseconds)
   local ok = vim.wait(3000, function()
-    return get_cached_models(adapter) ~= nil
+    return get_cached_models(url) ~= nil
   end, 10)
 
   if not ok then
-    log:error(adapter.formatted_name .. " Adapter: Timeout waiting for models")
+    log:error(name .. " adapter: Timeout waiting for models")
     return {}
   end
 
-  return get_cached_models(adapter) or {}
+  return get_cached_models(url) or {}
 end
 
 ---@param self CodeCompanion.HTTPAdapter.OpenRouter
@@ -196,13 +179,20 @@ local function get_models(self, opts)
     return {}
   end
 
+  if not adapter.env_replaced then
+    utils.get_env_vars(adapter)
+  end
+
+  local url = adapter.env.url .. adapter.env.models_endpoint
+  local name = adapter.formatted_name
+
   if not opts.async then
-    return fetch(adapter)
+    return fetch(url, name)
   end
 
   -- Non-blocking: start async fetching (if possible) and return whatever is cached
-  fetch_async(adapter)
-  return get_cached_models(adapter) or {}
+  fetch_async(url, name)
+  return get_cached_models(url) or {}
 end
 
 ---@class CodeCompanion.HTTPAdapter.OpenRouter: CodeCompanion.HTTPAdapter
