@@ -82,7 +82,6 @@ local function fetch_async(adapter)
   if fetch_in_progress[adapter_name] then
     return true
   end
-  fetch_in_progress[adapter_name] = true
 
   utils.get_env_vars(adapter)
   local url = adapter.env_replaced.url
@@ -91,6 +90,8 @@ local function fetch_async(adapter)
   local headers = {
     ["content-type"] = "application/json",
   }
+
+  fetch_in_progress[adapter_name] = true
 
   -- Async request via plenary.curl with a callback
   local ok, err = pcall(function()
