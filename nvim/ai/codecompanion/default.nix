@@ -46,7 +46,7 @@ in
                 usage.prompt or 0,
                 usage.cached or 0,
                 usage.completion or 0,
-                string.gsub(string.format("%.5f", usage.cost), "(%.%d%d%d-)0*$", "%1") or "0.00"
+                string.gsub(string.format("%.5f", usage.cost or 0), "(%.%d%d%d-)0*$", "%1")
               )
             end
             return ""
