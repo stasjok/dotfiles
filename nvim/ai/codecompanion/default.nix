@@ -62,7 +62,7 @@ in
               lib.nixvim.toLuaObject {
                 name = "openrouter";
                 formatted_name = "OpenRouter";
-                schema.model.default = "moonshotai/kimi-k2.5";
+                schema.model.default = "qwen/qwen3.6-plus";
                 env = {
                   url = "https://openrouter.ai/api";
                   chat_url = "/v1/chat/completions";
