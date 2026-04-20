@@ -45,6 +45,7 @@ in
     };
 
     imports = [
+      ./ai
       ./autocmds.nix
       ./autopairs
       ./colorscheme.nix
