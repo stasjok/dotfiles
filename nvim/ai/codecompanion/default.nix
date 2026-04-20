@@ -24,6 +24,7 @@ in
         cmd.adapter = "openrouter";
         background.adapter = "openrouter";
       };
+
       display.chat = {
         window = {
           width = 0;
@@ -36,7 +37,8 @@ in
         };
         # Enable wrap in debug window
         floating_window.opts.wrap = true;
-        show_token_count = true;
+
+        # Display full token usage
         token_count = mkRaw ''
           function(usage, adapter)
             if type(usage) == "number" then
@@ -53,71 +55,83 @@ in
           end
         '';
       };
+
       adapters = {
-        http = {
-          opts.show_presets = false;
-          openrouter = "openrouter";
-          bothub = mkRaw ''
-            require("codecompanion.adapters.http").extend("openrouter", ${
-              toLuaObject {
-                name = "bothub";
-                formatted_name = "BotHub";
-                schema.model.default = "qwen3.6-plus";
-                env = {
-                  url = "https://bothub.chat/api";
-                  chat_url = "/v2/openai/v1/chat/completions";
-                  models_endpoint = "/v2/model/list?children=1";
-                  api_key = mkRaw ''require("helpers.codecompanion").get_api_key("bothub", "BOTHUB_API_KEY")'';
-                };
-              }
-            })
-          '';
-        }
-        // builtins.listToAttrs (
-          lib.flip map
-            [
-              "anthropic/claude-haiku-4.5"
-              "anthropic/claude-sonnet-4.6"
-              "deepseek/deepseek-v3.2"
-              "openrouter/elephant-alpha"
-              "google/gemini-3-flash-preview"
-              "google/gemini-3.1-flash-lite-preview"
-              "google/gemini-3.1-pro-preview"
-              "z-ai/glm-4.5-air:free"
-              "z-ai/glm-5.1"
-              "openai/gpt-5.4"
-              "openai/gpt-5.4-mini"
-              "openai/gpt-5.4-nano"
-              "openai/gpt-oss-120b:free"
-              "x-ai/grok-4.1-fast"
-              "x-ai/grok-4.20"
-              "moonshotai/kimi-k2.5"
-              "xiaomi/mimo-v2-pro"
-              "minimax/minimax-m2.5:free"
-              "minimax/minimax-m2.7"
-              "qwen/qwen3.6-plus"
-            ]
-            (
-              model:
-              let
-                name = baseNameOf model;
-              in
-              {
-                # CodeCompanion recognizes only alphanumerics and underscores in inline prompt
-                # https://github.com/olimorris/codecompanion.nvim/blob/991dd81ac37b56b6d13529a08e86a42d183d79dc/lua/codecompanion/strategies/inline/init.lua#L236
-                name = lib.replaceStrings [ "-" "." ":" ] [ "_" "_" "_" ] name;
-                value = mkRaw ''
-                  require("codecompanion.adapters.http").extend("openrouter", ${
-                    toLuaObject {
-                      name = name;
-                      formatted_name = name;
-                      schema.model.default = model;
-                    }
-                  })
-                '';
-              }
-            )
-        );
+        http =
+          let
+            defaultModel = "qwen/qwen3.6-plus";
+          in
+          {
+            opts.show_presets = false;
+            openrouter = mkRaw ''
+              require("codecompanion.adapters.http").extend("openrouter", ${
+                toLuaObject {
+                  schema.model.default = defaultModel;
+                  env.api_key = mkRaw ''require("helpers.codecompanion").get_api_key("openrouter", "OPENROUTER_API_KEY")'';
+                }
+              })
+            '';
+            bothub = mkRaw ''
+              require("codecompanion.adapters.http").extend("openrouter", ${
+                toLuaObject {
+                  name = "bothub";
+                  formatted_name = "BotHub";
+                  schema.model.default = baseNameOf defaultModel;
+                  env = {
+                    url = "https://bothub.chat/api";
+                    chat_url = "/v2/openai/v1/chat/completions";
+                    models_endpoint = "/v2/model/list?children=1";
+                    api_key = mkRaw ''require("helpers.codecompanion").get_api_key("bothub", "BOTHUB_API_KEY")'';
+                  };
+                }
+              })
+            '';
+          }
+          // builtins.listToAttrs (
+            lib.flip map
+              [
+                "anthropic/claude-haiku-4.5"
+                "anthropic/claude-sonnet-4.6"
+                "deepseek/deepseek-v3.2"
+                "openrouter/elephant-alpha"
+                "google/gemini-3-flash-preview"
+                "google/gemini-3.1-flash-lite-preview"
+                "google/gemini-3.1-pro-preview"
+                "z-ai/glm-4.5-air:free"
+                "z-ai/glm-5.1"
+                "openai/gpt-5.4"
+                "openai/gpt-5.4-mini"
+                "openai/gpt-5.4-nano"
+                "openai/gpt-oss-120b:free"
+                "x-ai/grok-4.1-fast"
+                "x-ai/grok-4.20"
+                "moonshotai/kimi-k2.5"
+                "xiaomi/mimo-v2-pro"
+                "minimax/minimax-m2.5:free"
+                "minimax/minimax-m2.7"
+                "qwen/qwen3.6-plus"
+              ]
+              (
+                model:
+                let
+                  name = baseNameOf model;
+                in
+                {
+                  # CodeCompanion recognizes only alphanumerics and underscores in inline prompt
+                  # https://github.com/olimorris/codecompanion.nvim/blob/991dd81ac37b56b6d13529a08e86a42d183d79dc/lua/codecompanion/strategies/inline/init.lua#L236
+                  name = lib.replaceStrings [ "-" "." ":" ] [ "_" "_" "_" ] name;
+                  value = mkRaw ''
+                    require("codecompanion.adapters.http").extend("openrouter", ${
+                      toLuaObject {
+                        name = name;
+                        formatted_name = name;
+                        schema.model.default = model;
+                      }
+                    })
+                  '';
+                }
+              )
+          );
         acp.opts.show_presets = false;
       };
     };
