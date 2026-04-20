@@ -227,8 +227,8 @@ return {
     Authorization = "Bearer ${api_key}",
   },
   available_tools = {
-    ["web_search"] = {
-      description = "Allow models to search the web for the latest information before generating a response.",
+    ["web_search_native"] = {
+      description = "Allow models to search the web for the latest information before generating a response using OpenRouter server tool.",
       enabled = true,
       ---@param self CodeCompanion.HTTPAdapter.OpenRouter
       ---@param tools table The transformed tools table

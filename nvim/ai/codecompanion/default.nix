@@ -86,6 +86,13 @@ in
                 }
               })
             '';
+            tavily = mkRaw ''
+              require("codecompanion.adapters.http").extend("tavily", ${
+                toLuaObject {
+                  env.api_key = mkRaw ''require("helpers.codecompanion").get_api_key("tavily", "TAVILY_API_KEY")'';
+                }
+              })
+            '';
           }
           // builtins.listToAttrs (
             lib.flip map
