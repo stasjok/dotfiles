@@ -1,6 +1,5 @@
--- Based on OpenRouter adapter with reasoning by @ernie
--- https://gist.github.com/ernie/e8f3a4bb2a01d3f449ec000605631eb8
-
+-- OpenRouter adapter with reasoning, model caching, and session support
+local helpers = require("helpers.codecompanion")
 local openai = require("codecompanion.adapters.http.openai")
 local log = require("codecompanion.utils.log")
 local Curl = require("plenary.curl")
@@ -9,19 +8,19 @@ local utils = require("codecompanion.utils.adapters")
 local tokens = require("codecompanion.utils.tokens")
 
 ---Remove any keys from the message that are not allowed by the API
----@param message table The message to filter
+---@param message {[string]: any} The message to filter
 ---@return table The filtered message
 local function filter_message(message)
   local allowed = {
-    "content",
-    "role",
-    "reasoning_details",
-    "tool_calls",
-    "tool_call_id",
+    content = true,
+    role = true,
+    reasoning_details = true,
+    tool_calls = true,
+    tool_call_id = true,
   }
 
   for key, _ in pairs(message) do
-    if not vim.tbl_contains(allowed, key) then
+    if not allowed[key] then
       message[key] = nil
     end
   end
@@ -44,7 +43,7 @@ local function as_set(tbl)
 end
 
 ---Refresh the cache expiry timestamp
----@param adapter CodeCompanion.HTTPAdapter.BotHub
+---@param adapter CodeCompanion.HTTPAdapter.OpenRouter
 ---@param seconds number|nil Number of seconds until the cache expires. Default: 1800
 ---@return number
 local function set_cache_expiry(adapter, seconds)
@@ -55,7 +54,7 @@ local function set_cache_expiry(adapter, seconds)
 end
 
 ---Return cached models if the cache is still valid.
----@param adapter CodeCompanion.HTTPAdapter.BotHub
+---@param adapter CodeCompanion.HTTPAdapter.OpenRouter
 ---@return table|nil
 local function get_cached_models(adapter)
   local adapter_name = adapter.name
@@ -72,7 +71,7 @@ local function get_cached_models(adapter)
 end
 
 ---Asynchronously fetch the list of available models
----@param adapter CodeCompanion.HTTPAdapter.BotHub
+---@param adapter CodeCompanion.HTTPAdapter.OpenRouter
 ---@return boolean
 local function fetch_async(adapter)
   local adapter_name = adapter.name
@@ -121,8 +120,20 @@ local function fetch_async(adapter)
         end
 
         local models = {}
-        if json.data then
-          -- OpenRouter
+        if vim.startswith(models_endpoint, "/v2/model/list") then
+          -- BotHub API model list
+          for _, model in ipairs(json) do
+            local params = as_set(model.features or {})
+            if params.TEXT_TO_TEXT then
+              models[model.id] = {
+                opts = {
+                  has_vision = params.IMAGE_TO_TEXT,
+                  can_reason = params.REASONING or params.EFFORT,
+                },
+              }
+            end
+          end
+        else
           for _, model in ipairs(json.data) do
             local params = as_set(model.supported_parameters or {})
             local inputs = as_set((model.architecture or {}).input_modalities or {})
@@ -131,18 +142,6 @@ local function fetch_async(adapter)
                 opts = {
                   has_vision = inputs.image,
                   can_reason = params.reasoning,
-                },
-              }
-            end
-          end
-        else
-          for _, model in ipairs(json) do
-            local params = as_set(model.features or {})
-            if params.TEXT_TO_TEXT then
-              models[model.id] = {
-                opts = {
-                  has_vision = params.IMAGE_TO_TEXT,
-                  can_reason = params.REASONING or params.EFFORT,
                 },
               }
             end
@@ -165,7 +164,7 @@ local function fetch_async(adapter)
 end
 
 ---Fetch the list of available models synchronously.
----@param adapter CodeCompanion.HTTPAdapter.BotHub
+---@param adapter CodeCompanion.HTTPAdapter.OpenRouter
 ---@return table
 local function fetch(adapter)
   fetch_async(adapter)
@@ -183,7 +182,7 @@ local function fetch(adapter)
   return get_cached_models(adapter) or {}
 end
 
----@param self CodeCompanion.HTTPAdapter.BotHub
+---@param self CodeCompanion.HTTPAdapter.OpenRouter
 ---@param opts? { async: boolean }
 ---@return table
 local function get_models(self, opts)
@@ -205,31 +204,10 @@ local function get_models(self, opts)
   return get_cached_models(adapter) or {}
 end
 
----@type string
-local api_key
-
--- Get BotHub API key from the file
----@param adapter CodeCompanion.HTTPAdapter.BotHub
----@return string?
-local function from_file(adapter)
-  local lines = vim.F.npcall(vim.fn.readfile, (adapter.env or {}).api_key_path, "", 1) --[[@as string[]?]]
-  return lines and lines[1]
-end
-
--- Get BotHub API key from various sources
----@param adapter CodeCompanion.HTTPAdapter.BotHub
----@return string
-local function get_api_key(adapter)
-  api_key = vim.env[(adapter.env or {}).api_key_env]
-    or from_file(adapter)
-    or vim.fn.inputsecret(("Enter %s API key: "):format(adapter.formatted_name))
-  return api_key
-end
-
----@class CodeCompanion.HTTPAdapter.BotHub: CodeCompanion.HTTPAdapter
+---@class CodeCompanion.HTTPAdapter.OpenRouter: CodeCompanion.HTTPAdapter
 return {
-  name = "bothub",
-  formatted_name = "BotHub",
+  name = "openrouter",
+  formatted_name = "OpenRouter",
   roles = {
     llm = "assistant",
     user = "user",
@@ -248,12 +226,10 @@ return {
   },
   url = "${url}${chat_url}",
   env = {
-    api_key = get_api_key,
-    url = "https://bothub.chat/api",
-    chat_url = "/v2/openai/v1/chat/completions",
-    models_endpoint = "/v2/model/list?children=1",
-    api_key_path = vim.fs.joinpath(vim.fs.dirname(vim.fn.stdpath("config")), "bothub/key"),
-    api_key_env = "BOTHUB_API_KEY",
+    api_key = helpers.get_api_key("openrouter", "OPENROUTER_API_KEY"),
+    url = "https://openrouter.ai/api",
+    chat_url = "/v1/chat/completions",
+    models_endpoint = "/v1/models",
   },
   headers = {
     ["Content-Type"] = "application/json",
@@ -263,7 +239,7 @@ return {
     ["web_search"] = {
       description = "Allow models to search the web for the latest information before generating a response.",
       enabled = true,
-      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param self CodeCompanion.HTTPAdapter.OpenRouter
       ---@param tools table The transformed tools table
       callback = function(self, tools)
         table.insert(tools, {
@@ -274,14 +250,14 @@ return {
   },
   handlers = {
     lifecycle = {
-      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param self CodeCompanion.HTTPAdapter.OpenRouter
       ---@return boolean
       setup = function(self)
         return openai.handlers.setup(self)
       end,
 
       ---Function to run when the request has completed. Useful to catch errors
-      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param self CodeCompanion.HTTPAdapter.OpenRouter
       ---@param data? table
       ---@return nil
       on_exit = function(self, data)
@@ -291,7 +267,7 @@ return {
 
     request = {
       ---Set the parameters
-      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param self CodeCompanion.HTTPAdapter.OpenRouter
       ---@param params table
       ---@param messages table
       ---@return table
@@ -306,7 +282,7 @@ return {
       end,
 
       ---Set the format of the role and content for the messages from the chat buffer
-      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param self CodeCompanion.HTTPAdapter.OpenRouter
       ---@param messages table Format is: { { role = "user", content = "Your prompt here" } }
       ---@return table
       build_messages = function(self, messages)
@@ -315,7 +291,6 @@ return {
         result.messages = vim
           .iter(result.messages)
           :map(function(m)
-            -- https://gist.github.com/ernie/e8f3a4bb2a01d3f449ec000605631eb8#file-openrouter-lua-L200-L208
             -- Pull reasoning back out to a top-level message key
             -- https://openrouter.ai/docs/use-cases/reasoning-tokens#example-preserving-reasoning-blocks-with-openrouter-and-claude
             if m.reasoning and m.reasoning.details then
@@ -326,7 +301,7 @@ return {
           end)
           :totable()
 
-        -- Prompt Caching for Claude
+        -- Prompt Caching for Claude and Qwen
         local model = self.schema.model.default
         if type(model) == "function" then
           model = model(self)
@@ -379,7 +354,7 @@ return {
       end,
 
       ---Form the reasoning output that is stored in the chat buffer
-      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param self CodeCompanion.HTTPAdapter.OpenRouter
       ---@param data table The reasoning output from the LLM
       ---@return table
       build_reasoning = function(self, data)
@@ -424,7 +399,7 @@ return {
       end,
 
       ---Provides the schemas of the tools that are available to the LLM to call
-      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param self CodeCompanion.HTTPAdapter.OpenRouter
       ---@param tools table<string, table>
       ---@return table|nil
       build_tools = function(self, tools)
@@ -454,7 +429,7 @@ return {
 
     response = {
       ---Returns detailed token usage from the LLM
-      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param self CodeCompanion.HTTPAdapter.OpenRouter
       ---@param data table The data from the LLM
       ---@return table|nil
       parse_tokens = function(self, data)
@@ -476,7 +451,7 @@ return {
       end,
 
       ---Output the data from the API ready for insertion into the chat buffer
-      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param self CodeCompanion.HTTPAdapter.OpenRouter
       ---@param data table The streamed JSON data from the API, also formatted by the format_data handler
       ---@param tools? table The table to write any tool output to
       ---@return table|nil #[status: string, output: table]
@@ -485,7 +460,7 @@ return {
       end,
 
       ---Process non-standard fields in the response
-      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param self CodeCompanion.HTTPAdapter.OpenRouter
       ---@param data table
       ---@return table
       parse_meta = function(self, data)
@@ -511,7 +486,7 @@ return {
       end,
 
       ---Output the data from the API ready for inlining into the current buffer
-      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param self CodeCompanion.HTTPAdapter.OpenRouter
       ---@param data string|table The streamed JSON data from the API, also formatted by the format_data handler
       ---@param context? table Useful context about the buffer to inline to
       ---@return {status: string, output: table}|nil
@@ -522,7 +497,7 @@ return {
 
     tools = {
       ---Format the LLM's tool calls for inclusion back in the request
-      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param self CodeCompanion.HTTPAdapter.OpenRouter
       ---@param tools table The raw tools collected by chat_output
       ---@return table
       format_calls = function(self, tools)
@@ -530,7 +505,7 @@ return {
       end,
 
       ---Output the LLM's tool call so we can include it in the messages
-      ---@param self CodeCompanion.HTTPAdapter.BotHub
+      ---@param self CodeCompanion.HTTPAdapter.OpenRouter
       ---@param tool_call {id: string, function: table, name: string}
       ---@param output string
       ---@return table
@@ -546,7 +521,7 @@ return {
       mapping = "parameters",
       type = "enum",
       desc = "ID of the model to use. See the model endpoint compatibility table for details on which models work with the Chat API.",
-      default = "kimi-k2.5",
+      default = "qwen/qwen3.6-plus",
       choices = get_models,
     },
     -- Source: https://github.com/olimorris/codecompanion.nvim/discussions/1013#discussioncomment-15375459

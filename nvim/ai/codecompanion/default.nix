@@ -1,6 +1,6 @@
 { lib, myLib, ... }:
 let
-  inherit (lib.nixvim) mkRaw;
+  inherit (lib.nixvim) mkRaw toLuaObject;
 in
 {
   plugins.codecompanion = {
@@ -56,19 +56,18 @@ in
       adapters = {
         http = {
           opts.show_presets = false;
-          bothub = "bothub";
-          openrouter = mkRaw ''
-            require("codecompanion.adapters.http").extend("bothub", ${
-              lib.nixvim.toLuaObject {
-                name = "openrouter";
-                formatted_name = "OpenRouter";
-                schema.model.default = "qwen/qwen3.6-plus";
+          openrouter = "openrouter";
+          bothub = mkRaw ''
+            require("codecompanion.adapters.http").extend("openrouter", ${
+              toLuaObject {
+                name = "bothub";
+                formatted_name = "BotHub";
+                schema.model.default = "qwen3.6-plus";
                 env = {
-                  url = "https://openrouter.ai/api";
-                  chat_url = "/v1/chat/completions";
-                  models_endpoint = "/v1/models";
-                  api_key_path = mkRaw ''vim.fs.joinpath(vim.fs.dirname(vim.fn.stdpath("config")), "openrouter/key")'';
-                  api_key_env = "OPENROUTER_API_KEY";
+                  url = "https://bothub.chat/api";
+                  chat_url = "/v2/openai/v1/chat/completions";
+                  models_endpoint = "/v2/model/list?children=1";
+                  api_key = mkRaw ''require("helpers.codecompanion").get_api_key("bothub", "BOTHUB_API_KEY")'';
                 };
               }
             })
@@ -77,41 +76,47 @@ in
         // builtins.listToAttrs (
           lib.flip map
             [
-              "claude-haiku-4.5"
-              "claude-sonnet-4.6"
-              "deepseek-v3.2"
-              "elephant-alpha"
-              "gemini-3-flash-preview"
-              "gemini-3.1-flash-lite-preview"
-              "gemini-3.1-pro-preview"
-              "glm-4.5-air:free"
-              "glm-5.1"
-              "gpt-5.4"
-              "gpt-5.4-mini"
-              "gpt-5.4-nano"
-              "gpt-oss-120b:free"
-              "grok-4.1-fast"
-              "grok-4.20"
-              "kimi-k2.5"
-              "mimo-v2-pro"
-              "minimax-m2.5:free"
-              "minimax-m2.7"
-              "qwen3.6-plus"
+              "anthropic/claude-haiku-4.5"
+              "anthropic/claude-sonnet-4.6"
+              "deepseek/deepseek-v3.2"
+              "openrouter/elephant-alpha"
+              "google/gemini-3-flash-preview"
+              "google/gemini-3.1-flash-lite-preview"
+              "google/gemini-3.1-pro-preview"
+              "z-ai/glm-4.5-air:free"
+              "z-ai/glm-5.1"
+              "openai/gpt-5.4"
+              "openai/gpt-5.4-mini"
+              "openai/gpt-5.4-nano"
+              "openai/gpt-oss-120b:free"
+              "x-ai/grok-4.1-fast"
+              "x-ai/grok-4.20"
+              "moonshotai/kimi-k2.5"
+              "xiaomi/mimo-v2-pro"
+              "minimax/minimax-m2.5:free"
+              "minimax/minimax-m2.7"
+              "qwen/qwen3.6-plus"
             ]
-            (name: {
-              # CodeCompanion recognizes only alphanumerics and underscores in inline prompt
-              # https://github.com/olimorris/codecompanion.nvim/blob/991dd81ac37b56b6d13529a08e86a42d183d79dc/lua/codecompanion/strategies/inline/init.lua#L236
-              name = lib.replaceStrings [ "-" "." ":" ] [ "_" "_" "_" ] name;
-              value = mkRaw ''
-                require("codecompanion.adapters.http").extend("bothub", ${
-                  lib.nixvim.toLuaObject {
-                    inherit name;
-                    formatted_name = name;
-                    schema.model.default = name;
-                  }
-                })
-              '';
-            })
+            (
+              model:
+              let
+                name = baseNameOf model;
+              in
+              {
+                # CodeCompanion recognizes only alphanumerics and underscores in inline prompt
+                # https://github.com/olimorris/codecompanion.nvim/blob/991dd81ac37b56b6d13529a08e86a42d183d79dc/lua/codecompanion/strategies/inline/init.lua#L236
+                name = lib.replaceStrings [ "-" "." ":" ] [ "_" "_" "_" ] name;
+                value = mkRaw ''
+                  require("codecompanion.adapters.http").extend("openrouter", ${
+                    toLuaObject {
+                      name = name;
+                      formatted_name = name;
+                      schema.model.default = model;
+                    }
+                  })
+                '';
+              }
+            )
         );
         acp.opts.show_presets = false;
       };
@@ -146,7 +151,9 @@ in
   ];
 
   extraFiles = {
-    # BotHub adapter
-    "lua/codecompanion/adapters/http/bothub.lua".text = builtins.readFile ./bothub.lua;
+    # Helpers
+    "lua/helpers/codecompanion.lua".text = builtins.readFile ./helpers.lua;
+    # OpenRouter adapter
+    "lua/codecompanion/adapters/http/openrouter.lua".text = builtins.readFile ./openrouter.lua;
   };
 }
