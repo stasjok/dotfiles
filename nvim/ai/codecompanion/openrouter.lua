@@ -1,30 +1,49 @@
 -- OpenRouter adapter with reasoning, model caching, and session support
 local helpers = require("helpers.codecompanion")
 local openai = require("codecompanion.adapters.http.openai")
-local log = require("codecompanion.utils.log")
+local logger = require("codecompanion.utils.log")
 local Curl = require("plenary.curl")
 local config = require("codecompanion.config")
 local utils = require("codecompanion.utils.adapters")
 local tokens = require("codecompanion.utils.tokens")
 
----Remove any keys from the message that are not allowed by the API
----@param message {[string]: any} The message to filter
----@return table The filtered message
-local function filter_message(message)
-  local allowed = {
-    content = true,
-    role = true,
-    reasoning_details = true,
-    tool_calls = true,
-    tool_call_id = true,
-  }
+LOG_PREFIX = [[[adapters::http::openrouter::%s] ]]
 
-  for key, _ in pairs(message) do
-    if not allowed[key] then
-      message[key] = nil
-    end
-  end
-  return message
+local log = {}
+
+---@param prefix string Source of the logging
+---@param msg string Log message
+---@param ... any
+function log.trace(prefix, msg, ...)
+  logger:trace(string.format(LOG_PREFIX, prefix) .. msg, ...)
+end
+
+---@param prefix string Source of the logging
+---@param msg string Log message
+---@param ... any
+function log.debug(prefix, msg, ...)
+  logger:debug(string.format(LOG_PREFIX, prefix) .. msg, ...)
+end
+
+---@param prefix string Source of the logging
+---@param msg string Log message
+---@param ... any
+function log.info(prefix, msg, ...)
+  logger:info(string.format(LOG_PREFIX, prefix) .. msg, ...)
+end
+
+---@param prefix string Source of the logging
+---@param msg string Log message
+---@param ... any
+function log.warn(prefix, msg, ...)
+  logger:warn(string.format(LOG_PREFIX, prefix) .. msg, ...)
+end
+
+---@param prefix string Source of the logging
+---@param msg string Log message
+---@param ... any
+function log.error(prefix, msg, ...)
+  logger:error(string.format(LOG_PREFIX, prefix) .. msg, ...)
 end
 
 local cached_models = {}
@@ -92,13 +111,13 @@ local function fetch_async(url, name)
         fetch_in_progress[url] = false
 
         if not response or not response.body then
-          log:error("Could not get the " .. name .. " models from " .. url .. ". Empty response")
+          logger:error("Could not get the " .. name .. " models from " .. url .. ". Empty response")
           return
         end
 
         local ok_json, json = pcall(vim.json.decode, response.body)
         if not ok_json then
-          log:error("Could not parse the response from " .. url)
+          logger:error("Could not parse the response from " .. url)
           return
         end
 
@@ -139,7 +158,7 @@ local function fetch_async(url, name)
 
   if not ok then
     fetch_in_progress[url] = false
-    log:error("Could not start async request for " .. name .. " models: %s", err)
+    logger:error("Could not start async request for " .. name .. " models: %s", err)
     return false
   end
 
@@ -159,7 +178,7 @@ local function fetch(url, name)
   end, 10)
 
   if not ok then
-    log:error(name .. " adapter: Timeout waiting for models")
+    logger:error(name .. " adapter: Timeout waiting for models")
     return {}
   end
 
@@ -173,7 +192,7 @@ local function get_models(self, opts)
   opts = opts or { async = true }
   local adapter = require("codecompanion.adapters.http").resolve(self)
   if not adapter then
-    log:error(
+    logger:error(
       "Could not resolve " .. self.formatted_name .. " adapter in the `get_models` function"
     )
     return {}
@@ -263,12 +282,14 @@ return {
       ---@param messages table
       ---@return table
       build_parameters = function(self, params, messages)
+        log.trace("build_parameters", "Input params: " .. vim.inspect(params))
         if not self._session_id then
           local meta = _G.codecompanion_chat_metadata[vim.api.nvim_get_current_buf()]
           local chat_id = meta and meta.id or math.random(10000000)
           self._session_id = string.format("nvim-%d-chat-%d", vim.fn.getpid(), chat_id)
         end
         params.session_id = self._session_id
+        log.trace("build_parameters", "Output params: " .. vim.inspect(params))
         return params
       end,
 
@@ -277,17 +298,34 @@ return {
       ---@param messages table Format is: { { role = "user", content = "Your prompt here" } }
       ---@return table
       build_messages = function(self, messages)
+        log.trace("build_messages", "Input: " .. vim.inspect(messages))
+
         local result = openai.handlers.form_messages(self, messages)
+        log.trace("build_messages", "OpenAI adapter output: " .. vim.inspect(result))
 
         result.messages = vim
           .iter(result.messages)
           :map(function(m)
             -- Pull reasoning back out to a top-level message key
             -- https://openrouter.ai/docs/use-cases/reasoning-tokens#example-preserving-reasoning-blocks-with-openrouter-and-claude
-            if m.reasoning and m.reasoning.details then
-              m.reasoning_details = m.reasoning.details
+            if m.reasoning then
+              if
+                m.reasoning.details
+                -- For a simple reasoning form return it as simple string
+                and not (
+                  #m.reasoning.details == 1
+                  and m.reasoning.details[1].format == "unknown"
+                  and m.reasoning.details[1].type == "reasoning.text"
+                )
+              then
+                m.reasoning_details = m.reasoning.details
+                m.reasoning = nil
+              elseif m.reasoning.content then
+                m.reasoning = m.reasoning.content
+              else
+                m.reasoning = nil
+              end
             end
-            m = filter_message(m)
             return m
           end)
           :totable()
@@ -341,6 +379,7 @@ return {
           result.messages = messages
         end
 
+        log.trace("build_messages", "Output: " .. vim.inspect(result))
         return result
       end,
 
@@ -349,16 +388,35 @@ return {
       ---@param data table The reasoning output from the LLM
       ---@return table
       build_reasoning = function(self, data)
+        log.trace("build_reasoning", "Input: " .. vim.inspect(data))
+
         local reasoning_details = {}
+        local content = ""
         for _, item in ipairs(data) do
-          for _, rd in ipairs(item.details) do
-            local details = reasoning_details[rd.index + 1] or {}
+          content = content .. (item.content or "")
+
+          for _, rd in ipairs(item.details or {}) do
+            local index = rd.index
+            ---@type table
+            local details
+            -- OpenRouter for some models returns two types with the same index,
+            -- e.g. first reasoning.summary deltas with index = 0,
+            -- then final reasoning.encrypted with index = 0.
+            -- I compared reasoning_details with stream = false. Both reasoning types
+            -- are returned: reasoning.summary with index = 0, and reasoning.encrypted with index = 1
+            repeat
+              index = index + 1
+              details = reasoning_details[index]
+                or {
+                  index = index - 1,
+                  type = rd.type,
+                }
+            until details.type == rd.type
+            reasoning_details[index] = details
+
             -- Common Fields
             details.id = rd.id
             details.format = rd.format
-            details.index = rd.index
-            -- Reasoning Detail Type
-            details.type = rd.type
             -- Summary Type
             if rd.summary then
               details.summary = (details.summary or "") .. rd.summary
@@ -374,19 +432,19 @@ return {
             if rd.signature then
               details.signature = (details.signature or "") .. rd.signature
             end
-            -- OpenRouter often returns "reasoning.summary" or "reasoning.text" first,
-            -- and then "reasoning.encrypted" with the same index
-            if details.type == "reasoning.encrypted" then
-              details.summary = nil
-              details.text = nil
-              details.signature = nil
-            end
-            reasoning_details[rd.index + 1] = details
           end
         end
-        return {
-          details = reasoning_details,
-        }
+
+        local reasoning = {}
+        if not vim.tbl_isempty(reasoning_details) then
+          reasoning.details = reasoning_details
+        end
+        if content ~= "" then
+          reasoning.content = content
+        end
+
+        log.trace("build_reasoning", "Output: " .. vim.inspect(reasoning))
+        return reasoning
       end,
 
       ---Provides the schemas of the tools that are available to the LLM to call
@@ -394,10 +452,13 @@ return {
       ---@param tools table<string, table>
       ---@return table|nil
       build_tools = function(self, tools)
-        if not self.opts.tools or not tools then
+        log.trace("build_tools", "Input: " .. vim.inspect(tools))
+
+        if not self.opts.tools then
+          log.debug("build_tools", "Tools are not supported by model")
           return nil
         end
-        if vim.tbl_count(tools) == 0 then
+        if not tools or vim.tbl_count(tools) == 0 then
           return nil
         end
 
@@ -414,7 +475,9 @@ return {
           end
         end
 
-        return { tools = transformed }
+        local result = { tools = transformed }
+        log.trace("build_tools", "Output: " .. vim.inspect(result))
+        return result
       end,
     },
 
@@ -424,12 +487,17 @@ return {
       ---@param data table The data from the LLM
       ---@return table|nil
       parse_tokens = function(self, data)
+        log.trace("parse_tokens", "Input: " .. vim.inspect(data))
         if data and data ~= "" then
           local data_mod = type(data) == "table" and data.body or utils.clean_streamed_data(data)
           local ok, json = pcall(vim.json.decode, data_mod, { luanil = { object = true } })
 
-          if ok and json.usage then
-            return {
+          if not ok then
+            log.trace("parse_tokens", "JSON-decoding error: " .. json .. ", input: " .. data_mod)
+            return
+          end
+          if json.usage then
+            local result = {
               prompt = json.usage.prompt_tokens,
               completion = json.usage.completion_tokens,
               total = json.usage.total_tokens,
@@ -437,6 +505,10 @@ return {
                 and json.usage.prompt_tokens_details.cached_tokens,
               cost = json.usage.cost,
             }
+            log.trace("parse_tokens", "Output: " .. vim.inspect(result))
+            return result
+          else
+            log.trace("parse_tokens", "No usage data found")
           end
         end
       end,
@@ -455,24 +527,25 @@ return {
       ---@param data table
       ---@return table
       parse_meta = function(self, data)
+        log.trace("parse_meta", "Input: " .. vim.inspect(data))
+
         local extra = data.extra
-        if not extra then
-          return data
-        end
+        if extra then
+          data.output.reasoning = {}
 
-        data.output.reasoning = {}
+          if extra.reasoning and extra.reasoning ~= "" then
+            data.output.reasoning.content = extra.reasoning
+            if data.output.content == "" then
+              data.output.content = nil
+            end
+          end
 
-        if extra.reasoning and extra.reasoning ~= "" then
-          data.output.reasoning.content = extra.reasoning
-          if data.output.content == "" then
-            data.output.content = nil
+          if extra.reasoning_details and #extra.reasoning_details > 0 then
+            data.output.reasoning.details = extra.reasoning_details
           end
         end
 
-        if extra.reasoning_details and #extra.reasoning_details > 0 then
-          data.output.reasoning.details = extra.reasoning_details
-        end
-
+        log.trace("parse_meta", "Output: " .. vim.inspect(data))
         return data
       end,
 
