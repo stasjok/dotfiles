@@ -392,46 +392,51 @@ return {
 
         local reasoning_details = {}
         local content = ""
+        -- OpenRouter for some reason returns all deltas with `index = 0`,
+        -- so we can't rely on index
+        local index = 0
         for _, item in ipairs(data) do
           content = content .. (item.content or "")
 
           for _, rd in ipairs(item.details or {}) do
-            local index = rd.index
-            ---@type table
-            local details
-            -- OpenRouter for some models returns two types with the same index,
-            -- e.g. first reasoning.summary deltas with index = 0,
-            -- then final reasoning.encrypted with index = 0.
-            -- I compared reasoning_details with stream = false. Both reasoning types
-            -- are returned: reasoning.summary with index = 0, and reasoning.encrypted with index = 1
-            repeat
+            local details = reasoning_details[index] or {}
+            if rd.type ~= details.type or rd.id ~= details.id or rd.format ~= details.format then
               index = index + 1
-              details = reasoning_details[index]
-                or {
-                  index = index - 1,
-                  type = rd.type,
-                }
-            until details.type == rd.type
-            reasoning_details[index] = details
-
-            -- Common Fields
-            details.id = rd.id
-            details.format = rd.format
-            -- Summary Type
-            if rd.summary then
-              details.summary = (details.summary or "") .. rd.summary
+              details = {
+                index = index - 1,
+                id = rd.id,
+                format = rd.format,
+                type = rd.type,
+                -- Summary Type
+                summary = rd.summary,
+                -- Encrypted Type
+                data = rd.data,
+                -- Text Type
+                text = rd.text,
+                signature = rd.signature,
+              }
+              reasoning_details[index] = details
+              goto continue
             end
-            -- Encrypted Type
-            if rd.data then
+
+            -- Summary Type
+            if rd.type == "reasoning.summary" then
+              details.summary = (details.summary or "") .. rd.summary
+              -- Text Type
+            elseif rd.type == "reasoning.text" then
+              details.text = (details.text or "") .. (rd.text or "")
+              if rd.signature then
+                details.signature = rd.signature
+              end
+              -- Encrypted Type
+            elseif rd.type == "reasoning.encrypted" then
+              -- I expect that encrypted blocks are always whole,
+              -- but let's concat it anyway. Shouldn't happen,
+              -- since type/id would be unique
               details.data = (details.data or "") .. rd.data
             end
-            -- Text Type
-            if rd.text then
-              details.text = (details.text or "") .. rd.text
-            end
-            if rd.signature then
-              details.signature = (details.signature or "") .. rd.signature
-            end
+
+            ::continue::
           end
         end
 
