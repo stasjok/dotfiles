@@ -59,7 +59,7 @@ in
       adapters = {
         http =
           let
-            defaultModel = "qwen/qwen3.6-plus";
+            defaultModel = "moonshotai/kimi-k2.6";
           in
           {
             opts.show_presets = false;
