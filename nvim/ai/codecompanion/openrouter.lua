@@ -189,23 +189,16 @@ end
 ---@param opts? { async: boolean }
 ---@return table
 local function get_models(self, opts)
-  opts = opts or { async = true }
-  local adapter = require("codecompanion.adapters.http").resolve(self)
-  if not adapter then
-    logger:error(
-      "Could not resolve " .. self.formatted_name .. " adapter in the `get_models` function"
-    )
-    return {}
+  local async = (opts or {}).async ~= false
+
+  if not self.env_replaced then
+    self = utils.get_env_vars(self) --[[@as CodeCompanion.HTTPAdapter.OpenRouter]]
   end
 
-  if not adapter.env_replaced then
-    utils.get_env_vars(adapter)
-  end
+  local url = self.env_replaced.url .. self.env_replaced.models_endpoint
+  local name = self.formatted_name
 
-  local url = adapter.env.url .. adapter.env.models_endpoint
-  local name = adapter.formatted_name
-
-  if not opts.async then
+  if not async then
     return fetch(url, name)
   end
 
@@ -215,7 +208,8 @@ local function get_models(self, opts)
 end
 
 ---@class CodeCompanion.HTTPAdapter.OpenRouter: CodeCompanion.HTTPAdapter
-return {
+---@field _session_id? string
+local OpenRouter = {
   name = "openrouter",
   formatted_name = "OpenRouter",
   roles = {
@@ -769,3 +763,5 @@ return {
     },
   },
 }
+
+return OpenRouter
