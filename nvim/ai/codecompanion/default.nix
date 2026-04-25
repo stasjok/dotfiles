@@ -26,6 +26,7 @@ in
       };
 
       display.chat = {
+        show_header_separator = true;
         window = {
           width = 0;
           opts = {
