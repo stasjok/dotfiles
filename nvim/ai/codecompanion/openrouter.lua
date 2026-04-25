@@ -237,6 +237,9 @@ local OpenRouter = {
   },
   headers = {
     ["Content-Type"] = "application/json",
+    ["HTTP-Referer"] = "https://github.com/olimorris/codecompanion.nvim",
+    ["X-OpenRouter-Title"] = "CodeCompanion",
+    ["X-OpenRouter-Categories"] = "ide-extension",
     Authorization = "Bearer ${api_key}",
   },
   available_tools = {
