@@ -23,6 +23,12 @@ in
         inline.adapter = "openrouter";
         cmd.adapter = "openrouter";
         background.adapter = "openrouter";
+        shared.keymaps = {
+          always_accept.modes.n = "<LocalLeader>A";
+          accept_change.modes.n = "<LocalLeader>a";
+          reject_change.modes.n = "<LocalLeader>r";
+          cancel.modes.n = "<LocalLeader>c";
+        };
       };
 
       display.chat = {
