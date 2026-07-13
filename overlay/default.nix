@@ -71,16 +71,6 @@ in
   # A tool to convert HomeBank files to Ledger format
   homebank2ledger = final.perlPackages.AppHomeBank2Ledger;
 
-  # Allow changing kubernetes schema URL via settings
-  yaml-language-server = prev.yaml-language-server.overrideAttrs (prevAttrs: {
-    src = prevAttrs.src.override {
-      owner = "stasjok";
-      tag = null;
-      rev = "cc4e519833a9c4f91055f26d6b0ce532cb17227d";
-      hash = "sha256-DXNxGHIlGabKH6xEivI/odVJU2DpMMbvqI1f3ReXW2Y=";
-    };
-  });
-
   # Support goto definition on path expressions
   nixd = prev.nixd.overrideAttrs (prevAttrs: {
     patches = [
