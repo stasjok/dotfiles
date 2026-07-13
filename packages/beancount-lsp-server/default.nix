@@ -2,9 +2,11 @@
   stdenv,
   fetchFromGitHub,
   nodejs,
-  pnpm,
+  pnpm_11,
 }:
-
+let
+  pnpm = pnpm_11;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "beancount-lsp-server";
   version = "0.0.178";
@@ -46,8 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    fetcherVersion = 2;
-    hash = "sha256-si+zUCosMw2vSPECaJQZ4BFWve9Y1fIohAi+bGjj0lA=";
+    fetcherVersion = 4;
+    hash = "sha256-u1euLl8cVKUeExU0eje+mkEkQvlVntXgvVk3BpUu+gU=";
   };
 
   buildPhase = ''
