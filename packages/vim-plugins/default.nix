@@ -38,7 +38,7 @@ final: prev: {
     version = "2024-02-18";
     src = prevAttrs.src.override {
       rev = "159c4823e3a11c79bb65fc4b8560320c49f738f4";
-      sha256 = "sha256-S5I9nQcNGmjqZFn5jQkoG5Oh/mu8oSJpDZpAG07GytA=";
+      hash = "sha256-S5I9nQcNGmjqZFn5jQkoG5Oh/mu8oSJpDZpAG07GytA=";
     };
   });
 
