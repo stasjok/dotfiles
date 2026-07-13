@@ -82,12 +82,7 @@ in
   });
 
   # Support goto definition on path expressions
-  nixd = prev.nixd.overrideAttrs (prevAttrs: rec {
-    version = "2.8.2";
-    src = prevAttrs.src.override {
-      tag = version;
-      hash = "sha256-rlV3ZAe7HKdt1SlPS6xy+vAxhddKhjn7XvoDnbq2AnE=";
-    };
+  nixd = prev.nixd.overrideAttrs (prevAttrs: {
     patches = [
       # Completion improvements
       # https://github.com/nix-community/nixd/pull/698
@@ -95,11 +90,6 @@ in
       ./patches/nixd/0002-Remove-completion-prefix-filtering.patch
     ];
     patchFlags = "-p2";
-  });
-  nixt = prev.nixt.overrideAttrs { inherit (final.nixd) version src; };
-  nixf = prev.nixf.overrideAttrs (prevAttrs: {
-    inherit (final.nixd) version src;
-    buildInputs = prevAttrs.buildInputs ++ [ final.nixVersions.nixComponents_2_30.nix-expr ];
   });
 
   # Disable history merging
