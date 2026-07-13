@@ -75,7 +75,7 @@ final: prev: {
 
   # Remove tests because there are invalid lua files there
   nvim-treesitter-legacy = prev.nvim-treesitter-legacy.overrideAttrs (prev: {
-    postPatch = prev.postPatch + "rm -r tests";
+    postPatch = prev.postPatch + "rm -r tests queries";
     # Improve comment queries performance
     patches = fetchpatch {
       url = "https://github.com/stasjok/nvim-treesitter/commit/b115652fd53fc67fed3086804d37f1b92110e312.diff";
