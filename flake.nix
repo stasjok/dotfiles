@@ -12,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
-      url = "github:catppuccin/nix/c11bfcf5671358a12fa2d906e7c859d0644d9b2d";
+      url = "github:catppuccin/nix/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin-palette = {
