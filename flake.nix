@@ -9,11 +9,7 @@
     };
     nixvim = {
       url = "github:nix-community/nixvim/nixos-26.05";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        # Remove optional dependencies
-        nuschtosSearch.follows = "";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
       url = "github:catppuccin/nix/c11bfcf5671358a12fa2d906e7c859d0644d9b2d";
