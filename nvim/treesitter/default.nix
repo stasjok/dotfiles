@@ -6,6 +6,9 @@ in
   plugins.treesitter = {
     enable = true;
 
+    # TODO: Migrate to nvim-treesitter main branch
+    package = pkgs.vimPlugins.nvim-treesitter-legacy;
+
     settings = {
       highlight = {
         enable = true;
