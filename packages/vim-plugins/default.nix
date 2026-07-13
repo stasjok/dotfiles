@@ -78,7 +78,7 @@ final: prev: {
   );
 
   # Remove tests because there are invalid lua files there
-  nvim-treesitter = prev.nvim-treesitter.overrideAttrs (prev: {
+  nvim-treesitter-legacy = prev.nvim-treesitter-legacy.overrideAttrs (prev: {
     postPatch = prev.postPatch + "rm -r tests";
     # Improve comment queries performance
     patches = fetchpatch {
