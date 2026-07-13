@@ -42,10 +42,6 @@ final: prev: {
     };
   });
 
-  otter-nvim = prev.otter-nvim.overrideAttrs {
-    patches = ./otter-fix-user-commands.patch;
-  };
-
   # Fixes errors in telescope keymaps picker
   telescope-nvim = prev.telescope-nvim.overrideAttrs {
     patches = ./telescope-keymaps-picker.patch;
