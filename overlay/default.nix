@@ -34,20 +34,6 @@ in
   # Perl packages
   perlPackages = prev.perlPackages.overrideScope (callPackage ../packages/perl-packages { });
 
-  # Tree-sitter grammars
-  tree-sitter = prev.tree-sitter.override {
-    extraGrammars = {
-      tree-sitter-jinja2 = {
-        src = final.fetchFromGitHub {
-          owner = "theHamsta";
-          repo = "tree-sitter-jinja2";
-          rev = "3fa73cd4a871bf88e95d61adc8e66e7fb09016a1";
-          hash = "sha256-LhyWfhtS1M+5m3wVnlHkM7e0yAG+Cfb1iBS1QuslG/c=";
-        };
-      };
-    };
-  };
-
   # Support incremental document changes
   typos-lsp = prev.typos-lsp.overrideAttrs (
     finalAttrs: prevAttrs: {
