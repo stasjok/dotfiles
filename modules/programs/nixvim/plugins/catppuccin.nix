@@ -53,13 +53,13 @@ in
               for f in *; do
                 mv $f catppuccin-$f.lua
               done
-              cp catppuccin-${defaultFlavour}.lua catppuccin.lua
+              cp catppuccin-${defaultFlavour}.lua catppuccin-nvim.lua
             )
           '';
         };
       in
       [ package ];
 
-    colorscheme = lib.mkDefault "catppuccin";
+    colorscheme = lib.mkDefault "catppuccin-nvim";
   };
 }
