@@ -1,15 +1,17 @@
 {
-  stdenv,
   fetchFromGitHub,
+  fetchPnpmDeps,
   nodejs,
+  pnpmConfigHook,
   pnpm_11,
+  stdenv,
 }:
 let
   pnpm = pnpm_11;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "beancount-lsp-server";
-  version = "0.0.178";
+  version = "0.0.182";
 
   src =
     (fetchFromGitHub {
@@ -17,14 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
       repo = "beancount-lsp";
       rev = "v${finalAttrs.version}";
       fetchSubmodules = true;
-      hash = "sha256-MRgUpe0UZCPucHkMqza2iFKvTi3x3Wu5rTDqDO2M53Q=";
+      hash = "sha256-FdAHO8o2G2fKH2pyUTKIMevT7HC7E30H86gZJGLjsJ4=";
     }).overrideAttrs
-      # fetchgit doesn't have ssh, need http url type
-      {
-        GIT_CONFIG_COUNT = 1;
-        GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
-        GIT_CONFIG_VALUE_0 = "git@github.com:";
-      };
+      (prev: {
+        env = prev.env or { } // {
+          GIT_CONFIG_COUNT = 1;
+          GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
+          GIT_CONFIG_VALUE_0 = "git@github.com:";
+        };
+      });
 
   patches = [
     ./0001-feat-allow-to-exclude-files-from-ListBeanFiles.patch
@@ -36,12 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm
+    pnpmConfigHook
   ];
 
   pnpmWorkspaces = [ "${finalAttrs.pname}..." ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -49,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     fetcherVersion = 4;
-    hash = "sha256-u1euLl8cVKUeExU0eje+mkEkQvlVntXgvVk3BpUu+gU=";
+    hash = "sha256-+xOcF2B79HlwSvyAKxni9CNvdiyWXPbX/SeAgia4u0Q=";
   };
 
   buildPhase = ''
