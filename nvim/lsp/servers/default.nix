@@ -47,6 +47,7 @@
       config = {
         settings.ansible = {
           completion.provideRedirectModules = false;
+          python.interpreterPath = lib.getExe (pkgs.python3.withPackages (ps: [ ps.ansible ]));
         };
       };
     };

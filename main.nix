@@ -23,8 +23,6 @@
           p: with p; [
             requests
             pyyaml
-            # ansible-language-server uses python to get sys.path in order to get collections list
-            ansible
             # beancount-lsp-server uses python to run beancheck
             beancount
           ]
