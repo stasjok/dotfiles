@@ -27,7 +27,7 @@ T["is compiled"] = function()
   )
 
   -- Instead of Vimscript files (uncompiled), there are Lua files in the colors directory
-  for _, suffix in ipairs({ "", "-frappe", "-latte", "-macchiato", "-mocha" }) do
+  for _, suffix in ipairs({ "-nvim", "-frappe", "-latte", "-macchiato", "-mocha" }) do
     local vim_color_name = vim.fs.joinpath("colors", "catppuccin" .. suffix .. ".vim")
     local lua_color_name = vim.fs.joinpath("colors", "catppuccin" .. suffix .. ".lua")
     ok(

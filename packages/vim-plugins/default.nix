@@ -38,13 +38,9 @@ final: prev: {
     version = "2024-02-18";
     src = prevAttrs.src.override {
       rev = "159c4823e3a11c79bb65fc4b8560320c49f738f4";
-      sha256 = "sha256-S5I9nQcNGmjqZFn5jQkoG5Oh/mu8oSJpDZpAG07GytA=";
+      hash = "sha256-S5I9nQcNGmjqZFn5jQkoG5Oh/mu8oSJpDZpAG07GytA=";
     };
   });
-
-  otter-nvim = prev.otter-nvim.overrideAttrs {
-    patches = ./otter-fix-user-commands.patch;
-  };
 
   # Fixes errors in telescope keymaps picker
   telescope-nvim = prev.telescope-nvim.overrideAttrs {
@@ -78,8 +74,8 @@ final: prev: {
   );
 
   # Remove tests because there are invalid lua files there
-  nvim-treesitter = prev.nvim-treesitter.overrideAttrs (prev: {
-    postPatch = prev.postPatch + "rm -r tests";
+  nvim-treesitter-legacy = prev.nvim-treesitter-legacy.overrideAttrs (prev: {
+    postPatch = prev.postPatch + "rm -r tests queries";
     # Improve comment queries performance
     patches = fetchpatch {
       url = "https://github.com/stasjok/nvim-treesitter/commit/b115652fd53fc67fed3086804d37f1b92110e312.diff";

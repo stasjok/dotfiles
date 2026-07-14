@@ -25,7 +25,7 @@ local function on_attach(args)
   local buf = args.buf
   local client = lsp.get_client_by_id(args.data.client_id)
 
-  if client.supports_method("textDocument/documentHighlight") then
+  if client:supports_method("textDocument/documentHighlight") then
     timers[buf] = uv.new_timer()
 
     -- Cancel all pending requests. Make sure to unset it after calling.

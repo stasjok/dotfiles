@@ -89,12 +89,6 @@
       enable = true;
       config.settings.yaml = {
         customTags = [ "!vault" ];
-        kubernetesSchemaUrl = lib.nixvim.mkRaw ''
-          (function()
-            local schema_path = vim.fs.normalize("~/.kube/json-schema/all.json")
-            return vim.fn.filereadable(schema_path) == 1 and schema_path or nil
-          end)()
-        '';
         schemas = {
           kubernetes = [
             "/deckhouse/**/*.yml"
