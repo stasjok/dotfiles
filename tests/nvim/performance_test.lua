@@ -24,30 +24,32 @@ T["runtime paths"] = function()
 end
 
 T["byte compiling"] = function()
-  expect.no_error(child.lua_func, function()
-    -- Get init.lua path
-    local init = vim.fn.getscriptinfo({ name = "init.lua" })[1].name
-    -- Test every lua file
-    local paths = vim.api.nvim_get_runtime_file("**/*.lua", true)
-    table.insert(paths, init)
-    for _, path in ipairs(paths) do
-      local f = assert(io.open(path, "rb"))
-      -- Read three bytes
-      local data = assert(f:read(3)) --[[@as string]]
-      local bytes = { data:byte(1, 3) }
-      -- LuaJIT byte compiled files are beginning with: 1B 4C 4A (ESC L J)
-      local expected = { 0x1b, string.byte("L"), string.byte("J") }
-      assert(
-        vim.deep_equal(expected, bytes),
-        string.format(
-          "File '%s' is not byte compiled. Expected %s, got %s.",
-          path,
-          vim.inspect(expected),
-          vim.inspect(bytes)
+  expect.no_error(function()
+    child.lua_func(function()
+      -- Get init.lua path
+      local init = vim.fn.getscriptinfo({ name = "init.lua" })[1].name
+      -- Test every lua file
+      local paths = vim.api.nvim_get_runtime_file("**/*.lua", true)
+      table.insert(paths, init)
+      for _, path in ipairs(paths) do
+        local f = assert(io.open(path, "rb"))
+        -- Read three bytes
+        local data = assert(f:read(3)) --[[@as string]]
+        local bytes = { data:byte(1, 3) }
+        -- LuaJIT byte compiled files are beginning with: 1B 4C 4A (ESC L J)
+        local expected = { 0x1b, string.byte("L"), string.byte("J") }
+        assert(
+          vim.deep_equal(expected, bytes),
+          string.format(
+            "File '%s' is not byte compiled. Expected %s, got %s.",
+            path,
+            vim.inspect(expected),
+            vim.inspect(bytes)
+          )
         )
-      )
-      assert(f:close())
-    end
+        assert(f:close())
+      end
+    end)
   end)
 end
 

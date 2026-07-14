@@ -46,14 +46,26 @@ T["works"] = function()
   eq(fn.getcompletion("catppuccin.txt", "help"), { "catppuccin.txt" })
 
   -- Lua modules are available
-  not_errors(lua, [[require("catppuccin")]])
-  not_errors(lua, [[require("catppuccin.palettes")]])
+  not_errors(function()
+    lua([[require("catppuccin")]])
+  end)
+  not_errors(function()
+    lua([[require("catppuccin.palettes")]])
+  end)
 
   -- Colorschemes are loadable
-  not_errors(cmd, "colorscheme catppuccin-latte")
-  not_errors(cmd, "colorscheme catppuccin-frappe")
-  not_errors(cmd, "colorscheme catppuccin-macchiato")
-  not_errors(cmd, "colorscheme catppuccin-mocha")
+  not_errors(function()
+    cmd("colorscheme catppuccin-latte")
+  end)
+  not_errors(function()
+    cmd("colorscheme catppuccin-frappe")
+  end)
+  not_errors(function()
+    cmd("colorscheme catppuccin-macchiato")
+  end)
+  not_errors(function()
+    cmd("colorscheme catppuccin-mocha")
+  end)
 end
 
 -- Test enabled integrations

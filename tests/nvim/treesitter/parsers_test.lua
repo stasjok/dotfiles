@@ -39,7 +39,9 @@ T["installed"] = new_set({
   }),
 }, {
   test = function(lang)
-    not_errors(child.lua, "vim.treesitter.language.add(...)", { lang })
+    not_errors(function()
+      child.lua("vim.treesitter.language.add(...)", { lang })
+    end)
   end,
 })
 
@@ -47,7 +49,9 @@ T["absent"] = new_set({
   parametrize = wrap_values({}),
 }, {
   test = function(lang)
-    errors(child.lua, "no parser for", "vim.treesitter.language.add(...)", { lang })
+    errors(function()
+      child.lua("vim.treesitter.language.add(...)", { lang })
+    end, "no parser for")
   end,
 })
 
