@@ -61,12 +61,20 @@ T["minimal"] = function(type)
   local target = targets[type]
 
   -- Everything is disabled
-  errors(target.api.nvim_get_autocmds, "Invalid 'group'", { group = "filetypeplugin" })
-  errors(target.api.nvim_get_autocmds, "Invalid 'group'", { group = "filetypeindent" })
+  errors(function()
+    target.api.nvim_get_autocmds({ group = "filetypeplugin" })
+  end, "Invalid 'group'")
+  errors(function()
+    target.api.nvim_get_autocmds({ group = "filetypeindent" })
+  end, "Invalid 'group'")
   -- 'syntaxset' group is always defined, so check that it's empty
   eq(#target.api.nvim_get_autocmds({ group = "syntaxset" }), 0)
-  errors(target.api.nvim_get_autocmds, "Invalid 'group'", { group = "Syntax" })
-  errors(target.api.nvim_get_autocmds, "Invalid 'group'", { group = "filetypedetect" })
+  errors(function()
+    target.api.nvim_get_autocmds({ group = "Syntax" })
+  end, "Invalid 'group'")
+  errors(function()
+    target.api.nvim_get_autocmds({ group = "filetypedetect" })
+  end, "Invalid 'group'")
   expect.is_false(target.go.loadplugins, "loadplugins option is enabled")
 
   -- No swap file, no shada

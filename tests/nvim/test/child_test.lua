@@ -74,10 +74,16 @@ T["child { minimal = false }"] = function()
   ok(init_lua_info, "expected init.lua from 'initFile' to be sourced")
 
   -- Make sure nothing is disabled in full child Nvim
-  not_errors(child.api.nvim_get_autocmds, { group = "filetypeplugin" })
-  not_errors(child.api.nvim_get_autocmds, { group = "filetypeindent" })
+  not_errors(function()
+    child.api.nvim_get_autocmds({ group = "filetypeplugin" })
+  end)
+  not_errors(function()
+    child.api.nvim_get_autocmds({ group = "filetypeindent" })
+  end)
   ok(#child.api.nvim_get_autocmds({ group = "syntaxset" }) >= 1)
-  not_errors(child.api.nvim_get_autocmds, { group = "filetypedetect" })
+  not_errors(function()
+    child.api.nvim_get_autocmds({ group = "filetypedetect" })
+  end)
 
   -- Plugins are enabled
   ok(child.go.loadplugins, "loadplugins is not enabled")
@@ -165,7 +171,9 @@ end
 
 T["child.feed_keys()"]["prevents hanging"] = function()
   child.type_keys("di")
-  errors(child.feed_keys, "feed_keys.*child process is blocked", "iabc")
+  errors(function()
+    child.feed_keys("iabc")
+  end, "feed_keys.*child process is blocked")
   child.type_keys("<Esc>")
 end
 
@@ -176,7 +184,9 @@ T["child.feed_keys()"]["doesn't hang"] = function()
 end
 
 T["child.feed_keys()"]["throws error"] = function()
-  errors(child.feed_keys, "Not an editor command: test", ":test<CR>")
+  errors(function()
+    child.feed_keys(":test<CR>")
+  end, "Not an editor command: test")
 end
 
 T["child.get_lines()"] = new_set({
@@ -205,7 +215,9 @@ T["child.get_lines()"]["works"] = new_set({
 })
 
 T["child.get_lines()"]["strict"] = function()
-  errors(child.get_lines, "Index out of bounds", { finish = 10 })
+  errors(function()
+    child.get_lines({ finish = 10 })
+  end, "Index out of bounds")
 end
 
 T["child.get_lines()"]["buffer"] = function()
@@ -243,7 +255,9 @@ T["child.set_lines()"]["works"] = new_set({
 })
 
 T["child.set_lines()"]["strict"] = function()
-  errors(child.set_lines, "Index out of bounds", "line", { finish = 10 })
+  errors(function()
+    child.set_lines("line", { finish = 10 })
+  end, "Index out of bounds")
 end
 
 T["child.set_lines()"]["buffer"] = function()
