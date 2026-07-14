@@ -19,12 +19,12 @@ final: prev: {
 
   # My fork of mini.nvim
   mini-nvim = prev.mini-nvim.overrideAttrs {
-    version = "2026-01-10";
+    version = "2026-07-14";
     src = fetchFromGitHub {
       owner = "stasjok";
       repo = "mini.nvim";
-      rev = "7065cc7b89647988ed9c810157b670127a930768";
-      hash = "sha256-9XZZuKNvqDWUjPmWpdDCRhEvB7uL5PkTGaelGPfZlPg=";
+      rev = "4a5485d372698312c8b6dd976aebd021cd8f9ab6";
+      hash = "sha256-kFSVNCMxc7B6xSWpWGhuKR/ysaPnN1CEVSyXolGtcWQ=";
     };
     patches = fetchpatch {
       # Remove ':Git' doc tag to avoid clashing with vim-fugitive
