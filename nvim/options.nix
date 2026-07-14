@@ -29,6 +29,9 @@
     # Default border style of floating windows
     winborder = "single";
 
+    # Disable '~' symbols for empty lines at the of a buffer
+    fillchars = [ "eob: " ];
+
     # Make some context visible
     scrolloff = 6;
     sidescrolloff = 6;
