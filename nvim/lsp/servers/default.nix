@@ -32,7 +32,6 @@
           function(client)
             client.server_capabilities.definitionProvider = false
             client.server_capabilities.referencesProvider = false
-            client.server_capabilities.hoverProvider = false
           end
         '';
         settings.nil.nix.flake.nixpkgsInputName = lib.nixvim.mkRaw "vim.NIL";
