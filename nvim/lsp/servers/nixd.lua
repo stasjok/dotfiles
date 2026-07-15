@@ -50,7 +50,7 @@ M.on_init = function(client)
   ---@return string
   local function home_manager_options(path, pkgs, extra_config)
     return string.format(
-      '(import %s {configuration = {home = {stateVersion = "24.05"; username = "nixd"; homeDirectory = "/home/nixd";};%s}; pkgs = %s;}).options',
+      '(import %s {configuration = {home = {stateVersion = "24.11"; username = "nixd"; homeDirectory = "/home/nixd";};%s}; pkgs = %s;}).options',
       path,
       extra_config or "",
       pkgs
@@ -67,7 +67,7 @@ M.on_init = function(client)
         '"${home-manager}/modules"',
         settings.nixpkgs.expr,
         string.format(
-          " imports = [nixvim.homeManagerModules.nixvim catppuccin.homeManagerModules.catppuccin %s];",
+          " imports = [nixvim.homeModules.nixvim catppuccin.homeModules.catppuccin %s];",
           fs.joinpath(root_dir, "modules")
         )
       )
