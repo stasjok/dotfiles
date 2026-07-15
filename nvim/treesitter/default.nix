@@ -34,22 +34,6 @@ in
         ];
       };
 
-      incremental_selection = {
-        enable = true;
-        # Disable <CR> mapping in |command-line-window|
-        disable = mkRaw ''
-          function()
-            return vim.fn.win_gettype() == "command"
-          end
-        '';
-        keymaps = {
-          init_selection = "<CR>";
-          node_incremental = "<CR>";
-          scope_incremental = "<C-J>"; # <C-CR>
-          node_decremental = "<M-CR>";
-        };
-      };
-
       # If it's set, it's prepended to 'rtp'
       parser_install_dir = null;
     };
