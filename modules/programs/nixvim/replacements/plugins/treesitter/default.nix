@@ -357,6 +357,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
               callback = function(args)
                 local filetype = vim.bo[args.buf].filetype
                 local lang = vim.treesitter.language.get_lang(filetype) or filetype
+                local has_parser = vim.treesitter.language.add(lang)
+
+                local function has_query(query_name)
+                  return vim.treesitter.query.get(lang, query_name) ~= nil
+                end
 
                 local function is_disabled(disabled)
                   if type(disabled) == 'function' then
@@ -373,17 +378,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
                 end
 
                 ${optionalString highlightEnabled ''
-                  if not is_disabled(disabled_highlight) then
-                    pcall(vim.treesitter.start, args.buf, lang)
+                  if has_parser and has_query('highlights') and not is_disabled(disabled_highlight) then
+                    vim.treesitter.start(args.buf, lang)
                   end
                 ''}${optionalString indentEnabled ''
                   local disabled_indent = ${lib.nixvim.toLuaObject cfg.indent.disable}
-                  if not is_disabled(disabled_indent) then
+                  if has_parser and has_query('indents') and not is_disabled(disabled_indent) then
                     vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
                   end
                 ''}${optionalString cfg.folding.enable ''
                   local disabled_folding = ${lib.nixvim.toLuaObject cfg.folding.disable}
-                  if not is_disabled(disabled_folding) then
+                  if has_parser and has_query('folds') and not is_disabled(disabled_folding) then
                     vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
                     vim.wo[0][0].foldmethod = 'expr'
                   end
