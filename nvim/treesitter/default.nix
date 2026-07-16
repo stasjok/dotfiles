@@ -19,30 +19,14 @@ in
         end
       '';
     };
-    indent.enable = true;
 
-    # settings = {
-    #   highlight = {
-    #     enable = true;
-    #     disable = mkRaw ''
-    #       function()
-    #         local ft = vim.bo.filetype
-    #         return ft == "yaml.ansible" or ft:find("%.jinja2?$")
-    #       end
-    #     '';
-    #   };
-    #
-    #   indent = {
-    #     enable = true;
-    #     disable = [
-    #       "yaml"
-    #       "fish"
-    #     ];
-    #   };
-    #
-    #   # If it's set, it's prepended to 'rtp'
-    #   parser_install_dir = null;
-    # };
+    indent = {
+      enable = true;
+      disable = [
+        "yaml"
+        "fish"
+      ];
+    };
 
     grammarPackages =
       let

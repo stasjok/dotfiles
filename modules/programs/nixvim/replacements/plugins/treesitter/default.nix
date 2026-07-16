@@ -210,6 +210,25 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     indent = {
       enable = lib.mkEnableOption "tree-sitter based indentation";
+
+      disable = mkOption {
+        type = lib.types.maybeRaw (types.listOf types.str);
+        default = [ ];
+        example = [
+          "python"
+          "yaml"
+        ];
+        description = ''
+          Languages or filetypes for which tree-sitter based indentation should not be enabled by
+          Nixvim. A raw Lua function may be used for buffer-specific control; it receives the
+          tree-sitter language, filetype, and buffer number, in that order, and should return `true`
+          to disable indentation.
+
+          This option only applies to Nixvim's native tree-sitter indentation setup for the modern
+          nvim-treesitter main branch. Legacy nvim-treesitter configuration should continue using
+          upstream settings under `plugins.treesitter.settings`.
+        '';
+      };
     };
 
     grammarPackages = mkOption {
@@ -321,9 +340,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
               group = augroup,
               pattern = '*',
               callback = function(args)
+                local filetype = vim.bo[args.buf].filetype
+                local lang = vim.treesitter.language.get_lang(filetype) or filetype
+
                 ${optionalString highlightEnabled ''
-                  local filetype = vim.bo[args.buf].filetype
-                  local lang = vim.treesitter.language.get_lang(filetype) or filetype
                   local start_highlight = true
 
                   if type(disabled_highlight) == 'function' then
@@ -341,7 +361,23 @@ lib.nixvim.plugins.mkNeovimPlugin {
                     pcall(vim.treesitter.start, args.buf, lang)
                   end
                 ''}${optionalString indentEnabled ''
-                  vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                  local disabled_indent = ${lib.nixvim.toLuaObject cfg.indent.disable}
+                  local start_indent = true
+
+                  if type(disabled_indent) == 'function' then
+                    start_indent = not disabled_indent(lang, filetype, args.buf)
+                  else
+                    for _, disabled in ipairs(disabled_indent) do
+                      if disabled == lang or disabled == filetype then
+                        start_indent = false
+                        break
+                      end
+                    end
+                  end
+
+                  if start_indent then
+                    vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                  end
                 ''}
               end,
             })
