@@ -1,42 +1,45 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }:
 let
   cfg = config.plugins.treesitter;
-  inherit (lib.nixvim) mkRaw;
 in
 {
   plugins.treesitter = {
     enable = true;
 
-    # TODO: Migrate to nvim-treesitter main branch
-    package = pkgs.vimPlugins.nvim-treesitter-legacy;
-
-    settings = {
-      highlight = {
-        enable = true;
-        disable = mkRaw ''
-          function()
-            local ft = vim.bo.filetype
-            return ft == "yaml.ansible" or ft:find("%.jinja2?$")
-          end
-        '';
-      };
-
-      indent = {
-        enable = true;
-        disable = [
-          "yaml"
-          "fish"
-        ];
-      };
-
-      # If it's set, it's prepended to 'rtp'
-      parser_install_dir = null;
+    highlight = {
+      enable = true;
+      disable = [
+        "yaml.ansible"
+      ];
     };
+    indent.enable = true;
+
+    # settings = {
+    #   highlight = {
+    #     enable = true;
+    #     disable = mkRaw ''
+    #       function()
+    #         local ft = vim.bo.filetype
+    #         return ft == "yaml.ansible" or ft:find("%.jinja2?$")
+    #       end
+    #     '';
+    #   };
+    #
+    #   indent = {
+    #     enable = true;
+    #     disable = [
+    #       "yaml"
+    #       "fish"
+    #     ];
+    #   };
+    #
+    #   # If it's set, it's prepended to 'rtp'
+    #   parser_install_dir = null;
+    # };
 
     grammarPackages =
       let
