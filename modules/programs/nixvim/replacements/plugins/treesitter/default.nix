@@ -162,6 +162,21 @@ lib.nixvim.plugins.mkNeovimPlugin {
           foldingSubmodule = types.submodule {
             options = {
               enable = lib.mkEnableOption "tree-sitter based folding";
+
+              disable = mkOption {
+                type = lib.types.maybeRaw (types.listOf types.str);
+                default = [ ];
+                example = [
+                  "markdown"
+                  "nix"
+                ];
+                description = ''
+                  Languages or filetypes for which tree-sitter based folding should not be enabled by
+                  Nixvim. A raw Lua function may be used for buffer-specific control; it receives the
+                  tree-sitter language, filetype, and buffer number, in that order, and should return
+                  `true` to disable folding.
+                '';
+              };
             };
           };
         in
@@ -330,8 +345,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
           ${optionalString (mainBranchSettings != { }) ''
             require'nvim-treesitter'.setup(${lib.nixvim.toLuaObject mainBranchSettings})
           ''}
-          ${optionalString (highlightEnabled || indentEnabled) ''
-            -- Enable features via autocommands for modern nvim-treesitter
+          ${optionalString (highlightEnabled || indentEnabled || cfg.folding.enable) ''
+            -- Enable features via an autocommand for modern nvim-treesitter
             ${optionalString highlightEnabled ''
               local disabled_highlight = ${lib.nixvim.toLuaObject cfg.highlight.disable}
             ''}
@@ -378,6 +393,25 @@ lib.nixvim.plugins.mkNeovimPlugin {
                   if start_indent then
                     vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
                   end
+                ''}${optionalString cfg.folding.enable ''
+                  local disabled_folding = ${lib.nixvim.toLuaObject cfg.folding.disable}
+                  local start_folding = true
+
+                  if type(disabled_folding) == 'function' then
+                    start_folding = not disabled_folding(lang, filetype, args.buf)
+                  else
+                    for _, disabled in ipairs(disabled_folding) do
+                      if disabled == lang or disabled == filetype then
+                        start_folding = false
+                        break
+                      end
+                    end
+                  end
+
+                  if start_folding then
+                    vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+                    vim.wo[0][0].foldmethod = 'expr'
+                  end
                 ''}
               end,
             })
@@ -401,22 +435,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     plugins.treesitter.packageDecorator = lib.mkIf cfg.nixGrammars (
       pkg: pkg.withPlugins (_: cfg.grammarPackages)
     );
-
-    # NOTE: This autoCmd is declared outside of Lua while the autogroup is created in luaConfig.content.
-    # This is fragile - if module generation order changes, the autocmd might be created before the
-    # autogroup exists (causing failure), or the autogroup's clear=true might clear this autocmd.
-    # The current order happens to work, but changes to nixvim's module system could break this.
-    autoCmd = lib.optional cfg.folding.enable {
-      event = "FileType";
-      group = "nixvim_treesitter";
-      pattern = "*";
-      callback.__raw = ''
-        function()
-          vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-          vim.wo[0][0].foldmethod = 'expr'
-        end
-      '';
-    };
 
     warnings = lib.nixvim.mkWarnings "plugins.treesitter" (
       [
