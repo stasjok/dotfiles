@@ -6,52 +6,26 @@
 }:
 let
   cfg = config.plugins.treesitter;
-  inherit (lib.nixvim) mkRaw;
 in
 {
   plugins.treesitter = {
     enable = true;
 
-    # TODO: Migrate to nvim-treesitter main branch
-    package = pkgs.vimPlugins.nvim-treesitter-legacy;
+    highlight = {
+      enable = true;
+      disable = lib.nixvim.mkRaw ''
+        function(_, ft)
+          return ft == "yaml.ansible" or ft:find("%.jinja2?$")
+        end
+      '';
+    };
 
-    settings = {
-      highlight = {
-        enable = true;
-        disable = mkRaw ''
-          function()
-            local ft = vim.bo.filetype
-            return ft == "yaml.ansible" or ft:find("%.jinja2?$")
-          end
-        '';
-      };
-
-      indent = {
-        enable = true;
-        disable = [
-          "yaml"
-          "fish"
-        ];
-      };
-
-      incremental_selection = {
-        enable = true;
-        # Disable <CR> mapping in |command-line-window|
-        disable = mkRaw ''
-          function()
-            return vim.fn.win_gettype() == "command"
-          end
-        '';
-        keymaps = {
-          init_selection = "<CR>";
-          node_incremental = "<CR>";
-          scope_incremental = "<C-J>"; # <C-CR>
-          node_decremental = "<M-CR>";
-        };
-      };
-
-      # If it's set, it's prepended to 'rtp'
-      parser_install_dir = null;
+    indent = {
+      enable = true;
+      disable = [
+        "yaml"
+        "fish"
+      ];
     };
 
     grammarPackages =

@@ -59,6 +59,7 @@ in
       ./mappings.nix
       ./options.nix
       ./plugins
+      ./selection.nix
       ./skeletons.nix
       ./snippets
       ./terminal
