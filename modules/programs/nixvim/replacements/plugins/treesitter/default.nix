@@ -363,6 +363,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
                   return vim.treesitter.query.get(lang, query_name) ~= nil
                 end
 
+                local function add_undo_ftplugin(command)
+                  local undo_ftplugin = vim.b[args.buf].undo_ftplugin
+                  if undo_ftplugin == nil or undo_ftplugin == "" then
+                    vim.b[args.buf].undo_ftplugin = command
+                  else
+                    vim.b[args.buf].undo_ftplugin = undo_ftplugin .. '\n' .. command
+                  end
+                end
+
                 local function is_disabled(disabled)
                   if type(disabled) == 'function' then
                     return disabled(lang, filetype, args.buf)
@@ -380,17 +389,20 @@ lib.nixvim.plugins.mkNeovimPlugin {
                 ${optionalString highlightEnabled ''
                   if has_parser and has_query('highlights') and not is_disabled(disabled_highlight) then
                     vim.treesitter.start(args.buf, lang)
+                    add_undo_ftplugin(("call v:lua.vim.treesitter.stop(%d)"):format(args.buf))
                   end
                 ''}${optionalString indentEnabled ''
                   local disabled_indent = ${lib.nixvim.toLuaObject cfg.indent.disable}
                   if has_parser and has_query('indents') and not is_disabled(disabled_indent) then
                     vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                    add_undo_ftplugin('setlocal indentexpr<')
                   end
                 ''}${optionalString cfg.folding.enable ''
                   local disabled_folding = ${lib.nixvim.toLuaObject cfg.folding.disable}
                   if has_parser and has_query('folds') and not is_disabled(disabled_folding) then
                     vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
                     vim.wo[0][0].foldmethod = 'expr'
+                    add_undo_ftplugin('setlocal foldexpr< foldmethod<')
                   end
                 ''}
               end,
