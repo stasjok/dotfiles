@@ -358,57 +358,32 @@ lib.nixvim.plugins.mkNeovimPlugin {
                 local filetype = vim.bo[args.buf].filetype
                 local lang = vim.treesitter.language.get_lang(filetype) or filetype
 
-                ${optionalString highlightEnabled ''
-                  local start_highlight = true
+                local function is_disabled(disabled)
+                  if type(disabled) == 'function' then
+                    return disabled(lang, filetype, args.buf)
+                  end
 
-                  if type(disabled_highlight) == 'function' then
-                    start_highlight = not disabled_highlight(lang, filetype, args.buf)
-                  else
-                    for _, disabled in ipairs(disabled_highlight) do
-                      if disabled == lang or disabled == filetype then
-                        start_highlight = false
-                        break
-                      end
+                  for _, disabled_language in ipairs(disabled) do
+                    if disabled_language == lang or disabled_language == filetype then
+                      return true
                     end
                   end
 
-                  if start_highlight then
+                  return false
+                end
+
+                ${optionalString highlightEnabled ''
+                  if not is_disabled(disabled_highlight) then
                     pcall(vim.treesitter.start, args.buf, lang)
                   end
                 ''}${optionalString indentEnabled ''
                   local disabled_indent = ${lib.nixvim.toLuaObject cfg.indent.disable}
-                  local start_indent = true
-
-                  if type(disabled_indent) == 'function' then
-                    start_indent = not disabled_indent(lang, filetype, args.buf)
-                  else
-                    for _, disabled in ipairs(disabled_indent) do
-                      if disabled == lang or disabled == filetype then
-                        start_indent = false
-                        break
-                      end
-                    end
-                  end
-
-                  if start_indent then
+                  if not is_disabled(disabled_indent) then
                     vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
                   end
                 ''}${optionalString cfg.folding.enable ''
                   local disabled_folding = ${lib.nixvim.toLuaObject cfg.folding.disable}
-                  local start_folding = true
-
-                  if type(disabled_folding) == 'function' then
-                    start_folding = not disabled_folding(lang, filetype, args.buf)
-                  else
-                    for _, disabled in ipairs(disabled_folding) do
-                      if disabled == lang or disabled == filetype then
-                        start_folding = false
-                        break
-                      end
-                    end
-                  end
-
-                  if start_folding then
+                  if not is_disabled(disabled_folding) then
                     vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
                     vim.wo[0][0].foldmethod = 'expr'
                   end
