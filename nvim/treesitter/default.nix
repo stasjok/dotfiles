@@ -14,7 +14,7 @@ in
     highlight = {
       enable = true;
       disable = lib.nixvim.mkRaw ''
-        function(_, ft)
+        function(_, _, ft)
           return ft == "yaml.ansible" or ft:find("%.jinja2?$")
         end
       '';

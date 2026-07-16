@@ -173,7 +173,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
                 description = ''
                   Languages or filetypes for which tree-sitter based folding should not be enabled by
                   Nixvim. A raw Lua function may be used for buffer-specific control; it receives the
-                  tree-sitter language, filetype, and buffer number, in that order, and should return
+                  tree-sitter language, buffer number, and filetype, in that order, and should return
                   `true` to disable folding.
                 '';
               };
@@ -214,7 +214,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         description = ''
           Languages or filetypes for which tree-sitter based syntax highlighting should not be
           started by Nixvim. A raw Lua function may be used for buffer-specific control; it receives
-          the tree-sitter language, filetype, and buffer number, in that order, and should return
+          the tree-sitter language, buffer number, and filetype, in that order, and should return
           `true` to disable highlighting.
 
           This option only applies to Nixvim's native tree-sitter highlighting setup for the modern
@@ -237,7 +237,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         description = ''
           Languages or filetypes for which tree-sitter based indentation should not be enabled by
           Nixvim. A raw Lua function may be used for buffer-specific control; it receives the
-          tree-sitter language, filetype, and buffer number, in that order, and should return `true`
+          tree-sitter language, buffer number, and filetype, in that order, and should return `true`
           to disable indentation.
 
           This option only applies to Nixvim's native tree-sitter indentation setup for the modern
@@ -370,7 +370,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
                 local function is_disabled(disabled)
                   if type(disabled) == 'function' then
-                    return disabled(lang, filetype, buf)
+                    return disabled(lang, buf, filetype)
                   elseif type(disabled) == 'table' then
                     for _, disabled_language in ipairs(disabled) do
                       if disabled_language == lang or disabled_language == filetype then
@@ -435,6 +435,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
             `plugins.treesitter.settings.highlight.disable` is an upstream legacy nvim-treesitter
             option. For Nixvim's native highlighting support with the modern nvim-treesitter main
             branch, use `${opt.highlight.disable}` instead.
+          '';
+        }
+        {
+          when =
+            (cfg.settings.indent.disable or null) != null
+            && !(lib.hasInfix "nvim-treesitter-legacy" (lib.getName cfg.package));
+          message = ''
+            `plugins.treesitter.settings.indent.disable` is an upstream legacy nvim-treesitter
+            option. For Nixvim's native indentation support with the modern nvim-treesitter main
+            branch, use `${opt.indent.disable}` instead.
           '';
         }
       ]
