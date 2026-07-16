@@ -9,6 +9,7 @@
           ./ftplugin.nix
           ./mylib.nix
           ./plugins
+          ./replacements
           ./runtime.nix
           ./snippets.nix
         ];
