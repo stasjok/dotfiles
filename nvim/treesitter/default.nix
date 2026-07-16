@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }:
@@ -12,9 +13,11 @@ in
 
     highlight = {
       enable = true;
-      disable = [
-        "yaml.ansible"
-      ];
+      disable = lib.nixvim.mkRaw ''
+        function(_, ft)
+          return ft == "yaml.ansible" or ft:find("%.jinja2?$")
+        end
+      '';
     };
     indent.enable = true;
 

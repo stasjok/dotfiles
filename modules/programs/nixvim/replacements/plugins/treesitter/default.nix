@@ -189,15 +189,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
       enable = lib.mkEnableOption "tree-sitter based syntax highlighting";
 
       disable = mkOption {
-        type = with types; listOf str;
+        type = lib.types.maybeRaw (types.listOf types.str);
         default = [ ];
         example = [
           "latex"
           "html"
         ];
         description = ''
-          List of languages or filetypes for which tree-sitter based syntax highlighting should not
-          be started by Nixvim.
+          Languages or filetypes for which tree-sitter based syntax highlighting should not be
+          started by Nixvim. A raw Lua function may be used for buffer-specific control; it receives
+          the tree-sitter language, filetype, and buffer number, in that order, and should return
+          `true` to disable highlighting.
 
           This option only applies to Nixvim's native tree-sitter highlighting setup for the modern
           nvim-treesitter main branch. Legacy nvim-treesitter configuration should continue using
@@ -324,10 +326,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
                   local lang = vim.treesitter.language.get_lang(filetype) or filetype
                   local start_highlight = true
 
-                  for _, disabled in ipairs(disabled_highlight) do
-                    if disabled == lang or disabled == filetype then
-                      start_highlight = false
-                      break
+                  if type(disabled_highlight) == 'function' then
+                    start_highlight = not disabled_highlight(lang, filetype, args.buf)
+                  else
+                    for _, disabled in ipairs(disabled_highlight) do
+                      if disabled == lang or disabled == filetype then
+                        start_highlight = false
+                        break
+                      end
                     end
                   end
 
