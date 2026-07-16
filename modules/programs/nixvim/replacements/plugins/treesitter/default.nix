@@ -195,6 +195,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             "Passing a boolean to `${options.plugins.treesitter.folding}` is deprecated, use `${options.plugins.treesitter.folding}.enable`. Definitions: ${lib.options.showDefs options.plugins.treesitter.folding.definitionsWithLocations}"
             {
               enable = x;
+              disable = [ ];
             }
         else
           x;
