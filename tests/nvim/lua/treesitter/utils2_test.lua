@@ -1,8 +1,10 @@
 local assert = require("luassert")
 
--- TODO: Replace with upstreamed version from neovim 0.8
-local get_node_at_cursor = require("nvim-treesitter.ts_utils").get_node_at_cursor
 local feedkeys = require("map").feedkeys
+
+local function get_node_at_cursor(_, ignore_injected_langs)
+  return vim.treesitter.get_node({ ignore_injections = ignore_injected_langs })
+end
 
 describe("treesitter.utils", function()
   local utils = require("treesitter.utils")
