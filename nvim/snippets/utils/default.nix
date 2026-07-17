@@ -7,7 +7,7 @@
     ./lua/snippets/nodes.lua
     ./lua/snippets/show_conditions.lua
     ./lua/treesitter/utils.lua
-    ./queries/jinja2/ft_func.scm
+    ./queries/jinja/ft_func.scm
     ./queries/yaml/ft_func.scm
   ];
 }

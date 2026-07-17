@@ -22,7 +22,7 @@ T["installed"] = new_set({
     "go",
     "hcl",
     "javascript",
-    "jinja2", -- For LuaSnip ft_func
+    "jinja",
     "json",
     "lua",
     "markdown",
@@ -54,9 +54,5 @@ T["absent"] = new_set({
     end, "no parser for")
   end,
 })
-
-T["jinja2 parser is suitable for luasnip ft_func"] = function()
-  not_errors(child.lua, 'vim.treesitter.query.parse("jinja2", "(jinja_stuff) (text)")')
-end
 
 return T

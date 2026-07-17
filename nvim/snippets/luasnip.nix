@@ -17,6 +17,7 @@ in
       ft_func = mkRaw ''
         setmetatable({
           jinja = require("snippets.jinja_utils").jinja_ft_func("jinja"),
+          jinja2 = require("snippets.jinja_utils").jinja_ft_func("jinja"),
           salt = require("snippets.jinja_utils").jinja_ft_func("salt"),
           ansible = require("snippets.jinja_utils").jinja_ft_func("ansible"),
           lua = function()
