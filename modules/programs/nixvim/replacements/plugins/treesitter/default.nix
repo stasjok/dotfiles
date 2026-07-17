@@ -222,6 +222,20 @@ lib.nixvim.plugins.mkNeovimPlugin {
           upstream settings under `plugins.treesitter.settings`.
         '';
       };
+
+      enableVimSyntax = mkOption {
+        type = with types; either bool (listOf str);
+        default = false;
+        example = [
+          "latex"
+          "html"
+        ];
+        description = ''
+          Whether to enable Vim's legacy regex syntax highlighting in addition to native tree-sitter
+          highlighting. Set this to `true` for all languages, or provide a list of languages or
+          filetypes for which it should be enabled.
+        '';
+      };
     };
 
     indent = {
@@ -387,6 +401,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
                 if has_parser and has_query('highlights') and not is_disabled(disabled_highlight) then
                   vim.treesitter.start(buf, lang)
                   add_undo_ftplugin(("call v:lua.vim.treesitter.stop(%d)"):format(buf))
+
+                  local vim_syntax = ${lib.nixvim.toLuaObject cfg.highlight.enableVimSyntax}
+                  if vim_syntax == true or is_disabled(vim_syntax) then
+                    vim.bo[buf].syntax = 'ON'
+                  end
                 end
               ''}${optionalString indentEnabled ''
                 local disabled_indent = ${lib.nixvim.toLuaObject cfg.indent.disable}
