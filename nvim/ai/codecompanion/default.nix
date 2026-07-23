@@ -44,23 +44,6 @@ in
         };
         # Enable wrap in debug window
         floating_window.opts.wrap = true;
-
-        # Display full token usage
-        token_count = mkRaw ''
-          function(usage, adapter)
-            if type(usage) == "number" then
-              return (" (%d tokens)"):format(usage)
-            elseif type(usage) == "table" then
-              return (" (%d/%d -> %d, $%s)"):format(
-                usage.prompt or 0,
-                usage.cached or 0,
-                usage.completion or 0,
-                string.gsub(string.format("%.5f", usage.cost or 0), "(%.%d%d%d-)0*$", "%1")
-              )
-            end
-            return ""
-          end
-        '';
       };
 
       adapters = {
