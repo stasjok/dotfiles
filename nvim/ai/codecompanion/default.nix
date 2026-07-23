@@ -74,7 +74,7 @@ in
               require("codecompanion.adapters.http").extend("openrouter", ${
                 toLuaObject {
                   schema.model.default = defaultModel;
-                  env.api_key = mkRaw ''require("helpers.codecompanion").get_api_key("openrouter", "OPENROUTER_API_KEY")'';
+                  env.api_key = mkRaw ''get_api_key("openrouter", "OPENROUTER_API_KEY")'';
                 }
               })
             '';
@@ -88,7 +88,7 @@ in
                     url = "https://bothub.chat/api";
                     chat_url = "/v2/openai/v1/chat/completions";
                     models_endpoint = "/v2/model/list?children=1";
-                    api_key = mkRaw ''require("helpers.codecompanion").get_api_key("bothub", "BOTHUB_API_KEY")'';
+                    api_key = mkRaw ''get_api_key("bothub", "BOTHUB_API_KEY")'';
                   };
                 }
               })
@@ -96,7 +96,7 @@ in
             tavily = mkRaw ''
               require("codecompanion.adapters.http").extend("tavily", ${
                 toLuaObject {
-                  env.api_key = mkRaw ''require("helpers.codecompanion").get_api_key("tavily", "TAVILY_API_KEY")'';
+                  env.api_key = mkRaw ''get_api_key("tavily", "TAVILY_API_KEY")'';
                 }
               })
             '';
@@ -150,7 +150,10 @@ in
       };
     };
 
-    luaConfig.post = myLib.readWrapDo ./post.lua;
+    luaConfig = myLib.wrapDoLuaConfig {
+      pre = ./pre.lua;
+      post = ./post.lua;
+    };
   };
 
   # Mappings
@@ -179,8 +182,6 @@ in
   ];
 
   extraFiles = {
-    # Helpers
-    "lua/helpers/codecompanion.lua".text = builtins.readFile ./helpers.lua;
     # OpenRouter adapter
     "lua/codecompanion/adapters/http/openrouter.lua".text = builtins.readFile ./openrouter.lua;
   };
