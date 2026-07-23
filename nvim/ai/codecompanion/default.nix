@@ -71,10 +71,9 @@ in
           {
             opts.show_presets = false;
             openrouter = mkRaw ''
-              require("codecompanion.adapters.http").extend("openrouter", ${
+              openrouter_adapter(${
                 toLuaObject {
                   schema.model.default = defaultModel;
-                  env.api_key = mkRaw ''get_api_key("openrouter", "OPENROUTER_API_KEY")'';
                 }
               })
             '';
@@ -135,7 +134,7 @@ in
                   # https://github.com/olimorris/codecompanion.nvim/blob/991dd81ac37b56b6d13529a08e86a42d183d79dc/lua/codecompanion/strategies/inline/init.lua#L236
                   name = lib.replaceStrings [ "-" "." ":" ] [ "_" "_" "_" ] name;
                   value = mkRaw ''
-                    require("codecompanion.adapters.http").extend("openrouter", ${
+                    openrouter_adapter(${
                       toLuaObject {
                         name = name;
                         formatted_name = name;
@@ -180,9 +179,4 @@ in
       action = "<Cmd>CodeCompanionChat Add<CR>";
     }
   ];
-
-  extraFiles = {
-    # OpenRouter adapter
-    "lua/codecompanion/adapters/http/openrouter.lua".text = builtins.readFile ./openrouter.lua;
-  };
 }

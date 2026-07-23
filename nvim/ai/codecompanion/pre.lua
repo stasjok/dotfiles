@@ -28,3 +28,18 @@ local function get_api_key(name, env_var)
     return api_key
   end
 end
+
+-- A function to use in env.api_key for OpenRouter adapter
+local get_openrouter_api_key = get_api_key("openrouter", "OPENROUTER_API_KEY")
+
+--- Returns OpenRouter adapter with my modifications
+---@diagnostic disable-next-line: unused
+---@param opts? table
+local function openrouter_adapter(opts)
+  return require("codecompanion.adapters").extend(
+    "openrouter",
+    vim.tbl_deep_extend("force", {
+      env = { api_key = get_openrouter_api_key },
+    }, opts or {})
+  )
+end
