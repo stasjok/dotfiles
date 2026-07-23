@@ -60,23 +60,6 @@ in
                 }
               })
             '';
-            bothub = mkRaw ''
-              function()
-                return require("codecompanion.adapters.http").extend("openrouter", ${
-                  toLuaObject {
-                    name = "bothub";
-                    formatted_name = "BotHub";
-                    schema.model.default = baseNameOf defaultModel;
-                    env = {
-                      url = "https://bothub.chat/api";
-                      chat_url = "/v2/openai/v1/chat/completions";
-                      models_endpoint = "/v2/model/list?children=1";
-                      api_key = mkRaw ''get_api_key("bothub", "BOTHUB_API_KEY")'';
-                    };
-                  }
-                })
-              end
-            '';
             tavily = mkRaw ''
               function()
                 return require("codecompanion.adapters.http").extend("tavily", ${
