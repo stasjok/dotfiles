@@ -40,6 +40,29 @@ local function openrouter_adapter(opts)
     "openrouter",
     vim.tbl_deep_extend("force", {
       env = { api_key = get_openrouter_api_key },
+      schema = {
+        provider = {
+          default = {
+            order = {
+              "OpenAI",
+              "Anthropic",
+              "xAI",
+              "Minimax",
+              "Moonshot AI",
+              "SiliconFlow",
+              "Z.AI",
+              "DeepSeek",
+              "Mistral",
+              "Xiaomi",
+              "Perplexity",
+              "Google",
+              "Amazon Bedrock",
+              "Novita",
+            },
+            allow_fallbacks = true,
+          },
+        },
+      },
     }, opts or {})
   )
 end
