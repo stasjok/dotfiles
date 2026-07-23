@@ -44,23 +44,6 @@ in
         };
         # Enable wrap in debug window
         floating_window.opts.wrap = true;
-
-        # Display full token usage
-        token_count = mkRaw ''
-          function(usage, adapter)
-            if type(usage) == "number" then
-              return (" (%d tokens)"):format(usage)
-            elseif type(usage) == "table" then
-              return (" (%d/%d -> %d, $%s)"):format(
-                usage.prompt or 0,
-                usage.cached or 0,
-                usage.completion or 0,
-                string.gsub(string.format("%.5f", usage.cost or 0), "(%.%d%d%d-)0*$", "%1")
-              )
-            end
-            return ""
-          end
-        '';
       };
 
       adapters = {
@@ -71,34 +54,20 @@ in
           {
             opts.show_presets = false;
             openrouter = mkRaw ''
-              require("codecompanion.adapters.http").extend("openrouter", ${
+              openrouter_adapter(${
                 toLuaObject {
                   schema.model.default = defaultModel;
-                  env.api_key = mkRaw ''require("helpers.codecompanion").get_api_key("openrouter", "OPENROUTER_API_KEY")'';
-                }
-              })
-            '';
-            bothub = mkRaw ''
-              require("codecompanion.adapters.http").extend("openrouter", ${
-                toLuaObject {
-                  name = "bothub";
-                  formatted_name = "BotHub";
-                  schema.model.default = baseNameOf defaultModel;
-                  env = {
-                    url = "https://bothub.chat/api";
-                    chat_url = "/v2/openai/v1/chat/completions";
-                    models_endpoint = "/v2/model/list?children=1";
-                    api_key = mkRaw ''require("helpers.codecompanion").get_api_key("bothub", "BOTHUB_API_KEY")'';
-                  };
                 }
               })
             '';
             tavily = mkRaw ''
-              require("codecompanion.adapters.http").extend("tavily", ${
-                toLuaObject {
-                  env.api_key = mkRaw ''require("helpers.codecompanion").get_api_key("tavily", "TAVILY_API_KEY")'';
-                }
-              })
+              function()
+                return require("codecompanion.adapters.http").extend("tavily", ${
+                  toLuaObject {
+                    env.api_key = mkRaw ''get_api_key("tavily", "TAVILY_API_KEY")'';
+                  }
+                })
+              end
             '';
           }
           // builtins.listToAttrs (
@@ -135,7 +104,7 @@ in
                   # https://github.com/olimorris/codecompanion.nvim/blob/991dd81ac37b56b6d13529a08e86a42d183d79dc/lua/codecompanion/strategies/inline/init.lua#L236
                   name = lib.replaceStrings [ "-" "." ":" ] [ "_" "_" "_" ] name;
                   value = mkRaw ''
-                    require("codecompanion.adapters.http").extend("openrouter", ${
+                    openrouter_adapter(${
                       toLuaObject {
                         name = name;
                         formatted_name = name;
@@ -150,7 +119,10 @@ in
       };
     };
 
-    luaConfig.post = myLib.readWrapDo ./post.lua;
+    luaConfig = myLib.wrapDoLuaConfig {
+      pre = ./pre.lua;
+      post = ./post.lua;
+    };
   };
 
   # Mappings
@@ -177,11 +149,4 @@ in
       action = "<Cmd>CodeCompanionChat Add<CR>";
     }
   ];
-
-  extraFiles = {
-    # Helpers
-    "lua/helpers/codecompanion.lua".text = builtins.readFile ./helpers.lua;
-    # OpenRouter adapter
-    "lua/codecompanion/adapters/http/openrouter.lua".text = builtins.readFile ./openrouter.lua;
-  };
 }
