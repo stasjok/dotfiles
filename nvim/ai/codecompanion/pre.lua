@@ -36,33 +36,46 @@ local get_openrouter_api_key = get_api_key("openrouter", "OPENROUTER_API_KEY")
 ---@diagnostic disable-next-line: unused
 ---@param opts? table
 local function openrouter_adapter(opts)
+  local openrouter = require("codecompanion.adapters.http.openrouter")
+
   return require("codecompanion.adapters").extend(
-    "openrouter",
+    openrouter,
     vim.tbl_deep_extend("force", {
       env = { api_key = get_openrouter_api_key },
-      schema = {
-        provider = {
-          default = {
-            order = {
-              "OpenAI",
-              "Anthropic",
-              "xAI",
-              "Minimax",
-              "Moonshot AI",
-              "SiliconFlow",
-              "Z.AI",
-              "DeepSeek",
-              "Mistral",
-              "Xiaomi",
-              "Perplexity",
-              "Google",
-              "Amazon Bedrock",
-              "Novita",
-            },
-            allow_fallbacks = true,
-          },
-        },
-      },
     }, opts or {})
   )
+end
+
+--- Returns a choices function that filters models from the given adapter.
+---@param adapter CodeCompanion.HTTPAdapter The base adapter (e.g. openrouter)
+---@param filter? string|fun(string, CodeCompanion.Adapter.ModelChoice):boolean A filter for model choices. Function or a string to match.
+---@return function
+local function model_choices(adapter, filter)
+  local filter_fn = filter
+  if not filter_fn then
+    filter_fn = function()
+      return true
+    end
+  elseif type(filter_fn) == "string" then
+    local match = filter_fn
+    ---@param name string
+    ---@return boolean
+    filter_fn = function(name)
+      return name:find(match, 1, true) ~= nil
+    end
+  end
+
+  return function(...)
+    local models = adapter.schema.model.choices(...)
+    models = vim.iter(models):filter(filter_fn)
+    return models
+  end
+end
+
+--- Returns a choices function that filters OpenRouter models.
+---@param filter? string|fun(string, CodeCompanion.Adapter.ModelChoice):boolean A filter for model choices. Function or a string to match.
+---@return function
+---@diagnostic disable-next-line: unused
+local function openrouter_model_choices(filter)
+  return model_choices(require("codecompanion.adapters.http.openrouter"), filter)
 end
