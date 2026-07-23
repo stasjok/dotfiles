@@ -131,7 +131,7 @@ in
               openai = {
                 name = "OpenAI";
                 defaultModel = "openai/gpt-5.6-luna";
-                modelFilter = "openai/";
+                modelFilter = "^openai/";
                 providers = [ "OpenAI" ];
               };
             }

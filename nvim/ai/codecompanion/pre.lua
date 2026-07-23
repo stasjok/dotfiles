@@ -47,27 +47,25 @@ local function openrouter_adapter(opts)
 end
 
 --- Returns a choices function that filters models from the given adapter.
----@param adapter CodeCompanion.HTTPAdapter The base adapter (e.g. openrouter)
----@param filter? string|fun(string, CodeCompanion.Adapter.ModelChoice):boolean A filter for model choices. Function or a string to match.
+---@param adapter CodeCompanion.HTTPAdapter The base adapter
+---@param filter string|fun(string, CodeCompanion.Adapter.ModelChoice):boolean A filter for model choices. Function or a pattern to match model name.
 ---@return function
 local function model_choices(adapter, filter)
-  local filter_fn = filter
-  if not filter_fn then
-    filter_fn = function()
-      return true
-    end
-  elseif type(filter_fn) == "string" then
-    local match = filter_fn
+  if type(filter) == "string" then
+    local match = filter
     ---@param name string
     ---@return boolean
-    filter_fn = function(name)
-      return name:find(match, 1, true) ~= nil
+    filter = function(name)
+      return name:find(match) ~= nil
     end
   end
 
   return function(...)
     local models = adapter.schema.model.choices(...)
-    models = vim.iter(models):filter(filter_fn)
+    models = vim.iter(models):filter(filter):fold({}, function(acc, k, v)
+      acc[k] = v
+      return acc
+    end)
     return models
   end
 end
