@@ -8,7 +8,7 @@ in
     settings = {
       interactions = {
         chat = {
-          adapter = "openrouter";
+          adapter = "zai";
           keymaps.send.modes = {
             i = [
               "<C-S>"
@@ -20,9 +20,9 @@ in
             ];
           };
         };
-        inline.adapter = "openrouter";
-        cmd.adapter = "openrouter";
-        background.adapter = "openrouter";
+        inline.adapter = "xiaomi";
+        cmd.adapter = "xiaomi";
+        background.adapter = "xiaomi";
         shared.keymaps = {
           always_accept.modes.n = "<LocalLeader>A";
           accept_change.modes.n = "<LocalLeader>a";
@@ -59,58 +59,13 @@ in
             end
           '';
         }
-        // builtins.listToAttrs (
-          lib.flip map
-            [
-              "anthropic/claude-haiku-4.5"
-              "anthropic/claude-sonnet-4.6"
-              "deepseek/deepseek-v3.2"
-              "openrouter/elephant-alpha"
-              "google/gemini-3-flash-preview"
-              "google/gemini-3.1-flash-lite-preview"
-              "google/gemini-3.1-pro-preview"
-              "z-ai/glm-4.5-air:free"
-              "z-ai/glm-5.1"
-              "openai/gpt-5.4"
-              "openai/gpt-5.4-mini"
-              "openai/gpt-5.4-nano"
-              "openai/gpt-oss-120b:free"
-              "x-ai/grok-4.1-fast"
-              "x-ai/grok-4.20"
-              "moonshotai/kimi-k2.5"
-              "xiaomi/mimo-v2-pro"
-              "minimax/minimax-m2.5:free"
-              "minimax/minimax-m2.7"
-              "qwen/qwen3.6-plus"
-            ]
-            (
-              model:
-              let
-                name = baseNameOf model;
-              in
-              {
-                # CodeCompanion recognizes only alphanumerics and underscores in inline prompt
-                # https://github.com/olimorris/codecompanion.nvim/blob/991dd81ac37b56b6d13529a08e86a42d183d79dc/lua/codecompanion/strategies/inline/init.lua#L236
-                name = lib.replaceStrings [ "-" "." ":" ] [ "_" "_" "_" ] name;
-                value = mkRaw ''
-                  openrouter_adapter(${
-                    toLuaObject {
-                      name = name;
-                      formatted_name = name;
-                      schema.model.default = model;
-                    }
-                  })
-                '';
-              }
-            )
-        )
         # OpenRouter adapters
         //
           lib.flip builtins.mapAttrs
             {
               openrouter = {
                 name = "OpenRouter";
-                defaultModel = "z-ai/glm-5.2";
+                defaultModel = "openai/gpt-5.6-terra";
                 providers = {
                   order = [
                     "openai"
@@ -118,7 +73,7 @@ in
                     "xai"
                     "minimax"
                     "moonshotai"
-                    "siliconflow"
+                    "decart"
                     "z-ai"
                     "deepseek"
                     "mistral"
@@ -160,7 +115,10 @@ in
                 name = "Kimi";
                 defaultModel = "moonshotai/kimi-k3";
                 modelFilter = "^moonshotai/";
-                providers.order = [ "moonshotai" ];
+                providers.order = [
+                  "siliconflow"
+                  "moonshotai"
+                ];
               };
               minimax = {
                 name = "Minimax";
@@ -170,6 +128,12 @@ in
                   "minimax"
                   "novita"
                 ];
+              };
+              nvidia = {
+                name = "NVIDIA";
+                defaultModel = "nvidia/nemotron-3-ultra-550b-a55b:free";
+                modelFilter = "^nvidia/";
+                providers.order = [ "nvidia" ];
               };
               openai = {
                 name = "OpenAI";
