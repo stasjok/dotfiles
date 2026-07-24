@@ -110,29 +110,100 @@ in
             {
               openrouter = {
                 name = "OpenRouter";
-                defaultModel = "moonshotai/kimi-k2.6";
-                providers = [
-                  "OpenAI"
-                  "Anthropic"
-                  "xAI"
-                  "Minimax"
-                  "Moonshot AI"
-                  "SiliconFlow"
-                  "Z.AI"
-                  "DeepSeek"
-                  "Mistral"
-                  "Xiaomi"
-                  "Perplexity"
-                  "Google"
-                  "Amazon Bedrock"
-                  "Novita"
+                defaultModel = "z-ai/glm-5.2";
+                providers = {
+                  order = [
+                    "openai"
+                    "anthropic"
+                    "xai"
+                    "minimax"
+                    "moonshotai"
+                    "siliconflow"
+                    "z-ai"
+                    "deepseek"
+                    "mistral"
+                    "xiaomi"
+                    "perplexity"
+                    "google-ai-studio"
+                    "amazon-bedrock"
+                    "novita"
+                  ];
+                  data_collection = "deny";
+                };
+              };
+              anthropic = {
+                name = "Anthropic";
+                defaultModel = "anthropic/claude-sonnet-5";
+                modelFilter = "^anthropic/";
+                providers.order = [ "anthropic" ];
+              };
+              deepseek = {
+                name = "DeepSeek";
+                defaultModel = "deepseek/deepseek-v4-pro";
+                modelFilter = "^deepseek/";
+                providers = {
+                  order = [
+                    "deepseek"
+                    "novita"
+                    "gmicloud"
+                  ];
+                  data_collection = "allow";
+                };
+              };
+              google = {
+                name = "Google";
+                defaultModel = "google/gemini-3.6-flash";
+                modelFilter = "^google/";
+                providers.order = [ "google-ai-studio" ];
+              };
+              kimi = {
+                name = "Kimi";
+                defaultModel = "moonshotai/kimi-k3";
+                modelFilter = "^moonshotai/";
+                providers.order = [ "moonshotai" ];
+              };
+              minimax = {
+                name = "Minimax";
+                defaultModel = "minimax/minimax-m3";
+                modelFilter = "^minimax/";
+                providers.order = [
+                  "minimax"
+                  "novita"
                 ];
               };
               openai = {
                 name = "OpenAI";
                 defaultModel = "openai/gpt-5.6-luna";
                 modelFilter = "^openai/";
-                providers = [ "OpenAI" ];
+                providers.order = [ "openai" ];
+              };
+              qwen = {
+                name = "Qwen";
+                defaultModel = "qwen/qwen3.7-plus";
+                modelFilter = "^qwen/";
+                providers.order = [ "alibaba" ];
+              };
+              xai = {
+                name = "xAI";
+                defaultModel = "x-ai/grok-4.5";
+                modelFilter = "^x-ai/";
+                providers.order = [ "xai" ];
+              };
+              xiaomi = {
+                name = "Xiaomi";
+                defaultModel = "xiaomi/mimo-v2.5-pro";
+                modelFilter = "^xiaomi/";
+                providers.order = [ "xiaomi" ];
+              };
+              zai = {
+                name = "Z.AI";
+                defaultModel = "z-ai/glm-5.2";
+                modelFilter = "^z-ai/";
+                providers.order = [
+                  "decart"
+                  "novita"
+                  "z-ai"
+                ];
               };
             }
             (
