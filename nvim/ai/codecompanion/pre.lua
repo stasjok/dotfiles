@@ -35,22 +35,25 @@ local get_openrouter_api_key = get_api_key("openrouter", "OPENROUTER_API_KEY")
 --- Returns OpenRouter adapter with my modifications
 ---@diagnostic disable-next-line: unused
 ---@param opts? table
+---@return function
 local function openrouter_adapter(opts)
-  local openrouter = require("codecompanion.adapters.http.openrouter")
+  return function()
+    local openrouter = require("codecompanion.adapters.http.openrouter")
 
-  return require("codecompanion.adapters").extend(
-    openrouter,
-    vim.tbl_deep_extend("force", {
-      env = { api_key = get_openrouter_api_key },
-    }, opts or {})
-  )
+    return require("codecompanion.adapters").extend(
+      openrouter,
+      vim.tbl_deep_extend("force", {
+        env = { api_key = get_openrouter_api_key },
+      }, opts or {})
+    )
+  end
 end
 
 --- Returns a choices function that filters models from the given adapter.
----@param adapter CodeCompanion.HTTPAdapter The base adapter
+---@param adapter_name string The adapter name
 ---@param filter string|fun(string, CodeCompanion.Adapter.ModelChoice):boolean A filter for model choices. Function or a pattern to match model name.
 ---@return function
-local function model_choices(adapter, filter)
+local function model_choices(adapter_name, filter)
   if type(filter) == "string" then
     local match = filter
     ---@param name string
@@ -61,6 +64,7 @@ local function model_choices(adapter, filter)
   end
 
   return function(...)
+    local adapter = require("codecompanion.adapters.http." .. adapter_name)
     local models = adapter.schema.model.choices(...)
     models = vim.iter(models):filter(filter):fold({}, function(acc, k, v)
       acc[k] = v
@@ -75,5 +79,5 @@ end
 ---@return function
 ---@diagnostic disable-next-line: unused
 local function openrouter_model_choices(filter)
-  return model_choices(require("codecompanion.adapters.http.openrouter"), filter)
+  return model_choices("openrouter", filter)
 end
