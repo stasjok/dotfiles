@@ -462,7 +462,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
         ''}
       '';
 
-    extraFiles = mkIf cfg.nixvimInjections { "queries/nix/injections.scm".source = ./injections.scm; };
+    extraFiles = mkIf cfg.nixvimInjections {
+      "queries/nix/injections.scm".text = builtins.readFile ./injections.scm;
+    };
 
     # Install the grammar packages if enabled
     plugins.treesitter.packageDecorator = lib.mkIf cfg.nixGrammars (
