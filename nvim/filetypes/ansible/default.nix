@@ -33,6 +33,11 @@
     };
   };
 
-  # Indent
-  extraFiles."after/indent/ansible.vim".text = builtins.readFile ./indent.vim;
+  extraFiles = {
+    # Indent
+    "after/indent/ansible.vim".text = builtins.readFile ./indent.vim;
+
+    # Tree-sitter injections for Jinja
+    "queries/yaml/injections.scm".text = builtins.readFile ./injections.scm;
+  };
 }
