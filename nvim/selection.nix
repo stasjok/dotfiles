@@ -4,7 +4,11 @@
     {
       mode = "n";
       key = "<CR>";
-      action = "van";
+      # There is a problem in Nvim, that 'van' keeps last selection type (e.g. linewise)
+      # It skips toggling visual mode if it's already 'v':
+      # https://github.com/neovim/neovim/blob/66441e549d5c560f8b1d6d6b6e71244ce3569604/runtime/lua/vim/treesitter/_select.lua#L367-L370
+      # As a workaround toggle normal visual mode first
+      action = "vvvan";
       options.remap = true;
     }
     {
