@@ -22,7 +22,10 @@ in
         };
         inline.adapter = "xiaomi";
         cmd.adapter = "xiaomi";
-        background.adapter = "xiaomi";
+        background.adapter = {
+          name = "xiaomi";
+          model = "xiaomi/mimo-v2.5";
+        };
         shared.keymaps = {
           always_accept.modes.n = "<LocalLeader>A";
           accept_change.modes.n = "<LocalLeader>a";
