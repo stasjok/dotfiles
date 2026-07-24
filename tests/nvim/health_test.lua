@@ -28,18 +28,26 @@ T["checkhealth"] = function()
   -- List of ignored messages
   local ignored = {
     "Missing user config file",
-    "`tree-sitter` executable not found",
+    "tree-sitter-cli not found",
     "`cc` executable not found",
     "No clipboard tool found",
     "vim.validate is deprecated",
     -- It's expected when running tests inside neovim terminal
     "$TERM differs from the tmux `default-terminal` setting",
+    -- I'm working over ssh
+    "vim.ui.open: no handler found",
     -- I'm testing internal watcher
     "libuv-watchdirs has known performance issues",
+    -- vim.lsp
+    "Hint: filename extension != filetype", -- Those filetype mostly from nvim-lspconfig
+    -- nvim-treesitter
+    "Install directory for parsers and queries): is not in runtimepath.",
     -- diffview.nvim
     "`hg_cmd` is not executable",
     -- blink.cmp
     'Some providers may show up as "disabled"',
+    -- codecompanion.nvim
+    "sqlite3 not found", -- Needed only for copilot
   }
 
   -- Mock Nvim health functions (:h health-functions) in order to collect warnings and errors.
