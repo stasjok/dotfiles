@@ -19,7 +19,7 @@ in
           options = {
             content = mkOption {
               type = types.lines;
-              description = "Lua code to execute for this filetype";
+              description = "Lua code to execute for this filetype. `buf` variable is available";
             };
             undo = mkOption {
               type = types.separatedString " | ";
@@ -93,16 +93,18 @@ in
       pattern = filetype;
       desc = "${filetype} filetype configuration";
       callback = mkRaw ''
-        function()
-          if vim.b.did_ftplugin and vim.b.did_ftplugin >= 2 then
+        function(args)
+          local buf = args.buf
+
+          if vim.b[buf].did_ftplugin and vim.b[buf].did_ftplugin >= 2 then
             return
           end
-          vim.b.did_ftplugin = 2
+          vim.b[buf].did_ftplugin = 2
 
           ${opts.content}
 
           ${lib.optionalString (opts.undo != "") ''
-            vim.b.undo_ftplugin = (vim.b.undo_ftplugin and vim.b.undo_ftplugin .. " | " or "") .. ${toLuaObject opts.undo}
+            vim.b[buf].undo_ftplugin = (vim.b[buf].undo_ftplugin and vim.b[buf].undo_ftplugin .. " | " or "") .. ${toLuaObject opts.undo}
           ''}
         end
       '';
