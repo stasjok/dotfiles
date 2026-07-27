@@ -1,24 +1,22 @@
-{
-  # Plugin
-  plugins.ansible = {
-    enable = true;
-
-    settings = {
-      attribute_highlight = "od";
-      unindent_after_newline = 1;
-      extra_keywords_highlight = 1;
-      template_syntaxes = {
-        "*.sh.j2" = "sh";
-      };
-    };
-  };
+{ config, myLib, ... }: {
+  # Activate yaml parser for ansible
+  ftplugin.ansible.content = /* lua */ ''
+    vim.treesitter.language.add("ansible", {
+      path = "${config.plugins.treesitter.package.builtGrammars.yaml}/parser",
+      symbol_name = "yaml"
+    })
+    -- In case autocmd from treesitter to enable highlight is already executed
+    if not vim.b.ts_highlight then
+      vim.treesitter.start()
+    end
+  '';
 
   # Ftdetect
   filetype = {
     pattern = {
       # Ansible
-      ".*ansible[^/]*/.*%.ya?ml" = "yaml.ansible";
-      ".*/infrastructure/.*%.ya?ml" = "yaml.ansible";
+      ".*ansible[^/]*/.*%.ya?ml" = "ansible";
+      ".*/infrastructure/.*%.ya?ml" = "ansible";
 
       # Ansible hosts
       ".*ansible[^/]*/.*production" = "ansible_hosts";
@@ -36,8 +34,11 @@
   extraFiles = {
     # Indent
     "after/indent/ansible.vim".text = builtins.readFile ./indent.vim;
-
-    # Tree-sitter injections for Jinja
-    "queries/yaml/injections.scm".text = builtins.readFile ./injections.scm;
-  };
+  }
+  // myLib.mkExtraFiles ./. [
+    # Tree-sitter queries
+    ./queries/ansible/folds.scm
+    ./queries/ansible/highlights.scm
+    ./queries/ansible/injections.scm
+  ];
 }
