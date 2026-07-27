@@ -10,7 +10,13 @@
       enable = true;
       disable = lib.nixvim.mkRaw ''
         function(_, _, ft)
-          return ft == "yaml.ansible" or ft:find("%.jinja2?$")
+          return ft == "yaml.ansible" or ft:find("%.jinja2?$") or vim.list_contains({
+            -- Disable for filetypes for which builtin ftplugin already enables tree-sitter highlight
+            "lua",
+            "help",
+            "query",
+            "markdown",
+          }, ft)
         end
       '';
     };
