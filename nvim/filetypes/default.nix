@@ -11,6 +11,7 @@
     ./markdown.nix
     ./mediawiki.nix
     ./nix.nix
+    ./query.nix
     ./salt
     ./terraform-vars
     ./xml.nix
