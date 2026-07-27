@@ -1,15 +1,15 @@
 { config, myLib, ... }: {
   # Activate yaml parser for ansible
-  ftplugin.ansible.content = /* lua */ ''
-    vim.treesitter.language.add("ansible", {
-      path = "${config.plugins.treesitter.package.builtGrammars.yaml}/parser",
-      symbol_name = "yaml"
-    })
-    -- In case autocmd from treesitter to enable highlight is already executed
-    if not vim.b.ts_highlight then
-      vim.treesitter.start()
-    end
-  '';
+  ftplugin.ansible = {
+    content = /* lua */ ''
+      vim.treesitter.language.add("ansible", {
+        path = "${config.plugins.treesitter.package.builtGrammars.yaml}/parser",
+        symbol_name = "yaml"
+      })
+      vim.treesitter.start(buf)
+    '';
+    undo = "call v:lua.vim.treesitter.stop()";
+  };
 
   # Ftdetect
   filetype = {
