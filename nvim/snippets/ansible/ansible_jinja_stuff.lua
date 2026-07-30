@@ -17,10 +17,10 @@ return {
     t("ansible_managed"),
   }, {
     condition = function()
-      return vim.bo.filetype ~= "yaml.ansible"
+      return vim.bo.filetype ~= "yaml.ansible" and vim.bo.filetype ~= "ansible"
     end,
     show_condition = function()
-      return vim.bo.filetype ~= "yaml.ansible"
+      return vim.bo.filetype ~= "yaml.ansible" and vim.bo.filetype ~= "ansible"
     end,
   }),
 }

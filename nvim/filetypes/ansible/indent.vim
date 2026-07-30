@@ -1,3 +1,6 @@
+" Load GetYAMLIndent function
+runtime indent/yaml.vim
+
 " Use indentkeys from YAML indent
 setlocal indentkeys=!^F,o,O,0#,0},0],<:>,0-
 " Use extended indentexpr function

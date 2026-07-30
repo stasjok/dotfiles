@@ -81,6 +81,11 @@ final: prev: {
     }
   );
 
+  # Remove tree-sitter queries
+  ansible-vim = prev.ansible-vim.overrideAttrs {
+    postPatch = "rm -r queries";
+  };
+
   # Remove tests because there are invalid lua files there
   nvim-treesitter-legacy = prev.nvim-treesitter-legacy.overrideAttrs (prev: {
     postPatch = prev.postPatch + "rm -r tests queries";
