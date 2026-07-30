@@ -25,7 +25,9 @@ end
 ---Returns `true` if current jinja file is for Ansible
 ---@return boolean
 local function is_ansible()
-  return vim.bo.filetype == "yaml.ansible" or match_file_path({ "ansible", "role" })
+  return vim.bo.filetype == "ansible"
+    or vim.bo.filetype == "yaml.ansible"
+    or match_file_path({ "ansible", "role" })
 end
 
 ---Returns LuaSnip `ft_func` for jinja or salt filetypes

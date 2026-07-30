@@ -96,7 +96,7 @@ local function is_rust_closure(opts)
   end
 end
 
-local jinja_filetypes = { "jinja", "jinja2", "yaml.ansible", "salt" }
+local jinja_filetypes = { "jinja", "jinja2", "yaml.ansible", "ansible", "salt" }
 
 -- Extra pairs
 npairs.add_rules({
