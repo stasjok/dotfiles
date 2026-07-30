@@ -54,4 +54,12 @@
     ./queries/ansible/highlights.scm
     ./queries/ansible/injections.scm
   ];
+
+  highlight = {
+    # https://github.com/pearofducks/ansible-vim/blob/6c42a448e30bc48ae98792bce38970148b0e3c9d/lua/ansible/init.lua#L124-L127
+    "@keyword.ansible.control".link = "Conditional";
+    "@keyword.ansible.loop".link = "Special";
+    "@keyword.ansible.directive".link = "Identifier";
+    "@keyword.ansible.debug".link = "Debug";
+  };
 }
