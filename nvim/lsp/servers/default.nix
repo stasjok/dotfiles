@@ -44,6 +44,10 @@
       enable = true;
       package = pkgs.ansible-language-server;
       config = {
+        filetypes = [
+          "yaml.ansible"
+          "ansible"
+        ];
         settings.ansible = {
           completion.provideRedirectModules = false;
           python.interpreterPath = lib.getExe (pkgs.python3.withPackages (ps: [ ps.ansible ]));
