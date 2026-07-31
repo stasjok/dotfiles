@@ -6,7 +6,7 @@
     ./gomod.nix
     ./helm.nix
     ./help.nix
-    ./jinja.nix
+    ./jinja
     ./lua.nix
     ./markdown.nix
     ./mediawiki.nix
