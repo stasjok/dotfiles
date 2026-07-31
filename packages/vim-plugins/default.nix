@@ -84,6 +84,7 @@ final: prev: {
   # Remove tree-sitter queries
   ansible-vim = prev.ansible-vim.overrideAttrs {
     postPatch = "rm -r queries";
+    patches = ./ansible-vim-use-jinja-filetype.patch;
   };
 
   # Remove tests because there are invalid lua files there

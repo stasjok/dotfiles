@@ -1,0 +1,19 @@
+diff --git a/ftdetect/ansible.vim b/ftdetect/ansible.vim
+index eda4f01..7d2d856 100644
+--- a/ftdetect/ansible.vim
++++ b/ftdetect/ansible.vim
+@@ -23,12 +23,12 @@ function! s:setupTemplate()
+     for syntax_name in items(g:ansible_template_syntaxes)
+       let s:syntax_string = '\v/'.syntax_name[0]
+       if filepath =~ s:syntax_string
+-        execute 'set ft='.syntax_name[1].'.jinja2'
++        execute 'set ft='.syntax_name[1].'.jinja'
+         return
+       endif
+     endfor
+   endif
+-  set ft=jinja2
++  set ft=jinja
+ endfunction
+ 
+ augroup ansible_vim_ftyaml_ansible
