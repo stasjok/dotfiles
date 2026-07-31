@@ -16,8 +16,6 @@
             "help",
             "query",
             "markdown",
-            -- Enabled in filetypes/ansible
-            "ansible",
           }, ft)
         end
       '';
