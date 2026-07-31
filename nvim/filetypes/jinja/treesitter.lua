@@ -40,8 +40,12 @@ vim.api.nvim_create_autocmd("FileType", {
           )
       end
 
-      vim.treesitter.query.set(compound_lang, "highlights", ";; inherits: jinja")
-      vim.treesitter.query.set(compound_lang, "injections", injections)
+      if not vim.treesitter.query.get(compound_lang, "highlights") then
+        vim.treesitter.query.set(compound_lang, "highlights", ";; inherits: jinja")
+      end
+      if not vim.treesitter.query.get(compound_lang, "injections") then
+        vim.treesitter.query.set(compound_lang, "injections", injections)
+      end
       vim.treesitter.start(buf)
     end
 
