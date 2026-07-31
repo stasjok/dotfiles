@@ -1,9 +1,31 @@
-{
+{ config, myLib, ... }: {
   ftplugin.salt.opts = {
     shiftwidth = 2;
     commentstring = "# %s";
   };
 
-  # Indent
-  extraFiles."indent/salt.vim".text = builtins.readFile ./indent.vim;
+  # This autocmd should be before treesitter autocmd
+  extraConfigLuaPre = ''
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "salt",
+      group = vim.api.nvim_create_augroup("salt_parser", { clear = true }),
+      callback = function()
+        vim.treesitter.language.add("salt", {
+          path = "${config.plugins.treesitter.package.builtGrammars.jinja}/parser",
+          symbol_name = "jinja",
+        })
+      end
+    })
+  '';
+
+  extraFiles = {
+    # Indent
+    "indent/salt.vim".text = builtins.readFile ./indent.vim;
+  }
+  // myLib.mkExtraFiles ./. [
+    # Tree-sitter queries
+    ./queries/salt/folds.scm
+    ./queries/salt/highlights.scm
+    ./queries/salt/injections.scm
+  ];
 }
