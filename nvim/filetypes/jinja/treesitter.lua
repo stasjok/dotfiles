@@ -1,3 +1,5 @@
+local jinja_parser_path = vim.api.nvim_get_runtime_file("parser/jinja.so", false)[1]
+
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "*.jinja",
   group = vim.api.nvim_create_augroup("jinja_treesitter", { clear = true }),
@@ -7,34 +9,43 @@ vim.api.nvim_create_autocmd("FileType", {
     local embedded_filetype = filetype:match("^(.+)%.jinja$")
     local embedded_lang = embedded_filetype and vim.treesitter.language.get_lang(embedded_filetype)
     local has_embedded_parser = embedded_lang and vim.treesitter.language.add(embedded_lang)
+    local compound_lang = "jinja_compound_" .. filetype:gsub("[^%w_]", "_")
+    local has_jinja_parser = jinja_parser_path
+      and vim.treesitter.language.add(compound_lang, {
+        path = jinja_parser_path,
+        symbol_name = "jinja",
+      })
 
-    -- Make compound filetypes use Jinja as their root parser.
-    vim.treesitter.language.register("jinja", filetype)
+    if has_jinja_parser then
+      -- A parser alias gives every compound filetype an independent query set.
+      vim.treesitter.language.register(compound_lang, filetype)
 
-    if has_embedded_parser then
-      vim.treesitter.query.set(
-        "jinja",
-        "injections",
-        string.format(
-          [[
+      local injections = [[
 ((comment) @injection.content
   (#set! injection.language "comment"))
 
 ((inline) @injection.content
   (#set! injection.language "jinja_inline"))
+]]
 
+      if has_embedded_parser then
+        injections = injections
+          .. string.format(
+            [[
 ((content) @injection.content
   (#set! injection.language "%s")
   (#set! injection.combined))
 ]],
-          embedded_lang
-        )
-      )
+            embedded_lang
+          )
+      end
+
+      vim.treesitter.query.set(compound_lang, "highlights", ";; inherits: jinja")
+      vim.treesitter.query.set(compound_lang, "injections", injections)
+      vim.treesitter.start(buf)
     end
 
-    vim.treesitter.start(buf, "jinja")
-
-    if not has_embedded_parser then
+    if not has_jinja_parser or not has_embedded_parser then
       vim.bo[buf].syntax = "ON"
     end
 
