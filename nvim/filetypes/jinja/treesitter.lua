@@ -7,7 +7,7 @@ vim.api.nvim_create_autocmd("FileType", {
     local embedded_filetype = filetype:match("^(.+)%.jinja$") or filetype:match("^jinja%.(.+)$")
     local embedded_lang = embedded_filetype and vim.treesitter.language.get_lang(embedded_filetype)
     local has_embedded_parser = embedded_lang and vim.treesitter.language.add(embedded_lang)
-    if has_embedded_parser then
+    if embedded_filetype and embedded_lang and has_embedded_parser then
       local compound_lang = "jinja_compound_" .. embedded_filetype:gsub("[^%w_]", "_")
       vim.treesitter.language.add(compound_lang, {
         path = "__JINJA_PARSER_PATH__",
