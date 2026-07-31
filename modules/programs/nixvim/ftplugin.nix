@@ -61,7 +61,7 @@ in
                   map (
                     keymap:
                     "keymap_set(${toLuaObject keymap.mode}, ${toLuaObject keymap.key}, ${toLuaObject keymap.action}, ${
-                      toLuaObject (keymap.options // { buffer = 0; })
+                      toLuaObject (keymap.options // { buffer = mkRaw "buf"; })
                     })"
                   ) config.keymaps
                 )}
