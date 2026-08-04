@@ -19,6 +19,7 @@ in
     # Disable all providers
     withNodeJs = false;
     withRuby = false;
+    withPython3 = false;
 
     # Set neovim as the default EDITOR
     defaultEditor = true;
