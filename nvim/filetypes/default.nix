@@ -9,7 +9,7 @@
     ./jinja
     ./lua.nix
     ./markdown.nix
-    ./mediawiki.nix
+    ./mediawiki
     ./nix.nix
     ./query.nix
     ./salt
