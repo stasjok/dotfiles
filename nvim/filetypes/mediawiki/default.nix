@@ -1,4 +1,4 @@
-{
+{ myLib, ... }: {
   # Filetype detection
   filetype.extension.mediawiki = "mediawiki";
 
@@ -8,7 +8,10 @@
   };
 
   # Tree-sitter queries
-  extraFiles."queries/wikitext/highlights.scm".text = builtins.readFile ./queries/highlights.scm;
+  extraFiles = myLib.mkExtraFiles' ./queries "queries/wikitext" [
+    ./queries/highlights.scm
+    ./queries/injections.scm
+  ];
 
   # Highlight headings like in markdown
   highlight = {
