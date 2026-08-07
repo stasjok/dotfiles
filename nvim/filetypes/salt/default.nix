@@ -7,7 +7,8 @@
   # This autocmd should be before treesitter autocmd
   extraConfigLuaPre = ''
     vim.api.nvim_create_autocmd("FileType", {
-      pattern = "salt",
+      -- Activate also in markup languages
+      pattern = { "salt", "sls", "mediawiki" },
       group = vim.api.nvim_create_augroup("salt_parser", { clear = true }),
       callback = function()
         vim.treesitter.language.add("salt", {
@@ -17,6 +18,9 @@
       end
     })
   '';
+
+  # Filetype from old salt-vim plugin
+  plugins.treesitter.languageRegister.salt = "sls";
 
   extraFiles = {
     # Indent
