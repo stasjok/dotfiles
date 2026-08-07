@@ -7,16 +7,20 @@
   # This autocmd should be before treesitter autocmd
   extraConfigLuaPre = ''
     vim.api.nvim_create_autocmd("FileType", {
-      pattern = "salt",
-      group = vim.api.nvim_create_augroup("salt_parser", { clear = true }),
+      -- Activate also in markup languages
+      pattern = { "salt", "sls", "mediawiki" },
       callback = function()
         vim.treesitter.language.add("salt", {
           path = "${config.plugins.treesitter.package.builtGrammars.jinja}/parser",
           symbol_name = "jinja",
         })
-      end
+      end,
+      once = true,
     })
   '';
+
+  # Filetype from old salt-vim plugin
+  plugins.treesitter.languageRegister.salt = "sls";
 
   extraFiles = {
     # Indent

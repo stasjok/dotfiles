@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  _module.args.myLib = {
+  _module.args.myLib = rec {
     # Returns contents of the file wrapped in `do..end` block
     readWrapDo = file: lib.nixvim.wrapDo (builtins.readFile file);
 
@@ -15,14 +15,18 @@
         (builtins.mapAttrs (_: v: if builtins.isPath v then builtins.readFile v else v) luaConfig)
       ];
 
+    # Returns 'extraFiles' for all 'files' paths, stripped of 'parent' path and prefixed with 'prefix'
+    mkExtraFiles' =
+      parent: prefix: files:
+      lib.genAttrs' files (file: {
+        name =
+          prefix
+          + lib.optionalString (prefix != "") "/"
+          + lib.removePrefix (toString parent + "/") (toString file);
+        value.text = builtins.readFile file;
+      });
+
     # Returns 'extraFiles' for all 'files' paths, stripped of 'parent' path
-    mkExtraFiles =
-      parent: files:
-      lib.pipe files [
-        (map (path: lib.removePrefix (toString parent + "/") (toString path)))
-        (lib.flip lib.genAttrs (path: {
-          text = builtins.readFile /${parent}/${path};
-        }))
-      ];
+    mkExtraFiles = parent: files: mkExtraFiles' parent "" files;
   };
 }

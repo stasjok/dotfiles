@@ -1,24 +1,18 @@
 ;; extends
+
 (italic) @markup.italic
 
 (bold) @markup.strong
 
 (bold_italic) @markup.italic @markup.strong
 
+(list_marker) @markup.list
+
 ((syntaxhighlight
   (code) @markup.raw.block)
   (#set! priority 90))
 
-[
-  "<syntaxhighlight"
-  "</syntaxhighlight>"
-] @tag
-
-"lang" @tag.attribute
-
-"=" @operator
-
-; Table
+; Tables
 [
   "{|"
   "|}"
@@ -30,8 +24,108 @@
   "||"
 ] @punctuation.special
 
-; html
-(html_tag_name) @tag
+; Override vertical bar in links
+(wikilink
+  "|" @punctuation.bracket)
+
+(medialink
+  "|" @punctuation.bracket)
+
+; Conceal bold/italics
+([
+  "''"
+  "'''"
+  "'''''"
+] @conceal
+(#set! conceal ""))
+
+; Conceal highlighted html tags
+((html_tag
+  "<" @conceal
+  name: (html_tag_name) @conceal @_tag
+  ">" @conceal
+  "</" @conceal
+  (html_tag_name) @conceal
+  ">" @conceal)
+  (#any-of? @_tag "i" "em" "var" "strong" "b" "s" "del" "u" "code" "kbd" "tt" "samp" "pre")
+  (#set! conceal ""))
+
+; Conceal link symbols
+(wikilink
+  [
+    "[["
+    "|"
+    "]]"
+  ] @conceal
+  (#set! conceal ""))
+
+; Conceal link url only if there is a page name
+(wikilink
+  (wikilink_page) @conceal
+  (page_name_segment)
+  (#set! conceal ""))
+
+; Conceal external link symbols
+(external_link
+  [
+    "["
+    "]" @conceal
+  ] @conceal
+  (#set! conceal ""))
+
+; Conceal link url only if there is a link name
+(external_link
+  (url) @_url @conceal
+  (page_name_segment)
+  (#offset! @_url 0 0 0 1)
+  (#set! conceal ""))
+
+; Conceal image links
+(medialink
+  [
+    "[["
+    "]]"
+  ] @conceal
+  (#set! conceal ""))
+
+; Conceal image links only if there is no a caption
+(medialink
+  (filename) @conceal
+  .
+  "|" @conceal
+  (file_caption)
+  (#set! conceal ""))
+
+; Conceal syntaxhighlight blocks
+(syntaxhighlight
+  [
+    "<syntaxhighlight"
+    "lang"
+    "="
+    "\""
+    (code_language)
+    (html_attribute)
+    ">"
+    "</syntaxhighlight>"
+  ] @conceal
+  (#set! conceal ""))
+
+; Hacks for a broken syntaxhighlight in many places
+((ERROR) @tag
+  (#any-of? @tag "syntaxhighlight" "/syntaxhighlight"))
+
+((ERROR) @tag.attribute
+  (#eq? @tag.attribute "inline"))
+
+"lang" @tag.attribute
+
+"=" @operator
+
+([
+  "<syntaxhighlight"
+  "</syntaxhighlight>"
+] @tag
+(#set! priority 90))
 
 [
   "<"
@@ -39,40 +133,3 @@
   "</"
   "/>"
 ] @tag.delimiter
-
-(html_tag
-  name: (html_tag_name) @_tag
-  (text) @markup.strong
-  (#any-of? @_tag "strong" "b"))
-
-(html_tag
-  name: (html_tag_name) @_tag
-  (text) @markup.italic
-  (#any-of? @_tag "em" "i" "var"))
-
-(html_tag
-  name: (html_tag_name) @_tag
-  (text) @markup.strikethrough
-  (#any-of? @_tag "s" "del"))
-
-(html_tag
-  name: (html_tag_name) @_tag
-  (text) @markup.underline
-  (#eq? @_tag "u"))
-
-(html_tag
-  name: (html_tag_name) @_tag
-  (text) @markup.raw
-  (#any-of? @_tag "code" "kbd" "tt" "samp"))
-
-(html_tag
-  name: (html_tag_name) @_tag
-  (text) @markup.raw.block
-  (#eq? @_tag "pre" ))
-
-; Hack for a broken inline syntaxhighlight
-((ERROR) @tag
-  (#eq? @tag "syntaxhighlight"))
-
-((ERROR) @tag.attribute
-  (#eq? @tag.attribute "inline"))
