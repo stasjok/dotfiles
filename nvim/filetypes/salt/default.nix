@@ -9,13 +9,13 @@
     vim.api.nvim_create_autocmd("FileType", {
       -- Activate also in markup languages
       pattern = { "salt", "sls", "mediawiki" },
-      group = vim.api.nvim_create_augroup("salt_parser", { clear = true }),
       callback = function()
         vim.treesitter.language.add("salt", {
           path = "${config.plugins.treesitter.package.builtGrammars.jinja}/parser",
           symbol_name = "jinja",
         })
-      end
+      end,
+      once = true,
     })
   '';
 

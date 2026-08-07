@@ -16,13 +16,13 @@
   extraConfigLuaPre = ''
     vim.api.nvim_create_autocmd("FileType", {
       pattern = "ansible",
-      group = vim.api.nvim_create_augroup("ansible_parser", { clear = true }),
       callback = function()
         vim.treesitter.language.add("ansible", {
           path = "${config.plugins.treesitter.package.builtGrammars.yaml}/parser",
           symbol_name = "yaml",
         })
-      end
+      end,
+      once = true,
     })
   '';
 
