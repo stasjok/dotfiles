@@ -6,6 +6,8 @@
 
 (bold_italic) @markup.italic @markup.strong
 
+(list_marker) @markup.list
+
 ((syntaxhighlight
   (code) @markup.raw.block)
   (#set! priority 90))
