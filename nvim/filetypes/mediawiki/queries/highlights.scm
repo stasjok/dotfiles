@@ -24,6 +24,13 @@
   "||"
 ] @punctuation.special
 
+; Override vertical bar in links
+(wikilink
+  "|" @punctuation.bracket)
+
+(medialink
+  "|" @punctuation.bracket)
+
 ; Conceal bold/italics
 ([
   "''"
@@ -47,7 +54,7 @@
 (wikilink
   [
     "[["
-    "|" @punctuation.bracket
+    "|"
     "]]"
   ] @conceal
   (#set! conceal ""))
@@ -85,7 +92,7 @@
 (medialink
   (filename) @conceal
   .
-  "|" @punctuation.bracket @conceal
+  "|" @conceal
   (file_caption)
   (#set! conceal ""))
 
