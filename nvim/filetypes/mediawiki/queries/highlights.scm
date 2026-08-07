@@ -10,7 +10,7 @@
   (code) @markup.raw.block)
   (#set! priority 90))
 
-; Table
+; Tables
 [
   "{|"
   "|}"
@@ -22,9 +22,26 @@
   "||"
 ] @punctuation.special
 
-; Hack for a broken inline syntaxhighlight
+; Hacks for a broken syntaxhighlight in many places
 ((ERROR) @tag
-  (#eq? @tag "syntaxhighlight"))
+  (#any-of? @tag "syntaxhighlight" "/syntaxhighlight"))
 
 ((ERROR) @tag.attribute
   (#eq? @tag.attribute "inline"))
+
+"lang" @tag.attribute
+
+"=" @operator
+
+([
+  "<syntaxhighlight"
+  "</syntaxhighlight>"
+] @tag
+(#set! priority 90))
+
+[
+  "<"
+  ">"
+  "</"
+  "/>"
+] @tag.delimiter
