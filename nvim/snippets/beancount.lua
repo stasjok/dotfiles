@@ -162,6 +162,10 @@ return {
       elseif
         vim.list_contains({ "current", "savings", "debitcard", "creditcard", "deposit" }, acc_type)
       then
+        if acc_type ~= "current" then
+          table.insert(metas, { key = "name", opts = { quote_value = true } })
+        end
+
         table.insert(metas, { key = "number", opts = { quote_value = true } })
 
         if acc_type == "debitcard" or acc_type == "creditcard" then
@@ -185,6 +189,10 @@ return {
           end
 
           table.insert(metas, { key = "interest_rate" })
+        end
+
+        if acc_type ~= "current" then
+          table.insert(metas, { key = "agreement", opts = { quote_value = true } })
         end
       end
 
