@@ -144,6 +144,15 @@ in
                 modelFilter = "^openai/";
                 providers.order = [ "openai" ];
               };
+              tencent = {
+                name = "Tencent";
+                defaultModel = "tencent/hy3";
+                modelFilter = "^tencent/";
+                providers.order = [
+                  "tencent"
+                  "novita"
+                ];
+              };
               qwen = {
                 name = "Qwen";
                 defaultModel = "qwen/qwen3.7-plus";
