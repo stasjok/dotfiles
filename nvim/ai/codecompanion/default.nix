@@ -97,7 +97,7 @@ in
               };
               deepseek = {
                 name = "DeepSeek";
-                defaultModel = "deepseek/deepseek-v4-pro";
+                defaultModel = "deepseek/deepseek-v4-flash-0731";
                 modelFilter = "^deepseek/";
                 providers = {
                   order = [
