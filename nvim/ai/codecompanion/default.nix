@@ -8,7 +8,7 @@ in
     settings = {
       interactions = {
         chat = {
-          adapter = "zai";
+          adapter = "openai";
           keymaps.send.modes = {
             i = [
               "<C-S>"
@@ -20,8 +20,8 @@ in
             ];
           };
         };
-        inline.adapter = "xiaomi";
-        cmd.adapter = "xiaomi";
+        inline.adapter = "openai";
+        cmd.adapter = "openai";
         background.adapter = {
           name = "xiaomi";
           model = "xiaomi/mimo-v2.5";
