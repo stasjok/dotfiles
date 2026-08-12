@@ -142,7 +142,15 @@ in
                 name = "OpenAI";
                 defaultModel = "openai/gpt-5.6-luna";
                 modelFilter = "^openai/";
-                providers.order = [ "openai" ];
+                providers = {
+                  order = [ "openai" ];
+                  # Don't mix different providers to avoid the following error:
+                  #   Your request contains encrypted reasoning or compaction content
+                  #   from multiple provider endpoints. No single endpoint can
+                  #   decrypt the mixed history. Start a new conversation without
+                  #   the encrypted items.
+                  allow_fallbacks = false;
+                };
               };
               tencent = {
                 name = "Tencent";
