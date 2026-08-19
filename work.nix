@@ -21,7 +21,8 @@ in
   # Nixvim
   programs.nixvim = {
     # CodeCompanion proxy
-    plugins.codecompanion.settings.adapters.http.opts.proxy = proxy;
+    plugins.codecompanion.settings.adapters.http.opts.proxy =
+      "socks5h://localhost//run/user/18901/proxy";
 
     lsp.servers = {
       # ansible-language-server settings
