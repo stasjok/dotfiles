@@ -5,12 +5,29 @@
 }:
 final: prev: {
   # Fix hover in Otter
+  # TODO: remove in 26.11
   otter-nvim = prev.otter-nvim.overrideAttrs {
     patches = fetchpatch {
       url = "https://github.com/jmbuhr/otter.nvim/commit/fee544194ceff2ca6604ad6f70f40c8b9d566873.diff";
       hash = "sha256-C3WJla95Ly8Ipmsx0eqK1UUu/CBwtwA138KPMjEWp/o=";
     };
   };
+
+  # TODO: remove in 26.11
+  nvim-treesitter = prev.nvim-treesitter.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      passthru = prevAttrs.passthru // {
+        # Nixvim uses withPlugins to add grammarPackages
+        withPlugins =
+          f:
+          (prevAttrs.passthru.withPlugins f).overrideAttrs {
+            nativeBuildInputs = builtins.filter (
+              drv: drv.name != "vim-gen-doc-hook"
+            ) finalAttrs.nativeBuildInputs;
+          };
+      };
+    }
+  );
 
   # Fix Auto Scroll Neovim
   fix-auto-scroll-nvim = vimUtils.buildVimPlugin {

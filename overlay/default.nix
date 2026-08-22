@@ -1,7 +1,8 @@
-final: prev:
+inputs: final: prev:
 let
   inherit (prev) lib;
   inherit (final) callPackage;
+  unstable = inputs.nixpkgs-unstable.legacyPackages.${final.stdenv.hostPlatform.system};
 in
 {
   # Nvim
@@ -16,7 +17,27 @@ in
     // (callPackage ../packages/tmux-plugins { inherit (final.tmuxPlugins) mkTmuxPlugin; });
 
   # Vim plugins
-  vimPlugins = prev.vimPlugins.extend (callPackage ../packages/vim-plugins { });
+  vimPlugins = prev.vimPlugins.extend (
+    # Plugins from Nixpkgs unstable
+    lib.composeExtensions (
+      _: _:
+      # Nixvim doesn't handle plugins from other nixpkgs, because it
+      # compares vimUtils.vimGenDocHook literally. TODO: make a PR to upstream to fix that.
+      # As a workaround, remove vimGenDocHook manually.
+      builtins.mapAttrs
+        (
+          _: plugin:
+          plugin.overrideAttrs (prevAttrs: {
+            nativeBuildInputs = lib.remove unstable.vimUtils.vimGenDocHook prevAttrs.nativeBuildInputs or [ ];
+          })
+        )
+        {
+          inherit (unstable.vimPlugins)
+            nvim-treesitter
+            ;
+        }
+    ) (callPackage ../packages/vim-plugins { })
+  );
 
   # Python packages
   pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
