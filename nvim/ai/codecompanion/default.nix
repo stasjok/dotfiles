@@ -101,9 +101,11 @@ in
                 modelFilter = "^deepseek/";
                 providers = {
                   order = [
+                    "baidu"
+                    "deepinfra"
+                    "gmicloud"
                     "deepseek"
                     "novita"
-                    "gmicloud"
                   ];
                   data_collection = "allow";
                 };
