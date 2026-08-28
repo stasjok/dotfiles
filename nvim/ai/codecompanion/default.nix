@@ -172,7 +172,7 @@ in
               xai = {
                 name = "xAI";
                 defaultModel = "x-ai/grok-4.5";
-                modelFilter = "^x-ai/";
+                modelFilter = "^x%-ai/";
                 providers.order = [ "xai" ];
               };
               xiaomi = {
@@ -184,7 +184,7 @@ in
               zai = {
                 name = "Z.AI";
                 defaultModel = "z-ai/glm-5.2";
-                modelFilter = "^z-ai/";
+                modelFilter = "^z%-ai/";
                 providers.order = [
                   "decart"
                   "novita"
