@@ -37,37 +37,74 @@
     "copyOnSelect": true,
     "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
     "disableAnimations": true,
+    "disabledProfileSources": 
+    [
+        "Windows.Terminal.Azure",
+        "Windows.Terminal.VisualStudio"
+    ],
     "firstWindowPreference": "persistedWindowLayout",
     "initialRows": 40,
     "keybindings": 
     [
-        {
-            "id": null,
-            "keys": "alt+shift+plus"
-        },
         {
             "id": "User.splitPane.D5151347",
             "keys": "ctrl+alt+shift+minus"
         },
         {
             "id": null,
-            "keys": "alt+enter"
+            "keys": "alt+shift+plus"
         },
         {
-            "id": "User.copy.644BA8F2",
-            "keys": "ctrl+c"
+            "id": null,
+            "keys": "alt+enter"
         },
         {
             "id": null,
             "keys": "alt+shift+minus"
         },
         {
+            "id": "User.copy.644BA8F2",
+            "keys": "ctrl+c"
+        },
+        {
             "id": "User.find",
             "keys": "ctrl+shift+f"
         },
         {
+            "id": null,
+            "keys": "ctrl+comma"
+        },
+        {
             "id": "User.splitPane.864CD510",
             "keys": "ctrl+alt+shift+plus"
+        },
+        {
+            "id": "Terminal.DecreaseFontSize",
+            "keys": "ctrl+shift+minus"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+plus"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+minus"
+        },
+        {
+            "id": "Terminal.ResetFontSize",
+            "keys": "ctrl+shift+0"
+        },
+        {
+            "id": "Terminal.IncreaseFontSize",
+            "keys": "ctrl+shift+plus"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+0"
+        },
+        {
+            "id": "Terminal.OpenSettingsUI",
+            "keys": "ctrl+shift+comma"
         }
     ],
     "launchMode": "maximized",
@@ -111,44 +148,31 @@
                 "scrollbarState": "visible"
             },
             {
-                "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
-                "hidden": false,
-                "name": "Ubuntu",
-                "source": "Windows.Terminal.Wsl",
-                "startingDirectory": "\\\\wsl$\\Ubuntu\\home\\stas"
-            },
-            {
                 "guid": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
                 "hidden": false,
                 "name": "Debian",
                 "source": "Windows.Terminal.Wsl"
             },
             {
-                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
-                "hidden": true,
-                "name": "Azure Cloud Shell",
-                "source": "Windows.Terminal.Azure"
-            },
-            {
-                "commandline": "wsl --cd ~ --exec ssh server2",
+                "commandline": "ssh server2",
                 "guid": "{604bcda3-9e7c-5ec3-aa15-a7cc2b834770}",
                 "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
                 "name": "Server 2"
             },
             {
-                "commandline": "wsl --cd ~ --exec ssh admAsunkinSS@192.168.176.15",
+                "commandline": "ssh admAsunkinSS@192.168.176.15",
                 "guid": "{beb369b6-813e-49c7-a489-7489f35e2275}",
                 "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
                 "name": "vr-jump"
             },
             {
-                "commandline": "wsl --cd ~ --exec ssh admAsunkinSS@192.168.177.15",
+                "commandline": "ssh admAsunkinSS@192.168.177.15",
                 "guid": "{1ee3fb4e-dce2-47e1-b01d-e9bd52d871bf}",
                 "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
                 "name": "cb-jump"
             },
             {
-                "commandline": "wsl --cd ~ --exec ssh ab-proxy",
+                "commandline": "ssh ab-proxy",
                 "guid": "{b21f647d-e26e-5c0a-b59e-66a951ea33db}",
                 "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
                 "name": "Ab-proxy"
