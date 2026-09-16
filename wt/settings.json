@@ -47,32 +47,32 @@
     "keybindings": 
     [
         {
-            "id": "User.splitPane.D5151347",
-            "keys": "ctrl+alt+shift+minus"
-        },
-        {
             "id": null,
             "keys": "alt+shift+plus"
+        },
+        {
+            "id": "User.splitPane.D5151347",
+            "keys": "ctrl+alt+shift+minus"
         },
         {
             "id": null,
             "keys": "alt+enter"
         },
         {
-            "id": null,
-            "keys": "alt+shift+minus"
-        },
-        {
             "id": "User.copy.644BA8F2",
             "keys": "ctrl+c"
         },
         {
-            "id": "User.find",
-            "keys": "ctrl+shift+f"
+            "id": null,
+            "keys": "alt+shift+minus"
         },
         {
             "id": null,
             "keys": "ctrl+comma"
+        },
+        {
+            "id": "User.find",
+            "keys": "ctrl+shift+f"
         },
         {
             "id": "User.splitPane.864CD510",
@@ -154,19 +154,19 @@
                 "source": "Windows.Terminal.Wsl"
             },
             {
-                "commandline": "ssh server2",
+                "commandline": "ssh -R 8081:127.0.0.1:8081 server2",
                 "guid": "{604bcda3-9e7c-5ec3-aa15-a7cc2b834770}",
                 "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
                 "name": "Server 2"
             },
             {
-                "commandline": "ssh admAsunkinSS@192.168.176.15",
+                "commandline": "ssh -R 8081:127.0.0.1:8081 admAsunkinSS@192.168.176.15",
                 "guid": "{beb369b6-813e-49c7-a489-7489f35e2275}",
                 "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
                 "name": "vr-jump"
             },
             {
-                "commandline": "ssh admAsunkinSS@192.168.177.15",
+                "commandline": "ssh -R 8081:127.0.0.1:8081 admAsunkinSS@192.168.177.15",
                 "guid": "{1ee3fb4e-dce2-47e1-b01d-e9bd52d871bf}",
                 "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
                 "name": "cb-jump"
