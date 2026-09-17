@@ -63,7 +63,7 @@ in
           '';
           "llama.cpp" = mkRaw ''
             function()
-              return require("codecompanion.adapters").extend("deepseek", ${
+              return require("codecompanion.adapters").extend("openai", ${
                 toLuaObject {
                   url = "http://127.0.0.1:18081/v1/chat/completions";
                   opts.proxy = "";
@@ -200,9 +200,29 @@ in
                         end
                       '';
                     };
-                    max_tokens.default = mkRaw "function() end";
-                    temperature.default = 0.6;
-                    top_p.default = 0.95;
+                  };
+                  handlers = {
+                    form_messages = mkRaw ''
+                      function(self, messages)
+                        local result = require("codecompanion.adapters.http.openai").handlers.form_messages(self, messages)
+                        result.messages = vim.iter(result.messages):map(function(m)
+                          m.reasoning_content = m.reasoning
+                          m.reasoning = nil
+                          return m
+                        end):totable()
+                        return result
+                      end
+                    '';
+                    form_reasoning = mkRaw ''
+                      function(...)
+                        return require("codecompanion.adapters.http.deepseek").handlers.request.build_reasoning(...)
+                      end
+                    '';
+                    parse_message_meta = mkRaw ''
+                      function(...)
+                        return require("codecompanion.adapters.http.deepseek").handlers.response.parse_meta(...)
+                      end
+                    '';
                   };
                 }
               })
