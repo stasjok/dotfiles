@@ -200,6 +200,18 @@ in
                         end
                       '';
                     };
+                    reasoning_effort = {
+                      default = "default";
+                      choices = [
+                        "default"
+                        "minimal"
+                        "low"
+                        "medium"
+                        "high"
+                        "xhigh"
+                        "max"
+                      ];
+                    };
                   };
                   handlers = {
                     form_messages = mkRaw ''
