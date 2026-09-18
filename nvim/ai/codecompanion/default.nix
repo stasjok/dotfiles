@@ -62,7 +62,7 @@ in
             end
           '';
           llama = mkRaw ''
-            llamacpp_adapter("http://127.0.0.1:18081", ${
+            llama_adapter("http://127.0.0.1:18081", ${
               toLuaObject {
                 opts.proxy = "";
                 schema.model.default = "tiel-coder-35b-a3b";

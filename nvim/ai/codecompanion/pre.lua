@@ -118,11 +118,11 @@ function transform_from_llamacpp(model)
     }
 end
 
---- Factory that returns a llama.cpp adapter configuration
----@param endpoint string The llama.cpp server endpoint (e.g., "http://127.0.0.1:18081")
+--- Returns llama.cpp adapter
+---@param endpoint string The llama.cpp server endpoint (e.g., "http://127.0.0.1:8080")
 ---@param opts? table Additional options to merge into the adapter
 ---@return function
-local function llamacpp_adapter(endpoint, opts)
+local function llama_adapter(endpoint, opts)
   return function()
     local adapter_utils = require("codecompanion.adapters.utils")
     local config = require("codecompanion.config")
@@ -130,6 +130,8 @@ local function llamacpp_adapter(endpoint, opts)
     local models_source = {
       name = "llamacpp",
       url = endpoint .. "/v1/models",
+      ---@param adapter CodeCompanion.HTTPAdapter
+      ---@return table
       headers = function(adapter)
         adapter_utils.get_env_vars(adapter, { timeout = config.adapters.opts.cmd_timeout })
         return adapter_utils.set_env_vars(adapter, adapter.headers)
@@ -153,6 +155,8 @@ local function llamacpp_adapter(endpoint, opts)
           setup = function(...)
             return require("codecompanion.adapters.http.openrouter").handlers.setup(...)
           end,
+          ---@param self CodeCompanion.HTTPAdapter
+          ---@param messages table Format is: { { role = "user", content = "Your prompt here" } }
           form_messages = function(self, messages)
             local result =
               require("codecompanion.adapters.http.openai").handlers.form_messages(self, messages)
