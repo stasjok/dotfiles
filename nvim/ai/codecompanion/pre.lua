@@ -104,8 +104,9 @@ function transform_from_llamacpp(model)
   end
 
   local opts = {
-    can_form_structured_outputs = true,
+    can_reason = true,
     can_use_tools = true,
+    can_form_structured_outputs = true,
     has_vision = has_vision,
   }
 
@@ -125,7 +126,6 @@ local function llamacpp_adapter(endpoint, opts)
   return function()
     local adapter_utils = require("codecompanion.adapters.utils")
     local config = require("codecompanion.config")
-    local fetch_models = require("codecompanion.adapters.utils.models.fetch")
 
     local models_source = {
       name = "llamacpp",
@@ -142,31 +142,17 @@ local function llamacpp_adapter(endpoint, opts)
       vim.tbl_deep_extend("force", {
         name = "llama.cpp",
         formatted_name = "llama.cpp",
+        opts = {
+          documents = false,
+        },
         url = endpoint .. "/v1/chat/completions",
         env = {
           api_key = get_api_key("llama.cpp", "LLAMACPP_API_KEY"),
         },
-        schema = {
-          model = {
-            default = "tiel-coder-35b-a3b",
-            choices = function(self, opts)
-              return fetch_models.get(models_source, self, opts)
-            end,
-          },
-          reasoning_effort = {
-            default = "default",
-            choices = {
-              "default",
-              "minimal",
-              "low",
-              "medium",
-              "high",
-              "xhigh",
-              "max",
-            },
-          },
-        },
         handlers = {
+          setup = function(...)
+            return require("codecompanion.adapters.http.openrouter").handlers.setup(...)
+          end,
           form_messages = function(self, messages)
             local result =
               require("codecompanion.adapters.http.openai").handlers.form_messages(self, messages)
@@ -188,6 +174,30 @@ local function llamacpp_adapter(endpoint, opts)
           parse_message_meta = function(...)
             return require("codecompanion.adapters.http.deepseek").handlers.response.parse_meta(...)
           end,
+        },
+        schema = {
+          model = {
+            default = "default",
+            choices = function(self, opts)
+              return require("codecompanion.adapters.utils.models.fetch").get(
+                models_source,
+                self,
+                opts
+              )
+            end,
+          },
+          reasoning_effort = {
+            default = "default",
+            choices = {
+              "default",
+              "minimal",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max",
+            },
+          },
         },
       }, opts or {})
     )
