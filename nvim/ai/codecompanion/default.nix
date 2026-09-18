@@ -8,7 +8,7 @@ in
     settings = {
       interactions = {
         chat = {
-          adapter = "openai";
+          adapter = "llama";
           keymaps.send.modes = {
             i = [
               "<C-S>"
@@ -20,12 +20,9 @@ in
             ];
           };
         };
-        inline.adapter = "openai";
-        cmd.adapter = "openai";
-        background.adapter = {
-          name = "xiaomi";
-          model = "xiaomi/mimo-v2.5";
-        };
+        inline.adapter = "llama";
+        cmd.adapter = "llama";
+        background.adapter = "llama";
         shared.keymaps = {
           always_accept.modes.n = "<LocalLeader>A";
           accept_change.modes.n = "<LocalLeader>a";
