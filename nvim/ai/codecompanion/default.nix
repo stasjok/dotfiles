@@ -72,131 +72,18 @@ in
                     model = {
                       default = "tiel-coder-35b-a3b";
                       choices = mkRaw ''
-                        function()
-                          return ${
-                            toLuaObject {
-                              "ornith-1.5-9b" = {
-                                formatted_name = "Ornith-1.5-9B";
-                                meta.context_window = 122880;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                              "ornith-1.5-9b:VISION" = {
-                                formatted_name = "Ornith-1.5-9B (Vision)";
-                                meta.context_window = 81920;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                              "ornith-1.5-9b:CONTEXT" = {
-                                formatted_name = "Ornith-1.5-9B (Context)";
-                                meta.context_window = 163840;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                              "qwen3.6-35b-a3b" = {
-                                formatted_name = "Qwen3.6-35B-A3B";
-                                meta.context_window = 112640;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                              "qwen3.6-35b-a3b:VISION" = {
-                                formatted_name = "Qwen3.6-35B-A3B (Vision)";
-                                meta.context_window = 71680;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                              "qwen3.6-35b-a3b:CONTEXT" = {
-                                formatted_name = "Qwen3.6-35B-A3B (Context)";
-                                meta.context_window = 215040;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                              "tiel-coder-35b-a3b" = {
-                                formatted_name = "Tiel-Coder-35B-A3B";
-                                meta.context_window = 92160;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                              "tiel-coder-35b-a3b:VISION" = {
-                                formatted_name = "Tiel-Coder-35B-A3B (Vision)";
-                                meta.context_window = 61440;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                              "tiel-coder-35b-a3b:CONTEXT" = {
-                                formatted_name = "Tiel-Coder-35B-A3B (Context)";
-                                meta.context_window = 204800;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                              "gemma-4-26b-a4b-it" = {
-                                formatted_name = "Gemma-4-26B-A4B";
-                                meta.context_window = 112640;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                              "gemma-4-26b-a4b-it:VISION" = {
-                                formatted_name = "Gemma-4-26B-A4B (Vision)";
-                                meta.context_window = 81920;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                              "gemma-4-26b-a4b-it:CONTEXT" = {
-                                formatted_name = "Gemma-4-26B-A4B (Context)";
-                                meta.context_window = 215040;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                              "gemma-4-12b-it" = {
-                                formatted_name = "Gemma-4-12B";
-                                meta.context_window = 65536;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                              "gemma-4-12b-it:VISION" = {
-                                formatted_name = "Gemma-4-12B (Vision)";
-                                meta.context_window = 46080;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                              "gemma-4-12b-it:CONTEXT" = {
-                                formatted_name = "Gemma-4-12B (Context)";
-                                meta.context_window = 143360;
-                                opts = {
-                                  can_reason = true;
-                                  can_use_tools = true;
-                                };
-                              };
-                            }
+                        function(self, opts)
+                          local adapter_utils = require("codecompanion.adapters.utils")
+                          local models_source = {
+                            name = "llamacpp",
+                            url = "http://127.0.0.1:18081/v1/models",
+                            headers = function(adapter)
+                              adapter_utils.get_env_vars(adapter, { timeout = require("codecompanion.config").adapters.opts.cmd_timeout })
+                              return adapter_utils.set_env_vars(adapter, adapter.headers)
+                            end,
+                            transform = transform_from_llamacpp,
                           }
+                          return require("codecompanion.adapters.utils.models.fetch").get(models_source, self, opts)
                         end
                       '';
                     };

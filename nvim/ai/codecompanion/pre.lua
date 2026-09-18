@@ -81,3 +81,38 @@ end
 local function openrouter_model_choices(filter)
   return model_choices("openrouter", filter)
 end
+
+--- Transform llama.cpp model list entry to CodeCompanion.Adapter.ModelChoice format
+---@param model table The model entry from llama.cpp /models endpoint
+---@return string id, CodeCompanion.Adapter.ModelChoice entry
+function transform_from_llamacpp(model)
+  -- Extract context window from status.args (--ctx-size parameter)
+  local context_window = nil
+  if model.status and model.status.args then
+    for i, arg in ipairs(model.status.args) do
+      if arg == "--ctx-size" and model.status.args[i + 1] then
+        context_window = tonumber(model.status.args[i + 1])
+        break
+      end
+    end
+  end
+
+  -- Detect vision capability from input modalities
+  local has_vision = false
+  if model.architecture and model.architecture.input_modalities then
+    has_vision = vim.tbl_contains(model.architecture.input_modalities, "image")
+  end
+
+  local opts = {
+    can_form_structured_outputs = true,
+    can_use_tools = true,
+    has_vision = has_vision,
+  }
+
+  return model.id,
+    {
+      formatted_name = string.lower(model.id),
+      meta = context_window and { context_window = context_window } or nil,
+      opts = opts,
+    }
+end
