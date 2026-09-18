@@ -62,70 +62,12 @@ in
             end
           '';
           "llama.cpp" = mkRaw ''
-            function()
-              return require("codecompanion.adapters").extend("openai", ${
-                toLuaObject {
-                  url = "http://127.0.0.1:18081/v1/chat/completions";
-                  opts.proxy = "";
-                  env.api_key = mkRaw ''get_api_key("llama.cpp", "LLAMACPP_API_KEY")'';
-                  schema = {
-                    model = {
-                      default = "tiel-coder-35b-a3b";
-                      choices = mkRaw ''
-                        function(self, opts)
-                          local adapter_utils = require("codecompanion.adapters.utils")
-                          local models_source = {
-                            name = "llamacpp",
-                            url = "http://127.0.0.1:18081/v1/models",
-                            headers = function(adapter)
-                              adapter_utils.get_env_vars(adapter, { timeout = require("codecompanion.config").adapters.opts.cmd_timeout })
-                              return adapter_utils.set_env_vars(adapter, adapter.headers)
-                            end,
-                            transform = transform_from_llamacpp,
-                          }
-                          return require("codecompanion.adapters.utils.models.fetch").get(models_source, self, opts)
-                        end
-                      '';
-                    };
-                    reasoning_effort = {
-                      default = "default";
-                      choices = [
-                        "default"
-                        "minimal"
-                        "low"
-                        "medium"
-                        "high"
-                        "xhigh"
-                        "max"
-                      ];
-                    };
-                  };
-                  handlers = {
-                    form_messages = mkRaw ''
-                      function(self, messages)
-                        local result = require("codecompanion.adapters.http.openai").handlers.form_messages(self, messages)
-                        result.messages = vim.iter(result.messages):map(function(m)
-                          m.reasoning_content = m.reasoning
-                          m.reasoning = nil
-                          return m
-                        end):totable()
-                        return result
-                      end
-                    '';
-                    form_reasoning = mkRaw ''
-                      function(...)
-                        return require("codecompanion.adapters.http.deepseek").handlers.request.build_reasoning(...)
-                      end
-                    '';
-                    parse_message_meta = mkRaw ''
-                      function(...)
-                        return require("codecompanion.adapters.http.deepseek").handlers.response.parse_meta(...)
-                      end
-                    '';
-                  };
-                }
-              })
-            end
+            llamacpp_adapter("http://127.0.0.1:18081", ${
+              toLuaObject {
+                opts.proxy = "";
+                schema.model.default = "tiel-coder-35b-a3b";
+              }
+            })
           '';
         }
         # OpenRouter adapters

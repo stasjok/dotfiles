@@ -116,3 +116,78 @@ function transform_from_llamacpp(model)
       opts = opts,
     }
 end
+
+--- Factory that returns a llama.cpp adapter configuration
+---@param endpoint string The llama.cpp server endpoint (e.g., "http://127.0.0.1:18081")
+---@param opts? table Additional options to merge into the adapter
+---@return function
+local function llamacpp_adapter(endpoint, opts)
+  return function()
+    local adapter_utils = require("codecompanion.adapters.utils")
+    local config = require("codecompanion.config")
+    local fetch_models = require("codecompanion.adapters.utils.models.fetch")
+
+    local models_source = {
+      name = "llamacpp",
+      url = endpoint .. "/v1/models",
+      headers = function(adapter)
+        adapter_utils.get_env_vars(adapter, { timeout = config.adapters.opts.cmd_timeout })
+        return adapter_utils.set_env_vars(adapter, adapter.headers)
+      end,
+      transform = transform_from_llamacpp,
+    }
+
+    return require("codecompanion.adapters").extend(
+      "openai",
+      vim.tbl_deep_extend("force", {
+        url = endpoint .. "/v1/chat/completions",
+        env = {
+          api_key = get_api_key("llama.cpp", "LLAMACPP_API_KEY"),
+        },
+        schema = {
+          model = {
+            default = "tiel-coder-35b-a3b",
+            choices = function(self, opts)
+              return fetch_models.get(models_source, self, opts)
+            end,
+          },
+          reasoning_effort = {
+            default = "default",
+            choices = {
+              "default",
+              "minimal",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max",
+            },
+          },
+        },
+        handlers = {
+          form_messages = function(self, messages)
+            local result =
+              require("codecompanion.adapters.http.openai").handlers.form_messages(self, messages)
+            result.messages = vim
+              .iter(result.messages)
+              :map(function(m)
+                m.reasoning_content = m.reasoning
+                m.reasoning = nil
+                return m
+              end)
+              :totable()
+            return result
+          end,
+          form_reasoning = function(...)
+            return require("codecompanion.adapters.http.deepseek").handlers.request.build_reasoning(
+              ...
+            )
+          end,
+          parse_message_meta = function(...)
+            return require("codecompanion.adapters.http.deepseek").handlers.response.parse_meta(...)
+          end,
+        },
+      }, opts or {})
+    )
+  end
+end
