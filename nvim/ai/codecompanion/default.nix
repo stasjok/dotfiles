@@ -61,7 +61,7 @@ in
               })
             end
           '';
-          "llama" = mkRaw ''
+          llama = mkRaw ''
             llamacpp_adapter("http://127.0.0.1:18081", ${
               toLuaObject {
                 opts.proxy = "";
