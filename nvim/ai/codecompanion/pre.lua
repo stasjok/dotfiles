@@ -81,3 +81,125 @@ end
 local function openrouter_model_choices(filter)
   return model_choices("openrouter", filter)
 end
+
+--- Transform llama.cpp model list entry to CodeCompanion.Adapter.ModelChoice format
+---@param model table The model entry from llama.cpp /models endpoint
+---@return string id, CodeCompanion.Adapter.ModelChoice entry
+function transform_from_llamacpp(model)
+  -- Extract context window from status.args (--ctx-size parameter)
+  local context_window = nil
+  if model.status and model.status.args then
+    for i, arg in ipairs(model.status.args) do
+      if arg == "--ctx-size" and model.status.args[i + 1] then
+        context_window = tonumber(model.status.args[i + 1])
+        break
+      end
+    end
+  end
+
+  -- Detect vision capability from input modalities
+  local has_vision = false
+  if model.architecture and model.architecture.input_modalities then
+    has_vision = vim.tbl_contains(model.architecture.input_modalities, "image")
+  end
+
+  local opts = {
+    can_reason = true,
+    can_use_tools = true,
+    can_form_structured_outputs = true,
+    has_vision = has_vision,
+  }
+
+  return model.id,
+    {
+      formatted_name = string.lower(model.id),
+      meta = context_window and { context_window = context_window } or nil,
+      opts = opts,
+    }
+end
+
+--- Factory that returns a llama.cpp adapter configuration
+---@param endpoint string The llama.cpp server endpoint (e.g., "http://127.0.0.1:18081")
+---@param opts? table Additional options to merge into the adapter
+---@return function
+local function llamacpp_adapter(endpoint, opts)
+  return function()
+    local adapter_utils = require("codecompanion.adapters.utils")
+    local config = require("codecompanion.config")
+
+    local models_source = {
+      name = "llamacpp",
+      url = endpoint .. "/v1/models",
+      headers = function(adapter)
+        adapter_utils.get_env_vars(adapter, { timeout = config.adapters.opts.cmd_timeout })
+        return adapter_utils.set_env_vars(adapter, adapter.headers)
+      end,
+      transform = transform_from_llamacpp,
+    }
+
+    return require("codecompanion.adapters").extend(
+      "openai",
+      vim.tbl_deep_extend("force", {
+        name = "llama.cpp",
+        formatted_name = "llama.cpp",
+        opts = {
+          documents = false,
+        },
+        url = endpoint .. "/v1/chat/completions",
+        env = {
+          api_key = get_api_key("llama.cpp", "LLAMACPP_API_KEY"),
+        },
+        handlers = {
+          setup = function(...)
+            return require("codecompanion.adapters.http.openrouter").handlers.setup(...)
+          end,
+          form_messages = function(self, messages)
+            local result =
+              require("codecompanion.adapters.http.openai").handlers.form_messages(self, messages)
+            result.messages = vim
+              .iter(result.messages)
+              :map(function(m)
+                m.reasoning_content = m.reasoning
+                m.reasoning = nil
+                return m
+              end)
+              :totable()
+            return result
+          end,
+          form_reasoning = function(...)
+            return require("codecompanion.adapters.http.deepseek").handlers.request.build_reasoning(
+              ...
+            )
+          end,
+          parse_message_meta = function(...)
+            return require("codecompanion.adapters.http.deepseek").handlers.response.parse_meta(...)
+          end,
+        },
+        schema = {
+          model = {
+            default = "default",
+            choices = function(self, opts)
+              return require("codecompanion.adapters.utils.models.fetch").get(
+                models_source,
+                self,
+                opts
+              )
+            end,
+          },
+          reasoning_effort = {
+            default = "default",
+            choices = {
+              "default",
+              "minimal",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max",
+            },
+          },
+        },
+      }, opts or {})
+    )
+  end
+end

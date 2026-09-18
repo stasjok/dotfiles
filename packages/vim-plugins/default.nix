@@ -89,6 +89,8 @@ final: prev: {
       patches = [
         # Allow to set proxy for adapter via opts
         ./codecompanion-add-support-for-per-adapter-proxy.patch
+        # Allow to pass model transformer to fetcher
+        ./codecompanion-add-ability-to-pass-transformer-via-spec-to-model-fetcher.patch
       ];
 
       # Collision with blink-cmp
