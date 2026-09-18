@@ -78,12 +78,12 @@ final: prev: {
 
   codecompanion-nvim = prev.codecompanion-nvim.overrideAttrs (
     finalAttrs: prevAttrs: {
-      version = "19.21.0";
+      version = "19.25.0";
       src = fetchFromGitHub {
         owner = "olimorris";
         repo = "codecompanion.nvim";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-+9VRCA1B9AUfjN8ht2Xer82SVNI9woXL6VzYW3lhC20=";
+        hash = "sha256-PTvllgZji45JdW1NW9YmRDJqiEvdmbpeB2QGvu10jbM=";
       };
 
       patches = [
