@@ -140,6 +140,8 @@ local function llamacpp_adapter(endpoint, opts)
     return require("codecompanion.adapters").extend(
       "openai",
       vim.tbl_deep_extend("force", {
+        name = "llama.cpp",
+        formatted_name = "llama.cpp",
         url = endpoint .. "/v1/chat/completions",
         env = {
           api_key = get_api_key("llama.cpp", "LLAMACPP_API_KEY"),
