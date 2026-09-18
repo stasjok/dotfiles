@@ -152,8 +152,14 @@ local function llama_adapter(endpoint, opts)
           api_key = get_api_key("llama.cpp", "LLAMACPP_API_KEY"),
         },
         handlers = {
-          setup = function(...)
-            return require("codecompanion.adapters.http.openrouter").handlers.setup(...)
+          ---@param self CodeCompanion.HTTPAdapter
+          ---@return boolean
+          setup = function(self)
+            -- Ask llama.cpp to return token usage
+            if self.opts and self.opts.stream then
+              self.parameters.stream_options = { include_usage = true }
+            end
+            return require("codecompanion.adapters.http.openrouter").handlers.setup(self)
           end,
           ---@param self CodeCompanion.HTTPAdapter
           ---@param messages table Format is: { { role = "user", content = "Your prompt here" } }
