@@ -32,6 +32,8 @@ T["checkhealth"] = function()
     "`cc` executable not found",
     "No clipboard tool found",
     "vim.validate is deprecated",
+    -- Version check
+    "is available (current:",
     -- It's expected when running tests inside neovim terminal
     "$TERM differs from the tmux `default-terminal` setting",
     -- I'm working over ssh
