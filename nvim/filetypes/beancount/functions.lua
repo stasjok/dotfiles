@@ -87,33 +87,14 @@ function M.print_references()
 
   local cmd = { "bean-query", ledger_path, query }
 
-  local stdout_data = {}
-  local stderr_data = {}
-
-  local on_stdout = function(err, data)
-    if err then
-      table.insert(stderr_data, "Error: " .. err)
-      return
-    end
-    if data then
-      table.insert(stdout_data, data)
-    end
-  end
-
-  local on_stderr = function(err, data)
-    if data then
-      table.insert(stderr_data, data)
-    end
-  end
-
+  -- Run query asynchronously
   local on_exit = vim.schedule_wrap(function(obj)
-    if obj.code ~= 0 and #stderr_data > 0 then
-      vim.notify("bean-query error: " .. table.concat(stderr_data, "\n"), vim.log.levels.ERROR)
+    if obj.code ~= 0 then
+      vim.notify("bean-query error: " .. (obj.stderr or ""), vim.log.levels.ERROR)
       return
     end
 
-    local lines = vim.list_extend(stdout_data, stderr_data)
-    local output = table.concat(lines, "\n")
+    local output = obj.stdout or ""
 
     if output == "" then
       vim.notify("No results found", vim.log.levels.INFO)
@@ -131,7 +112,7 @@ function M.print_references()
     _, last_winid = vim.lsp.util.open_floating_preview(lines_arr, "markdown", config)
   end)
 
-  vim.system(cmd, { text = true, stdout = on_stdout, stderr = on_stderr }, on_exit)
+  vim.system(cmd, { text = true }, on_exit)
 end
 
 return M
