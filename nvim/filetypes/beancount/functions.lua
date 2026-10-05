@@ -1,9 +1,11 @@
 local M = {}
 
 -- Store window id for focus reuse
+---@type integer?
 local last_winid = nil
 
--- Get the ledger file path from the current buffer
+--- Get the ledger file path from the current buffer
+---@return string? path
 local function get_ledger_path()
   local bufname = vim.api.nvim_buf_get_name(0)
 
@@ -27,8 +29,10 @@ local function get_ledger_path()
   return nil
 end
 
--- Get bean-query command based on node type
-local function get_bean_query(node, ledger_path)
+--- Get bean-query command based on node type
+---@param node TSNode
+---@return string? query
+local function get_bean_query(node)
   local node_type = node:type()
   local text = vim.treesitter.get_node_text(node, 0)
 
@@ -58,22 +62,23 @@ local function get_bean_query(node, ledger_path)
   end
 end
 
+--- Print bean-query results for node under cursor
 function M.print_references()
   local ledger_path = get_ledger_path()
   if not ledger_path then
-    vim.notify("Could not find ledger file", vim.log.levels.ERROR)
+    vim.notify("Could not find ledger file", vim.log.levels.WARN)
     return
   end
 
   local node = vim.treesitter.get_node()
   if not node or not node:named() then
-    vim.notify("No valid node under cursor", vim.log.levels.WARN)
+    vim.notify("No valid node under cursor", vim.log.levels.INFO)
     return
   end
 
-  local query = get_bean_query(node, ledger_path)
+  local query = get_bean_query(node)
   if not query then
-    vim.notify("No query available for this node type", vim.log.levels.WARN)
+    vim.notify("No query available for this node type", vim.log.levels.INFO)
     return
   end
 
@@ -83,11 +88,11 @@ function M.print_references()
     vim.api.nvim_set_current_win(last_winid)
     return
   end
-  last_winid = nil
 
   local cmd = { "bean-query", ledger_path, query }
 
   -- Run query asynchronously
+  ---@param obj vim.SystemCompleted
   local on_exit = vim.schedule_wrap(function(obj)
     if obj.code ~= 0 then
       vim.notify("bean-query error: " .. (obj.stderr or ""), vim.log.levels.ERROR)
