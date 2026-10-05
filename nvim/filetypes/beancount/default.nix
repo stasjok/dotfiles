@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   ftplugin.beancount = {
     opts = {
@@ -18,6 +18,16 @@
         key = "<LocalLeader>t";
         action = ''"_ciw<C-R>=strftime("%Y-%m-%d")<CR><Esc>'';
       }
+      {
+        mode = "n";
+        key = "gR";
+        action = lib.nixvim.mkRaw ''
+          function()
+            require("beancount.functions").print_references()
+          end
+        '';
+        options.desc = "Print Beancount references";
+      }
     ];
   };
 
@@ -29,8 +39,11 @@
         hash = "sha256-p0mFlHdW/mWC3ABObTVGG8mNM3pO7OT4k9OG9Z5eUEQ=";
       };
     };
-  };
 
-  # Telescope extension
-  extraFiles."lua/telescope/_extensions/beancount.lua".text = builtins.readFile ./telescope.lua;
+    # Utils
+    "lua/beancount/functions.lua".text = builtins.readFile ./functions.lua;
+
+    # Telescope extension
+    "lua/telescope/_extensions/beancount.lua".text = builtins.readFile ./telescope.lua;
+  };
 }
