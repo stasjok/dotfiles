@@ -40,7 +40,7 @@
       };
     };
 
-    # Utils
+    # Functions
     "lua/beancount/functions.lua".text = builtins.readFile ./functions.lua;
 
     # Telescope extension
