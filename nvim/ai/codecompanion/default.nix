@@ -19,6 +19,13 @@ in
               "<C-J>"
             ];
           };
+          slash_commands = {
+            fetch.opts.adapter = "jina";
+          };
+          tools = {
+            web_search.opts.adapter = "tavily";
+            fetch_webpage.opts.adapter = "jina";
+          };
         };
         inline.adapter = "llama";
         cmd.adapter = "llama";
