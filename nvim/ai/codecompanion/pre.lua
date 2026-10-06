@@ -140,7 +140,7 @@ local function llama_adapter(endpoint, opts)
     }
 
     return require("codecompanion.adapters").extend(
-      "openai",
+      "openai_legacy",
       vim.tbl_deep_extend("force", {
         name = "llama.cpp",
         formatted_name = "llama.cpp",
@@ -165,7 +165,10 @@ local function llama_adapter(endpoint, opts)
           ---@param messages table Format is: { { role = "user", content = "Your prompt here" } }
           form_messages = function(self, messages)
             local result =
-              require("codecompanion.adapters.http.openai").handlers.form_messages(self, messages)
+              require("codecompanion.adapters.http.openai_legacy").handlers.form_messages(
+                self,
+                messages
+              )
             result.messages = vim
               .iter(result.messages)
               :map(function(m)
@@ -176,13 +179,17 @@ local function llama_adapter(endpoint, opts)
               :totable()
             return result
           end,
-          form_reasoning = function(...)
+          form_reasoning = function(self, data)
             return require("codecompanion.adapters.http.deepseek").handlers.request.build_reasoning(
-              ...
+              self,
+              { data = data }
             )
           end,
-          parse_message_meta = function(...)
-            return require("codecompanion.adapters.http.deepseek").handlers.response.parse_meta(...)
+          parse_message_meta = function(self, data)
+            return require("codecompanion.adapters.http.deepseek").handlers.response.parse_meta(
+              self,
+              { data = data }
+            )
           end,
         },
         schema = {
