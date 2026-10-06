@@ -1,12 +1,19 @@
-local config = require("codecompanion.config")
-local log = require("codecompanion.utils.log")
-local utils = require("codecompanion.utils")
-local codecompanion = require("codecompanion")
+---@param opts vim.api.keyset.create_user_command.command_args
+local function add_files(opts)
+  local codecompanion = require("codecompanion")
+  local config = require("codecompanion.config")
+  local File = require("codecompanion.interactions.shared.slash_commands.file")
+  local SlashCommands = require("codecompanion.interactions.chat.slash_commands")
+  local log = require("codecompanion.utils.log")
+  local utils = require("codecompanion.utils")
 
---- Add a file to the current chat by its path
----@param path string Path to the file
-local function add_file_to_chat(path)
-  -- Get the current chat
+  local path = vim.fs.normalize(opts.args)
+  local stat = vim.uv.fs_stat(path)
+  if not stat then
+    return utils.notify("Path not found: " .. path, vim.log.levels.WARN)
+  end
+  path = vim.fs.abspath(opts.args)
+
   local chat = codecompanion.last_chat()
   if not chat then
     chat = codecompanion.chat()
@@ -16,82 +23,22 @@ local function add_file_to_chat(path)
     end
   end
 
-  -- Format file for LLM
-  local content, id, relative_path =
-    require("codecompanion.interactions.chat.helpers").format_file_for_llm(path)
+  -- Copy the /file slash command config and point its search dirs at the containing directory.
+  -- `dirs` is only read by the picker, so it only matters on the directory branch.
+  ---@diagnostic disable-next-line: undefined-field
+  local file_config = vim.deepcopy(config.interactions.chat.slash_commands["file"]) --[[@as table]]
+  file_config.opts.dirs = { path }
 
-  -- Add message to chat
-  chat:add_message({
-    role = config.constants.USER_ROLE,
-    content = content or "",
-  }, {
-    visible = false,
-    context = { id = id, path = path },
-    _meta = { tag = "file" },
-  })
+  local file = File.new({ Chat = chat, config = file_config, context = {}, opts = {} })
 
-  -- Add to chat context
-  chat.context:add({
-    id = id or "",
-    path = path,
-    source = "codecompanion.interactions.chat.slash_commands.builtin.file",
-  })
-
-  utils.notify(
-    string.format("Added the `%s` file to the chat", vim.fn.fnamemodify(relative_path, ":t"))
-  )
-end
-
---- Open Telescope picker for a directory
----@param directory string Directory to search in
-local function open_file_picker(directory)
-  local telescope = require("telescope.builtin")
-
-  -- Open Telescope find_files
-  telescope.find_files({
-    prompt_title = "Select file(s)",
-    cwd = directory,
-    attach_mappings = function()
-      local actions = require("telescope.actions")
-      local action_state = require("telescope.actions.state")
-
-      -- Replace the default action with our custom handler
-      actions.select_default:replace(function(bufnr, _)
-        local picker = action_state.get_current_picker(bufnr)
-        local selections = picker:get_multi_selection()
-
-        if vim.tbl_isempty(selections) then
-          selections = { action_state.get_selected_entry() }
-        end
-
-        actions.close(bufnr)
-
-        for _, selection in ipairs(selections) do
-          add_file_to_chat(selection.path)
-        end
-      end)
-
-      return true
-    end,
-  })
-end
-
---- Add file or open picker if a directory
----@param opts vim.api.keyset.create_user_command.command_args
-local function add_files(opts)
-  local path = vim.fs.normalize(opts.args)
-
-  local stat = vim.uv.fs_stat(path)
-  if not stat then
-    return utils.notify("Path not found: " .. path, vim.log.levels.WARN)
-  end
-
-  path = vim.fs.abspath(opts.args)
-
+  -- Directories open the picker (execute); files attach directly (output).
   if stat.type == "directory" then
-    open_file_picker(path)
+    file:execute(SlashCommands)
   else
-    add_file_to_chat(path)
+    file:output({
+      path = path,
+      relative_path = vim.fn.fnamemodify(path, ":."),
+    })
   end
 end
 
