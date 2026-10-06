@@ -41,6 +41,7 @@ in
       display.chat = {
         show_header_separator = true;
         window = {
+          pertab = true;
           width = 0;
           opts = {
             number = false;
