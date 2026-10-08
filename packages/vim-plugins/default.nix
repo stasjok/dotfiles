@@ -94,6 +94,8 @@ final: prev: {
         ./codecompanion-add-ability-to-pass-transformer-via-spec-to-model-fetcher.patch
         # Remove is_regexp parameter in grep_search tool
         ./codecompanion-remove-is_regexp-parameter.patch
+        # Return more lines below help tag in help slash command
+        ./codecompanion-return-more-lines-below-help-tag.patch
       ];
 
       # Collision with blink-cmp
