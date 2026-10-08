@@ -92,6 +92,8 @@ final: prev: {
         ./codecompanion-add-support-for-per-adapter-proxy.patch
         # Allow to pass model transformer to fetcher
         ./codecompanion-add-ability-to-pass-transformer-via-spec-to-model-fetcher.patch
+        # Remove is_regexp parameter in grep_search tool
+        ./codecompanion-remove-is_regexp-parameter.patch
       ];
 
       # Collision with blink-cmp

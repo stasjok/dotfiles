@@ -1,0 +1,52 @@
+diff --git a/lua/codecompanion/interactions/chat/tools/builtin/grep_search.lua b/lua/codecompanion/interactions/chat/tools/builtin/grep_search.lua
+index 554e61ca..a75b0925 100644
+--- a/lua/codecompanion/interactions/chat/tools/builtin/grep_search.lua
++++ b/lua/codecompanion/interactions/chat/tools/builtin/grep_search.lua
+@@ -5,14 +5,13 @@ local markdown = require("codecompanion.utils.markdown")
+ local fmt = string.format
+ 
+ ---Build the ripgrep command for a search
+----@param action { query: string, is_regexp: boolean?, include_pattern: string? }
++---@param action { query: string, include_pattern: string? }
+ ---@param opts table
+ ---@return string[]
+ local function build_command(action, opts)
+   local cmd = { "rg" }
+   local cwd = vim.fn.getcwd()
+   local max_results = opts.max_results or 100
+-  local is_regexp = action.is_regexp or false
+   local respect_gitignore = opts.respect_gitignore
+   if respect_gitignore == nil then
+     respect_gitignore = opts.respect_gitignore ~= false
+@@ -24,11 +23,6 @@ local function build_command(action, opts)
+   table.insert(cmd, "--no-heading")
+   table.insert(cmd, "--with-filename")
+ 
+-  -- Regex vs fixed string
+-  if not is_regexp then
+-    table.insert(cmd, "--fixed-strings")
+-  end
+-
+   -- Case sensitivity
+   table.insert(cmd, "--ignore-case")
+ 
+@@ -158,17 +152,13 @@ return {
+   schema = {
+     ["function"] = {
+       name = "grep_search",
+-      description = "Do a text search in the workspace. Use this tool when you know the exact string you're searching for.",
++      description = "Do a pattern search in the workspace. Prefer using this tool when you're searching in the workspace. Pattern syntax: uses ripgrep (not grep) - literal braces need escaping (use `interface{}` to find `interface{}` in Go code)",
+       parameters = {
+         type = "object",
+         properties = {
+           query = {
+             type = "string",
+-            description = "The pattern to search for in files in the workspace. Can be a regex or plain text pattern",
+-          },
+-          is_regexp = {
+-            type = "boolean",
+-            description = "Whether the pattern is a regex. False by default.",
++            description = "The pattern to search for in files in the workspace. Uses ripgrep (not grep). Literal braces need escaping (use `{}` to find `{}`).",
+           },
+           include_pattern = {
+             type = "string",
