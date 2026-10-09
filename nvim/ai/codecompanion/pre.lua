@@ -44,6 +44,15 @@ local function openrouter_adapter(opts)
       openrouter,
       vim.tbl_deep_extend("force", {
         env = { api_key = get_openrouter_api_key },
+
+        available_tools = {
+          ["fetch_webpage"] = {
+            enabled = false,
+          },
+          ["web_search"] = {
+            enabled = false,
+          },
+        },
       }, opts or {})
     )
   end

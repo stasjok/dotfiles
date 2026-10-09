@@ -25,6 +25,7 @@ in
           tools = {
             web_search.opts.adapter = "tavily";
             fetch_webpage.opts.adapter = "jina";
+            grep_search.opts.max_results = 200;
           };
         };
         inline.adapter = "llama";
