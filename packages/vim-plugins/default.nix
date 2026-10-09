@@ -96,6 +96,8 @@ final: prev: {
         ./codecompanion-remove-is_regexp-parameter.patch
         # Return more lines below help tag in help slash command
         ./codecompanion-return-more-lines-below-help-tag.patch
+        # Show feedback about parameters tools are called with
+        ./codecompanion-verbose-tools-in-chat.patch
       ];
 
       # Collision with blink-cmp
