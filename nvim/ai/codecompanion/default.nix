@@ -27,6 +27,10 @@ in
             fetch_webpage.opts.adapter = "jina";
             grep_search.opts.max_results = 200;
           };
+          opts.context_management = {
+            editing.trigger = 0.8;
+            compaction.trigger = 0.92;
+          };
         };
         inline.adapter = "llama";
         cmd.adapter = "llama";
