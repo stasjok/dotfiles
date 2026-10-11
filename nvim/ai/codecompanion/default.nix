@@ -26,6 +26,7 @@ in
             web_search.opts.adapter = "tavily";
             fetch_webpage.opts.adapter = "jina";
             grep_search.opts.max_results = 200;
+            opts.max_output_tokens = 15000;
           };
           opts.context_management = {
             editing.trigger = 0.8;
