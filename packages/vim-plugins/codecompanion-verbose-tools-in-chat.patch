@@ -1,13 +1,12 @@
 diff --git a/lua/codecompanion/interactions/chat/tools/builtin/cmd_tool.lua b/lua/codecompanion/interactions/chat/tools/builtin/cmd_tool.lua
-index dd370b19..4a1ee7f6 100644
+index befb2791..7ef43f05 100644
 --- a/lua/codecompanion/interactions/chat/tools/builtin/cmd_tool.lua
 +++ b/lua/codecompanion/interactions/chat/tools/builtin/cmd_tool.lua
-@@ -94,7 +94,15 @@ local function cmd_tool(spec)
+@@ -94,7 +94,14 @@ local function cmd_tool(spec)
        if stdout then
          local output = vim.iter(stdout[#stdout]):flatten():join("\n")
          local content = fmt("`%s`\n%s", spec.build_cmd(self.args), markdown.form_codeblock(output))
--        return chat:add_tool_output({ tool = self, for_llm = content, for_user = "" })
-+
+-        return chat:add_tool_output(self, { content = content, display = false })
 +        local lines = vim.split(output, "\n")
 +        local user_output = fmt(
 +          "`%s`\n%s",
@@ -15,38 +14,12 @@ index dd370b19..4a1ee7f6 100644
 +          markdown.form_codeblock(table.concat(vim.list_slice(lines, 1, 30), "\n"))
 +        )
 +
-+        return chat:add_tool_output({ tool = self, for_llm = content, for_user = user_output })
++        return chat:add_tool_output(self, { content = content, display = user_output })
        end
-       return chat:add_tool_output({
-         tool = self,
-diff --git a/lua/codecompanion/interactions/chat/tools/builtin/create_file.lua b/lua/codecompanion/interactions/chat/tools/builtin/create_file.lua
-index 7e8696b5..086d9325 100644
---- a/lua/codecompanion/interactions/chat/tools/builtin/create_file.lua
-+++ b/lua/codecompanion/interactions/chat/tools/builtin/create_file.lua
-@@ -118,7 +118,7 @@ return {
-     ---@param opts { tools: CodeCompanion.Tools }
-     ---@return string
-     cmd_string = function(self, opts)
--      return self.args.filepath
-+      return vim.fn.fnamemodify(self.args.filepath, ":.")
-     end,
- 
-     ---@param self CodeCompanion.Tool.CreateFile
-diff --git a/lua/codecompanion/interactions/chat/tools/builtin/delete_file.lua b/lua/codecompanion/interactions/chat/tools/builtin/delete_file.lua
-index 81927911..8602a1e0 100644
---- a/lua/codecompanion/interactions/chat/tools/builtin/delete_file.lua
-+++ b/lua/codecompanion/interactions/chat/tools/builtin/delete_file.lua
-@@ -92,7 +92,7 @@ return {
-     ---@param opts { tools: CodeCompanion.Tools }
-     ---@return string
-     cmd_string = function(self, opts)
--      return self.args.filepath
-+      return vim.fn.fnamemodify(self.args.filepath, ":.")
-     end,
- 
-     ---The message which is shared with the user when asking for their approval
+       return chat:add_tool_output(self, {
+         content = fmt("There was no output from the %s tool", spec.name),
 diff --git a/lua/codecompanion/interactions/chat/tools/builtin/edit_file/init.lua b/lua/codecompanion/interactions/chat/tools/builtin/edit_file/init.lua
-index 60824b1b..f2282837 100644
+index ac5e5685..3c9ebb9c 100644
 --- a/lua/codecompanion/interactions/chat/tools/builtin/edit_file/init.lua
 +++ b/lua/codecompanion/interactions/chat/tools/builtin/edit_file/init.lua
 @@ -266,6 +266,15 @@ return {
@@ -58,7 +31,7 @@ index 60824b1b..f2282837 100644
 +    ---@param meta { tools: CodeCompanion.Tools }
 +    ---@return string
 +    cmd_string = function(self, meta)
-+      return vim.fn.fnamemodify(self.args.filepath, ":.")
++      return self.args.filepath
 +    end,
 +
 +    ---The message which is shared with the user when asking for their approval
@@ -66,7 +39,7 @@ index 60824b1b..f2282837 100644
      ---@param meta { tools: CodeCompanion.Tools }
      ---@return string
 diff --git a/lua/codecompanion/interactions/chat/tools/builtin/fetch_webpage.lua b/lua/codecompanion/interactions/chat/tools/builtin/fetch_webpage.lua
-index cf5ef1ef..3f8601de 100644
+index 5b508fb3..2dbc56f0 100644
 --- a/lua/codecompanion/interactions/chat/tools/builtin/fetch_webpage.lua
 +++ b/lua/codecompanion/interactions/chat/tools/builtin/fetch_webpage.lua
 @@ -84,6 +84,14 @@ return {
@@ -85,26 +58,26 @@ index cf5ef1ef..3f8601de 100644
      ---@param stdout table The output from the command
      ---@param meta { tools: CodeCompanion.Tools, cmd: table }
 diff --git a/lua/codecompanion/interactions/chat/tools/builtin/file_search.lua b/lua/codecompanion/interactions/chat/tools/builtin/file_search.lua
-index b9d543b3..931903e7 100644
+index 7d67d3ad..eca5fe96 100644
 --- a/lua/codecompanion/interactions/chat/tools/builtin/file_search.lua
 +++ b/lua/codecompanion/interactions/chat/tools/builtin/file_search.lua
 @@ -138,11 +138,12 @@ return {
          local files = #data
          local results_msg =
            fmt("Searched files for `%s`, %d results\n%s", query, files, markdown.form_codeblock(output))
--        chat:add_tool_output({ tool = self, for_llm = fmt(llm_output, results_msg), for_user = "" })
+-        chat:add_tool_output(self, { content = fmt(llm_output, results_msg), display = false })
 +        local user_output = fmt("Searched files for `%s`, %d results", query, files)
-+        chat:add_tool_output({ tool = self, for_llm = fmt(llm_output, results_msg), for_user = user_output })
++        chat:add_tool_output(self, { content = fmt(llm_output, results_msg), display = user_output })
        else
          -- No files found - data is a string message
          local no_results_msg = fmt("Searched files for `%s`, no results", query)
--        chat:add_tool_output({ tool = self, for_llm = fmt(llm_output, no_results_msg), for_user = "" })
-+        chat:add_tool_output({ tool = self, for_llm = fmt(llm_output, no_results_msg), for_user = no_results_msg })
+-        chat:add_tool_output(self, { content = fmt(llm_output, no_results_msg), display = false })
++        chat:add_tool_output(self, { content = fmt(llm_output, no_results_msg), display = no_results_msg })
        end
      end,
  
 diff --git a/lua/codecompanion/interactions/chat/tools/builtin/get_changed_files.lua b/lua/codecompanion/interactions/chat/tools/builtin/get_changed_files.lua
-index b8fcf220..90c7a5b0 100644
+index 5baf344c..b133e938 100644
 --- a/lua/codecompanion/interactions/chat/tools/builtin/get_changed_files.lua
 +++ b/lua/codecompanion/interactions/chat/tools/builtin/get_changed_files.lua
 @@ -129,6 +129,17 @@ return {
@@ -126,24 +99,21 @@ index b8fcf220..90c7a5b0 100644
      ---@param meta { tools: CodeCompanion.Tools }
      prompt = function(self, meta)
 diff --git a/lua/codecompanion/interactions/chat/tools/builtin/get_diagnostics.lua b/lua/codecompanion/interactions/chat/tools/builtin/get_diagnostics.lua
-index 11f2d7c2..6b7342f3 100644
+index ba5164cc..3b44b5cb 100644
 --- a/lua/codecompanion/interactions/chat/tools/builtin/get_diagnostics.lua
 +++ b/lua/codecompanion/interactions/chat/tools/builtin/get_diagnostics.lua
-@@ -298,7 +298,11 @@ return {
+@@ -298,6 +298,9 @@ return {
      ---@param opts { tools: CodeCompanion.Tools }
      ---@return string
      cmd_string = function(self, opts)
--      return self.args.filepath
-+      local path = vim.fn.fnamemodify(self.args.filepath, ":.")
 +      if self.args.severity then
-+        return fmt("%s (%s)", path, self.args.severity)
++        return fmt("%s (%s)", self.args.filepath, self.args.severity)
 +      end
-+      return path
+       return self.args.filepath
      end,
  
-     ---The message which is shared with the user when asking for their approval
 diff --git a/lua/codecompanion/interactions/chat/tools/builtin/grep_search.lua b/lua/codecompanion/interactions/chat/tools/builtin/grep_search.lua
-index 554e61ca..c7ee2c84 100644
+index e03e3739..21b7f091 100644
 --- a/lua/codecompanion/interactions/chat/tools/builtin/grep_search.lua
 +++ b/lua/codecompanion/interactions/chat/tools/builtin/grep_search.lua
 @@ -196,7 +196,11 @@ return {
@@ -190,7 +160,7 @@ index 554e61ca..c7ee2c84 100644
          -- Results were found - data is an array of file paths
          local results = #data
 -        local content = fmt("Searched text for `%s`, %d results\n%s", query, results, markdown.form_codeblock(output))
--        chat:add_tool_output({ tool = self, for_llm = fmt(llm_output, content), for_user = "" })
+-        chat:add_tool_output(self, { content = fmt(llm_output, content), display = false })
 +        local content = fmt(
 +          "Searched text for `%s`, %d results\n%s\n\n%s",
 +          query,
@@ -199,17 +169,17 @@ index 554e61ca..c7ee2c84 100644
 +          "NOTE: The output format is {filepath}:{line_number}"
 +        )
 +        local user_output = fmt("Searched text for `%s`, %d results", query, results)
-+        chat:add_tool_output({ tool = self, for_llm = fmt(llm_output, content), for_user = user_output })
++        chat:add_tool_output(self, { content = fmt(llm_output, content), display = user_output })
        else
          -- No results found - data is a string message
          local content = fmt("Searched text for `%s`, no results", query)
--        chat:add_tool_output({ tool = self, for_llm = fmt(llm_output, content), for_user = "" })
-+        chat:add_tool_output({ tool = self, for_llm = fmt(llm_output, content), for_user = content })
+-        chat:add_tool_output(self, { content = fmt(llm_output, content), display = false })
++        chat:add_tool_output(self, { content = fmt(llm_output, content), display = content })
        end
      end,
  
 diff --git a/lua/codecompanion/interactions/chat/tools/builtin/memory.lua b/lua/codecompanion/interactions/chat/tools/builtin/memory.lua
-index eb1298cd..186836f1 100644
+index af0c1fea..dace3170 100644
 --- a/lua/codecompanion/interactions/chat/tools/builtin/memory.lua
 +++ b/lua/codecompanion/interactions/chat/tools/builtin/memory.lua
 @@ -489,6 +489,18 @@ return {
@@ -232,7 +202,7 @@ index eb1298cd..186836f1 100644
      ---@param self CodeCompanion.Tools.Tool
      ---@param meta { tools: CodeCompanion.Tools }
 diff --git a/lua/codecompanion/interactions/chat/tools/builtin/read_file.lua b/lua/codecompanion/interactions/chat/tools/builtin/read_file.lua
-index f6589dd3..f26e91d5 100644
+index 54e8f41f..a6ddf79e 100644
 --- a/lua/codecompanion/interactions/chat/tools/builtin/read_file.lua
 +++ b/lua/codecompanion/interactions/chat/tools/builtin/read_file.lua
 @@ -71,6 +71,16 @@ local function format_range(range)
@@ -252,17 +222,16 @@ index f6589dd3..f26e91d5 100644
  ---Split normalized content without treating a trailing newline as another line
  ---@param content string
  ---@return string[]
-@@ -183,7 +193,8 @@ return {
+@@ -183,7 +193,7 @@ return {
      ---@param opts { tools: CodeCompanion.Tools }
      ---@return string
      cmd_string = function(self, opts)
 -      return self.args.filepath
-+      local path = vim.fn.fnamemodify(self.args.filepath, ":.")
-+      return fmt("%s%s", path, format_display_range(self.args))
++      return fmt("%s%s", self.args.filepath, format_display_range(self.args))
      end,
  
      ---The message which is shared with the user when asking for their approval
-@@ -191,7 +202,8 @@ return {
+@@ -191,7 +201,8 @@ return {
      ---@param meta { tools: CodeCompanion.Tools }
      ---@return nil|string
      prompt = function(self, meta)
@@ -290,7 +259,7 @@ index b70ab911..6742f109 100644
  
      ---@param self CodeCompanion.Tool.RunCommand
 diff --git a/lua/codecompanion/interactions/chat/tools/builtin/web_search.lua b/lua/codecompanion/interactions/chat/tools/builtin/web_search.lua
-index be65ce85..b571c217 100644
+index 9ec9624d..3a5c6acd 100644
 --- a/lua/codecompanion/interactions/chat/tools/builtin/web_search.lua
 +++ b/lua/codecompanion/interactions/chat/tools/builtin/web_search.lua
 @@ -86,21 +86,43 @@ return {
@@ -336,8 +305,8 @@ index be65ce85..b571c217 100644
 +        :join("\n")
 +      local user_output = fmt("Searched the web for `%s`, %d results\n%s", query, #results, links)
  
--      chat:add_tool_output({ tool = self, for_llm = llm_output, for_user = "" })
-+      chat:add_tool_output({ tool = self, for_llm = llm_output, for_user = user_output })
+-      chat:add_tool_output(self, { content = llm_output, display = false })
++      chat:add_tool_output(self, { content = llm_output, display = user_output })
      end,
  
      ---@param self CodeCompanion.Tool.WebSearch
