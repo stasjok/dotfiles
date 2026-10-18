@@ -5,6 +5,7 @@ in
 {
   plugins.codecompanion = {
     enable = true;
+
     settings = {
       interactions = {
         chat = {
@@ -236,7 +237,6 @@ in
                   }
                 })
               ''
-
             );
         acp.opts.show_presets = false;
       };
