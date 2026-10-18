@@ -9,15 +9,19 @@ in
       interactions = {
         chat = {
           adapter = "llama";
-          keymaps.send.modes = {
-            i = [
-              "<C-S>"
-              "<C-J>"
-            ];
-            n = [
-              "<C-S>"
-              "<C-J>"
-            ];
+          keymaps = {
+            send.modes = {
+              i = [
+                "<C-S>"
+                "<C-J>"
+              ];
+              n = [
+                "<C-S>"
+                "<C-J>"
+              ];
+            };
+            # Allow to search backward
+            options.modes.n = "g?";
           };
           slash_commands = {
             fetch.opts.adapter = "jina";
