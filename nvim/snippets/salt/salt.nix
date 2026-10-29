@@ -263,7 +263,7 @@
       id_prefix = {
         prefix = "id_prefix";
         description = "A default prefix for state IDs";
-        body = ''{%- set id_prefix = sls | replace(".", " - ") %}'';
+        body = ''{%- set id_prefix = sls | replace(".", "-") %}'';
       };
       unless = {
         prefix = "unless";
