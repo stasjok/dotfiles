@@ -82,8 +82,9 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "olimorris";
         repo = "codecompanion.nvim";
-        tag = "v${finalAttrs.version}";
-        hash = "sha256-29Z/aTSK6xtLCNp+FJH1D89MpNztm6Hjgfz80XZVTlI=";
+        # tag = "v${finalAttrs.version}";
+        rev = "052ad5ade662ea3e3a6b99bc39a6bf3ce1c42892";
+        hash = "sha256-Av+hmAomoFzrYzKzKTbhSZe4NkO4WdptL/rhzEOmUyk=";
       };
 
       patches = [

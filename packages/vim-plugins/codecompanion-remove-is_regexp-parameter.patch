@@ -1,16 +1,16 @@
 diff --git a/lua/codecompanion/interactions/chat/tools/builtin/grep_search.lua b/lua/codecompanion/interactions/chat/tools/builtin/grep_search.lua
-index 554e61ca..41be43ad 100644
+index 4697d9dc..ca9a1701 100644
 --- a/lua/codecompanion/interactions/chat/tools/builtin/grep_search.lua
 +++ b/lua/codecompanion/interactions/chat/tools/builtin/grep_search.lua
 @@ -5,14 +5,13 @@ local markdown = require("codecompanion.utils.markdown")
  local fmt = string.format
  
  ---Build the ripgrep command for a search
-----@param action { query: string, is_regexp: boolean?, include_pattern: string? }
-+---@param action { query: string, include_pattern: string? }
- ---@param opts table
+----@param opts { action: { query: string, is_regexp: boolean?, include_pattern: string? }, max_results?: number, respect_gitignore?: boolean }
++---@param opts { action: { query: string, include_pattern: string? }, max_results?: number, respect_gitignore?: boolean }
  ---@return string[]
- local function build_command(action, opts)
+ local function build_command(opts)
+   local action = opts.action
    local cmd = { "rg" }
    local cwd = vim.fn.getcwd()
    local max_results = opts.max_results or 100
@@ -18,7 +18,7 @@ index 554e61ca..41be43ad 100644
    local respect_gitignore = opts.respect_gitignore
    if respect_gitignore == nil then
      respect_gitignore = opts.respect_gitignore ~= false
-@@ -24,11 +23,6 @@ local function build_command(action, opts)
+@@ -24,11 +23,6 @@ local function build_command(opts)
    table.insert(cmd, "--no-heading")
    table.insert(cmd, "--with-filename")
  
@@ -30,7 +30,7 @@ index 554e61ca..41be43ad 100644
    -- Case sensitivity
    table.insert(cmd, "--ignore-case")
  
-@@ -72,7 +66,7 @@ local function parse_output(result, max_results)
+@@ -72,7 +66,7 @@ local function parse_output(opts)
          data = "No matches found for the query",
        }
      elseif result.code == 2 then
@@ -39,7 +39,7 @@ index 554e61ca..41be43ad 100644
        return {
          status = "error",
          data = fmt("Invalid search pattern or arguments: %s", error_msg:match("^[^\n]*") or "Unknown error"),
-@@ -158,17 +152,13 @@ return {
+@@ -163,17 +157,13 @@ return {
    schema = {
      ["function"] = {
        name = "grep_search",
@@ -55,7 +55,35 @@ index 554e61ca..41be43ad 100644
 -          is_regexp = {
 -            type = "boolean",
 -            description = "Whether the pattern is a regex. False by default.",
-+            description = "The pattern to search for in files in the workspace. Uses ripgrep (not grep). Literal braces need escaping (use `\\{\\}` to find `{}`).",
++            description = "The pattern to search for in files in the workspace. Uses ripgrep (not grep). Literal braces need escaping (use `\\{` to find `{`).",
            },
            include_pattern = {
              type = "string",
+@@ -220,19 +210,19 @@ return {
+       local chat = meta.tools.chat
+       local data = stdout[1]
+ 
+-      local llm_output = [[<grepSearchTool>%s
+-
+-NOTE:
+-- The output format is {filepath}:{line_number}.
+-- For example:
+-/Users/user/project/lua/codecompanion/interactions/chat/tools/init.lua:335
+-Refers to line 335 of the init.lua file</grepSearchTool>]]
++      local llm_output = [[<grepSearchTool>%s</grepSearchTool>]]
+       local output = vim.iter(stdout):flatten():join("\n")
+ 
+       if type(data) == "table" then
+         -- Results were found - data is an array of file paths
+         local results = #data
+-        local content = fmt("Searched text for `%s`, %d results\n%s", query, results, markdown.form_codeblock(output))
++        local content = fmt(
++          "Searched text for `%s`, %d results\n%s\n\n%s",
++          query,
++          results,
++          markdown.form_codeblock(output),
++          "NOTE: The output format is {filepath}:{line_number}"
++        )
+         chat:add_tool_output(self, { content = fmt(llm_output, content) })
+       else
+         -- No results found - data is a string message
