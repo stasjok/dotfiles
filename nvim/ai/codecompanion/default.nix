@@ -61,8 +61,6 @@ in
             list = false;
           };
         };
-        # Enable wrap in debug window
-        floating_window.opts.wrap = true;
       };
 
       adapters = {
