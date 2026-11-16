@@ -66,23 +66,18 @@ in
       adapters = {
         http = {
           opts.show_presets = false;
-          tavily = mkRaw ''
-            function()
-              return require("codecompanion.adapters.http").extend("tavily", ${
-                toLuaObject {
-                  env.api_key = mkRaw ''get_api_key("tavily", "TAVILY_API_KEY")'';
-                }
-              })
-            end
-          '';
-          llama = mkRaw ''
-            llama_adapter("http://127.0.0.1:18081", ${
-              toLuaObject {
-                opts.proxy = "";
-                schema.model.default = "qwen3.6-35b-a3b";
-              }
-            })
-          '';
+          extend = {
+            tavily = {
+              env.api_key = mkRaw ''get_api_key("tavily", "TAVILY_API_KEY")'';
+            };
+            llama = {
+              opts.proxy = "";
+              env.api_key = mkRaw ''get_api_key("llama.cpp", "LLAMACPP_API_KEY")'';
+              env.url = "http://127.0.0.1:18081";
+              schema.model.default = "qwen3.6-35b-a3b";
+            };
+          };
+          llama = "llama";
         }
         # OpenRouter adapters
         //
@@ -244,6 +239,11 @@ in
       pre = ./pre.lua;
       post = ./post.lua;
     };
+  };
+
+  extraFiles = {
+    # Adapters
+    "lua/codecompanion/adapters/http/llama.lua".text = builtins.readFile ./llama.lua;
   };
 
   # Mappings
