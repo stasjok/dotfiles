@@ -28,6 +28,18 @@ in
             fetch.opts.adapter = "jina";
           };
           tools = {
+            groups = {
+              inspect = {
+                description = "Tools for inspecting code";
+                tools = [
+                  "grep_search"
+                  "file_search"
+                  "read_file"
+                  "run_command" # grep_search isn't powerful enough
+                ];
+                opts.collapse_tools = false;
+              };
+            };
             web_search.opts.adapter = "tavily";
             fetch_webpage.opts.adapter = "jina";
             grep_search.opts.max_results = 200;
