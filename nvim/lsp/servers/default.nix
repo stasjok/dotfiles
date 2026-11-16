@@ -170,6 +170,7 @@
         init_options.exclude = [
           "zenmoney/**"
           "easyfinance/**"
+          "projection/**"
           "importers/tests/**"
         ];
         settings = {
